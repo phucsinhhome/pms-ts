@@ -51,15 +51,15 @@ export const InvoiceManager = () => {
     fetchInvoices(fromDate, pNum, pSize)
   }
 
-  const isCurrentlyStaying = (reservation) => {
+  const isCurrentlyStaying = (invoice) => {
     const now = new Date();
-    const checkInDate = new Date(reservation.checkInDate);
-    const checkOutDate = new Date(reservation.checkOutDate);
+    const checkInDate = new Date(invoice.checkInDate);
+    const checkOutDate = new Date(invoice.checkOutDate);
     return now >= checkInDate && now <= checkOutDate;
   };
 
-  const sortReservations = (reservations) => {
-    return reservations.sort((a, b) => {
+  const sortInvoices = (invoices) => {
+    return invoices.sort((a, b) => {
       const aCurrentlyStaying = isCurrentlyStaying(a);
       const bCurrentlyStaying = isCurrentlyStaying(b);
 
@@ -80,8 +80,8 @@ export const InvoiceManager = () => {
 
     listStayingAndComingInvoices(fd, pageNumber, pageSize)
       .then(data => {
-        const sortedReses = sortReservations(data.content)
-        setInvoices(sortedReses)
+        const sortedInvs = sortInvoices(data.content)
+        setInvoices(sortedInvs)
         var page = {
           pageNumber: data.number,
           pageSize: data.size,

@@ -98,6 +98,7 @@ export const InvoiceManager = () => {
       return
     }
     fetchInvoices(new Date(), location.state.pageNumber, location.state.pageSize);
+    // eslint-disable-next-line
   }, [location]);
 
   const filterOpts = [

@@ -10,6 +10,7 @@ import { ReservationManager } from "./Components/Reservation/ReservationManager"
 import { EditReservation } from "./Components/Reservation/EditReservation";
 import { Settings } from "./Components/Settings/Settings";
 import { IoMdSettings } from "react-icons/io";
+import { OrderManager } from "./Components/Order/OrderManager";
 
 const tele = window.Telegram.WebApp;
 export const DEFAULT_PAGE_SIZE = process.env.REACT_APP_DEFAULT_PAGE_SIZE
@@ -49,6 +50,7 @@ export default function App() {
           <Link to="invoice" className="px-2 py-1 bg-gray-200 text-center text-amber-900 text-sm font-sans rounded-sm shadow-sm" state={{ pageNumber: 0, pageSize: DEFAULT_PAGE_SIZE }}>Invoice</Link>
           <Link to="expenses" className="px-2 py-1 bg-gray-200 text-center text-amber-900 text-sm font-sans rounded-sm shadow-sm" state={{ pageNumber: 0, pageSize: DEFAULT_PAGE_SIZE }}>Expense</Link>
           <Link to="reservation" className="px-2 py-1 bg-gray-200 text-center text-amber-900 text-sm font-sans rounded-sm shadow-sm">Reservation</Link>
+          <Link to="order" className="px-2 py-1 bg-gray-200 text-center text-amber-900 text-sm font-sans rounded-sm shadow-sm">Order</Link>
           <Link to="settings" className="absolute right-2">
             <IoMdSettings
               className="pointer-events-auto cursor-pointer w-14 h-7"
@@ -63,6 +65,8 @@ export default function App() {
           <Route path="expenses/:expenseId" element={<EditExpense />} />
           <Route path="reservation" element={<ReservationManager />} />
           <Route path="reservation/:reservationId" element={<EditReservation />} />
+          <Route path="order" element={<OrderManager />} />
+          <Route path="order/:orderId/:staffId" element={<OrderManager />} />
           <Route path="settings" element={<Settings
             syncing={syncing} changeSyncing={(n) => setSyncing(n)}
             syncingRes={syncingRes} changeResSyncing={(n) => setSyncingRes(n)}

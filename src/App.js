@@ -11,6 +11,7 @@ import { EditReservation } from "./Components/Reservation/EditReservation";
 import { Settings } from "./Components/Settings/Settings";
 import { IoMdSettings } from "react-icons/io";
 import { OrderManager } from "./Components/Order/OrderManager";
+import { Order } from "./Components/Order/Order";
 
 const tele = window.Telegram.WebApp;
 export const DEFAULT_PAGE_SIZE = process.env.REACT_APP_DEFAULT_PAGE_SIZE
@@ -66,7 +67,7 @@ export default function App() {
           <Route path="reservation" element={<ReservationManager />} />
           <Route path="reservation/:reservationId" element={<EditReservation />} />
           <Route path="order" element={<OrderManager />} />
-          <Route path="order/:orderId/:staffId" element={<OrderManager />} />
+          <Route path="order/:orderId/:staffId" element={<Order />} />
           <Route path="settings" element={<Settings
             syncing={syncing} changeSyncing={(n) => setSyncing(n)}
             syncingRes={syncingRes} changeResSyncing={(n) => setSyncingRes(n)}

@@ -79,16 +79,21 @@ export const InvoiceManager = () => {
     console.info("Loading invoices from date %s...", fd)
 
     listStayingAndComingInvoices(fd, pageNumber, pageSize)
-      .then(data => {
-        const sortedInvs = sortInvoices(data.content)
-        setInvoices(sortedInvs)
-        var page = {
-          pageNumber: data.number,
-          pageSize: data.size,
-          totalElements: data.totalElements,
-          totalPages: data.totalPages
+      .then(rsp => {
+        if (rsp.ok) {
+          rsp.json()
+            .then(data => {
+              const sortedInvs = sortInvoices(data.content)
+              setInvoices(sortedInvs)
+              var page = {
+                pageNumber: data.number,
+                pageSize: data.size,
+                totalElements: data.totalElements,
+                totalPages: data.totalPages
+              }
+              setPagination(page)
+            })
         }
-        setPagination(page)
       })
   }
 
@@ -98,6 +103,8 @@ export const InvoiceManager = () => {
       return
     }
     fetchInvoices(new Date(), location.state.pageNumber, location.state.pageSize);
+
+    // eslint-disable-next-line
   }, [location]);
 
   const filterOpts = [

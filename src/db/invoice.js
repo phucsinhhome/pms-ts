@@ -59,7 +59,6 @@ export const listStayingAndComingInvoices = (fromDate, pageNumber, pageSize) => 
   }
 
   return fetch(`${process.env.REACT_APP_INVOICE_SERVICE_ENDPOINT}/list/upcoming?fromDate=${fromDate}&page=${pageNumber}&size=${pageSize}`, opts)
-    .then(response => response.json())
 }
 
 export function getInvoice(invoiceId) {

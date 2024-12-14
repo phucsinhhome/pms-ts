@@ -97,6 +97,7 @@ export const Order = () => {
             .then(data => {
               setPotentialInvoices(data.content)
               setShowPotentialInvoices(true)
+              console.info("Show potential invoices")
               var page = {
                 pageNumber: data.number,
                 pageSize: data.size,

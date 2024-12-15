@@ -1,15 +1,13 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { addDays, beginOfDay, formatISODateTime } from "../../Service/Utils";
+import { beginOfDay, formatISODateTime } from "../../Service/Utils";
 import { currentUser, DEFAULT_PAGE_SIZE } from "../../App";
 import { fetchOrders } from "../../db/order";
+import { Button } from "flowbite-react";
 
 
 export const OrderManager = () => {
   const [orders, setOrders] = useState([])
-
-  const [fromDate, setFromDate] = useState(new Date());
-  const [deltaDays, setDeltaDays] = useState(0)
 
   const [pagination, setPagination] = useState({
     pageNumber: 0,
@@ -17,14 +15,6 @@ export const OrderManager = () => {
     totalElements: 200,
     totalPages: 20
   })
-
-  const filterDay = (numDays) => {
-    var newDD = addDays(new Date(), numDays)
-    console.info("Change filter date to %s", newDD.toISOString())
-    setFromDate(newDD)
-    setDeltaDays(numDays)
-    fetchUpcomingOrders(pagination.pageNumber, pagination.pageSize)
-  }
 
   const handlePaginationClick = (pageNumber) => {
     console.log("Pagination nav bar click to page %s", pageNumber)
@@ -34,7 +24,7 @@ export const OrderManager = () => {
   }
 
   const fetchUpcomingOrders = (pageNumber, pageSize) => {
-    var fromTime = formatISODateTime(beginOfDay(fromDate))
+    var fromTime = formatISODateTime(beginOfDay(new Date()))
     console.info("Fetch upcoming order after %s", fromTime)
 
     fetchOrders(fromTime, pageNumber, pageSize)
@@ -60,28 +50,6 @@ export const OrderManager = () => {
     // eslint-disable-next-line
   }, []);
 
-  const filterOpts = [
-    {
-      days: 0,
-      label: 'Today'
-    },
-    {
-      days: -1,
-      label: 'Yesterday'
-    },
-    {
-      days: -5,
-      label: 'Last 5 days'
-    },
-    {
-      days: -1 * new Date().getDate(),
-      label: 'From 1st'
-    }]
-  const filterClass = (days) => {
-    var classNamePattern = "font-bold text-amber-800 rounded px-2 py-1"
-    return classNamePattern + " " + (deltaDays === days ? "bg-slate-400" : "bg-slate-200");
-  }
-
   const pageClass = (pageNum) => {
     var noHighlight = "px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
     var highlight = "px-3 py-2 leading-tight text-bold text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"
@@ -92,35 +60,8 @@ export const OrderManager = () => {
 
   return (
     <div className="h-full pt-3">
-      <div className="flex flex-wrap pb-4 px-2 space-x-4 space-y-2">
-        <div className="flex flex-row items-center mb-2">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            className="w-5 h-5 text-amber-700 dark:text-white"
-          >
-            <path fillRule="evenodd" d="M4.755 10.059a7.5 7.5 0 0 1 12.548-3.364l1.903 1.903h-3.183a.75.75 0 1 0 0 1.5h4.992a.75.75 0 0 0 .75-.75V4.356a.75.75 0 0 0-1.5 0v3.18l-1.9-1.9A9 9 0 0 0 3.306 9.67a.75.75 0 1 0 1.45.388Zm15.408 3.352a.75.75 0 0 0-.919.53 7.5 7.5 0 0 1-12.548 3.364l-1.902-1.903h3.183a.75.75 0 0 0 0-1.5H2.984a.75.75 0 0 0-.75.75v4.992a.75.75 0 0 0 1.5 0v-3.18l1.9 1.9a9 9 0 0 0 15.059-4.035.75.75 0 0 0-.53-.918Z" clipRule="evenodd" />
-          </svg>
-          <Link
-            onClick={() => fetchUpcomingOrders(0, DEFAULT_PAGE_SIZE)}
-            className="font-bold text-amber-800"
-          >
-            Update
-          </Link>
-        </div>
-      </div>
-      <div className="flex flex-row space-x-4 px-4 pb-3">
-        {filterOpts.map((opt) => {
-          return (<Link
-            key={opt.days}
-            onClick={() => filterDay(opt.days)}
-            relative="route"
-            className={filterClass(opt.days)}
-          >
-            {opt.label}
-          </Link>)
-        })}
+      <div className="flex flex-row items-center w-full pb-4 px-2 space-x-4 space-y-2">
+        <Button>Order Link</Button>
       </div>
       <div className="h-3/5 overflow-hidden">
         <div className="flex flex-col space-y-1">

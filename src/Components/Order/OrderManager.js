@@ -1,13 +1,17 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { beginOfDay, formatISODateTime } from "../../Service/Utils";
+import { beginOfDay, formatISODate, formatISODateTime } from "../../Service/Utils";
 import { currentUser, DEFAULT_PAGE_SIZE } from "../../App";
 import { fetchOrders } from "../../db/order";
-import { Button } from "flowbite-react";
+import { Button, Modal, TextInput } from "flowbite-react";
+import { listInvoiceByGuestName } from "../../db/invoice";
 
 
 export const OrderManager = () => {
   const [orders, setOrders] = useState([])
+  const [filteredName, setFilteredName] = useState('')
+  const [invoices, setInvoices] = useState([])
+  const [showInvoices, setShowInvoices] = useState(false)
 
   const [pagination, setPagination] = useState({
     pageNumber: 0,
@@ -57,11 +61,46 @@ export const OrderManager = () => {
     return pagination.pageNumber === pageNum ? highlight : noHighlight
   }
 
+  const findTheInvoice = () => {
+    setShowInvoices(true)
+  }
+
+  const hideInvoices = () => {
+    setShowInvoices(false)
+  }
+  const changeFilteredName = (e) => {
+    let fN = e.target.value
+    setFilteredName(fN)
+    if (fN === '') {
+      setInvoices([])
+      return
+    }
+    let fromDate = formatISODate(new Date())
+
+    listInvoiceByGuestName(fromDate, fN, 0, DEFAULT_PAGE_SIZE)
+      .then(rsp => {
+        if (rsp.ok) {
+          rsp.json()
+            .then(data => {
+              setInvoices(data.content)
+            })
+        }
+      })
+  }
+
+  const copyOrderLink = (invoice) => {
+    let url = process.env.REACT_APP_MENU_ENDPOINT + '/' + invoice.id + '/' + currentUser.id
+    navigator.clipboard.writeText(url)
+    console.info("Url %s has been copied", url)
+    setInvoices([])
+    setShowInvoices(false)
+  }
+
 
   return (
     <div className="h-full pt-3">
       <div className="flex flex-row items-center w-full pb-4 px-2 space-x-4 space-y-2">
-        <Button>Order Link</Button>
+        <Button onClick={findTheInvoice}>Order Link</Button>
       </div>
       <div className="h-3/5 overflow-hidden">
         <div className="flex flex-col space-y-1">
@@ -117,6 +156,61 @@ export const OrderManager = () => {
           </li>
         </ul>
       </nav>
+
+
+      <Modal
+        show={showInvoices}
+        popup={true}
+        onClose={hideInvoices}
+      >
+        <Modal.Header />
+        <Modal.Body>
+          <div className="pb-2 px-2">
+            <TextInput
+              id="filteredName"
+              placeholder="Enter guest name to search"
+              type="text"
+              required={true}
+              value={filteredName}
+              onChange={changeFilteredName}
+              className="w-full"
+            />
+          </div>
+          <div className="flex flex-col space-y-6 px-2 pb-4 sm:pb-6 lg:px-8 xl:pb-8">
+            {invoices.map((invoice) => {
+              return (
+                <div
+                  className="flex flex-row items-center border px-2 border-gray-300 rounded-sm bg-white dark:bg-slate-500 "
+                  key={invoice.id}
+                >
+                  <div className="px-0 w-full">
+                    <div className="grid grid-cols-1">
+                      <div className="flex flex-row">
+                        <span
+                          className="font-medium text-blue-600 dark:text-blue-500 overflow-hidden"
+                        >
+                          {invoice.guestName}
+                        </span>
+                      </div>
+                      <div className="flex flex-row text-sm space-x-1">
+                        <span className="font font-mono text-gray-500 text-[10px]">{invoice.checkInDate}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <Link className="font-bold text-amber-900" onClick={() => copyOrderLink(invoice)}>Copy</Link>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </Modal.Body>
+        <Modal.Footer className="flex justify-center">
+          <Button onClick={hideInvoices}>
+            Cancel
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div >
   );
 }

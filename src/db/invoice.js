@@ -61,6 +61,16 @@ export const listStayingAndComingInvoices = (fromDate, pageNumber, pageSize) => 
   return fetch(`${process.env.REACT_APP_INVOICE_SERVICE_ENDPOINT}/list/upcoming?fromDate=${fromDate}&page=${pageNumber}&size=${pageSize}`, opts)
 }
 
+export const listInvoiceByGuestName = (fromDate, guestName, pageNumber, pageSize) => {
+  console.info("Fetching invoices by guest name")
+
+  var opts = {
+    method: 'GET'
+  }
+
+  return fetch(`${process.env.REACT_APP_INVOICE_SERVICE_ENDPOINT}/search/name?fromDate=${fromDate}&guestName=${guestName}&page=${pageNumber}&size=${pageSize}`, opts)
+}
+
 export function getInvoice(invoiceId) {
   console.info("Fetching invoice from backend")
   return fetch(`${process.env.REACT_APP_INVOICE_SERVICE_ENDPOINT}/${invoiceId}`, requestOptions)

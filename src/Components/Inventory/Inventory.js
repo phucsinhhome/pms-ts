@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Avatar, Button, Label, Modal, TextInput } from "flowbite-react";
+import { Avatar, Button, FileInput, Label, Modal, Textarea, TextInput } from "flowbite-react";
 import { adjustQuantity as adjustInventoryQuantity, listProducts, listProductsWithName, saveProduct } from "../../db/product";
 import { formatMoneyAmount } from "../Invoice/EditItem";
 import { HiOutlineCash } from "react-icons/hi";
@@ -220,6 +220,26 @@ export const Inventory = () => {
       })
   }
 
+  const onFileChange = (e) => {
+    // let upload = e.target.files;
+    // if (upload.length < 1) return;
+
+    // putObject(upload[0], 'ps-dc-pub', 'psassistant/product/phucsinh_logo.jpg')
+    //   .then(rsp => {
+    //     if (rsp.ok) {
+    //       rsp.json()
+    //         .then(data => {
+    //           let url = 'https://storage.googleapis.com/ps-dc-pub/' + data.objectKey
+    //           let uO = {
+    //             ...editingProduct,
+    //             featureImgUrl: url
+    //           }
+    //           setEditingProduct(uO)
+    //         })
+    //     }
+    //   })
+  }
+
   return (
     <div className="px-2 h-full pt-3">
 
@@ -427,16 +447,27 @@ export const Inventory = () => {
                   value="Description"
                 />
               </div>
-              <TextInput
+              <Textarea
                 id="description"
                 placeholder="Vegiterian"
                 type="text"
                 required={false}
                 value={editingProduct.description}
                 onChange={changeProductDescription}
-                // rightIcon={HiOutlineCash}
                 className="w-full"
               />
+            </div>
+            <div className="flex flex-row w-full align-middle">
+              <div className="flex items-center w-2/5">
+                <Label
+                  htmlFor="featureImgUrl"
+                  value="Feature Image"
+                />
+              </div>
+              <FileInput id="featureImgUrl" onChange={onFileChange} />
+              <img className="w-auto h-12"
+                src={editingProduct.featureImgUrl}
+                alt="" />
             </div>
           </div>
         </Modal.Body>

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Avatar, Button, Label, Modal, TextInput } from "flowbite-react";
-import { adjustQuantity as adjustInventoryQuantity, listAllProducts, listProducts, listProductsWithName, saveProduct } from "../../db/product";
+import { adjustQuantity as adjustInventoryQuantity, listProducts, listProductsWithName, saveProduct } from "../../db/product";
 import { formatMoneyAmount } from "../Invoice/EditItem";
 import { HiOutlineCash } from "react-icons/hi";
 import { DEFAULT_PAGE_SIZE } from "../../App";
@@ -202,7 +202,7 @@ export const Inventory = () => {
     setFilteredName(fN)
 
     if (fN === null || fN === '') {
-      listAllProducts()
+      fetchAllProducts()
       return
     }
 
@@ -211,9 +211,12 @@ export const Inventory = () => {
         if (rsp.ok) {
           rsp.json()
             .then(data => {
+              setProducts({})
               data.forEach(p => indexProduct(p))
-            })
+            }).catch(() => setProducts({}))
         }
+      }).catch(() => {
+        setProducts({})
       })
   }
 
@@ -223,7 +226,7 @@ export const Inventory = () => {
       <div className="px-0.5 py-2">
         <Button onClick={addProduct}>Add</Button>
       </div>
-      <div>
+      <div className="pb-2">
         <TextInput
           id="filteredName"
           placeholder="Enter product name to search"

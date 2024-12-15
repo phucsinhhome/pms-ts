@@ -46,7 +46,7 @@ export const Inventory = () => {
         if (rsp.ok) {
           rsp.json()
             .then(data => {
-              Array.from(data.content).forEach(p => indexProduct(p))
+              indexProduct(data.content)
               setPagination({
                 pageNumber: data.number,
                 pageSize: data.size,
@@ -90,7 +90,11 @@ export const Inventory = () => {
         if (rsp.ok) {
           rsp.json()
             .then(data => {
-              indexProduct(data)
+              let iP = {
+                ...products,
+                [data.id]: data
+              }
+              setProducts(iP)
               console.info("Change item %s with quantity %s order successfully", item.id, item.quantity)
             })
         } else if (rsp.status === 400) {
@@ -101,11 +105,8 @@ export const Inventory = () => {
       })
   }
 
-  const indexProduct = (product) => {
-    var iP = {
-      ...products,
-      [product.id]: product
-    }
+  const indexProduct = (fProducts) => {
+    var iP = Array.of(fProducts).reduce((map, e) => { map[e.id] = e; return map })
     setProducts(iP)
   }
 
@@ -211,8 +212,7 @@ export const Inventory = () => {
         if (rsp.ok) {
           rsp.json()
             .then(data => {
-              setProducts({})
-              data.forEach(p => indexProduct(p))
+              indexProduct(data)
             }).catch(() => setProducts({}))
         }
       }).catch(() => {

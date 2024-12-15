@@ -90,11 +90,22 @@ export const Inventory = () => {
         if (rsp.ok) {
           rsp.json()
             .then(data => {
-              let iP = {
-                ...products,
-                [data.id]: data
-              }
-              setProducts(iP)
+              
+              let key = data.id
+              // let iP = {
+              //   ...products,
+              //   [key]: {
+              //     ...products[key],
+              //     quantity: data.quantity
+              //   }
+              // }
+              // console.log(iP);
+
+              products[key].quantity = data.quantity
+              setProducts({...products})
+              
+
+              // setProducts(iP)
               console.info("Change item %s with quantity %s order successfully", item.id, item.quantity)
             })
         } else if (rsp.status === 400) {

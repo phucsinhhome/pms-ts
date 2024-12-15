@@ -109,12 +109,32 @@ export const Inventory = () => {
     setProducts(iP)
   }
 
-  const viewProductDetail = (product) => {
-    setEditingProduct(product)
+  const addProduct = () => {
+    let aP = {
+      id: crypto.randomUUID().toLocaleLowerCase(),
+      quantity: 10,
+      featureImgUrl: "https://storage.googleapis.com/ps-dc-pub/psassistant/product/pizza.png",
+      imageUrls: [
+        "https://storage.googleapis.com/ps-dc-pub/psassistant/product/pizza.png"
+      ]
+    }
+    setEditingProduct(aP)
     setShowProductDetailModal(true)
   }
+
+  const viewProductDetail = (product) => {
+    let uP = formatMoneyAmount(product.unitPrice + '')
+    let eP = {
+      ...product,
+      formattedUnitPrice: uP.formattedAmount
+    }
+    setEditingProduct(eP)
+    setShowProductDetailModal(true)
+  }
+
   const closeProductDetailModal = () => {
     setShowProductDetailModal(false)
+    setEditingProduct({})
   }
 
   const changeProductName = (e) => {
@@ -158,8 +178,6 @@ export const Inventory = () => {
   }
 
   const createOrUpdateProduct = () => {
-
-
     saveProduct(editingProduct)
       .then(rsp => {
         if (rsp.ok) {
@@ -200,16 +218,22 @@ export const Inventory = () => {
   }
 
   return (
-    <div className="h-full pt-3">
-      <TextInput
-        id="filteredName"
-        placeholder="Enter product name to search"
-        type="text"
-        required={true}
-        value={filteredName}
-        onChange={changeFilteredName}
-        className="w-full"
-      />
+    <div className="px-2 h-full pt-3">
+
+      <div className="px-0.5 py-2">
+        <Button onClick={addProduct}>Add</Button>
+      </div>
+      <div>
+        <TextInput
+          id="filteredName"
+          placeholder="Enter product name to search"
+          type="text"
+          required={true}
+          value={filteredName}
+          onChange={changeFilteredName}
+          className="w-full"
+        />
+      </div>
       <div className="max-h-fit overflow-hidden">
         <div className="flex flex-col space-y-1">
           {Object.values(products).map((product) => {
@@ -312,7 +336,7 @@ export const Inventory = () => {
       >
         <Modal.Header />
         <Modal.Body>
-          <div className="space-y-6 px-6 pb-4 sm:pb-6 lg:px-8 xl:pb-8">
+          <div className="flex flex-col space-y-6 px-6 pb-4 sm:pb-6 lg:px-8 xl:pb-8">
             <div className="flex flex-row w-full align-middle">
               <div className="flex items-center w-2/5">
                 <Label
@@ -322,7 +346,7 @@ export const Inventory = () => {
               </div>
               <TextInput
                 id="name"
-                placeholder="Enter amount here"
+                placeholder="Name to display on menu"
                 type="currency"
                 step={5000}
                 required={true}
@@ -341,7 +365,7 @@ export const Inventory = () => {
               </div>
               <TextInput
                 id="unitPrice"
-                placeholder="Enter amount here"
+                placeholder="Price to display on menu"
                 type="currency"
                 step={5000}
                 required={true}
@@ -367,7 +391,7 @@ export const Inventory = () => {
                   onClick={() => changeProductQuantity(-1)}
                 >
                   <svg className="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" strokeWidth="2" d="M1 1h16" />
+                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h16" />
                   </svg>
                 </button>
                 <input
@@ -375,7 +399,7 @@ export const Inventory = () => {
                   id="quantity-input"
                   data-input-counter aria-describedby="helper-text-explanation"
                   className="bg-gray-50 border-x-0 border-gray-300 h-11 text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="999"
+                  placeholder="1"
                   required
                   value={editingProduct.quantity}
                   readOnly
@@ -388,39 +412,39 @@ export const Inventory = () => {
                   onClick={() => changeProductQuantity(1)}
                 >
                   <svg className="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" strokeWidth="2" d="M9 1v16M1 9h16" />
+                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 1v16M1 9h16" />
                   </svg>
                 </button>
               </div>
-              <div className="flex flex-row w-full align-middle">
-                <div className="flex items-center w-2/5">
-                  <Label
-                    htmlFor="description"
-                    value="Description"
-                  />
-                </div>
-                <TextInput
-                  id="description"
-                  placeholder="Vegiterian"
-                  type="text"
-                  required={false}
-                  value={editingProduct.description}
-                  onChange={changeProductDescription}
-                  // rightIcon={HiOutlineCash}
-                  className="w-full"
+            </div>
+            <div className="flex flex-row w-full align-middle">
+              <div className="flex items-center w-2/5">
+                <Label
+                  htmlFor="description"
+                  value="Description"
                 />
               </div>
-            </div>
-            <div className="w-full flex justify-center">
-              <Button onClick={createOrUpdateProduct} className="mx-2">
-                Save
-              </Button>
-              <Button onClick={cancelEditingProduct} className="mx-2">
-                Cancel
-              </Button>
+              <TextInput
+                id="description"
+                placeholder="Vegiterian"
+                type="text"
+                required={false}
+                value={editingProduct.description}
+                onChange={changeProductDescription}
+                // rightIcon={HiOutlineCash}
+                className="w-full"
+              />
             </div>
           </div>
         </Modal.Body>
+        <Modal.Footer className="flex justify-center">
+          <Button onClick={createOrUpdateProduct} className="mx-2">
+            Save
+          </Button>
+          <Button onClick={cancelEditingProduct} className="mx-2">
+            Cancel
+          </Button>
+        </Modal.Footer>
       </Modal>
 
     </div >

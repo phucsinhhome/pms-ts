@@ -89,7 +89,7 @@ export const OrderManager = () => {
   }
 
   const copyOrderLink = (invoice) => {
-    let url = process.env.REACT_APP_MENU_ENDPOINT + '/' + invoice.id + '/' + currentUser.id
+    let url = process.env.REACT_APP_MENU_WEB_APP + '/menu/food/' + invoice.id + '/' + currentUser.id
     navigator.clipboard.writeText(url)
     console.info("Url %s has been copied", url)
     setInvoices([])

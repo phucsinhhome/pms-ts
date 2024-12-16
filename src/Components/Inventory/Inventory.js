@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Avatar, Button, FileInput, Label, Modal, Textarea, TextInput } from "flowbite-react";
+import { Avatar, Button, Dropdown, FileInput, Label, Modal, Textarea, TextInput } from "flowbite-react";
 import { adjustQuantity as adjustInventoryQuantity, listProducts, listProductsWithName, saveProduct } from "../../db/product";
 import { formatMoneyAmount } from "../Invoice/EditItem";
 import { HiOutlineCash } from "react-icons/hi";
@@ -90,22 +90,11 @@ export const Inventory = () => {
         if (rsp.ok) {
           rsp.json()
             .then(data => {
-              
-              let key = data.id
-              // let iP = {
-              //   ...products,
-              //   [key]: {
-              //     ...products[key],
-              //     quantity: data.quantity
-              //   }
-              // }
-              // console.log(iP);
-
-              products[key].quantity = data.quantity
-              setProducts({...products})
-              
-
-              // setProducts(iP)
+              let iPs = {
+                ...products
+              }
+              iPs[data.id].quantity = data.quantity
+              setProducts(iPs)
               console.info("Change item %s with quantity %s order successfully", item.id, item.quantity)
             })
         } else if (rsp.status === 400) {
@@ -117,14 +106,14 @@ export const Inventory = () => {
   }
 
   const indexProduct = (fProducts) => {
-    var iP = Array.of(fProducts).reduce((map, e) => { map[e.id] = e; return map })
+    var iP = fProducts.reduce((map, product) => { map[product.id] = product; return map }, {})
     setProducts(iP)
   }
 
   const addProduct = () => {
     let aP = {
-      id: crypto.randomUUID().toLocaleLowerCase(),
       quantity: 10,
+      group: 'food',
       featureImgUrl: "https://storage.googleapis.com/ps-dc-pub/psassistant/product/pizza.png",
       imageUrls: [
         "https://storage.googleapis.com/ps-dc-pub/psassistant/product/pizza.png"
@@ -189,14 +178,23 @@ export const Inventory = () => {
     setEditingProduct(eI)
   }
 
+  const changeProductGroup = (gN) => {
+    let eI = {
+      ...editingProduct,
+      group: gN
+    }
+    setEditingProduct(eI)
+  }
+
   const createOrUpdateProduct = () => {
     saveProduct(editingProduct)
       .then(rsp => {
         if (rsp.ok) {
           rsp.json()
-            .then(() => {
-              console.info("Save product successfully")
+            .then((data) => {
+              console.info("Save product successfully with id %s and offset %d", data.id, data.displayOffset)
               setEditingProduct({})
+              fetchAllProducts()
             })
         }
       }).finally(() => {
@@ -408,6 +406,24 @@ export const Inventory = () => {
                 rightIcon={HiOutlineCash}
                 className="w-full"
               />
+            </div>
+            <div className="flex flex-row w-full align-middle">
+              <div className="flex items-center w-2/5">
+                <Label
+                  htmlFor="group"
+                  value="Group"
+                />
+              </div>
+              <Dropdown
+                id="group"
+                label={editingProduct.group}
+                inline
+                value={editingProduct.group}
+                dismissOnClick
+              >
+                <Dropdown.Item onClick={() => changeProductGroup('food')}>food</Dropdown.Item>
+                <Dropdown.Item onClick={() => changeProductGroup('baverage')}>baverage</Dropdown.Item>
+              </Dropdown>
             </div>
             <div className="flex flex-row w-full align-middle">
               <div className="flex items-center w-2/5">

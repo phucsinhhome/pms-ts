@@ -8,6 +8,13 @@ import { listInvoiceByGuestName, listStayingAndComingInvoicesAndPrepaid } from "
 
 
 export const OrderManager = () => {
+  const statusFormats = {
+    SENT: 'text-orange-400',
+    CONFIRMED: 'text-green-700',
+    REJECTED: 'text-red-700',
+    SERVED: 'text-gray-700',
+    EXPIRED: 'text-gray-700'
+  }
   const [orders, setOrders] = useState([])
   const [filteredName, setFilteredName] = useState('')
   const [invoices, setInvoices] = useState([])
@@ -139,8 +146,8 @@ export const OrderManager = () => {
                   </div>
                 </div>
                 <div className="pl-0.2 pr-1">
-                  <div className="bg-zinc-200 rounded-md py-0.5 w-24 text-center font-bold text-green-700">
-                    <span>{order.status}</span>
+                  <div className="bg-zinc-200 rounded-md py-0.5 w-24 text-center">
+                    <span className={"font font-mono font-bold " + statusFormats[order.status]}>{order.status}</span>
                   </div>
                 </div>
               </div>

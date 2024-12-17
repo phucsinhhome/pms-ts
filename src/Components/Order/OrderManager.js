@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { beginOfDay, formatISODate, formatISODateTime } from "../../Service/Utils";
+import { beginOfDay, formatISODate, formatISODateTime, formatVNDateTime } from "../../Service/Utils";
 import { currentUser, DEFAULT_PAGE_SIZE } from "../../App";
 import { fetchOrders } from "../../db/order";
 import { Button, Modal, TextInput } from "flowbite-react";
@@ -111,18 +111,18 @@ export const OrderManager = () => {
 
   return (
     <div className="h-full pt-3">
-      <div className="flex flex-row items-center w-full pb-4 px-2 space-x-4 space-y-2">
+      <div className="flex flex-row items-center w-full pb-4 px-2">
         <Button onClick={findTheInvoice}>Order Link</Button>
       </div>
-      <div className="h-3/5 overflow-hidden">
-        <div className="flex flex-col space-y-1">
+      <div className="h-3/5 px-2 overflow-hidden">
+        <div className="flex flex-col space-y-2">
           {orders.map((order) => {
             return (
               <div
-                className="flex flex-row border border-gray-300 shadow-2xl rounded-md bg-white dark:bg-slate-500 "
+                className="flex flex-row items-center border border-gray-300 shadow-2xl rounded-md px-2 bg-white dark:bg-slate-500 "
                 key={order.orderId}
               >
-                <div className="pl-0.5 pr-0 py-2 w-full">
+                <div className="w-full">
                   <div className="grid grid-cols-1">
                     <div className="flex flex-row">
                       <Link
@@ -134,11 +134,11 @@ export const OrderManager = () => {
                       </Link>
                     </div>
                     <div className="flex flex-row text-sm space-x-1">
-                      <span className="font font-mono text-gray-500 text-[10px]">{order.startTime}</span>
+                      <span className="font font-mono text-gray-500 text-[10px]">{formatVNDateTime(new Date(order.startTime))}</span>
                     </div>
                   </div>
                 </div>
-                <div className="pl-0.2 pr-2 py-2 items-center">
+                <div className="pl-0.2 pr-1">
                   <div className="bg-zinc-200 rounded-md py-0.5 w-24 text-center font-bold text-green-700">
                     <span>{order.status}</span>
                   </div>

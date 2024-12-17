@@ -61,14 +61,14 @@ export const formatISODateTime = (date) => {
 export const formatDatePartition = (date) => {
     // Format: 2024/07/30
     var isoDateString = formatISODate(date)
-    return isoDateString.replaceAll("-","/")
+    return isoDateString.replaceAll("-", "/")
 }
 
 export const formatMonthPartition = (date) => {
     // Format: 2024/07/30
     var isoDateString = formatISODate(date)
     var dateString = isoDateString.substring(0, "2024-07".length)
-    return dateString.replaceAll("-","/")
+    return dateString.replaceAll("-", "/")
 }
 
 const date2DigitOptions = { year: 'numeric', month: '2-digit', day: 'numeric' }
@@ -81,4 +81,17 @@ const dateMonthOptions = { month: 'short', day: 'numeric' }
 export const formatDateMonthDate = (date) => {
     // Format: Jul 30
     return date.toLocaleDateString("en-US", dateMonthOptions)
+}
+
+export const formatVNDateTime = (date) => {
+    // Format: 07/30/2024
+    return date.toLocaleDateString("en-GB", {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false,
+    })
 }

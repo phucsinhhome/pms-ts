@@ -16,7 +16,6 @@ export const Inventory = () => {
   const [pagination, setPagination] = useState({
     pageNumber: 0,
     pageSize: DEFAULT_PAGE_SIZE,
-    totalElements: 200,
     totalPages: 20
   })
 
@@ -26,16 +25,11 @@ export const Inventory = () => {
   const handlePaginationClick = (page) => {
     console.log("Pagination nav bar click to page %s", page)
 
-    var pNum = page < 0 ? 0 : page > pagination.totalPages - 1 ? pagination.totalPages - 1 : page;
-    var pSize = pagination.pageSize
-
-    var nPage = {
+    var pNum = page < 0 ? 0 : page > pagination.totalPages - 1 ? pagination.totalPages - 1 : page
+    setPagination({
       ...pagination,
-      pageNumber: pNum,
-      pageSize: pSize
-    }
-    setPagination(nPage)
-    fetchAllProducts()
+      pageNumber: pNum
+    })
   }
 
   const fetchAllProducts = () => {
@@ -47,12 +41,12 @@ export const Inventory = () => {
           rsp.json()
             .then(data => {
               indexProduct(data.content)
-              setPagination({
-                pageNumber: data.number,
-                pageSize: data.size,
-                totalElements: data.totalElements,
-                totalPages: data.totalPages
-              })
+              if (data.totalPages !== pagination.totalPages) {
+                setPagination({
+                  ...pagination,
+                  totalPages: data.totalPages
+                })
+              }
             })
         }
       })
@@ -63,7 +57,7 @@ export const Inventory = () => {
     fetchAllProducts();
 
     // eslint-disable-next-line
-  }, [location]);
+  }, [location, pagination.pageNumber]);
 
 
   const pageClass = (pageNum) => {
@@ -423,6 +417,7 @@ export const Inventory = () => {
               >
                 <Dropdown.Item onClick={() => changeProductGroup('food')}>food</Dropdown.Item>
                 <Dropdown.Item onClick={() => changeProductGroup('baverage')}>baverage</Dropdown.Item>
+                <Dropdown.Item onClick={() => changeProductGroup('breakfast')}>breakfast</Dropdown.Item>
               </Dropdown>
             </div>
             <div className="flex flex-row w-full align-middle">

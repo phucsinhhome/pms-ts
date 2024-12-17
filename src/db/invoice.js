@@ -52,13 +52,18 @@ export const listLatestInvoices = (pageNumber, pageSize) => {
 }
 
 export const listStayingAndComingInvoices = (fromDate, pageNumber, pageSize) => {
+  console.info("Fetching invoices from backend include prepaid")
+  return listStayingAndComingInvoicesAndPrepaid(fromDate, true, pageNumber, pageSize)
+}
+
+export const listStayingAndComingInvoicesAndPrepaid = (fromDate, includePrepaid, pageNumber, pageSize) => {
   console.info("Fetching invoices from backend")
 
   var opts = {
     method: 'GET'
   }
 
-  return fetch(`${process.env.REACT_APP_INVOICE_SERVICE_ENDPOINT}/list/upcoming?fromDate=${fromDate}&page=${pageNumber}&size=${pageSize}`, opts)
+  return fetch(`${process.env.REACT_APP_INVOICE_SERVICE_ENDPOINT}/list/upcoming?fromDate=${fromDate}&includePrepaid=${includePrepaid}&page=${pageNumber}&size=${pageSize}`, opts)
 }
 
 export const listInvoiceByGuestName = (fromDate, guestName, pageNumber, pageSize) => {

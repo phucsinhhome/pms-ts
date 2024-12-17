@@ -4,7 +4,7 @@ import { beginOfDay, formatISODate, formatISODateTime } from "../../Service/Util
 import { currentUser, DEFAULT_PAGE_SIZE } from "../../App";
 import { fetchOrders } from "../../db/order";
 import { Button, Modal, TextInput } from "flowbite-react";
-import { listInvoiceByGuestName } from "../../db/invoice";
+import { listInvoiceByGuestName, listStayingAndComingInvoicesAndPrepaid } from "../../db/invoice";
 
 
 export const OrderManager = () => {
@@ -62,7 +62,18 @@ export const OrderManager = () => {
   }
 
   const findTheInvoice = () => {
-    setShowInvoices(true)
+    let fromDate = formatISODate(new Date())
+    listStayingAndComingInvoicesAndPrepaid(fromDate, false, 0, 7)
+      .then(rsp => {
+        if (rsp.ok) {
+          rsp.json()
+            .then(data => {
+              setInvoices(data.content)
+            })
+        }
+      }).finally(() => {
+        setShowInvoices(true)
+      })
   }
 
   const hideInvoices = () => {
@@ -94,6 +105,7 @@ export const OrderManager = () => {
     console.info("Url %s has been copied", url)
     setInvoices([])
     setShowInvoices(false)
+    setFilteredName('')
   }
 
 
@@ -165,7 +177,8 @@ export const OrderManager = () => {
       >
         <Modal.Header />
         <Modal.Body>
-          <div className="pb-2 px-2">
+          <span className="font italic">Choose guest's invoice OR...</span>
+          <div className="pb-2">
             <TextInput
               id="filteredName"
               placeholder="Enter guest name to search"
@@ -176,11 +189,11 @@ export const OrderManager = () => {
               className="w-full"
             />
           </div>
-          <div className="flex flex-col space-y-6 px-2 pb-4 sm:pb-6 lg:px-8 xl:pb-8">
+          <div className="flex flex-col space-y-6pb-4 sm:pb-6 lg:px-8 xl:pb-8">
             {invoices.map((invoice) => {
               return (
                 <div
-                  className="flex flex-row items-center border px-2 border-gray-300 rounded-sm bg-white dark:bg-slate-500 "
+                  className="flex flex-row items-center border rounded-md px-2 border-gray-300 bg-white dark:bg-slate-500 "
                   key={invoice.id}
                 >
                   <div className="px-0 w-full">
@@ -197,8 +210,8 @@ export const OrderManager = () => {
                       </div>
                     </div>
                   </div>
-                  <div>
-                    <Link className="font-bold text-amber-900" onClick={() => copyOrderLink(invoice)}>Copy</Link>
+                  <div className="rounded-xl bg-slate-300">
+                    <Link className="font-bold text-amber-900 px-3 py-2 hover:underline" onClick={() => copyOrderLink(invoice)}>Copy</Link>
                   </div>
                 </div>
               )

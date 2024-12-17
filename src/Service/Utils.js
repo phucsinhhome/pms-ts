@@ -95,3 +95,7 @@ export const formatVNDateTime = (date) => {
         hour12: false,
     })
 }
+
+export const formatRooms = (rooms) => {
+    return rooms ? rooms.join('.') : "[]"
+}

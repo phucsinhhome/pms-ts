@@ -6,15 +6,15 @@ import { fetchOrders } from "../../db/order";
 import { Button, Modal, TextInput } from "flowbite-react";
 import { listInvoiceByGuestName, listStayingAndComingInvoicesAndPrepaid } from "../../db/invoice";
 
+export const statusFormats = {
+  SENT: 'text-orange-400',
+  CONFIRMED: 'text-green-700',
+  REJECTED: 'text-red-700',
+  SERVED: 'text-gray-700',
+  EXPIRED: 'text-gray-700'
+}
 
-export const OrderManager = () => {
-  const statusFormats = {
-    SENT: 'text-orange-400',
-    CONFIRMED: 'text-green-700',
-    REJECTED: 'text-red-700',
-    SERVED: 'text-gray-700',
-    EXPIRED: 'text-gray-700'
-  }
+export const OrderManager = () => {  
   const [orders, setOrders] = useState([])
   const [filteredName, setFilteredName] = useState('')
   const [invoices, setInvoices] = useState([])

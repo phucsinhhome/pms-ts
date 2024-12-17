@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Avatar, Button, Label, Modal, TextInput } from "flowbite-react";
 import { DEFAULT_PAGE_SIZE } from "../../App";
-import { formatISODate, formatISODateTime, formatVND } from "../../Service/Utils";
+import { formatISODate, formatISODateTime, formatRooms, formatVND } from "../../Service/Utils";
 import { confirmOrder, fetchOrder, rejectOrder } from "../../db/order";
-import { listInvoiceByGuestName } from "../../db/invoice";
+import { getInvoice, listInvoiceByGuestName } from "../../db/invoice";
+import { statusFormats } from "./OrderManager";
 
 
 export const Order = () => {
@@ -27,6 +28,14 @@ export const Order = () => {
           rsp.json()
             .then(data => {
               setOrder(data)
+              let invoiceId = data.invoiceId
+              if (invoiceId !== undefined && invoiceId !== null && invoiceId !== '') {
+                getInvoice(invoiceId)
+                  .then(inv => {
+                    console.info('Set the linked invoice')
+                    setChoosenInvoice(inv)
+                  })
+              }
             })
         }
       })
@@ -142,76 +151,45 @@ export const Order = () => {
   return (
     <div className="h-full pt-3">
       <div className="flex flex-col max-h-fit overflow-hidden">
-        <div className="flex flex-col space-y-1">
-          <Label>{'Order Id: ' + order.orderId}</Label>
-          <Label>{'Guest Name: ' + order.guestName}</Label>
-          <Label>{'Invoice Id: ' + order.invoiceId}</Label>
-          <Label>{'Status: ' + order.status}</Label>
+        <div className="flex flex-col space-y-1 px-2">
+          <span className="font font-mono text-[9px] text-gray-400">{order.orderId}</span>
+          <div className="flex flex-row items-center space-x-2">
+            <span className="font font-bold">{order.guestName ? order.guestName.toUpperCase() : ""}</span>
+            {
+              choosenInvoice.id !== undefined ?
+                <div className="flex flex-row items-center space-x-2">
+                  <span className="font text-[9px] italic">{" linked to: "}</span>
+                  <span>{choosenInvoice.guestName}</span>
+                  <span className="font text-sm font-bold">{"(" + formatRooms(choosenInvoice.rooms) + ")"}</span>
+                </div>
+                : <></>
+            }
+          </div>
+          <div className="flex flex-row items-center space-x-2">
+            <span className={"font font-mono " + statusFormats[order.status]}>{order.status}</span>
+            <span className="font font-mono text-sm text-gray-400">{order.invoiceId}</span>
+          </div>
         </div>
-        <div className="flex flex-col space-y-1 pt-2">
+        <div className="flex flex-col space-y-1 pt-2 px-2">
           {order.items ? order.items.map((item) => {
             return (
               <div
-                className="flex flex-row items-center border border-gray-300 shadow-2xl rounded-md bg-white dark:bg-slate-500 "
+                className="flex flex-row items-center border px-1 py-1 border-gray-300 shadow-2xl rounded-md bg-white dark:bg-slate-500 "
                 key={item.id}
               >
-                <div className="pl-0.5 pr-1">
-                  <Avatar img={item.featureImgUrl} alt="dish image" rounded className="w-12" />
+                <div>
+                  <Avatar img={item.featureImgUrl} alt="" rounded className="w-12" />
                 </div>
-                <div className="px-0 w-full">
-                  <div className="grid grid-cols-1">
-                    <div className="flex flex-row">
-                      <span
-                        className="font-medium text-blue-600 hover:underline dark:text-blue-500 overflow-hidden"
-                      >
-                        {item.name}
-                      </span>
-                    </div>
-                    <div className="flex flex-row text-sm space-x-1">
-                      <span className="font font-mono text-gray-500 text-[10px]">{item.description}</span>
-                    </div>
-                  </div>
+                <div className="flex flex-row px-1 w-full">
+                  <span
+                    className="font-medium text-blue-600 dark:text-blue-500 overflow-hidden"
+                  >
+                    {item.quantity + 'x ' + item.name}
+                  </span>
                 </div>
-                <div className="flex flex-col pl-0.2 pr-2">
-                  <div>
-                    <span className="w-full text text-center font-mono text-red-700 font-semibold">{formatVND(item.unitPrice)}</span>
-                  </div>
-                  <div className="relative flex items-center w-full mb-2">
-                    <button
-                      type="button"
-                      id="decrement-button"
-                      data-input-counter-decrement="quantity-input"
-                      className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-s-lg py-1 px-2 h-7 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
-                      disabled
-                    >
-                      <svg className="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
-                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h16" />
-                      </svg>
-                    </button>
-                    <input
-                      type="number"
-                      id="quantity-input"
-                      data-input-counter aria-describedby="helper-text-explanation"
-                      className="bg-gray-50 border-x-0 border-gray-300 h-7 text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-9 py-1 pr-0 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      placeholder="999"
-                      required
-                      value={item.quantity}
-                      readOnly
-                    />
-                    <button
-                      type="button"
-                      id="increment-button"
-                      data-input-counter-increment="quantity-input"
-                      className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-e-lg py-1 px-2 h-7 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
-                      disabled
-                    >
-                      <svg className="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 1v16M1 9h16" />
-                      </svg>
-                    </button>
-                  </div>
+                <div>
+                  <span className="w-full text text-center font-mono text-red-700 font-semibold">{formatVND(item.unitPrice)}</span>
                 </div>
-
               </div>
             )
           }) : <>{message}</>}

@@ -277,7 +277,7 @@ export const Inventory = () => {
     if (lastDotIndex !== -1) {
       extension = fullName.slice(lastDotIndex + 1);
     }
-    var imageName = editingProduct.name.toLowerCase().replace(' ', '_') + '_' + nameSuffix + '.' + extension
+    var imageName = editingProduct.name.toLowerCase().replaceAll(' ', '_') + '_' + nameSuffix + '.' + extension
 
     let imageKey = ['product/images', editingProduct.group, imageName].join('/')
     console.info("The new image name has been generated %s", imageKey)

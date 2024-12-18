@@ -6,10 +6,12 @@ import { formatMoneyAmount } from "../Invoice/EditItem";
 import { HiOutlineCash } from "react-icons/hi";
 import { DEFAULT_PAGE_SIZE } from "../../App";
 import { formatVND } from "../../Service/Utils";
+import { putObject } from "../../db/gcs";
 
 
 export const Inventory = () => {
 
+  const GOOGLE_CLOUD_STORAGE = 'https://storage.googleapis.com'
   const [filteredName, setFilteredName] = useState('')
   const [products, setProducts] = useState({})
 
@@ -104,17 +106,24 @@ export const Inventory = () => {
     setProducts(iP)
   }
 
+  const defaultImageKey = "psassistant/product/pizza.png"
   const addProduct = () => {
+    var defaultUrl = buildImageUrl(defaultImageKey)
     let aP = {
       quantity: 10,
       group: 'food',
-      featureImgUrl: "https://storage.googleapis.com/ps-dc-pub/psassistant/product/pizza.png",
+      featureImgUrl: defaultUrl,
       imageUrls: [
-        "https://storage.googleapis.com/ps-dc-pub/psassistant/product/pizza.png"
+        defaultUrl,
+        defaultUrl
       ]
     }
     setEditingProduct(aP)
     setShowProductDetailModal(true)
+  }
+
+  const buildImageUrl = (objectKey) => {
+    return [GOOGLE_CLOUD_STORAGE, process.env.REACT_APP_PUBLIC_BUCKET, objectKey].join("/")
   }
 
   const viewProductDetail = (product) => {
@@ -223,24 +232,57 @@ export const Inventory = () => {
       })
   }
 
-  const onFileChange = (e) => {
-    // let upload = e.target.files;
-    // if (upload.length < 1) return;
+  const changeFeatureImage = (e) => {
+    onFileChange(e, 'feature')
+      .then(rsp => {
+        if (rsp.ok) {
+          rsp.json()
+            .then(data => {
+              setEditingProduct({
+                ...editingProduct,
+                featureImgUrl: buildImageUrl(data.objectKey)
+              })
+            })
+        }
+      })
+  }
 
-    // putObject(upload[0], 'ps-dc-pub', 'psassistant/product/phucsinh_logo.jpg')
-    //   .then(rsp => {
-    //     if (rsp.ok) {
-    //       rsp.json()
-    //         .then(data => {
-    //           let url = 'https://storage.googleapis.com/ps-dc-pub/' + data.objectKey
-    //           let uO = {
-    //             ...editingProduct,
-    //             featureImgUrl: url
-    //           }
-    //           setEditingProduct(uO)
-    //         })
-    //     }
-    //   })
+  const changeContentImage = (e, idx) => {
+    onFileChange(e, 'content_' + idx)
+      .then(rsp => {
+        if (rsp.ok) {
+          rsp.json()
+            .then(data => {
+              setEditingProduct({
+                ...editingProduct,
+                imageUrls: [
+                  buildImageUrl(data.objectKey)
+                ]
+              })
+            })
+        }
+      })
+  }
+
+  const onFileChange = (e, nameSuffix) => {
+    let upload = e.target.files;
+    if (upload.length < 1) return;
+    const file = e.target.files[0];
+
+
+    const fullName = file.name;
+    var extension = ''
+
+    const lastDotIndex = fullName.lastIndexOf('.');
+    if (lastDotIndex !== -1) {
+      extension = fullName.slice(lastDotIndex + 1);
+    }
+    var imageName = editingProduct.name.toLowerCase().replace(' ', '_') + '_' + nameSuffix + '.' + extension
+
+    let imageKey = ['product/images', editingProduct.group, imageName].join('/')
+    console.info("The new image name has been generated %s", imageKey)
+
+    return putObject(file, process.env.REACT_APP_PUBLIC_BUCKET, imageKey)
   }
 
   return (
@@ -486,11 +528,26 @@ export const Inventory = () => {
                   value="Feature Image"
                 />
               </div>
-              <FileInput id="featureImgUrl" onChange={onFileChange} />
-              <img className="w-auto h-12"
+              <FileInput id="featureImgUrl" onChange={(e) => changeFeatureImage(e)} disabled={editingProduct.name === undefined || editingProduct.name === null || editingProduct.name === ''} />
+              <img className="max-w-sm h-12"
                 src={editingProduct.featureImgUrl}
                 alt="" />
             </div>
+            {
+              editingProduct.imageUrls ? editingProduct.imageUrls.map((imgUrl, idx) => <div key={idx} className="flex flex-row w-full align-middle">
+                <div className="flex items-center w-2/5">
+                  <Label
+                    htmlFor={"imgUrl" + idx}
+                    value={"Img " + idx}
+                  />
+                </div>
+                <FileInput id={"imgUrl" + idx} onChange={(e) => changeContentImage(e, idx)} disabled={editingProduct.name === undefined || editingProduct.name === null || editingProduct.name === ''} />
+                <img className="max-w-sm h-12"
+                  src={editingProduct.imageUrls[idx]}
+                  alt="" />
+              </div>)
+                : <></>
+            }
           </div>
         </Modal.Body>
         <Modal.Footer className="flex justify-center">

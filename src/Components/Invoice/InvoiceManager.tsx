@@ -1,40 +1,51 @@
-import { useState, useEffect } from "react";
-import { deleteInvoice, listStayingAndComingInvoices } from "../../db/invoice";
+import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button, Modal, Table } from "flowbite-react";
 import Moment from "react-moment";
 import { DEFAULT_PAGE_SIZE } from "../../App";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 import { formatISODate, formatVND } from "../../Service/Utils";
+import { deleteInvoice, listStayingAndComingInvoices } from "../../db/invoice";
+
+export type InvoiceItem = {
+  id: string,
+  name: string,
+  unitPrice: number,
+  quantity: number
+}
+export type Invoice = {
+  id: string,
+  guestName: string,
+  issuer: string,
+  issuerId: string,
+  subTotal: number,
+  checkInDate: Date,
+  checkOutDate: Date,
+  prepaied: boolean,
+  paymentMethod: string,
+  items: InvoiceItem[]
+}
 
 
 export const InvoiceManager = () => {
-  const [invoices, setInvoices] = useState([
-    {
-      "id": "000000000000000000",
-      "guestName": "",
-      "issuer": "",
-      "issuerId": "",
-      "subTotal": 0
-    }
-  ])
+  const [invoices, setInvoices] = useState<Invoice[]>([])
 
   const [fromDate, setFromDate] = useState(new Date());
   const [deltaDays, setDeltaDays] = useState(0)
 
   const [pagination, setPagination] = useState({
     pageNumber: 0,
-    pageSize: DEFAULT_PAGE_SIZE,
+    pageSize: DEFAULT_PAGE_SIZE === undefined ? 10 : +DEFAULT_PAGE_SIZE,
     totalElements: 200,
     totalPages: 20
   })
 
   const [openModal, setOpenModal] = useState(false)
-  const [deletingInv, setDeletingInv] = useState(null)
+  const [deletingInv, setDeletingInv] = useState<Invoice>()
 
   const location = useLocation()
 
-  const filterDay = (numDays) => {
+  const filterDay = (numDays: number) => {
 
     var newDate = Date.now() + numDays * 86400000
     var newDD = new Date(newDate)
@@ -44,21 +55,21 @@ export const InvoiceManager = () => {
     fetchInvoices(newDD, pagination.pageNumber, pagination.pageSize)
   }
 
-  const handlePaginationClick = (pageNumber) => {
+  const handlePaginationClick = (pageNumber: number) => {
     console.log("Pagination nav bar click to page %s", pageNumber)
     var pNum = pageNumber < 0 ? 0 : pageNumber > pagination.totalPages - 1 ? pagination.totalPages - 1 : pageNumber;
     var pSize = pagination.pageSize
     fetchInvoices(fromDate, pNum, pSize)
   }
 
-  const isCurrentlyStaying = (invoice) => {
+  const isCurrentlyStaying = (invoice: Invoice) => {
     const now = new Date();
     const checkInDate = new Date(invoice.checkInDate);
     const checkOutDate = new Date(invoice.checkOutDate);
     return now >= checkInDate && now <= checkOutDate;
   };
 
-  const sortInvoices = (invoices) => {
+  const sortInvoices = (invoices: Invoice[]): Invoice[] => {
     return invoices.sort((a, b) => {
       const aCurrentlyStaying = isCurrentlyStaying(a);
       const bCurrentlyStaying = isCurrentlyStaying(b);
@@ -66,14 +77,14 @@ export const InvoiceManager = () => {
       if (aCurrentlyStaying && !bCurrentlyStaying) return -1;
       if (!aCurrentlyStaying && bCurrentlyStaying) return 1;
 
-      const aCheckOutDate = new Date(a.checkOutDate);
-      const bCheckOutDate = new Date(b.checkOutDate);
+      const aCheckOutDate = new Date(a.checkOutDate).getTime();
+      const bCheckOutDate = new Date(b.checkOutDate).getTime();
 
       return aCheckOutDate - bCheckOutDate;
     });
-  };
+  }
 
-  const fetchInvoices = (fromDate, pageNumber, pageSize) => {
+  const fetchInvoices = (fromDate: Date, pageNumber: number, pageSize: number) => {
 
     var fd = formatISODate(fromDate)
     console.info("Loading invoices from date %s...", fd)
@@ -124,12 +135,12 @@ export const InvoiceManager = () => {
       days: -1 * new Date().getDate(),
       label: 'From 1st'
     }]
-  const filterClass = (days) => {
+  const filterClass = (days: number) => {
     var classNamePattern = "font-bold text-amber-800 rounded px-2 py-0.5"
     return classNamePattern + " " + (deltaDays === days ? "bg-slate-400" : "bg-slate-200");
   }
 
-  const pageClass = (pageNum) => {
+  const pageClass = (pageNum: number) => {
     var noHighlight = "px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
     var highlight = "px-3 py-2 leading-tight text-bold text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"
 
@@ -137,7 +148,7 @@ export const InvoiceManager = () => {
   }
 
   //================ DELETE INVOICE ==========================//
-  const handleDeleteInvoice = (inv) => {
+  const handleDeleteInvoice = (inv: Invoice) => {
     if (!isDeleteable(inv)) {
       console.warn("Can not delete the paid invoice")
       return
@@ -148,7 +159,7 @@ export const InvoiceManager = () => {
 
   const cancelDeletion = () => {
     setOpenModal(false)
-    setDeletingInv(null)
+    setDeletingInv(undefined)
   }
 
   const confirmDeletion = () => {
@@ -172,11 +183,11 @@ export const InvoiceManager = () => {
       console.error(e)
     } finally {
       setOpenModal(false)
-      setDeletingInv(null)
+      setDeletingInv(undefined)
     }
   }
 
-  const isDeleteable = (inv) => {
+  const isDeleteable = (inv: Invoice) => {
     if (inv.prepaied) {
       return false
     }
@@ -215,6 +226,7 @@ export const InvoiceManager = () => {
         {filterOpts.map((opt) => {
           return (<Link
             key={opt.days}
+            to=""
             onClick={() => filterDay(opt.days)}
             relative="route"
             className={filterClass(opt.days)}

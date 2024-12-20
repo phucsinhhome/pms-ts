@@ -113,10 +113,7 @@ export const Inventory = () => {
       quantity: 10,
       group: 'food',
       featureImgUrl: defaultUrl,
-      imageUrls: [
-        defaultUrl,
-        defaultUrl
-      ]
+      imageUrls: [defaultUrl]
     }
     setEditingProduct(aP)
     setShowProductDetailModal(true)

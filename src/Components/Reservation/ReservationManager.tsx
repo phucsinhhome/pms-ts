@@ -6,25 +6,25 @@ import Moment from "react-moment";
 import { Configs, internalRooms } from "../Invoice/EditInvoice";
 import { addDays, formatISODate } from "../../Service/Utils";
 import { DEFAULT_PAGE_SIZE } from "../../App";
+import { type } from "os";
 
+export type Reservation = {
+  id: string,
+  code: string,
+  guestName: string,
+  country: string,
+  channel: string,
+  numOfGuest: number,
+  canceled: false,
+  checkInDate: string,
+  checkOutDate: string,
+  rooms: [],
+  guestIds: [],
+  guestPhotos: []
+}
 
 export function ReservationManager() {
-  const [reservations, setReservations] = useState([
-    {
-      id: null,
-      code: "000000000000000000",
-      guestName: "",
-      country: "",
-      channel: "",
-      numOfGuest: 0,
-      canceled: false,
-      checkInDate: "",
-      checkOutDate: "",
-      rooms: [],
-      guestIds: [],
-      guestPhotos: []
-    }
-  ])
+  const [reservations, setReservations] = useState<Reservation[]>([])
 
   const [fromDate, setFromDate] = useState(new Date());
   const [deltaDays, setDeltaDays] = useState(0)

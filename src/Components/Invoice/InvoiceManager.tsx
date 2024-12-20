@@ -9,9 +9,11 @@ import { deleteInvoice, listStayingAndComingInvoices } from "../../db/invoice";
 
 export type InvoiceItem = {
   id: string,
-  name: string,
+  itemName: string,
   unitPrice: number,
-  quantity: number
+  quantity: number,
+  amount: number,
+  service: string
 }
 export type Invoice = {
   id: string,

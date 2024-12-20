@@ -7,7 +7,7 @@ export const listAllProducts = () => {
     .then(response => response.json())
 }
 
-export const listProducts = (page, size) => {
+export const listProducts = (page:number, size:number) => {
   console.info("Fetching all products from the inventory")
   const opts = {
     method: 'GET'

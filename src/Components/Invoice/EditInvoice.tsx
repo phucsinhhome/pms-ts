@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
-import { exportInvoice, getInvoice, listPaymentMethods as paymentMethods, rooms, updateInvoice } from "../../db/invoice";
+import { exportInvoice, getInvoice, rooms, updateInvoice } from "../../db/invoice";
 import { defaultEmptyItem, formatMoneyAmount } from "./EditItem";
 import { Table, TextInput, Label, Datepicker, Modal, Button } from 'flowbite-react';
 import { getPresignedLink, getPresignedLinkWithDefaultDuration, uploadBlobToPresignedURL } from "../../Service/FileService";
@@ -13,6 +13,8 @@ import Moment from "react-moment";
 import { listLatestReservations } from "../../db/reservation";
 import { listAllProducts } from "../../db/product";
 import html2canvas from "html2canvas";
+import { Invoice } from "./InvoiceManager";
+import { paymentMethods } from "../../db/staticdata";
 
 const getInvDownloadLink = (key, cbF) => {
   getPresignedLink('invoices', key, 300, cbF)
@@ -42,22 +44,7 @@ export const Configs = {
 }
 
 export const EditInvoice = () => {
-  const [invoice, setInvoice] = useState(
-    {
-      id: "new",
-      guestName: "",
-      issuer: currentUserFullname(),
-      issuerId: currentUser.id,
-      subTotal: 0,
-      checkInDate: formatISODate(new Date()),
-      checkOutDate: formatISODate(new Date()),
-      prepaied: false,
-      paymentMethod: null,
-      reservationCode: null,
-      items: [],
-      creatorId: currentUser.id
-    }
-  )
+  const [invoice, setInvoice] = useState<Invoice>()
 
   const [invoiceUrl, setInvoiceUrl] = useState({ filename: "", presignedUrl: "", hidden: true })
   const { invoiceId } = useParams()
@@ -113,16 +100,20 @@ export const EditInvoice = () => {
 
   useEffect(() => {
     console.info("Editing invoice %s", invoiceId)
+    if (invoiceId === undefined) {
+      console.warn("Invalid invoice id. It should be value of 'new' or a certain ID value")
+      return
+    }
     if (invoiceId !== "new") {
       getInvoice(invoiceId)
         .then(data => {
           if (data.paymentMethod !== null && data.paymentMethod !== undefined && data.paymentMethod !== "") {
             const pM = paymentMethods.find(m => m.id === data.paymentMethod)
-            setSelectedPaymentMethod(pM)
+            setSelectedPaymentMethod(pM || paymentMethods[0])
           }
           if (data.issuerId !== null && data.issuerId !== undefined && data.issuerId !== "") {
             const issuer = issuers.find(usr => usr.id === data.issuerId)
-            setSelectedIssuer(issuer)
+            setSelectedIssuer(issuer || issuers[0])
           }
           setInvoice(data)
         })
@@ -137,14 +128,15 @@ export const EditInvoice = () => {
     }
     if (products.length <= 0) {
       console.info("Fetch the products")
-      listAllProducts().then(data => setProducts(data))
+      listAllProducts()
+        .then(data => setProducts(data))
     }
   }, [invoiceId, products.length])
 
 
   const handleSaveInvoice = () => {
     console.info("Prepare to save invoice")
-    if (invoice === null) {
+    if (invoice === undefined) {
       return
     }
     if (invoice.guestName === null
@@ -186,6 +178,10 @@ export const EditInvoice = () => {
 
   const createOrUpdateItem = () => {
     try {
+      if (invoiceId === undefined || invoice === undefined) {
+        console.warn("Invalid invoice")
+        return
+      }
       if (editingItem === null || editingItem === undefined) {
         console.warn("Invalid item")
         return
@@ -234,9 +230,12 @@ export const EditInvoice = () => {
 
   const invoiceLink = useRef(null)
 
-  useEffect(() => {
-    invoiceLink.current.click()
-  }, [invoiceUrl])
+  // useEffect(() => {
+  //   if(invoiceLink.current==null){
+  //     return
+  //   }
+  //   invoiceLink.current.click()
+  // }, [invoiceUrl])
 
   const exportable = (initialUser === null || initialUser) === undefined ? true : false
 

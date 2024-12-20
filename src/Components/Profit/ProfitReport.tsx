@@ -1,9 +1,35 @@
 import { useState, useEffect } from "react";
-import { getProfitReportThisMonth } from "../../db/profit";
+// import { getProfitReportThisMonth } from "../../db/profit";
 import { Link } from "react-router-dom";
 import { adjustMonths, beginOfMonth, lastDateOf as lastDayOfMonth, formatVND, formatISODate, formatDateMonthDate, lastDateOfMonth } from "../../Service/Utils";
+import { fetchPReportThisMonth } from "../../db/profit";
 
-const reportTypes = [
+type RAspect = {
+  name: string,
+  key: string
+}
+type RPeriod = {
+  name: string,
+  range: {
+    fromDate: string,
+    toDate: string
+  }
+}
+type RFilter = {
+  id: string,
+  name: string,
+  adjustedMonths: number,
+  entiredMonth: boolean
+}
+
+type ROption = {
+  aspect: string,
+  periodName: string,
+  fromDate: string,
+  toDate: string
+}
+
+const aspects: RAspect[] = [
   {
     name: "By Service",
     key: "services"
@@ -18,7 +44,7 @@ const reportTypes = [
   }
 ]
 
-const defaultPeriod = {
+const defaultPeriod: RPeriod = {
   name: "Today",
   range: {
     fromDate: formatISODate(beginOfMonth(new Date())),
@@ -27,36 +53,36 @@ const defaultPeriod = {
 }
 
 export function ProfitReport() {
-  const [report, setReportData] = useState({
-    "fromDate": "2023-12-01",
-    "toDate": "2023-12-13",
-    "id": null,
-    "overall": {
-      "expense": 11879991,
-      "revenue": 7797616,
-      "name": "OVERALL",
-      "displayName": "Tổng Quan",
-      "profit": -4082375
+  const defaultReport: PReport = {
+    fromDate: "2023-12-01",
+    toDate: "2023-12-13",
+    overall: {
+      expense: 11879991,
+      revenue: 7797616,
+      name: "OVERALL",
+      displayName: "Tổng Quan",
+      profit: -4082375
     },
-    "breakdown": [
+    breakdown: [
       {
-        "expense": 1330000,
-        "revenue": 0,
-        "name": "INVEST",
-        "displayName": "Đầu Tư",
-        "profit": -1330000
-      }
-    ]
-  })
+        expense: 1330000,
+        revenue: 0,
+        name: "INVEST",
+        displayName: "Đầu Tư",
+        profit: -1330000
+      }]
+  }
+
+  const [report, setReportData] = useState(defaultReport)
 
   const [params, setParams] = useState({
-    type: reportTypes[0].key,
+    aspect: aspects[0].key,
     periodName: defaultPeriod.name,
     fromDate: defaultPeriod.range.fromDate,
     toDate: defaultPeriod.range.toDate
   })
 
-  const timeFilters = [
+  const timeFilters: RFilter[] = [
     // {
     //   name: "Last Month",
     //   adjustedMonths: -1,
@@ -81,7 +107,7 @@ export function ProfitReport() {
     // }
   ]
 
-  const changePeriod = (timeFilter) => {
+  const changePeriod = (timeFilter: RFilter) => {
 
     var nextFromDate = timeFilter.adjustedMonths === 0 ?
       beginOfMonth(new Date()) :
@@ -108,9 +134,9 @@ export function ProfitReport() {
   const fetchReport = () => {
     var fD = params.fromDate
     var tD = params.toDate
-    console.info("Profit report by %s from %s to %s", params.type, fD, tD)
+    console.info("Profit report by %s from %s to %s", params.aspect, fD, tD)
 
-    getProfitReportThisMonth(fD, tD, params.type)
+    fetchPReportThisMonth(fD, tD, params.aspect)
       .then(data => setReportData(data))
   }
 
@@ -120,20 +146,20 @@ export function ProfitReport() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params]);
 
-  const filterClass = (reportKey, currentKey) => {
+  const filterClass = (reportKey: string, currentKey: string) => {
     var classNamePattern = "font-bold text-sm text-amber-800 rounded px-2 py-0.5"
     return classNamePattern + " " + (currentKey === reportKey ? "bg-slate-400" : "bg-slate-200");
   }
 
-  const changeReportType = (type) => {
+  const changeReportType = (type: RAspect) => {
     let nParam = {
       ...params,
-      type: type.key
+      aspect: type.key
     }
     setParams(nParam)
   }
 
-  const profitMargin = (profit, revenue) => {
+  const profitMargin = (profit: number, revenue: number) => {
     return revenue <= 0 ? 0 : Math.floor(profit * 100 / revenue)
   }
 
@@ -159,11 +185,11 @@ export function ProfitReport() {
           </div>
         </div>
         <div className="flex flex-row items-center space-x-2 pl-4 mb-2">
-          {reportTypes.map((rp) => {
+          {aspects.map((rp) => {
             return (<span
               key={rp.key}
               onClick={() => changeReportType(rp)}
-              className={filterClass(rp.key, params.type)}
+              className={filterClass(rp.key, params.aspect)}
             >
               {rp.name}
             </span>)

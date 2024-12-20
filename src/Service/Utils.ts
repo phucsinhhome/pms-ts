@@ -1,48 +1,47 @@
-export const formatVND = (amount) => {
+export const formatVND = (amount: number) => {
     return amount.toLocaleString('us-US', { style: 'currency', currency: 'VND' })
 }
 
-export const lastDateOf = (date) => {
+export const lastDateOf = (date: Date) => {
     return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
 }
 
-export const lastDateOfMonth = (date) => {
+export const lastDateOfMonth = (date: Date) => {
     return new Date(date.getFullYear(), date.getMonth() + 1, 0);
 }
 
-export const beginOfDay = (date) => {
+export const beginOfDay = (date: Date) => {
     date.setHours(7, 0, 0, 0)
     return date
 }
 
-export const endOfDay = (date) => {
+export const endOfDay = (date: Date) => {
     date.setHours(23)
     date.setMinutes(59)
     date.setSeconds(59)
     return date
 }
 
-export const addDays = (date, numOfDays) => {
+export const addDays = (date: Date, numOfDays: number) => {
     return new Date(date.getTime() + numOfDays * 86400000)
 }
 
-export const adjustMonths = (date, numOfMonths) => {
+export const adjustMonths = (date: Date, numOfMonths: number) => {
     return new Date(date.setMonth(date.getMonth() + numOfMonths))
 }
 
-export const beginOfMonth = (date) => {
+export const beginOfMonth = (date: Date) => {
     date.setDate(1)
     beginOfDay(date)
     return date
 }
 
-const dateShortOptions = { year: 'numeric', month: 'short', day: 'numeric' }
-export const formatShortDate = (date) => {
+export const formatShortDate = (date: Date) => {
     // Format: Jul 30, 2024
-    return date.toLocaleDateString("en-US", dateShortOptions)
+    return date.toLocaleDateString("en-US", { year: 'numeric', month: 'short', day: 'numeric' })
 }
 
-export const formatISODate = (date) => {
+export const formatISODate = (date: Date) => {
     // Format: 2024-07-30
     // Input: Date('Tue Aug 27 2024 00:00:00 GMT+0700') => Output: 2024-08-26
     // Input: Date('2024-08-27') => Output: 2024-08-27
@@ -50,7 +49,7 @@ export const formatISODate = (date) => {
     return date.toISOString().substring(0, 10)
 }
 
-export const formatISODateTime = (date) => {
+export const formatISODateTime = (date: Date) => {
     // Format: 2024-07-30
     // Input: Date('Tue Aug 27 2024 00:00:00 GMT+0700') => Output: 2024-08-26T17:00:00
     // Input: Date('2024-08-27') => Output: 2024-08-27T00:00:00
@@ -58,32 +57,30 @@ export const formatISODateTime = (date) => {
     return date.toISOString().substring(0, 19)
 }
 
-export const formatDatePartition = (date) => {
+export const formatDatePartition = (date: Date) => {
     // Format: 2024/07/30
     var isoDateString = formatISODate(date)
-    return isoDateString.replaceAll("-", "/")
+    return isoDateString.replace("-", "/")
 }
 
-export const formatMonthPartition = (date) => {
+export const formatMonthPartition = (date: Date) => {
     // Format: 2024/07/30
     var isoDateString = formatISODate(date)
     var dateString = isoDateString.substring(0, "2024-07".length)
-    return dateString.replaceAll("-", "/")
+    return dateString.replace("-", "/")
 }
 
-const date2DigitOptions = { year: 'numeric', month: '2-digit', day: 'numeric' }
-export const format2DigitDate = (date) => {
+export const format2DigitDate = (date: Date) => {
     // Format: 07/30/2024
-    return date.toLocaleDateString("en-US", date2DigitOptions)
+    return date.toLocaleDateString("en-US", { year: 'numeric', month: '2-digit', day: 'numeric' })
 }
 
-const dateMonthOptions = { month: 'short', day: 'numeric' }
-export const formatDateMonthDate = (date) => {
+export const formatDateMonthDate = (date: Date) => {
     // Format: Jul 30
-    return date.toLocaleDateString("en-US", dateMonthOptions)
+    return date.toLocaleDateString("en-US", { month: 'short', day: 'numeric' })
 }
 
-export const formatVNDateTime = (date) => {
+export const formatVNDateTime = (date: Date) => {
     // Format: 07/30/2024
     return date.toLocaleDateString("en-GB", {
         day: '2-digit',
@@ -96,11 +93,11 @@ export const formatVNDateTime = (date) => {
     })
 }
 
-export const formatRooms = (rooms) => {
+export const formatRooms = (rooms: string[]) => {
     return rooms ? rooms.join('.') : "[]"
 }
 
-export const formatLongDateTime = (date) => {
+export const formatLongDateTime = (date: Date) => {
     // Format: 20241218160422
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');

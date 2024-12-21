@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, MouseEventHandler, ChangeEventHandler, ChangeEvent } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
-import { exportInvoice, getInvoice, rooms, updateInvoice } from "../../db/invoice";
+import { exportInvoice, getInvoice, updateInvoice } from "../../db/invoice";
 import { defaultEmptyItem, formatMoneyAmount } from "./EditItem";
 import { Table, TextInput, Label, Datepicker, Modal, Button } from 'flowbite-react';
-import { getPresignedLink, getPresignedLinkWithDefaultDuration, uploadBlobToPresignedURL } from "../../Service/FileService";
+import { getPresignedLinkWithDefaultDuration, uploadBlobToPresignedURL } from "../../Service/FileService";
 import { HiOutlineCash, HiOutlineClipboardCopy } from "react-icons/hi";
 import { classifyServiceByItemName } from "../../Service/ItemClassificationService";
 import { addDays, formatDatePartition, formatISODate, formatShortDate, formatVND } from "../../Service/Utils";
@@ -13,14 +13,47 @@ import Moment from "react-moment";
 import { listLatestReservations } from "../../db/reservation";
 import { listAllProducts } from "../../db/product";
 import html2canvas from "html2canvas";
-import { Invoice } from "./InvoiceManager";
-import { paymentMethods } from "../../db/staticdata";
+import { Invoice, InvoiceItem, Issuer, Room } from "./InvoiceManager";
+import { paymentMethods, rooms } from "../../db/staticdata";
+import getPresignedLink from "../../Service/FileService";
+import { ResultCallback } from "minio/dist/main/internal/type";
+import { warn } from "console";
+import { Product } from "../Inventory/Inventory";
+import { Reservation, ResRoom } from "../Reservation/ReservationManager";
 
-const getInvDownloadLink = (key, cbF) => {
+type PaymentMethod = {
+  id: string,
+  name: string,
+  feeRate: number,
+  template: string,
+  src: string,
+  srcLargeImg: string,
+  paymentInfo: string,
+  defaultIssuerId: string
+}
+
+type EditingInvoiceItem = {
+  origin: InvoiceItem,
+  formattedUnitPrice: string
+}
+
+const defaultEmptyItem = {
+  origin: {
+    id: "",
+    itemName: "",
+    unitPrice: 0,
+    quantity: 0,
+    amount: 0,
+    service: ""
+  },
+  formattedUnitPrice: ''
+}
+
+const getInvDownloadLink = (key: string, cbF: ResultCallback<string>) => {
   getPresignedLink('invoices', key, 300, cbF)
 }
 
-export const internalRooms = (rooms) => {
+export const internalRooms = (rooms: ResRoom[]) => {
   return rooms.map(r => r.internalRoomName)
 }
 
@@ -40,47 +73,60 @@ export const Configs = {
       bucket: 'invoices'
     }
   }
-
 }
 
 export const EditInvoice = () => {
-  const [invoice, setInvoice] = useState<Invoice>()
+  const [invoice, setInvoice] = useState<Invoice>({
+    id: "new",
+    guestName: "",
+    issuer: currentUserFullname(),
+    issuerId: currentUser.id,
+    subTotal: 0,
+    checkInDate: formatISODate(new Date()),
+    checkOutDate: formatISODate(new Date()),
+    prepaied: false,
+    paymentMethod: 'cash',
+    reservationCode: '',
+    items: [],
+    creatorId: currentUser.id,
+    rooms: []
+  })
 
   const [invoiceUrl, setInvoiceUrl] = useState({ filename: "", presignedUrl: "", hidden: true })
   const { invoiceId } = useParams()
 
   const [openGuestNameModal, setOpenGuestNameModal] = useState(false)
-  const [editingGuestName, setEditingGuestName] = useState(null)
+  const [editingGuestName, setEditingGuestName] = useState('')
   const guestNameTextInput = useRef(null)
 
   const [openEditDateModal, setOpenEditDateModal] = useState(false)
-  const [editingDate, setEditingDate] = useState({ dateField: null, value: new Date() })
+  const [editingDate, setEditingDate] = useState<{ dateField: keyof Invoice, value: Date }>()
 
   const [openDelItemModal, setOpenDelItemModal] = useState(false)
-  const [deletingItem, setDeletingItem] = useState(null)
+  const [deletingItem, setDeletingItem] = useState<InvoiceItem>()
 
   const [openUsersModal, setOpenUsersModal] = useState(false)
-  const [selectedIssuer, setSelectedIssuer] = useState(issuers[0])
+  const [selectedIssuer, setSelectedIssuer] = useState<Issuer>(issuers[0])
 
   const [openPaymentModal, setOpenPaymentModal] = useState(false)
-  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(paymentMethods[0])
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<PaymentMethod>(paymentMethods[0])
 
 
-  const [products, setProducts] = useState([])
+  const [products, setProducts] = useState<Product[]>([])
   const [openEditingItemModal, setOpenEditingItemModal] = useState(false)
-  const [editingItem, setEditingItem] = useState(defaultEmptyItem)
-  const [lookupItems, setLookupItems] = useState([])
+  const [editingItem, setEditingItem] = useState<EditingInvoiceItem>(defaultEmptyItem)
+  const [lookupItems, setLookupItems] = useState<Product[]>([])
 
   const [openViewInvModal, setOpenViewInvModal] = useState(false)
 
   const [openChooseResModal, setOpenChooseResModal] = useState(false)
-  const [reservations, setReservations] = useState([])
-  const [filteredReservations, setFilteredReservations] = useState([])
+  const [reservations, setReservations] = useState<Reservation[]>([])
+  const [filteredReservations, setFilteredReservations] = useState<Reservation[]>([])
   const [resFilteredText, setResFilteredText] = useState('')
   const filteredResText = useRef(null)
 
   const [openRoomModal, setOpenRoomModal] = useState(false)
-  const [selectedRooms, setSelectedRooms] = useState([])
+  const [selectedRooms, setSelectedRooms] = useState<string[]>([])
 
   const [dirty, setDirty] = useState(false)
   const [loc, setLoc] = useState({ pageNumber: 0, pageSize: DEFAULT_PAGE_SIZE })
@@ -190,12 +236,12 @@ export const EditInvoice = () => {
         .then((res) => {
           console.info("Classification result %s", res)
           let item = {
-            id: editingItem.id,
-            itemName: editingItem.itemName,
-            service: editingItem.service,
-            unitPrice: editingItem.unitPrice,
-            quantity: editingItem.quantity,
-            amount: editingItem.amount
+            id: editingItem.origin.id,
+            itemName: editingItem.origin.itemName,
+            service: editingItem.origin.service,
+            unitPrice: editingItem.origin.unitPrice,
+            quantity: editingItem.origin.quantity,
+            amount: editingItem.origin.amount
           }
           let items = []
           if (item.id === null || item.id === "") {
@@ -243,6 +289,10 @@ export const EditInvoice = () => {
   const exportInv = () => {
     console.log("Export invoice %s with method [%s]...", invoiceId)
 
+    if (invoice === undefined) {
+      console.warn("Invalid invoice")
+      return
+    }
     const inv = {
       ...invoice
     }
@@ -261,7 +311,11 @@ export const EditInvoice = () => {
               if (err) {
                 return console.log(err)
               }
-              var invObject = { filename: json.filename, presignedUrl: url }
+              var invObject = {
+                ...invoiceUrl,
+                filename: json.filename,
+                presignedUrl: url
+              }
               setInvoiceUrl(invObject)
             })
           });
@@ -273,7 +327,7 @@ export const EditInvoice = () => {
   }
 
   //============ ITEM DELETION ====================//
-  const askForDelItemConfirmation = (item) => {
+  const askForDelItemConfirmation = (item: InvoiceItem) => {
 
     setDeletingItem(item);
     setOpenDelItemModal(true)
@@ -281,12 +335,12 @@ export const EditInvoice = () => {
 
   const cancelDelItem = () => {
     setOpenDelItemModal(false)
-    setDeletingItem(null)
+    setDeletingItem(undefined)
   }
 
   const confirmDelItem = () => {
     try {
-      if (deletingItem === undefined || deletingItem === null) {
+      if (invoice === undefined || deletingItem === undefined || deletingItem === null) {
         return;
       }
       console.warn("Delete item %s...", deletingItem.id)
@@ -307,17 +361,22 @@ export const EditInvoice = () => {
     } finally {
       setDirty(true)
       setOpenDelItemModal(false)
-      setDeletingItem(null)
+      setDeletingItem(undefined)
     }
 
   }
   //============ GUEST NAME ====================//
   const editGuestName = () => {
+    if (invoice === undefined) {
+      console.warn("Invalid invoice")
+      return
+    }
     setEditingGuestName(invoice.guestName)
     setOpenGuestNameModal(true)
   }
 
-  const changeGuestName = (e) => {
+  //ChangeEventHandler<HTMLInputElement>
+  const changeGuestName = (e: React.ChangeEvent<HTMLInputElement>) => {
     let nGN = e.target.value
     setEditingGuestName(nGN)
     setOpenGuestNameModal(true)
@@ -329,6 +388,10 @@ export const EditInvoice = () => {
   }
 
   const confirmEditGuestName = () => {
+    if (invoice === undefined) {
+      console.warn("Invalid invoice")
+      return
+    }
     let nInv = {
       ...invoice,
       guestName: editingGuestName
@@ -338,19 +401,47 @@ export const EditInvoice = () => {
     setDirty(true)
   }
   //============ CHECK IN-OUT ====================//
-  const editDate = (e) => {
-    let dId = e
-    console.info("ID: %s", dId)
+  // const editDate = (dateFieldName: Date) => {
+  //   if (invoice === undefined) {
+  //     console.warn("Invalid invoice")
+  //     return
+  //   }
+  //   let dId: keyof Invoice = dateFieldName
+  //   console.info("ID: %s", dId)
+  //   let eD = {
+  //     dateField: dId,
+  //     value: new Date(invoice[dId])
+  //   }
+  //   console.log(eD)
+  //   setEditingDate(dateFieldName)
+  //   setOpenEditDateModal(true)
+  // }
+
+  const editDate = (dateFieldName: keyof Invoice) => {
+    if (invoice === undefined) {
+      console.warn("Invalid invoice")
+      return
+    }
+    // let dId: keyof Invoice = dateFieldName
+    console.info("ID: %s", dateFieldName)
     let eD = {
-      dateField: dId,
-      value: new Date(invoice[dId])
+      dateField: dateFieldName,
+      value: new Date(invoice[dateFieldName] as string)
     }
     console.log(eD)
     setEditingDate(eD)
     setOpenEditDateModal(true)
   }
 
-  const changeEditingDate = (date) => {
+  const changeEditingDate = (date: Date) => {
+    if (editingDate === undefined) {
+      console.warn("Invalid editing date")
+      return
+    }
+    if (invoice === undefined) {
+      console.warn("Invalid invoice")
+      return
+    }
     console.info("Selected date")
     let now = new Date()
     // Note: set the current time ( >= 07:00) to convert to ISO date does not change the date
@@ -361,22 +452,23 @@ export const EditInvoice = () => {
       [editingDate.dateField]: formatISODate(selectedDate)
     }
     setInvoice(nInv)
-    let eD = {
-      dateField: null,
-      value: new Date()
-    }
-    setEditingDate(eD)
+    // let eD = {
+    //   dateField: null,
+    //   value: new Date()
+    // }
+    setEditingDate(undefined)
     setOpenEditDateModal(false)
     setDirty(true)
   }
 
 
   const cancelEditDate = () => {
-    let eD = {
-      dateField: null,
-      value: new Date()
-    }
-    setEditingDate(eD)
+
+    // let eD = {
+    //   dateField: null,
+    //   value: new Date()
+    // }
+    setEditingDate(undefined)
     setOpenEditDateModal(false)
   }
 
@@ -387,14 +479,19 @@ export const EditInvoice = () => {
   const cancelSelectIssuer = () => {
     setOpenUsersModal(false)
   }
-  const changeIssuer = (user) => {
+  const changeIssuer = (user: Issuer) => {
     try {
+
+      if (invoice === undefined) {
+        console.warn("Invalid invoice")
+        return
+      }
       console.warn("Change the issuer to {}...", user.id)
       setSelectedIssuer(user)
       let nInv = {
         ...invoice,
-        issuerId: user.issuerId,
-        issuer: user.issuer
+        issuerId: user.id,
+        issuer: user.name
       }
       setInvoice(nInv)
     } catch (e) {
@@ -413,13 +510,21 @@ export const EditInvoice = () => {
     setOpenPaymentModal(false)
   }
 
-  const changePaymentMethod = (e) => {
+  const changePaymentMethod = (e: React.MouseEvent<HTMLImageElement, MouseEvent>) => {
 
     try {
       let is = e.currentTarget
       let pM = paymentMethods.find((p) => p.id === is.id)
-      setSelectedPaymentMethod(pM)
+      if (pM === undefined) {
+        console.warn("Cannot find payment method with id %s", is.id)
+        return
+      }
       let issuer = issuers.find(iss => iss.id === pM.defaultIssuerId)
+      if (issuer === undefined) {
+        warn("Cannot find the issuer for payment %s", pM.defaultIssuerId)
+        return
+      }
+      setSelectedPaymentMethod(pM)
       setSelectedIssuer(issuer)
 
       let nInv = {
@@ -438,7 +543,7 @@ export const EditInvoice = () => {
   }
 
   //============ PREPAIED CHANGE ====================//
-  const changePrepaied = (e) => {
+  const changePrepaied = (e: React.MouseEvent<HTMLImageElement, MouseEvent>) => {
     try {
       let nInv = {
         ...invoice,
@@ -453,10 +558,10 @@ export const EditInvoice = () => {
   }
 
   //================= EDIT ITEM ===================//
-  const editItem = (item) => {
+  const editItem = (item: InvoiceItem) => {
     let uP = formatMoneyAmount(String(item.unitPrice))
     let eI = {
-      ...item,
+      origin: item,
       formattedUnitPrice: uP.formattedAmount
     }
     setEditingItem(eI)
@@ -469,7 +574,7 @@ export const EditInvoice = () => {
   }
 
   //================= ITEM NAME ===================//
-  const changeItemName = (e) => {
+  const changeItemName = (e: React.ChangeEvent<HTMLInputElement>) => {
     let iName = e.target.value
     try {
       let eI = {
@@ -488,11 +593,11 @@ export const EditInvoice = () => {
   }
 
   const blurItemName = () => {
-    let nItemName = editingItem.itemName
+    let nItemName = editingItem.origin.itemName
     if (nItemName === null || nItemName === undefined || nItemName === "") {
       return Promise.resolve(false);
     }
-    if (editingItem.service === null || editingItem.service === undefined || editingItem.service === "") {
+    if (editingItem.origin.service === null || editingItem.origin.service === undefined || editingItem.origin.service === "") {
       console.log("Classify the service by service name [%s]", nItemName)
       return classifyServiceByItemName(nItemName)
         .then((srv) => {
@@ -510,17 +615,19 @@ export const EditInvoice = () => {
     }
   }
 
-  const confirmSelectItem = (product) => {
+  const confirmSelectItem = (product: Product) => {
     try {
       let uP = formatMoneyAmount(String(product.unitPrice))
       let eI = {
-        id: null,
-        itemName: product.name,
-        quantity: 1,
-        amount: product.unitPrice,
-        unitPrice: product.unitPrice,
+        origin: {
+          id: '',
+          itemName: product.name,
+          quantity: 1,
+          amount: product.unitPrice,
+          unitPrice: product.unitPrice,
+          service: ''
+        },
         formattedUnitPrice: uP.formattedAmount,
-        service: null
       }
       setLookupItems([])
       setEditingItem(eI)
@@ -534,12 +641,12 @@ export const EditInvoice = () => {
 
 
   //================= UNIT PRICE ===================//
-  const changeUnitPrice = (e) => {
+  const changeUnitPrice = (e: React.ChangeEvent<HTMLInputElement>) => {
     let v = e.target.value
     let uP = formatMoneyAmount(v)
     let eI = {
       ...editingItem,
-      amount: uP.amount * editingItem.quantity,
+      amount: uP.amount * editingItem.origin.quantity,
       unitPrice: uP.amount,
       formattedUnitPrice: uP.formattedAmount
     }
@@ -548,12 +655,12 @@ export const EditInvoice = () => {
   }
 
   //================= QUANTITY ===================//
-  const changeQuantity = (delta) => {
-    let nQ = editingItem.quantity + delta
+  const changeQuantity = (delta: number) => {
+    let nQ = editingItem.origin.quantity + delta
     let eI = {
       ...editingItem,
       quantity: nQ,
-      amount: editingItem.unitPrice * nQ
+      amount: editingItem.origin.unitPrice * nQ
     }
     setEditingItem(eI)
     setDirty(true)
@@ -575,7 +682,7 @@ export const EditInvoice = () => {
     confirmNoRes()
   }
 
-  const confirmSelectRes = (res) => {
+  const confirmSelectRes = (res: Reservation) => {
     try {
       let invId = currentUser.id + (Date.now() % 10000000)
       let inv = {
@@ -586,14 +693,14 @@ export const EditInvoice = () => {
         checkInDate: formatISODate(new Date(res.checkInDate)),
         checkOutDate: formatISODate(new Date(res.checkOutDate)),
         prepaied: false,
-        paymentMethod: null,
+        paymentMethod: '',
         paymentPhotos: [],
         reservationCode: res.code,
         rooms: internalRooms(res.rooms),
         creatorId: currentUser.id,
-        sheetName: null,
+        sheetName: '',
         signed: false,
-        country: null,
+        country: '',
         items: res.rooms.map(i => ({
           id: invId + (Date.now() % 10000000),
           itemName: i.roomName,
@@ -623,14 +730,14 @@ export const EditInvoice = () => {
         checkInDate: formatISODate(new Date()),
         checkOutDate: formatISODate(addDays(new Date(), 1)),
         prepaied: false,
-        paymentMethod: null,
+        paymentMethod: '',
         paymentPhotos: [],
-        reservationCode: null,
+        reservationCode: '',
         rooms: ["R1"],
         creatorId: currentUser.id,
-        sheetName: null,
+        sheetName: '',
         signed: false,
-        country: null,
+        country: '',
         items: [{
           id: invId + (Date.now() % 10000000),
           itemName: "Bungalow garden view",
@@ -661,7 +768,7 @@ export const EditInvoice = () => {
     return listLatestReservations(fD, tD, 0, Configs.invoice.fetchedReservation.max)
   }
 
-  const changeResFilteredText = (e) => {
+  const changeResFilteredText = (e: ChangeEvent<HTMLInputElement>) => {
     let text = e.target.value
     setResFilteredText(text)
     let fRes = reservations.filter(res => res.guestName.toLowerCase().includes(text.toLowerCase()))
@@ -673,11 +780,12 @@ export const EditInvoice = () => {
     let sR = invoice
       .rooms
       .map(rN => rooms.find(r => rN === r.name))
+      .filter(r => r !== undefined)
       .map(r => r.id)
     setSelectedRooms(sR)
     setOpenRoomModal(true)
   }
-  const selectRoom = (roomId) => {
+  const selectRoom = (roomId: string) => {
     let sR = [...selectedRooms]
     if (sR.includes(roomId)) {
       sR = selectedRooms.filter(r => r !== roomId)
@@ -690,6 +798,7 @@ export const EditInvoice = () => {
   const confirmSelectRoom = () => {
     let rs = selectedRooms
       .map(rId => rooms.find(r => r.id === rId))
+      .filter(r => r !== undefined)
       .map(r => r.name)
     let nInv = {
       ...invoice,
@@ -803,7 +912,7 @@ export const EditInvoice = () => {
             <div className="flex flex-wrap -mx-3 mb-1">
               <div className="flex flex-row w-36 px-3 mb-1 items-center">
                 <Label
-                  value={String(invoice.checkInDate)}
+                  value={String(invoice?.checkInDate)}
                   className="pr-2"
                 />
                 <svg
@@ -823,7 +932,7 @@ export const EditInvoice = () => {
 
               <div className="flex flex-row w-36 px-3 mb-1 items-center">
                 <Label
-                  value={String(invoice.checkOutDate)}
+                  value={String(invoice?.checkOutDate)}
                   className="pr-2"
                 />
                 <svg
@@ -843,7 +952,7 @@ export const EditInvoice = () => {
 
               <div className="flex flex-row px-3 mb-1 items-center">
                 <Label
-                  value={invoice.rooms ? invoice.rooms.join('.') : "[]"}
+                  value={invoice?.rooms ? invoice.rooms.join('.') : "[]"}
                   className="pr-2 w-full text-right"
                 />
                 <svg

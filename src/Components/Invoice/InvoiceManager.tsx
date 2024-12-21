@@ -15,17 +15,34 @@ export type InvoiceItem = {
   amount: number,
   service: string
 }
+export type Room = {
+  id: string,
+  name: string,
+  internalRoomName: string
+}
 export type Invoice = {
   id: string,
   guestName: string,
   issuer: string,
   issuerId: string,
   subTotal: number,
-  checkInDate: Date,
-  checkOutDate: Date,
+  checkInDate: string,
+  checkOutDate: string,
   prepaied: boolean,
   paymentMethod: string,
-  items: InvoiceItem[]
+  reservationCode: string,
+  creatorId: string,
+  sheetName: string,
+  country: string,
+  signed: boolean,
+  items: InvoiceItem[],
+  rooms: string[]
+}
+
+export type Issuer = {
+  id: string,
+  name: string,
+  imgSrc: string
 }
 
 

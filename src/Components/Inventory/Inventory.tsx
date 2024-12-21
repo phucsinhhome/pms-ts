@@ -8,6 +8,14 @@ import { DEFAULT_PAGE_SIZE } from "../../App";
 import { formatVND } from "../../Service/Utils";
 import { putObject } from "../../db/gcs";
 
+export type Product = {
+  id: string,
+  name: string,
+  unitPrice: number,
+  quantity: number,
+  group: string
+}
+
 
 export const Inventory = () => {
 

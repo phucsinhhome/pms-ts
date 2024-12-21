@@ -6,7 +6,6 @@ import Moment from "react-moment";
 import { Configs, internalRooms } from "../Invoice/EditInvoice";
 import { addDays, formatISODate } from "../../Service/Utils";
 import { DEFAULT_PAGE_SIZE } from "../../App";
-import { type } from "os";
 
 export type Reservation = {
   id: string,
@@ -18,9 +17,15 @@ export type Reservation = {
   canceled: false,
   checkInDate: string,
   checkOutDate: string,
-  rooms: [],
+  rooms: ResRoom[],
   guestIds: [],
   guestPhotos: []
+}
+
+export type ResRoom = {
+  roomName: string,
+  internalRoomName: string,
+  totalPrice: number
 }
 
 export function ReservationManager() {

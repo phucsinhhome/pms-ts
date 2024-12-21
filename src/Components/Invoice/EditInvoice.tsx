@@ -3,7 +3,7 @@ import { Link, useLocation, useParams } from "react-router-dom";
 import { exportInvoice, getInvoice, updateInvoice } from "../../db/invoice";
 import { defaultEmptyItem, formatMoneyAmount } from "./EditItem";
 import { Table, TextInput, Label, Datepicker, Modal, Button } from 'flowbite-react';
-import { getPresignedLinkWithDefaultDuration, uploadBlobToPresignedURL } from "../../Service/FileService";
+import { getPresignedLinkWithDefaultDuration } from "../../Service/FileMinio";
 import { HiOutlineCash, HiOutlineClipboardCopy } from "react-icons/hi";
 import { classifyServiceByItemName } from "../../Service/ItemClassificationService";
 import { addDays, formatDatePartition, formatISODate, formatShortDate, formatVND } from "../../Service/Utils";
@@ -15,11 +15,12 @@ import { listAllProducts } from "../../db/product";
 import html2canvas from "html2canvas";
 import { Invoice, InvoiceItem, Issuer, Room } from "./InvoiceManager";
 import { paymentMethods, rooms } from "../../db/staticdata";
-import getPresignedLink from "../../Service/FileService";
 import { ResultCallback } from "minio/dist/main/internal/type";
 import { warn } from "console";
 import { Product } from "../Inventory/Inventory";
 import { Reservation, ResRoom } from "../Reservation/ReservationManager";
+import { uploadBlobToPresignedURL } from "../../Service/FileMinio";
+import { getPresignedLink } from "../../Service/FileMinio";
 
 type PaymentMethod = {
   id: string,
@@ -815,28 +816,41 @@ export const EditInvoice = () => {
   }
 
   //================ SHARED INVOICE ==========================//
-  const sharedInvRef = useRef()
-  const sharedInvImg = useRef()
+  const sharedInvRef = useRef(null)
+  const sharedInvImg = useRef<HTMLElement>(null)
   // const [btnSharedInvText, setBtnSharedInvText] = useState("Copy")
-  const [sharedInvData, setSharedInvData] = useState(null)
+  const [sharedInvData, setSharedInvData] = useState<string>()
 
   const downloadSharedInv = async () => {
     const element = sharedInvRef.current;
+    if (element === null) {
+      warn("Invalid shared invoice")
+      return
+    }
     const canvas = await html2canvas(element);
 
     canvas.toBlob((blob) => {
+      if(blob===null){
+        warn("Invalid blob")
+        return
+      }
       var filename = invoice.id + ".png"
       var key = formatDatePartition(new Date()) + "/" + filename
       uploadBlobToPresignedURL(Configs.invoice.editInvoice.bucket, key, blob, filename)
-        .then(res => {
-          if (res == null) {
-            console.error("Failed to upload exported invoice to file service")
-            return
+        .then(rsp => {
+          if (rsp.ok) {
+            getPresignedLinkWithDefaultDuration(Configs.invoice.editInvoice.bucket, key, (error, url) => {
+              setSharedInvData(url)
+              if (sharedInvImg.current) {
+                sharedInvImg.current.scrollIntoView()
+              }
+            })
           }
-          getPresignedLinkWithDefaultDuration(Configs.invoice.editInvoice.bucket, key, (error, url) => {
-            setSharedInvData(url)
-            sharedInvImg.current.scrollIntoView()
-          })
+          return null
+        }).catch(e => {
+          console.error("Failed to upload file %s", filename)
+          console.log(e)
+          return null
         })
     },
       "image/png",
@@ -866,7 +880,7 @@ export const EditInvoice = () => {
                   <div className="flex flex-row flex-auto items-center">
                     <Label
                       id="guestName"
-                      required={true}
+                      // required={true}
                       value={invoice.guestName.toUpperCase()}
                       className="text-lg pr-2 font font-bold font-sans"
                     />

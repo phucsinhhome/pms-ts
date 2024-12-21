@@ -26,20 +26,10 @@ export function getPresignedLinkWithDefaultDuration(bucket: string, key: string,
 
 export const uploadBlobToPresignedURL = (bucket: string, key: string, blob: Blob, filename: string) => {
     var file = new File([blob], filename)
+    let opts = {
+        method: 'PUT',
+        body: file
+    }
     return minioClient.presignedPutObject(bucket, key, 300)
-        .then((url) => {
-            return fetch(url, {
-                method: 'PUT',
-                body: file
-            }).then(rsp => {
-                if (rsp.ok) {
-                    return url
-                }
-                return null
-            }).catch(e => {
-                console.error("Failed to upload file %s", filename)
-                console.log(e)
-                return null
-            })
-        })
+        .then((url) => fetch(url, opts))
 }

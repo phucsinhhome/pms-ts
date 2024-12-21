@@ -1,19 +1,18 @@
-import React, { useState, useEffect, useRef, MouseEventHandler, ChangeEventHandler, ChangeEvent } from "react";
+import React, { useState, useEffect, useRef, ChangeEvent } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { exportInvoice, getInvoice, updateInvoice } from "../../db/invoice";
-import { defaultEmptyItem, formatMoneyAmount } from "./EditItem";
 import { Table, TextInput, Label, Datepicker, Modal, Button } from 'flowbite-react';
 import { getPresignedLinkWithDefaultDuration } from "../../Service/FileMinio";
 import { HiOutlineCash, HiOutlineClipboardCopy } from "react-icons/hi";
 import { classifyServiceByItemName } from "../../Service/ItemClassificationService";
-import { addDays, formatDatePartition, formatISODate, formatShortDate, formatVND } from "../../Service/Utils";
+import { addDays, formatDatePartition, formatISODate, formatMoneyAmount, formatShortDate, formatVND } from "../../Service/Utils";
 import { currentUser, currentUserFullname, DEFAULT_PAGE_SIZE, initialUser } from "../../App";
 import { getUsers as issuers } from "../../db/users";
 import Moment from "react-moment";
 import { listLatestReservations } from "../../db/reservation";
 import { listAllProducts } from "../../db/product";
 import html2canvas from "html2canvas";
-import { Invoice, InvoiceItem, Issuer, Room } from "./InvoiceManager";
+import { Invoice, InvoiceItem, Issuer } from "./InvoiceManager";
 import { paymentMethods, rooms } from "../../db/staticdata";
 import { ResultCallback } from "minio/dist/main/internal/type";
 import { warn } from "console";
@@ -90,7 +89,10 @@ export const EditInvoice = () => {
     reservationCode: '',
     items: [],
     creatorId: currentUser.id,
-    rooms: []
+    rooms: [],
+    sheetName: '',
+    signed: false,
+    country: ''
   })
 
   const [invoiceUrl, setInvoiceUrl] = useState({ filename: "", presignedUrl: "", hidden: true })
@@ -544,7 +546,7 @@ export const EditInvoice = () => {
   }
 
   //============ PREPAIED CHANGE ====================//
-  const changePrepaied = (e: React.MouseEvent<HTMLImageElement, MouseEvent>) => {
+  const changePrepaied = (e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
     try {
       let nInv = {
         ...invoice,
@@ -816,8 +818,8 @@ export const EditInvoice = () => {
   }
 
   //================ SHARED INVOICE ==========================//
-  const sharedInvRef = useRef(null)
-  const sharedInvImg = useRef<HTMLElement>(null)
+  const sharedInvRef = useRef<HTMLDivElement>(null)
+  const sharedInvImg = useRef<HTMLDivElement>(null)
   // const [btnSharedInvText, setBtnSharedInvText] = useState("Copy")
   const [sharedInvData, setSharedInvData] = useState<string>()
 
@@ -901,10 +903,7 @@ export const EditInvoice = () => {
                     {selectedIssuer.imgSrc}
                     <Label
                       id="issuerId"
-                      placeholder="Min"
-                      required={true}
                       value={invoice.issuer}
-                      readOnly={false}
                       className="outline-none font-mono italic pr-2"
                     />
                     <svg
@@ -1030,10 +1029,7 @@ export const EditInvoice = () => {
               <div className="flex flex-row px-3 items-center">
                 <Label
                   id="totalAmount"
-                  placeholder="100000"
-                  required={true}
                   value={formatVND(invoice.subTotal)}
-                  readOnly={true}
                   className="font-bold text-red-900"
                 />
               </div>
@@ -1046,7 +1042,7 @@ export const EditInvoice = () => {
           : "grid grid-cols-4 items-center w-full px-1 mb-1 space-x-1 ml-2"}>
           <div
             className="flex flex-row items-center font-sans font-bold text-amber-800 px-1 py-1 hover:bg-slate-200"
-            onClick={() => editItem(defaultEmptyItem)}
+            onClick={() => editItem(defaultEmptyItem.origin)}
           >
             <svg
               className="w-5 h-5 text-amber-800 dark:text-white"
@@ -1319,7 +1315,7 @@ export const EditInvoice = () => {
                   id="itemName"
                   placeholder="Item name"
                   required={true}
-                  value={editingItem.itemName}
+                  value={editingItem.origin.itemName}
                   onChange={changeItemName}
                 />
                 <Table hoverable>
@@ -1398,7 +1394,7 @@ export const EditInvoice = () => {
                     className="bg-gray-50 border-x-0 border-gray-300 h-11 text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="999"
                     required
-                    value={editingItem.quantity}
+                    value={editingItem.origin.quantity}
                     readOnly
                   />
                   <button
@@ -1421,7 +1417,7 @@ export const EditInvoice = () => {
                     value="Amount"
                   />
                 </div>
-                <span className="w-full">{formatVND(editingItem.amount)}</span>
+                <span className="w-full">{formatVND(editingItem.origin.amount)}</span>
 
               </div>
               <div className="flex flex-row w-full align-middle">
@@ -1431,7 +1427,7 @@ export const EditInvoice = () => {
                     value="Service"
                   />
                 </div>
-                <span className="w-full">{editingItem.service}</span>
+                <span className="w-full">{editingItem.origin.service}</span>
                 <svg xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -1725,7 +1721,7 @@ export const EditInvoice = () => {
           </div>
         </Modal.Body>
         <Modal.Footer className="flex justify-center gap-4">
-          <Link onClick={confirmNoRes}>No Book</Link>
+          <Link to='' onClick={confirmNoRes}>No Book</Link>
           <Link to={"../invoice"}>Cancel</Link>
         </Modal.Footer>
       </Modal>

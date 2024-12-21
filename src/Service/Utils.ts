@@ -2,6 +2,14 @@ export const formatVND = (amount: number) => {
     return amount.toLocaleString('us-US', { style: 'currency', currency: 'VND' })
 }
 
+export const formatMoneyAmount = (value:string) => {
+    const numStr = value.replace(/[^0-9.]/g, ''); // Remove non-numeric characters
+    const [integerPart, decimalPart] = numStr.split('.');
+    const formattedIntegerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    const formattedValue = decimalPart ? `${formattedIntegerPart}.${decimalPart}` : formattedIntegerPart;
+    return { amount: Number(numStr), formattedAmount: formattedValue };
+};
+
 export const lastDateOf = (date: Date) => {
     return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
 }

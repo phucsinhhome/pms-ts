@@ -251,7 +251,7 @@ export const Inventory = () => {
 
   const changeFeatureImage = (e: ChangeEvent<HTMLInputElement>) => {
     onFileChange(e, 'feature')
-      .then((rsp: Response) => {
+      ?.then((rsp: Response) => {
         if (rsp.ok) {
           rsp.json()
             .then(data => {
@@ -269,7 +269,7 @@ export const Inventory = () => {
 
   const changeContentImage = (e: ChangeEvent<HTMLInputElement>, idx: number) => {
     onFileChange(e, 'content_' + idx)
-      .then((rsp: Response) => {
+      ?.then((rsp: Response) => {
         if (rsp.ok) {
           rsp.json()
             .then(data => {

@@ -13,3 +13,10 @@ type PReport = {
     overall: REntity,
     breakdown: REntity[]
 }
+
+export type Pagination = {
+    pageNumber: number,
+    pageSize: number,
+    totalElements: number,
+    totalPages: number
+}

@@ -1,7 +1,7 @@
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { Table, TextInput, Label, Spinner, Modal, Button } from "flowbite-react";
-import { deleteExpense, listExpenseByExpenserAndDate, newExpId } from "../../db/expense";
+import { deleteExpense, newExpId } from "../../db/expense";
 import Moment from "react-moment";
 import run from "../../Service/ExpenseExtractionService";
 import { saveExpense } from "../../db/expense";
@@ -12,6 +12,27 @@ import { HiOutlineCash } from "react-icons/hi";
 import { formatISODate, formatISODateTime, formatVND } from "../../Service/Utils";
 import { PiBrainThin } from "react-icons/pi";
 import { FaRotate } from "react-icons/fa6";
+import { listExpenseByExpenserAndDate } from "../../db/expense";
+import { Pagination } from "../Profit/Models";
+
+export type Expense = {
+  id: string,
+  expenseDate: string,
+  itemName: string,
+  quantity: number,
+  unitPrice: number,
+  amount: number,
+  expenserName: string,
+  expenserId: string,
+  service: string
+}
+
+type EditingExpense = {
+  origin: Expense,
+  formattedUnitPrice: string,
+  itemMessage: string,
+  originItemName: string
+}
 
 const defaultEmptExpense = {
   id: null,
@@ -40,21 +61,21 @@ export const ExpenseManager = () => {
   const [classifyingExp, setClassifyingExp] = useState(false);
 
   const [openDelExpenseModal, setOpenDelExpenseModal] = useState(false)
-  const [deletingExpense, setDeletingExpense] = useState(null)
+  const [deletingExpense, setDeletingExpense] = useState<Expense>()
 
   const [openEditingExpenseModal, setOpenEditingExpenseModal] = useState(false)
-  const [editingExpense, setEditingExpense] = useState(defaultEditingExpense)
+  const [editingExpense, setEditingExpense] = useState<EditingExpense>(defaultEditingExpense)
 
-  const [pagination, setPagination] = useState({
+  const [pagination, setPagination] = useState<Pagination>({
     pageNumber: 0,
-    pageSize: DEFAULT_PAGE_SIZE,
+    pageSize: Number(DEFAULT_PAGE_SIZE),
     totalElements: 200,
     totalPages: 20
   })
 
   const expMsgRef = useRef(null)
 
-  const handlePaginationClick = (pageNumber) => {
+  const handlePaginationClick = (pageNumber: number) => {
     console.log("Pagination nav bar click to page %s", pageNumber)
     fetchData(pageNumber < 0 ? 0 : pageNumber > pagination.totalPages - 1 ? pagination.totalPages - 1 : pageNumber, pagination.pageSize)
   }
@@ -62,20 +83,22 @@ export const ExpenseManager = () => {
   const location = useLocation()
 
 
-  const fetchData = (pageNumber, pageSize) => {
+  const fetchData = (pageNumber: number, pageSize: number) => {
     let byDate = formatISODate(new Date())
     let expenserId = (initialUser !== null && initialUser !== undefined) ? initialUser.id : null
     return listExpenseByExpenserAndDate(expenserId, byDate, pageNumber, pageSize)
-      .then(data => {
-        let sortedExps = data.content
-        setExpenses(sortedExps)
-        setPagination({
-          pageNumber: data.number,
-          pageSize: data.size,
-          totalElements: data.totalElements,
-          totalPages: data.totalPages
-        })
-        return true
+      .then((data: any) => {
+        {
+          let sortedExps = data.content
+          setExpenses(sortedExps)
+          setPagination({
+            pageNumber: data.number,
+            pageSize: data.size,
+            totalElements: data.totalElements,
+            totalPages: data.totalPages
+          })
+          return true
+        }
       })
   }
 
@@ -86,14 +109,14 @@ export const ExpenseManager = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location]);
 
-  const pageClass = (pageNum) => {
+  const pageClass = (pageNum: number) => {
     var noHighlight = "px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
     var highlight = "px-3 py-2 leading-tight text-bold text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"
 
     return pagination.pageNumber === pageNum ? highlight : noHighlight
   }
 
-  const generateExpenseFromMessage = (msg) => {
+  const generateExpenseFromMessage = (msg: string) => {
     return run(msg)
       .then(data => {
         console.info("Complete extracting expense from message %s", msg);
@@ -119,10 +142,10 @@ export const ExpenseManager = () => {
       })
   }
 
-  const handleDeleteExpense = (exp) => {
+  const handleDeleteExpense = (exp: Expense) => {
     console.warn("Deleting expense [%s]...", exp.id)
     deleteExpense(exp)
-      .then((rsp) => {
+      .then((rsp: any) => {
         if (rsp !== null) {
           console.log("Delete expense %s successully", exp.id)
           fetchData(location.state.pageNumber, location.state.pageSize)
@@ -131,14 +154,14 @@ export const ExpenseManager = () => {
   }
 
   //============ EXPENSE DELETION ====================//
-  const askForDelExpenseConfirmation = (exp) => {
+  const askForDelExpenseConfirmation = (exp: Expense) => {
     setDeletingExpense(exp);
     setOpenDelExpenseModal(true)
   }
 
   const cancelDelExpense = () => {
     setOpenDelExpenseModal(false)
-    setDeletingExpense(null)
+    setDeletingExpense(undefined)
   }
 
   const confirmDelExpense = () => {
@@ -151,13 +174,13 @@ export const ExpenseManager = () => {
       console.error(e)
     } finally {
       setOpenDelExpenseModal(false)
-      setDeletingExpense(null)
+      setDeletingExpense(undefined)
     }
 
   }
 
   //================= EDIT EXPENSE ===================//
-  const editExpense = (exp) => {
+  const editExpense = (exp: Expense) => {
     let uP = formatMoneyAmount(String(exp.unitPrice))
     let eI = {
       ...exp,

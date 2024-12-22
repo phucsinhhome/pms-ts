@@ -28,9 +28,9 @@ const generationConfig = {
   responseMimeType: "application/json",
 };
 
-var chatSession = null
+var chatSession: any = null
 
-async function run(expenseMessage) {
+async function run(expenseMessage: string) {
 
   if (chatSession == null) {
     chatSession = model.startChat({

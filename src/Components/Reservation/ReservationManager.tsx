@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { listLatestReservations } from "../../db/reservation";
 import { Link } from "react-router-dom";
 import { Table } from "flowbite-react";
@@ -6,6 +6,7 @@ import Moment from "react-moment";
 import { Configs, internalRooms } from "../Invoice/EditInvoice";
 import { addDays, formatISODate } from "../../Service/Utils";
 import { DEFAULT_PAGE_SIZE } from "../../App";
+import { Pagination } from "../Profit/Models";
 
 export type Reservation = {
   id: string,
@@ -34,14 +35,14 @@ export function ReservationManager() {
   const [fromDate, setFromDate] = useState(new Date());
   const [deltaDays, setDeltaDays] = useState(0)
 
-  const [pagination, setPagination] = useState({
+  const [pagination, setPagination] = useState<Pagination>({
     pageNumber: 0,
-    pageSize: DEFAULT_PAGE_SIZE,
+    pageSize: Number(DEFAULT_PAGE_SIZE),
     totalElements: 200,
     totalPages: 20
   })
 
-  const filterDay = (numDays) => {
+  const filterDay = (numDays: number) => {
     var newDD = addDays(new Date(), numDays)
     console.info("Change filter date to %s", newDD.toISOString())
     setFromDate(newDD)
@@ -49,14 +50,14 @@ export function ReservationManager() {
     fetchReservations(newDD, pagination.pageNumber, pagination.pageSize)
   }
 
-  const handlePaginationClick = (pageNumber) => {
+  const handlePaginationClick = (pageNumber: number) => {
     console.log("Pagination nav bar click to page %s", pageNumber)
     var pNum = pageNumber < 0 ? 0 : pageNumber > pagination.totalPages - 1 ? pagination.totalPages - 1 : pageNumber;
     var pSize = pagination.pageSize
     fetchReservations(fromDate, pNum, pSize)
   }
 
-  const fetchReservations = (fromDate, pageNumber, pageSize) => {
+  const fetchReservations = (fromDate: Date, pageNumber: number, pageSize: number) => {
 
     var toDate = addDays(fromDate, Configs.reservation.fetchDays)
     var fd = formatISODate(fromDate)
@@ -77,7 +78,7 @@ export function ReservationManager() {
   }
 
   useEffect(() => {
-    fetchReservations(new Date(), 0, DEFAULT_PAGE_SIZE);
+    fetchReservations(new Date(), 0, Number(DEFAULT_PAGE_SIZE));
   }, []);
 
   const filterOpts = [
@@ -97,12 +98,12 @@ export function ReservationManager() {
       days: -1 * new Date().getDate(),
       label: 'From 1st'
     }]
-  const filterClass = (days) => {
+  const filterClass = (days: number) => {
     var classNamePattern = "font-bold text-amber-800 rounded px-2 py-1"
     return classNamePattern + " " + (deltaDays === days ? "bg-slate-400" : "bg-slate-200");
   }
 
-  const pageClass = (pageNum) => {
+  const pageClass = (pageNum: number) => {
     var noHighlight = "px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
     var highlight = "px-3 py-2 leading-tight text-bold text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"
 
@@ -123,6 +124,7 @@ export function ReservationManager() {
             <path fillRule="evenodd" d="M4.755 10.059a7.5 7.5 0 0 1 12.548-3.364l1.903 1.903h-3.183a.75.75 0 1 0 0 1.5h4.992a.75.75 0 0 0 .75-.75V4.356a.75.75 0 0 0-1.5 0v3.18l-1.9-1.9A9 9 0 0 0 3.306 9.67a.75.75 0 1 0 1.45.388Zm15.408 3.352a.75.75 0 0 0-.919.53 7.5 7.5 0 0 1-12.548 3.364l-1.902-1.903h3.183a.75.75 0 0 0 0-1.5H2.984a.75.75 0 0 0-.75.75v4.992a.75.75 0 0 0 1.5 0v-3.18l1.9 1.9a9 9 0 0 0 15.059-4.035.75.75 0 0 0-.53-.918Z" clipRule="evenodd" />
           </svg>
           <Link
+            to=''
             onClick={() => fetchReservations(new Date(), 0, 10)}
             className="font-bold text-amber-800"
           >
@@ -133,6 +135,7 @@ export function ReservationManager() {
       <div className="flex flex-row space-x-4 px-4">
         {filterOpts.map((opt) => {
           return (<Link
+            to=''
             key={opt.days}
             onClick={() => filterDay(opt.days)}
             relative="route"
@@ -165,6 +168,7 @@ export function ReservationManager() {
                   <Table.Cell className="sm:px-1 px-1 py-0.5">
                     <div className="grid grid-cols-1">
                       <Link
+                        to=''
                         state={{ pageNumber: pagination.pageNumber, pageSize: pagination.pageSize }}
                         className={!res.canceled ? "font-medium text-blue-600 hover:underline dark:text-blue-500" : "font-medium text-gray-600 hover:underline dark:text-white-500"}
                       >

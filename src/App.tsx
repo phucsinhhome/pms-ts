@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
-// import { ProfitReport } from "./Components/Profit/ProfitReport"
 import ProfitReport from "./Components/Profit/ProfitReport";
 import { InvoiceManager } from "./Components/Invoice/InvoiceManager"
 import { EditInvoice } from "./Components/Invoice/EditInvoice"
 import { BrowserRouter as Router, Link, Route, Routes } from "react-router-dom"
 import { ExpenseManager } from "./Components/Expense/ExpenseManager";
 import { ReservationManager } from "./Components/Reservation/ReservationManager";
-// import { EditReservation } from "./Components/Reservation/EditReservation";
 import { Settings } from "./Components/Settings/Settings";
 import { IoMdSettings } from "react-icons/io";
 import { OrderManager } from "./Components/Order/OrderManager";
@@ -15,7 +13,7 @@ import { EditOrder } from "./Components/Order/EditOrder";
 import { Inventory } from "./Components/Inventory/Inventory";
 
 const tele = window.Telegram.WebApp;
-export const DEFAULT_PAGE_SIZE = process.env.REACT_APP_DEFAULT_PAGE_SIZE
+export const DEFAULT_PAGE_SIZE = Number(process.env.REACT_APP_DEFAULT_PAGE_SIZE)
 
 export const initialUser = tele.initDataUnsafe.user
 export const currentUser = tele.initDataUnsafe.user || {
@@ -53,7 +51,7 @@ export default function App() {
           <Link to="expenses" className="px-1 py-1 bg-gray-200 text-center text-amber-900 text-sm font-sans rounded-sm shadow-sm" state={{ pageNumber: 0, pageSize: DEFAULT_PAGE_SIZE }}>Expense</Link>
           <Link to="reservation" className="px-1 py-1 bg-gray-200 text-center text-amber-900 text-sm font-sans rounded-sm shadow-sm">Res</Link>
           <Link to="order" className="px-1 py-1 bg-gray-200 text-center text-amber-900 text-sm font-sans rounded-sm shadow-sm">Order</Link>
-          <Link to="inventory" className="px-1 py-1 bg-gray-200 text-center text-amber-900 text-sm font-sans rounded-sm shadow-sm">Inventory</Link> 
+          <Link to="inventory" className="px-1 py-1 bg-gray-200 text-center text-amber-900 text-sm font-sans rounded-sm shadow-sm">Inventory</Link>
           <Link to="settings" className="absolute right-2">
             <IoMdSettings
               className="pointer-events-auto cursor-pointer w-14 h-7"
@@ -71,9 +69,17 @@ export default function App() {
           <Route path="order" element={<OrderManager />} />
           <Route path="order/:orderId/:staffId" element={<EditOrder />} />
           <Route path="inventory" element={<Inventory />} />
-          <Route path="settings" element={<Settings
+          {/* <Route path="settings" element={<Settings
             syncing={syncing} changeSyncing={(n:boolean) => setSyncing(n)}
             syncingRes={syncingRes} changeResSyncing={(n:boolean) => setSyncingRes(n)}
+          />} /> */}
+          <Route path="settings" element={<Settings
+            // props={
+            syncing={syncing}
+            changeSyncing={(n: boolean) => setSyncing(n)}
+            syncingRes={syncingRes}
+            changeResSyncing={(n: boolean) => setSyncingRes(n)}
+          // }
           />} />
         </Routes>
       </Router>

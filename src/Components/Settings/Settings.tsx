@@ -1,8 +1,10 @@
 import { formatDatePartition } from "../../Service/Utils";
+// import { syncStatusOfMonth } from "../../Service/StatusSyncingService";
 import { syncStatusOfMonth } from "../../Service/StatusSyncingService";
-import React, { useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { Label, Spinner, TextInput } from "flowbite-react";
 import { IoIosSync } from "react-icons/io";
+// import { collectRes } from "../../db/reservation_extractor";
 import { collectRes } from "../../db/reservation_extractor";
 
 // const syncedResOptions = [
@@ -25,7 +27,10 @@ export type SettingProps = {
   changeResSyncing: any
 }
 
-export const Settings = (props: SettingProps) => {
+export const Settings = (syncing: boolean,
+  changeSyncing: any,
+  syncingRes: boolean,
+  changeResSyncing: any) => {
 
   const [datePartition, setDatePartition] = useState(formatDatePartition(new Date()))
   const [syncedResNextDays, setSyncedResNextDays] = useState(formatDatePartition(new Date()))
@@ -34,12 +39,12 @@ export const Settings = (props: SettingProps) => {
     changeSyncing(true)
     console.info("Sync status")
     syncStatusOfMonth(datePartition)
-      .then(rsp => {
+      .then((rsp: Response) => {
         if (rsp.ok) {
           console.info("Sync status of %s successfully", datePartition)
         }
         console.log(rsp)
-      }).catch(e => {
+      }).catch((e: any) => {
         console.error(e)
       }).finally(() => {
         changeSyncing(false)
@@ -64,7 +69,7 @@ export const Settings = (props: SettingProps) => {
       })
   }
 
-  const changePartition = (e) => {
+  const changePartition = (e:ChangeEvent<HTMLInputElement>) => {
     let iMsg = e.target.value
     setDatePartition(iMsg)
   }

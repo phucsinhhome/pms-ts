@@ -1,4 +1,4 @@
-export const collectRes = (fromDate, toDate) => {
+export const collectRes = (fromDate: string, toDate: string) => {
   console.info("Call API to collect reservations");
   const opts = {
     method: 'GET'

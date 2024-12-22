@@ -10,11 +10,19 @@ import { Invoice } from "../Invoice/InvoiceManager";
 
 
 export enum OrderStatus {
-  SENT= 'text-orange-400',
-  CONFIRMED= 'text-green-700',
-  REJECTED= 'text-red-700',
-  SERVED= 'text-gray-700',
-  EXPIRED= 'text-gray-700'
+  SENT = 'text-orange-400',
+  CONFIRMED = 'text-green-700',
+  REJECTED = 'text-red-700',
+  SERVED = 'text-gray-700',
+  EXPIRED = 'text-gray-700'
+}
+
+export type OrderItem = {
+  id: string,
+  name: string,
+  unitPrice: number,
+  quantity: number,
+  featureImgUrl: string
 }
 
 export type Order = {
@@ -22,7 +30,9 @@ export type Order = {
   id: string,
   guestName: string,
   status: OrderStatus,
-  startTime: Date
+  startTime: Date,
+  invoiceId: string,
+  items: OrderItem[]
 }
 
 export const OrderManager = () => {

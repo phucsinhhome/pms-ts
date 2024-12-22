@@ -12,7 +12,7 @@ import { EditReservation } from "./Components/Reservation/EditReservation";
 import { Settings } from "./Components/Settings/Settings";
 import { IoMdSettings } from "react-icons/io";
 import { OrderManager } from "./Components/Order/OrderManager";
-import { Order } from "./Components/Order/Order";
+import { EditOrder } from "./Components/Order/EditOrder";
 import { Inventory } from "./Components/Inventory/Inventory";
 
 const tele = window.Telegram.WebApp;
@@ -70,7 +70,7 @@ export default function App() {
           <Route path="reservation" element={<ReservationManager />} />
           <Route path="reservation/:reservationId" element={<EditReservation />} />
           <Route path="order" element={<OrderManager />} />
-          <Route path="order/:orderId/:staffId" element={<Order />} />
+          <Route path="order/:orderId/:staffId" element={<EditOrder />} />
           <Route path="inventory" element={<Inventory />} />
           <Route path="settings" element={<Settings
             syncing={syncing} changeSyncing={(n) => setSyncing(n)}

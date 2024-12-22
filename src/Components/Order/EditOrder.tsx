@@ -1,21 +1,22 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, ChangeEvent } from "react";
 import { useParams } from "react-router-dom";
 import { Avatar, Button, Label, Modal, TextInput } from "flowbite-react";
 import { DEFAULT_PAGE_SIZE } from "../../App";
 import { formatISODate, formatISODateTime, formatRooms, formatVND } from "../../Service/Utils";
 import { confirmOrder, fetchOrder, rejectOrder } from "../../db/order";
 import { getInvoice, listInvoiceByGuestName } from "../../db/invoice";
-import { OrderStatus } from "./OrderManager";
+import { Order, OrderStatus } from "./OrderManager";
+import { Invoice } from "../Invoice/InvoiceManager";
 
 
-export const Order = () => {
+export const EditOrder = () => {
 
-  const [order, setOrder] = useState({})
+  const [order, setOrder] = useState<Order>()
   const [message, setMessage] = useState('No item')
 
   const [showInvoices, setShowInvoices] = useState(false)
-  const [invoices, setInvoices] = useState([])
-  const [choosenInvoice, setChoosenInvoice] = useState({})
+  const [invoices, setInvoices] = useState<Invoice[]>([])
+  const [choosenInvoice, setChoosenInvoice] = useState<Invoice>()
   const [filteredName, setFilteredName] = useState('')
 
   const { orderId, staffId } = useParams()
@@ -23,7 +24,7 @@ export const Order = () => {
     console.info("Loading the order")
 
     fetchOrder(orderId)
-      .then(rsp => {
+      .then((rsp: Response) => {
         if (rsp.ok) {
           rsp.json()
             .then(data => {
@@ -56,7 +57,7 @@ export const Order = () => {
     }
 
     confirmOrder(confirmedOrder)
-      .then(rsp => {
+      .then((rsp: Response) => {
         if (rsp.ok) {
           rsp.json()
             .then(data => {
@@ -71,7 +72,7 @@ export const Order = () => {
   const stopPreparation = () => {
 
     rejectOrder(orderId, staffId)
-      .then(rsp => {
+      .then((rsp: Response) => {
         if (rsp.ok) {
           rsp.json()
             .then(data => {
@@ -87,7 +88,7 @@ export const Order = () => {
     setShowInvoices(false)
   }
 
-  const handleInvSelection = (inv) => {
+  const handleInvSelection = (inv: Invoice) => {
     setChoosenInvoice(inv)
   }
 
@@ -118,7 +119,7 @@ export const Order = () => {
 
   const cancelChangeInvoice = () => {
     try {
-      setChoosenInvoice({})
+      setChoosenInvoice(undefined)
     } catch (e) {
       console.error(e)
     }
@@ -127,7 +128,7 @@ export const Order = () => {
     }
   }
 
-  const changeFilteredName = (e) => {
+  const changeFilteredName = (e: ChangeEvent<HTMLInputElement>) => {
     let fN = e.target.value
     setFilteredName(fN)
     if (fN === '') {
@@ -137,7 +138,7 @@ export const Order = () => {
 
     let fromDate = formatISODate(new Date())
 
-    listInvoiceByGuestName(fromDate, fN, 0, DEFAULT_PAGE_SIZE)
+    listInvoiceByGuestName(fromDate, fN, 0, Number(DEFAULT_PAGE_SIZE))
       .then(rsp => {
         if (rsp.ok) {
           rsp.json()
@@ -152,11 +153,11 @@ export const Order = () => {
     <div className="h-full pt-3">
       <div className="flex flex-col max-h-fit overflow-hidden">
         <div className="flex flex-col space-y-1 px-2">
-          <span className="font font-mono text-[9px] text-gray-400">{order.orderId}</span>
+          <span className="font font-mono text-[9px] text-gray-400">{order?.orderId}</span>
           <div className="flex flex-row items-center space-x-2">
-            <span className="font font-bold">{order.guestName ? order.guestName.toUpperCase() : ""}</span>
+            <span className="font font-bold">{order?.guestName ? order.guestName.toUpperCase() : ""}</span>
             {
-              choosenInvoice.id !== undefined ?
+              choosenInvoice !== undefined ?
                 <div className="flex flex-row items-center space-x-2">
                   <span className="font text-[9px] italic">{" linked to: "}</span>
                   <span>{choosenInvoice.guestName}</span>
@@ -166,12 +167,12 @@ export const Order = () => {
             }
           </div>
           <div className="flex flex-row items-center space-x-2">
-            <span className={"font font-mono " + OrderStatus[order.status]}>{order.status}</span>
-            <span className="font font-mono text-sm text-gray-400">{order.invoiceId}</span>
+            <span className={"font font-mono " + order?.status}>{order?.status}</span>
+            <span className="font font-mono text-sm text-gray-400">{order?.invoiceId}</span>
           </div>
         </div>
         <div className="flex flex-col space-y-1 pt-2 px-2">
-          {order.items ? order.items.map((item) => {
+          {order?.items ? order.items.map((item) => {
             return (
               <div
                 className="flex flex-row items-center border px-1 py-1 border-gray-300 shadow-2xl rounded-md bg-white dark:bg-slate-500 "
@@ -196,9 +197,9 @@ export const Order = () => {
         </div>
       </div>
       <div className="flex flex-row items-center justify-between">
-        <Button className="px-3 py-2 mt-2 mx-3 h-9" onClick={stopPreparation} disabled={order.items === undefined || order.status !== 'SENT'}>Reject</Button>
-        <Button className="px-3 py-2 mt-2 mx-3 h-9" onClick={() => setShowInvoices(true)} disabled={order.items === undefined}>Link invoice</Button>
-        <Button className="px-3 py-2 mt-2 mx-3 h-9" onClick={sendToPreparation} disabled={order.invoiceId === null || order.items === undefined || order.status !== 'SENT'}>Confirm</Button>
+        <Button className="px-3 py-2 mt-2 mx-3 h-9" onClick={stopPreparation} disabled={order?.items === undefined || order?.status !== OrderStatus.SENT}>Reject</Button>
+        <Button className="px-3 py-2 mt-2 mx-3 h-9" onClick={() => setShowInvoices(true)} disabled={order?.items === undefined}>Link invoice</Button>
+        <Button className="px-3 py-2 mt-2 mx-3 h-9" onClick={sendToPreparation} disabled={order?.invoiceId === null || order?.items === undefined || order?.status !== OrderStatus.SENT}>Confirm</Button>
       </div>
 
 
@@ -228,7 +229,7 @@ export const Order = () => {
                   {invoices.map(inv =>
                     <div
                       key={inv.id}
-                      className={choosenInvoice.id === inv.id
+                      className={choosenInvoice?.id === inv.id
                         ? "flex flex-col py-1 px-2  border border-gray-100 shadow-sm rounded-md bg-amber-600 dark:bg-slate-500"
                         : "flex flex-col py-1 px-2 border border-gray-100 shadow-sm rounded-md bg-white dark:bg-slate-500"
                       }

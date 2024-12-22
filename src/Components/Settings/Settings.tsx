@@ -1,6 +1,6 @@
 import { formatDatePartition } from "../../Service/Utils";
 import { syncStatusOfMonth } from "../../Service/StatusSyncingService";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Label, Spinner, TextInput } from "flowbite-react";
 import { IoIosSync } from "react-icons/io";
 import { collectRes } from "../../db/reservation_extractor";
@@ -18,7 +18,14 @@ import { collectRes } from "../../db/reservation_extractor";
 //   }
 // ]
 
-export function Settings({ syncing, changeSyncing, syncingRes, changeResSyncing }) {
+export type SettingProps = {
+  syncing: boolean,
+  changeSyncing: any,
+  syncingRes: boolean,
+  changeResSyncing: any
+}
+
+export const Settings = (props: SettingProps) => {
 
   const [datePartition, setDatePartition] = useState(formatDatePartition(new Date()))
   const [syncedResNextDays, setSyncedResNextDays] = useState(formatDatePartition(new Date()))

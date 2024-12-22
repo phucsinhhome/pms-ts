@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 // import { ProfitReport } from "./Components/Profit/ProfitReport"
 import ProfitReport from "./Components/Profit/ProfitReport";
@@ -6,9 +6,8 @@ import { InvoiceManager } from "./Components/Invoice/InvoiceManager"
 import { EditInvoice } from "./Components/Invoice/EditInvoice"
 import { BrowserRouter as Router, Link, Route, Routes } from "react-router-dom"
 import { ExpenseManager } from "./Components/Expense/ExpenseManager";
-import { EditExpense } from "./Components/Expense/EditExpense";
 import { ReservationManager } from "./Components/Reservation/ReservationManager";
-import { EditReservation } from "./Components/Reservation/EditReservation";
+// import { EditReservation } from "./Components/Reservation/EditReservation";
 import { Settings } from "./Components/Settings/Settings";
 import { IoMdSettings } from "react-icons/io";
 import { OrderManager } from "./Components/Order/OrderManager";
@@ -66,15 +65,15 @@ export default function App() {
           <Route path="invoice" element={<InvoiceManager />} />
           <Route path="invoice/:invoiceId" element={<EditInvoice />} />
           <Route path="expenses" element={<ExpenseManager />} />
-          <Route path="expenses/:expenseId" element={<EditExpense />} />
+          {/* <Route path="expenses/:expenseId" element={<EditExpense />} /> */}
           <Route path="reservation" element={<ReservationManager />} />
-          <Route path="reservation/:reservationId" element={<EditReservation />} />
+          {/* <Route path="reservation/:reservationId" element={<EditReservation />} /> */}
           <Route path="order" element={<OrderManager />} />
           <Route path="order/:orderId/:staffId" element={<EditOrder />} />
           <Route path="inventory" element={<Inventory />} />
           <Route path="settings" element={<Settings
-            syncing={syncing} changeSyncing={(n) => setSyncing(n)}
-            syncingRes={syncingRes} changeResSyncing={(n) => setSyncingRes(n)}
+            syncing={syncing} changeSyncing={(n:boolean) => setSyncing(n)}
+            syncingRes={syncingRes} changeResSyncing={(n:boolean) => setSyncingRes(n)}
           />} />
         </Routes>
       </Router>

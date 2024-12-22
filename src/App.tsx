@@ -22,9 +22,13 @@ export const currentUser = tele.initDataUnsafe.user || {
   last_name: "Tran"
 }
 
+// export const currentUserFullname = () => {
+//   let sufix = currentUser.last_name === null || currentUser.last_name === undefined || currentUser.last_name === "" ? "" : (" " + currentUser.last_name)
+//   return currentUser.first_name + sufix
+// }
+
 export const currentUserFullname = () => {
-  let sufix = currentUser.last_name === null || currentUser.last_name === undefined || currentUser.last_name === "" ? "" : (" " + currentUser.last_name)
-  return currentUser.first_name + sufix
+  return "Minh Tran"
 }
 
 export default function App() {

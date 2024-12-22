@@ -40,8 +40,8 @@ const defaultEmptExpense = {
   quantity: 1,
   unitPrice: 0,
   amount: 0,
-  expenserName: currentUserFullname(),
-  expenserId: currentUser.id,
+  expenserName: 'Minh Tran',
+  expenserId: '1351151927',
   service: ""
 }
 

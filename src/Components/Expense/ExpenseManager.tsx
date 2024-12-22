@@ -1,19 +1,18 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, ChangeEvent } from "react";
 import { useLocation } from "react-router-dom";
 import { Table, TextInput, Label, Spinner, Modal, Button } from "flowbite-react";
 import { deleteExpense, newExpId } from "../../db/expense";
 import Moment from "react-moment";
 import run from "../../Service/ExpenseExtractionService";
-import { saveExpense } from "../../db/expense";
 import { classifyServiceByItemName } from "../../Service/ItemClassificationService";
 import { currentUser, currentUserFullname, initialUser } from "../../App";
-import { formatMoneyAmount } from "../Invoice/EditItem";
 import { HiOutlineCash } from "react-icons/hi";
-import { formatISODate, formatISODateTime, formatVND } from "../../Service/Utils";
+import { formatISODate, formatISODateTime, formatMoneyAmount, formatVND } from "../../Service/Utils";
 import { PiBrainThin } from "react-icons/pi";
 import { FaRotate } from "react-icons/fa6";
 import { listExpenseByExpenserAndDate } from "../../db/expense";
 import { Pagination } from "../Profit/Models";
+import { saveExpense } from "../../db/expense";
 
 export type Expense = {
   id: string,
@@ -35,19 +34,19 @@ type EditingExpense = {
 }
 
 const defaultEmptExpense = {
-  id: null,
+  id: '',
   expenseDate: formatISODateTime(new Date()),
   itemName: "",
   quantity: 1,
   unitPrice: 0,
   amount: 0,
-  expenserName: () => currentUserFullname(),
-  expenserId: () => currentUser.id,
+  expenserName: currentUserFullname(),
+  expenserId: currentUser.id,
   service: ""
 }
 
 const defaultEditingExpense = {
-  ...defaultEmptExpense,
+  origin: defaultEmptExpense,
   formattedUnitPrice: "",
   originItemName: "",
   itemMessage: ""
@@ -73,7 +72,7 @@ export const ExpenseManager = () => {
     totalPages: 20
   })
 
-  const expMsgRef = useRef(null)
+  const expMsgRef = useRef<HTMLInputElement>(null)
 
   const handlePaginationClick = (pageNumber: number) => {
     console.log("Pagination nav bar click to page %s", pageNumber)
@@ -130,13 +129,15 @@ export const ExpenseManager = () => {
         let uP = Math.floor(pr / qty); // Use Math.floor() if you prefer rounding down
         console.info("Price: " + pr + ", Quantity: " + qty + ", Unit Price: " + uP)
         var exp = {
-          id: null,
+          id: '',
           itemName: eE.item,
           quantity: qty,
           unitPrice: uP,
           amount: pr,
           service: eE.service,
-          expenseDate: formatISODateTime(new Date())
+          expenseDate: formatISODateTime(new Date()),
+          expenserName: currentUserFullname(),
+          expenserId: currentUser.id
         }
         return exp
       })
@@ -183,7 +184,7 @@ export const ExpenseManager = () => {
   const editExpense = (exp: Expense) => {
     let uP = formatMoneyAmount(String(exp.unitPrice))
     let eI = {
-      ...exp,
+      origin: exp,
       formattedUnitPrice: uP.formattedAmount,
       originItemName: exp.itemName,
       itemMessage: ""
@@ -194,13 +195,13 @@ export const ExpenseManager = () => {
 
   const cancelEditingExpense = () => {
     fetchData(pagination.pageNumber, pagination.pageSize)
-      .then(res => {
-        setEditingExpense(defaultEmptExpense)
+      .then((res: any) => {
+        setEditingExpense(defaultEditingExpense)
         setOpenEditingExpenseModal(false)
       })
   }
 
-  const changeItemMessage = (e) => {
+  const changeItemMessage = (e: ChangeEvent<HTMLInputElement>) => {
     let iMsg = e.target.value
     let eI = {
       ...editingExpense,
@@ -209,7 +210,7 @@ export const ExpenseManager = () => {
     setEditingExpense(eI)
   }
 
-  const changeItemName = (e) => {
+  const changeItemName = (e: ChangeEvent<HTMLInputElement>) => {
     let iName = e.target.value
     let eI = {
       ...editingExpense,
@@ -218,7 +219,7 @@ export const ExpenseManager = () => {
     setEditingExpense(eI)
   }
 
-  const changeService = (e) => {
+  const changeService = (e: ChangeEvent<HTMLInputElement>) => {
     let iName = e.target.value
     let eI = {
       ...editingExpense,
@@ -228,7 +229,7 @@ export const ExpenseManager = () => {
   }
 
   const blurItemName = () => {
-    let nItemName = editingExpense.itemName
+    let nItemName = editingExpense.origin.itemName
     if (nItemName === null || nItemName === undefined || nItemName === "") {
       return;
     }
@@ -245,24 +246,24 @@ export const ExpenseManager = () => {
       })
   }
 
-  const changeUnitPrice = (e) => {
+  const changeUnitPrice = (e: ChangeEvent<HTMLInputElement>) => {
     let v = e.target.value
     let uP = formatMoneyAmount(v)
     let eI = {
       ...editingExpense,
-      amount: uP.amount * editingExpense.quantity,
+      amount: uP.amount * editingExpense.origin.quantity,
       unitPrice: uP.amount,
       formattedUnitPrice: uP.formattedAmount
     }
     setEditingExpense(eI)
   }
 
-  const changeQuantity = (delta) => {
-    let nQ = editingExpense.quantity + delta
+  const changeQuantity = (delta: number) => {
+    let nQ = editingExpense.origin.quantity + delta
     let eI = {
       ...editingExpense,
       quantity: nQ,
-      amount: editingExpense.unitPrice * nQ
+      amount: editingExpense.origin.unitPrice * nQ
     }
     setEditingExpense(eI)
   }
@@ -279,7 +280,7 @@ export const ExpenseManager = () => {
       .then(exp => {
         let uP = formatMoneyAmount(String(exp.unitPrice))
         let eI = {
-          ...exp,
+          origin: exp,
           formattedUnitPrice: uP.formattedAmount,
           originItemName: exp.itemName,
           itemMessage: expMsg
@@ -295,17 +296,17 @@ export const ExpenseManager = () => {
       })
   }
 
-  const processSaveExpense = () => {
+  const processSaveExpense = (): boolean => {
     let exp = {
-      expenseDate: editingExpense.expenseDate,
-      itemName: editingExpense.itemName,
-      quantity: editingExpense.quantity,
-      unitPrice: editingExpense.unitPrice,
+      expenseDate: editingExpense.origin.expenseDate,
+      itemName: editingExpense.origin.itemName,
+      quantity: editingExpense.origin.quantity,
+      unitPrice: editingExpense.origin.unitPrice,
       expenserId: currentUser.id,
       expenserName: currentUserFullname(),
-      service: editingExpense.service,
-      id: editingExpense.id,
-      amount: editingExpense.amount
+      service: editingExpense.origin.service,
+      id: editingExpense.origin.id,
+      amount: editingExpense.origin.amount
     }
     if (exp.id === null || exp.id === "" || exp.id === "new") {
       exp.id = newExpId()
@@ -323,42 +324,41 @@ export const ExpenseManager = () => {
     }
     console.info("Save expense %s...", exp.id)
     return saveExpense(exp)
-      .then((resp) => {
-        if (resp.ok) {
-          console.log("Save expense %s successully", exp.id)
-          return true
-        } else {
-          console.log("Failed to save expense %s", exp.id)
-          console.error(resp)
-          return false
-        }
-      })
+      .then((rsp: Response) => rsp.ok)
+    // .then((resp: any) => {
+    //   if (resp.ok) {
+    //     console.log("Save expense %s successully", exp.id)
+    //     return true
+    //   } else {
+    //     console.log("Failed to save expense %s", exp.id)
+    //     console.error(resp)
+    //     return false
+    //   }
+    // })
   }
 
   const handleSaveAndCompleteExpense = () => {
-    processSaveExpense()
-      .then(res => {
-        if (res) {
-          setEditingExpense(defaultEditingExpense)
-          cancelEditingExpense()
-        }
-      })
-      .catch(e => {
-        console.error("Failed to save expense", e)
-      })
+    let result = processSaveExpense()
+    if (result) {
+      setEditingExpense(defaultEditingExpense)
+      cancelEditingExpense()
+    } else {
+      console.error("Failed to save expense")
+    }
   }
 
   const handleSaveAndContinueExpense = () => {
-    processSaveExpense()
-      .then(res => {
-        if (res) {
-          setEditingExpense(defaultEditingExpense)
-          expMsgRef.current.focus()
-        }
-      })
-      .catch(e => {
-        console.error("Failed to save expense", e)
-      })
+
+    let result = processSaveExpense()
+    if (result) {
+      setEditingExpense(defaultEditingExpense)
+      if(expMsgRef.current===null){
+        return
+      }
+      expMsgRef.current.focus()
+    } else {
+      console.error("Failed to save expense")
+    }
   }
 
   return (
@@ -413,7 +413,7 @@ export const ExpenseManager = () => {
                     <div className="grid grid-cols-1">
                       <Label
                         onClick={() => editExpense(exp)}
-                        state={{ pageNumber: pagination.pageNumber, pageSize: pagination.pageSize }}
+                        // state={{ pageNumber: pagination.pageNumber, pageSize: pagination.pageSize }}
                         className="font-medium text-blue-600 hover:underline dark:text-blue-500"
                         value={exp.itemName}
                       />
@@ -472,7 +472,7 @@ export const ExpenseManager = () => {
         <Modal.Header>Confirm</Modal.Header>
         <Modal.Body>
           <div>
-            <span>{deletingExpense === null ? "" : "Are you sure to delete [" + deletingExpense.itemName + "]?"}</span>
+            <span>{deletingExpense === null ? "" : "Are you sure to delete [" + deletingExpense?.itemName + "]?"}</span>
           </div>
         </Modal.Body>
         <Modal.Footer className="flex justify-center gap-4">
@@ -524,7 +524,7 @@ export const ExpenseManager = () => {
                 id="itemName"
                 placeholder="Bánh mì"
                 required={true}
-                value={editingExpense.itemName}
+                value={editingExpense.origin.itemName}
                 onChange={changeItemName}
                 onBlur={blurItemName}
                 className="w-full"
@@ -575,7 +575,7 @@ export const ExpenseManager = () => {
                   className="bg-gray-50 border-x-0 border-gray-300 h-11 text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="999"
                   required
-                  value={editingExpense.quantity}
+                  value={editingExpense.origin.quantity}
                   readOnly
                 />
                 <button
@@ -598,7 +598,7 @@ export const ExpenseManager = () => {
                   value="Amount"
                 />
               </div>
-              <span className="w-full">{formatVND(editingExpense.amount)}</span>
+              <span className="w-full">{formatVND(editingExpense.origin.amount)}</span>
 
             </div>
             <div className="flex flex-row w-full align-middle">
@@ -611,7 +611,7 @@ export const ExpenseManager = () => {
               <TextInput
                 id="service"
                 placeholder="STAY TOUR or FOOD"
-                value={editingExpense.service}
+                value={editingExpense.origin.service}
                 readOnly
                 required
                 onChange={changeService}

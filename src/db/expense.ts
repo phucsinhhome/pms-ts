@@ -8,13 +8,13 @@ export const newExpId = () => {
   return '' + (Date.now() % 10000000)
 }
 
-const listLatestExpenses = (pageNumber, pageSize) => {
+const listLatestExpenses = (pageNumber: number, pageSize: number) => {
   console.info("Fetching recent expenses")
   return fetch(`${process.env.REACT_APP_EXPENSE_SERVICE_ENDPOINT}/list/recent?page=${pageNumber}&size=${pageSize}`, requestOptions)
     .then(response => response.json())
 }
 
-export const listExpenseByDate = (byDate, pageNumber, pageSize) => {
+export const listExpenseByDate = (byDate: string, pageNumber: number, pageSize: number) => {
   console.info("Fetching expenses by date %s", byDate)
   return fetch(`${process.env.REACT_APP_EXPENSE_SERVICE_ENDPOINT}/list/bydate?byDate=${byDate}&page=${pageNumber}&size=${pageSize}`, requestOptions)
     .then(response => response.json())
@@ -40,13 +40,13 @@ export const listExpenseByExpenserAndDate = async (expenserId: string, byDate: s
 
 export default listLatestExpenses;
 
-export function getExpense(expenseId) {
+export function getExpense(expenseId: string) {
   console.info("Fetching expense [%s] from backend with", expenseId)
   return fetch(`${process.env.REACT_APP_EXPENSE_SERVICE_ENDPOINT}/${expenseId}`, requestOptions)
     .then(response => response.json())
 }
 
-export function saveExpense(expense) {
+export const saveExpense = (expense: Expense) => {
   console.info("Saving expense %s...", expense.id)
   var opts = {
     method: 'POST',

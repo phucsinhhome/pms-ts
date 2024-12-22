@@ -1,4 +1,4 @@
-export const putObject = (object: File, bucket: string, key:string) => {
+export const putObject = (object: File, bucket: string, key:string): Promise<Response> => {
     let form = new FormData()
     form.append('bucket', bucket)
     form.append('objectKey', key)
@@ -8,7 +8,6 @@ export const putObject = (object: File, bucket: string, key:string) => {
     console.info("Save product details")
     const opts = {
         method: 'POST',
-        // headers: { 'Content-Type': 'multipart/form-data' },
         body: form
     }
     return fetch(`${process.env.REACT_APP_GCS_SYNCER_ENDPOINT}/object/gcs/write`, opts)

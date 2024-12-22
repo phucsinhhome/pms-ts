@@ -4,7 +4,7 @@ import { Avatar, Button, Dropdown, FileInput, Label, Modal, Textarea, TextInput 
 import { adjustQuantity as adjustInventoryQuantity, listProducts, listProductsWithName, saveProduct } from "../../db/product";
 import { HiOutlineCash } from "react-icons/hi";
 import { DEFAULT_PAGE_SIZE } from "../../App";
-import { formatVND } from "../../Service/Utils";
+import { formatMoneyAmount, formatVND } from "../../Service/Utils";
 import { putObject } from "../../db/gcs";
 import { warn } from "console";
 import { Pagination } from "../Profit/Models";
@@ -14,15 +14,19 @@ export type Product = {
   name: string,
   unitPrice: number,
   quantity: number,
-  group: string
+  group: string,
+  description: string,
+  featureImgUrl: string,
+  imageUrls: string[]
 }
 
 
 export const Inventory = () => {
 
   const GOOGLE_CLOUD_STORAGE = 'https://storage.googleapis.com'
+  const defaultImageKey = "psassistant/product/pizza.png"
   const [filteredName, setFilteredName] = useState('')
-  const [products, setProducts] = useState({})
+  const [products, setProducts] = useState<Product[]>([])
 
   const [pagination, setPagination] = useState<Pagination>({
     pageNumber: 0,
@@ -31,14 +35,27 @@ export const Inventory = () => {
     totalElements: 0
   })
 
-  const [showProductDetailModal, setShowProductDetailModal] = useState(false)
-  const [editingProduct, setEditingProduct] = useState<Product>({
+  const buildImageUrl = (objectKey: string) => {
+    return [GOOGLE_CLOUD_STORAGE, process.env.REACT_APP_PUBLIC_BUCKET, objectKey].join("/")
+  }
+
+  const defaultEmptyProduct = {
     id: '',
     name: '',
     quantity: 0,
     unitPrice: 0,
-    group: ''
-  })
+    group: '',
+    description: '',
+    featureImgUrl: buildImageUrl(defaultImageKey),
+    imageUrls: [buildImageUrl(defaultImageKey)]
+  }
+  const defaultEditingProduct = {
+    origin: defaultEmptyProduct,
+    formattedUnitPrice: ''
+  }
+
+  const [showProductDetailModal, setShowProductDetailModal] = useState(false)
+  const [editingProduct, setEditingProduct] = useState<{ origin: Product, formattedUnitPrice: string }>(defaultEditingProduct)
 
   const handlePaginationClick = (page: number) => {
     console.log("Pagination nav bar click to page %s", page)
@@ -101,12 +118,11 @@ export const Inventory = () => {
       .then(rsp => {
         if (rsp.ok) {
           rsp.json()
-            .then(data => {
-              let iPs = {
-                ...products
-              }
-              iPs[data.id].quantity = data.quantity
-              setProducts(iPs)
+            .then((data: Product) => {
+              setProducts(products.map(p => {
+                if (p.id === data.id) { p.quantity = data.quantity }
+                return p
+              }))
               console.info("Change item %s with quantity %s order successfully", item.id, item.quantity)
             })
         } else if (rsp.status === 400) {
@@ -118,34 +134,20 @@ export const Inventory = () => {
   }
 
   const indexProduct = (fProducts: Product[]) => {
-    var iP = fProducts.reduce((map, product) => { map[product.id] = product; return map }, {})
-    setProducts(iP)
+    // var iP = fProducts.reduce((map, product) => { map[product.id] = product; return map }, {})
+    setProducts(fProducts)
   }
 
-  const defaultImageKey = "psassistant/product/pizza.png"
+
   const addProduct = () => {
-    var defaultUrl = buildImageUrl(defaultImageKey)
-    let aP = {
-      quantity: 10,
-      group: 'food',
-      featureImgUrl: defaultUrl,
-      imageUrls: [
-        defaultUrl,
-        defaultUrl
-      ]
-    }
-    setEditingProduct(aP)
+    setEditingProduct(defaultEditingProduct)
     setShowProductDetailModal(true)
   }
 
-  const buildImageUrl = (objectKey) => {
-    return [GOOGLE_CLOUD_STORAGE, process.env.REACT_APP_PUBLIC_BUCKET, objectKey].join("/")
-  }
-
-  const viewProductDetail = (product) => {
+  const viewProductDetail = (product: Product) => {
     let uP = formatMoneyAmount(product.unitPrice + '')
     let eP = {
-      ...product,
+      origin: product,
       formattedUnitPrice: uP.formattedAmount
     }
     setEditingProduct(eP)
@@ -154,10 +156,10 @@ export const Inventory = () => {
 
   const closeProductDetailModal = () => {
     setShowProductDetailModal(false)
-    setEditingProduct({})
+    setEditingProduct(defaultEditingProduct)
   }
 
-  const changeProductName = (e) => {
+  const changeProductName = (e: ChangeEvent<HTMLInputElement>) => {
     let v = e.target.value
     let eI = {
       ...editingProduct,
@@ -166,7 +168,7 @@ export const Inventory = () => {
     setEditingProduct(eI)
   }
 
-  const changeProductUnitPrice = (e) => {
+  const changeProductUnitPrice = (e: ChangeEvent<HTMLInputElement>) => {
     let v = e.target.value
     let uP = formatMoneyAmount(v)
     let eI = {
@@ -177,18 +179,18 @@ export const Inventory = () => {
     setEditingProduct(eI)
   }
 
-  const changeProductQuantity = (delta) => {
-    if (delta <= 0 && editingProduct.quantity <= 0) {
+  const changeProductQuantity = (delta: number) => {
+    if (delta <= 0 && editingProduct.origin.quantity <= 0) {
       return
     }
     let eI = {
       ...editingProduct,
-      quantity: editingProduct.quantity + delta
+      quantity: editingProduct.origin.quantity + delta
     }
     setEditingProduct(eI)
   }
 
-  const changeProductDescription = (e) => {
+  const changeProductDescription = (e: ChangeEvent<HTMLTextAreaElement>) => {
     let v = e.target.value
     let eI = {
       ...editingProduct,
@@ -197,7 +199,7 @@ export const Inventory = () => {
     setEditingProduct(eI)
   }
 
-  const changeProductGroup = (gN) => {
+  const changeProductGroup = (gN: string) => {
     let eI = {
       ...editingProduct,
       group: gN
@@ -206,13 +208,13 @@ export const Inventory = () => {
   }
 
   const createOrUpdateProduct = () => {
-    saveProduct(editingProduct)
+    saveProduct(editingProduct.origin)
       .then(rsp => {
         if (rsp.ok) {
           rsp.json()
             .then((data) => {
               console.info("Save product successfully with id %s and offset %d", data.id, data.displayOffset)
-              setEditingProduct({})
+              setEditingProduct(defaultEditingProduct)
               fetchAllProducts()
             })
         }
@@ -223,10 +225,10 @@ export const Inventory = () => {
 
   const cancelEditingProduct = () => {
     setShowProductDetailModal(false)
-    setEditingProduct({})
+    setEditingProduct(defaultEditingProduct)
   }
 
-  const changeFilteredName = (e) => {
+  const changeFilteredName = (e: ChangeEvent<HTMLInputElement>) => {
     let fN = e.target.value
     setFilteredName(fN)
 
@@ -241,39 +243,45 @@ export const Inventory = () => {
           rsp.json()
             .then(data => {
               indexProduct(data)
-            }).catch(() => setProducts({}))
+            }).catch(() => setProducts([]))
         }
       }).catch(() => {
-        setProducts({})
+        setProducts([])
       })
   }
 
   const changeFeatureImage = (e: ChangeEvent<HTMLInputElement>) => {
     onFileChange(e, 'feature')
-      .then(rsp => {
+      .then((rsp: Response) => {
         if (rsp.ok) {
           rsp.json()
             .then(data => {
               setEditingProduct({
                 ...editingProduct,
-                featureImgUrl: buildImageUrl(data.objectKey)
+                origin: {
+                  ...editingProduct.origin,
+                  featureImgUrl: buildImageUrl(data.objectKey)
+                }
               })
             })
         }
       })
   }
 
-  const changeContentImage = (e: ChangeEvent<HTMLInputElement>, idx) => {
+  const changeContentImage = (e: ChangeEvent<HTMLInputElement>, idx: number) => {
     onFileChange(e, 'content_' + idx)
-      .then(rsp => {
+      .then((rsp: Response) => {
         if (rsp.ok) {
           rsp.json()
             .then(data => {
               setEditingProduct({
                 ...editingProduct,
-                imageUrls: [
-                  buildImageUrl(data.objectKey)
-                ]
+                origin: {
+                  ...editingProduct.origin,
+                  imageUrls: [
+                    buildImageUrl(data.objectKey)
+                  ]
+                }
               })
             })
         }
@@ -297,9 +305,9 @@ export const Inventory = () => {
     if (lastDotIndex !== -1) {
       extension = fullName.slice(lastDotIndex + 1);
     }
-    var imageName = editingProduct.name.toLowerCase().replaceAll(' ', '_') + '_' + nameSuffix + '.' + extension
+    var imageName = editingProduct.origin.name.toLowerCase().replace(' ', '_') + '_' + nameSuffix + '.' + extension
 
-    let imageKey = ['product/images', editingProduct.group, imageName].join('/')
+    let imageKey = ['product/images', editingProduct.origin.group, imageName].join('/')
     console.info("The new image name has been generated %s", imageKey)
 
     return putObject(file, process.env.REACT_APP_PUBLIC_BUCKET, imageKey)
@@ -324,7 +332,7 @@ export const Inventory = () => {
       </div>
       <div className="max-h-fit overflow-hidden">
         <div className="flex flex-col space-y-1">
-          {Object.values(products).map((product) => {
+          {products.map((product) => {
             return (
               <div
                 className="flex flex-row items-center border border-gray-300 shadow-2xl rounded-md bg-white dark:bg-slate-500 "
@@ -337,6 +345,7 @@ export const Inventory = () => {
                   <div className="grid grid-cols-1">
                     <div className="flex flex-row">
                       <Link
+                        to=''
                         onClick={() => viewProductDetail(product)}
                         state={{ pageNumber: pagination.pageNumber, pageSize: pagination.pageSize }}
                         className="font-medium text-blue-600 hover:underline dark:text-blue-500 overflow-hidden"
@@ -438,7 +447,7 @@ export const Inventory = () => {
                 type="currency"
                 step={5000}
                 required={true}
-                value={editingProduct.name}
+                value={editingProduct.origin.name}
                 onChange={changeProductName}
                 // rightIcon={HiOutlineCash}
                 className="w-full"
@@ -472,9 +481,9 @@ export const Inventory = () => {
               </div>
               <Dropdown
                 id="group"
-                label={editingProduct.group}
+                label={editingProduct.origin.group}
                 inline
-                value={editingProduct.group}
+                value={editingProduct.origin.group}
                 dismissOnClick
               >
                 <Dropdown.Item onClick={() => changeProductGroup('food')}>food</Dropdown.Item>
@@ -508,7 +517,7 @@ export const Inventory = () => {
                   className="bg-gray-50 border-x-0 border-gray-300 h-11 text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="1"
                   required
-                  value={editingProduct.quantity}
+                  value={editingProduct.origin.quantity}
                   readOnly
                 />
                 <button
@@ -534,9 +543,8 @@ export const Inventory = () => {
               <Textarea
                 id="description"
                 placeholder="Vegiterian"
-                type="text"
                 required={false}
-                value={editingProduct.description}
+                value={editingProduct.origin.description}
                 onChange={changeProductDescription}
                 className="w-full"
               />
@@ -548,22 +556,22 @@ export const Inventory = () => {
                   value="Feature Image"
                 />
               </div>
-              <FileInput id="featureImgUrl" onChange={(e) => changeFeatureImage(e)} disabled={editingProduct.name === undefined || editingProduct.name === null || editingProduct.name === ''} />
+              <FileInput id="featureImgUrl" onChange={(e) => changeFeatureImage(e)} disabled={editingProduct.origin.name === undefined || editingProduct.origin.name === null || editingProduct.origin.name === ''} />
               <img className="max-w-sm h-12"
-                src={editingProduct.featureImgUrl}
+                src={editingProduct.origin.featureImgUrl}
                 alt="" />
             </div>
             {
-              editingProduct.imageUrls ? editingProduct.imageUrls.map((imgUrl, idx) => <div key={idx} className="flex flex-row w-full align-middle">
+              editingProduct.origin.imageUrls ? editingProduct.origin.imageUrls.map((imgUrl, idx) => <div key={idx} className="flex flex-row w-full align-middle">
                 <div className="flex items-center w-2/5">
                   <Label
                     htmlFor={"imgUrl" + idx}
                     value={"Img " + idx}
                   />
                 </div>
-                <FileInput id={"imgUrl" + idx} onChange={(e) => changeContentImage(e, idx)} disabled={editingProduct.name === undefined || editingProduct.name === null || editingProduct.name === ''} />
+                <FileInput id={"imgUrl" + idx} onChange={(e) => changeContentImage(e, idx)} disabled={editingProduct.origin.name === undefined || editingProduct.origin.name === null || editingProduct.origin.name === ''} />
                 <img className="max-w-sm h-12"
-                  src={editingProduct.imageUrls[idx]}
+                  src={editingProduct.origin.imageUrls[idx]}
                   alt="" />
               </div>)
                 : <></>

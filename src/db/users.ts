@@ -1,5 +1,3 @@
-import { HiArrowCircleDown, HiUserCircle } from "react-icons/hi";
-
 export const getUsers = [{
     id: "1351151927",
     name: "Mẫn Trịnh",

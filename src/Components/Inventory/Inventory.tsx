@@ -6,7 +6,6 @@ import { HiOutlineCash } from "react-icons/hi";
 import { DEFAULT_PAGE_SIZE } from "../../App";
 import { formatMoneyAmount, formatVND } from "../../Service/Utils";
 import { putObject } from "../../db/gcs";
-import { warn } from "console";
 import { Pagination } from "../Profit/Models";
 
 export type Product = {
@@ -291,7 +290,7 @@ export const Inventory = () => {
   const onFileChange = (e: ChangeEvent<HTMLInputElement>, nameSuffix: string) => {
     let upload = e.target.files;
     if (upload === null) {
-      warn("Invalid choosen files")
+      console.warn("Invalid choosen files")
       return
     }
     if (upload.length < 1) return;
@@ -310,7 +309,7 @@ export const Inventory = () => {
     let imageKey = ['product/images', editingProduct.origin.group, imageName].join('/')
     console.info("The new image name has been generated %s", imageKey)
 
-    return putObject(file, process.env.REACT_APP_PUBLIC_BUCKET, imageKey)
+    return putObject(file, process.env.REACT_APP_PUBLIC_BUCKET!, imageKey)
   }
 
   return (

@@ -1,5 +1,6 @@
+import { Order, OrderItem } from "../Components/Order/OrderManager";
 
-export const fetchOrders = (fromTime:string, page:number, size:number) => {
+export const fetchOrders = (fromTime: string, page: number, size: number) => {
   console.info("Fetch upcoming orders")
   var opts = {
     method: 'GET'
@@ -7,7 +8,7 @@ export const fetchOrders = (fromTime:string, page:number, size:number) => {
   return fetch(`${process.env.REACT_APP_ORDER_ENDPOINT}/list/coming?fromTime=${fromTime}&page=${page}&size=${size}`, opts);
 }
 
-export const startOrder = (resolverId:string, startTime:string) => {
+export const startOrder = (resolverId: string, startTime: string) => {
   console.info("Start an order")
   var opts = {
     method: 'GET'
@@ -15,7 +16,7 @@ export const startOrder = (resolverId:string, startTime:string) => {
   return fetch(`${process.env.REACT_APP_ORDER_ENDPOINT}/start?resolverId=${resolverId}&startTime=${startTime}`, opts);
 }
 
-export const adjustOrderItem = (orderId: string, item:) => {
+export const adjustOrderItem = (orderId: string, item: OrderItem) => {
   console.info("Add item into order")
   var opts = {
     method: 'POST',
@@ -25,7 +26,7 @@ export const adjustOrderItem = (orderId: string, item:) => {
   return fetch(`${process.env.REACT_APP_ORDER_ENDPOINT}/${orderId}/product/adjust`, opts);
 }
 
-export const fetchAvailability = (itemIds) => {
+export const fetchAvailability = (itemIds: string[]) => {
   console.info("Commit the order")
   var opts = {
     method: 'POST',
@@ -35,7 +36,7 @@ export const fetchAvailability = (itemIds) => {
   return fetch(`${process.env.REACT_APP_ORDER_ENDPOINT}/availability`, opts);
 }
 
-export const fetchItems = (group, page, size) => {
+export const fetchItems = (group: string, page: number, size: number) => {
   console.info("Fetch all the available items of group %s", group)
   var opts = {
     method: 'GET'
@@ -43,7 +44,7 @@ export const fetchItems = (group, page, size) => {
   return fetch(`${process.env.REACT_APP_ORDER_ENDPOINT}/items?group=${group}&page=${page}&size=${size}`, opts);
 }
 
-export const commitOrder = (order) => {
+export const commitOrder = (order: Order) => {
   console.info("Commit the order")
   var opts = {
     method: 'POST',
@@ -53,7 +54,7 @@ export const commitOrder = (order) => {
   return fetch(`${process.env.REACT_APP_ORDER_ENDPOINT}/commit`, opts);
 }
 
-export const getPotentialInvoices = (orderId) => {
+export const getPotentialInvoices = (orderId: string) => {
   console.info("Fetch the potential invoices of the order")
   var opts = {
     method: 'GET'
@@ -61,7 +62,7 @@ export const getPotentialInvoices = (orderId) => {
   return fetch(`${process.env.REACT_APP_ORDER_ENDPOINT}/${orderId}/guests`, opts);
 }
 
-export const resolveInvoiceId = (resolverId) => {
+export const resolveInvoiceId = (resolverId: string) => {
   console.info("Resolve the invoice id from the id %s", resolverId)
   var opts = {
     method: 'GET'
@@ -69,7 +70,7 @@ export const resolveInvoiceId = (resolverId) => {
   return fetch(`${process.env.REACT_APP_ORDER_ENDPOINT}/resolve?resolverId=${resolverId}`, opts);
 }
 
-export const fetchOrder = (orderId) => {
+export const fetchOrder = (orderId: string) => {
   console.info("Fetch the order")
   var opts = {
     method: 'GET'
@@ -77,7 +78,7 @@ export const fetchOrder = (orderId) => {
   return fetch(`${process.env.REACT_APP_ORDER_ENDPOINT}/${orderId}`, opts);
 }
 
-export const confirmOrder = (order) => {
+export const confirmOrder = (order: Order) => {
   console.info("Confirm the order")
   var opts = {
     method: 'POST',
@@ -87,7 +88,7 @@ export const confirmOrder = (order) => {
   return fetch(`${process.env.REACT_APP_ORDER_ENDPOINT}/confirm`, opts);
 }
 
-export const rejectOrder = (orderId, staffId) => {
+export const rejectOrder = (orderId: string, staffId: string) => {
   console.info("Reject the order")
   var opts = {
     method: 'POST'

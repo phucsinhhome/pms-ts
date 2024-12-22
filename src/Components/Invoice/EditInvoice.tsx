@@ -15,7 +15,6 @@ import html2canvas from "html2canvas";
 import { Invoice, InvoiceItem, Issuer } from "./InvoiceManager";
 import { paymentMethods, rooms } from "../../db/staticdata";
 import { ResultCallback } from "minio/dist/main/internal/type";
-import { warn } from "console";
 import { Product } from "../Inventory/Inventory";
 import { Reservation, ResRoom } from "../Reservation/ReservationManager";
 import { uploadBlobToPresignedURL } from "../../Service/FileMinio";
@@ -524,7 +523,7 @@ export const EditInvoice = () => {
       }
       let issuer = issuers.find(iss => iss.id === pM.defaultIssuerId)
       if (issuer === undefined) {
-        warn("Cannot find the issuer for payment %s", pM.defaultIssuerId)
+        console.warn("Cannot find the issuer for payment %s", pM.defaultIssuerId)
         return
       }
       setSelectedPaymentMethod(pM)
@@ -826,14 +825,14 @@ export const EditInvoice = () => {
   const downloadSharedInv = async () => {
     const element = sharedInvRef.current;
     if (element === null) {
-      warn("Invalid shared invoice")
+      console.warn("Invalid shared invoice")
       return
     }
     const canvas = await html2canvas(element);
 
     canvas.toBlob((blob) => {
       if(blob===null){
-        warn("Invalid blob")
+        console.warn("Invalid blob")
         return
       }
       var filename = invoice.id + ".png"

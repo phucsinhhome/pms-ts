@@ -1,4 +1,3 @@
-import * as Fs from 'fs';
 import * as minio from "minio";
 import { ResultCallback } from 'minio/dist/main/internal/type';
 

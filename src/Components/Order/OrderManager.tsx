@@ -1,45 +1,56 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, ChangeEvent } from "react";
 import { Link } from "react-router-dom";
 import { beginOfDay, formatISODate, formatISODateTime, formatVNDateTime } from "../../Service/Utils";
 import { currentUser, DEFAULT_PAGE_SIZE } from "../../App";
 import { fetchOrders } from "../../db/order";
 import { Button, Modal, TextInput } from "flowbite-react";
 import { listInvoiceByGuestName, listStayingAndComingInvoicesAndPrepaid } from "../../db/invoice";
+import { Invoice } from "../Invoice/InvoiceManager";
 
-export const statusFormats = {
-  SENT: 'text-orange-400',
-  CONFIRMED: 'text-green-700',
-  REJECTED: 'text-red-700',
-  SERVED: 'text-gray-700',
-  EXPIRED: 'text-gray-700'
+
+
+export enum OrderStatus {
+  SENT= 'text-orange-400',
+  CONFIRMED= 'text-green-700',
+  REJECTED= 'text-red-700',
+  SERVED= 'text-gray-700',
+  EXPIRED= 'text-gray-700'
 }
 
-export const OrderManager = () => {  
-  const [orders, setOrders] = useState([])
+export type Order = {
+  orderId: string,
+  id: string,
+  guestName: string,
+  status: OrderStatus,
+  startTime: Date
+}
+
+export const OrderManager = () => {
+  const [orders, setOrders] = useState<Order[]>([])
   const [filteredName, setFilteredName] = useState('')
-  const [invoices, setInvoices] = useState([])
+  const [invoices, setInvoices] = useState<Invoice[]>([])
   const [showInvoices, setShowInvoices] = useState(false)
 
   const [pagination, setPagination] = useState({
     pageNumber: 0,
-    pageSize: DEFAULT_PAGE_SIZE,
-    totalElements: 200,
-    totalPages: 20
+    pageSize: Number(DEFAULT_PAGE_SIZE),
+    totalElements: 0,
+    totalPages: 0
   })
 
-  const handlePaginationClick = (pageNumber) => {
+  const handlePaginationClick = (pageNumber: number) => {
     console.log("Pagination nav bar click to page %s", pageNumber)
     var pNum = pageNumber < 0 ? 0 : pageNumber > pagination.totalPages - 1 ? pagination.totalPages - 1 : pageNumber;
     var pSize = pagination.pageSize
     fetchUpcomingOrders(pNum, pSize)
   }
 
-  const fetchUpcomingOrders = (pageNumber, pageSize) => {
+  const fetchUpcomingOrders = (pageNumber: number, pageSize: number) => {
     var fromTime = formatISODateTime(beginOfDay(new Date()))
     console.info("Fetch upcoming order after %s", fromTime)
 
     fetchOrders(fromTime, pageNumber, pageSize)
-      .then(rsp => {
+      .then((rsp: Response) => {
         if (rsp.ok) {
           rsp.json()
             .then(data => {
@@ -57,11 +68,11 @@ export const OrderManager = () => {
   }
 
   useEffect(() => {
-    fetchUpcomingOrders(0, DEFAULT_PAGE_SIZE);
+    fetchUpcomingOrders(0, Number(DEFAULT_PAGE_SIZE));
     // eslint-disable-next-line
   }, []);
 
-  const pageClass = (pageNum) => {
+  const pageClass = (pageNum: number) => {
     var noHighlight = "px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
     var highlight = "px-3 py-2 leading-tight text-bold text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"
 
@@ -86,7 +97,7 @@ export const OrderManager = () => {
   const hideInvoices = () => {
     setShowInvoices(false)
   }
-  const changeFilteredName = (e) => {
+  const changeFilteredName = (e: ChangeEvent<HTMLInputElement>) => {
     let fN = e.target.value
     setFilteredName(fN)
     if (fN === '') {
@@ -95,7 +106,7 @@ export const OrderManager = () => {
     }
     let fromDate = formatISODate(new Date())
 
-    listInvoiceByGuestName(fromDate, fN, 0, DEFAULT_PAGE_SIZE)
+    listInvoiceByGuestName(fromDate, fN, 0, Number(DEFAULT_PAGE_SIZE))
       .then(rsp => {
         if (rsp.ok) {
           rsp.json()
@@ -106,7 +117,7 @@ export const OrderManager = () => {
       })
   }
 
-  const copyOrderLink = (invoice) => {
+  const copyOrderLink = (invoice: Invoice) => {
     let url = process.env.REACT_APP_MENU_WEB_APP + '/menu/food/' + invoice.id
     navigator.clipboard.writeText(url)
     console.info("Url %s has been copied", url)
@@ -147,7 +158,7 @@ export const OrderManager = () => {
                 </div>
                 <div className="pl-0.2 pr-1">
                   <div className="bg-zinc-200 rounded-md py-0.5 w-24 text-center">
-                    <span className={"font font-mono font-bold " + statusFormats[order.status]}>{order.status}</span>
+                    <span className={"font font-mono font-bold " + order.status}>{order.status}</span>
                   </div>
                 </div>
               </div>
@@ -218,7 +229,7 @@ export const OrderManager = () => {
                     </div>
                   </div>
                   <div className="rounded-xl bg-slate-300">
-                    <Link className="font-bold text-amber-900 px-3 py-2 hover:underline" onClick={() => copyOrderLink(invoice)}>Copy</Link>
+                    <Link to='' className="font-bold text-amber-900 px-3 py-2 hover:underline" onClick={() => copyOrderLink(invoice)}>Copy</Link>
                   </div>
                 </div>
               )

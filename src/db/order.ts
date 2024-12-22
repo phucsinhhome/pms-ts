@@ -1,5 +1,5 @@
 
-export const fetchOrders = (fromTime, page, size) => {
+export const fetchOrders = (fromTime:string, page:number, size:number) => {
   console.info("Fetch upcoming orders")
   var opts = {
     method: 'GET'
@@ -7,7 +7,7 @@ export const fetchOrders = (fromTime, page, size) => {
   return fetch(`${process.env.REACT_APP_ORDER_ENDPOINT}/list/coming?fromTime=${fromTime}&page=${page}&size=${size}`, opts);
 }
 
-export const startOrder = (resolverId, startTime) => {
+export const startOrder = (resolverId:string, startTime:string) => {
   console.info("Start an order")
   var opts = {
     method: 'GET'
@@ -15,7 +15,7 @@ export const startOrder = (resolverId, startTime) => {
   return fetch(`${process.env.REACT_APP_ORDER_ENDPOINT}/start?resolverId=${resolverId}&startTime=${startTime}`, opts);
 }
 
-export const adjustOrderItem = (orderId, item) => {
+export const adjustOrderItem = (orderId: string, item:) => {
   console.info("Add item into order")
   var opts = {
     method: 'POST',

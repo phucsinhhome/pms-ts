@@ -5,7 +5,7 @@ import { DEFAULT_PAGE_SIZE } from "../../App";
 import { formatISODate, formatISODateTime, formatRooms, formatVND } from "../../Service/Utils";
 import { confirmOrder, fetchOrder, rejectOrder } from "../../db/order";
 import { getInvoice, listInvoiceByGuestName } from "../../db/invoice";
-import { statusFormats } from "./OrderManager";
+import { OrderStatus } from "./OrderManager";
 
 
 export const Order = () => {
@@ -166,7 +166,7 @@ export const Order = () => {
             }
           </div>
           <div className="flex flex-row items-center space-x-2">
-            <span className={"font font-mono " + statusFormats[order.status]}>{order.status}</span>
+            <span className={"font font-mono " + OrderStatus[order.status]}>{order.status}</span>
             <span className="font font-mono text-sm text-gray-400">{order.invoiceId}</span>
           </div>
         </div>

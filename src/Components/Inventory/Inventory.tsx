@@ -1,12 +1,13 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, ChangeEvent } from "react";
 import { Link } from "react-router-dom";
 import { Avatar, Button, Dropdown, FileInput, Label, Modal, Textarea, TextInput } from "flowbite-react";
 import { adjustQuantity as adjustInventoryQuantity, listProducts, listProductsWithName, saveProduct } from "../../db/product";
-import { formatMoneyAmount } from "../Invoice/EditItem";
 import { HiOutlineCash } from "react-icons/hi";
 import { DEFAULT_PAGE_SIZE } from "../../App";
 import { formatVND } from "../../Service/Utils";
 import { putObject } from "../../db/gcs";
+import { warn } from "console";
+import { Pagination } from "../Profit/Models";
 
 export type Product = {
   id: string,
@@ -23,16 +24,23 @@ export const Inventory = () => {
   const [filteredName, setFilteredName] = useState('')
   const [products, setProducts] = useState({})
 
-  const [pagination, setPagination] = useState({
+  const [pagination, setPagination] = useState<Pagination>({
     pageNumber: 0,
-    pageSize: DEFAULT_PAGE_SIZE,
-    totalPages: 20
+    pageSize: Number(DEFAULT_PAGE_SIZE),
+    totalPages: 0,
+    totalElements: 0
   })
 
   const [showProductDetailModal, setShowProductDetailModal] = useState(false)
-  const [editingProduct, setEditingProduct] = useState({})
+  const [editingProduct, setEditingProduct] = useState<Product>({
+    id: '',
+    name: '',
+    quantity: 0,
+    unitPrice: 0,
+    group: ''
+  })
 
-  const handlePaginationClick = (page) => {
+  const handlePaginationClick = (page: number) => {
     console.log("Pagination nav bar click to page %s", page)
 
     var pNum = page < 0 ? 0 : page > pagination.totalPages - 1 ? pagination.totalPages - 1 : page
@@ -70,7 +78,7 @@ export const Inventory = () => {
   }, [location, pagination.pageNumber]);
 
 
-  const pageClass = (pageNum) => {
+  const pageClass = (pageNum: number) => {
     var noHighlight = "px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
     var highlight = "px-3 py-2 leading-tight text-bold text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"
 
@@ -79,7 +87,7 @@ export const Inventory = () => {
 
   //================ ORDER ==========================//
 
-  const changeQuantity = (product, delta) => {
+  const changeQuantity = (product: Product, delta: number) => {
 
     if (delta <= 0 && product.quantity <= 0) {
       return
@@ -109,7 +117,7 @@ export const Inventory = () => {
       })
   }
 
-  const indexProduct = (fProducts) => {
+  const indexProduct = (fProducts: Product[]) => {
     var iP = fProducts.reduce((map, product) => { map[product.id] = product; return map }, {})
     setProducts(iP)
   }
@@ -240,7 +248,7 @@ export const Inventory = () => {
       })
   }
 
-  const changeFeatureImage = (e) => {
+  const changeFeatureImage = (e: ChangeEvent<HTMLInputElement>) => {
     onFileChange(e, 'feature')
       .then(rsp => {
         if (rsp.ok) {
@@ -255,7 +263,7 @@ export const Inventory = () => {
       })
   }
 
-  const changeContentImage = (e, idx) => {
+  const changeContentImage = (e: ChangeEvent<HTMLInputElement>, idx) => {
     onFileChange(e, 'content_' + idx)
       .then(rsp => {
         if (rsp.ok) {
@@ -272,10 +280,14 @@ export const Inventory = () => {
       })
   }
 
-  const onFileChange = (e, nameSuffix) => {
+  const onFileChange = (e: ChangeEvent<HTMLInputElement>, nameSuffix: string) => {
     let upload = e.target.files;
+    if (upload === null) {
+      warn("Invalid choosen files")
+      return
+    }
     if (upload.length < 1) return;
-    const file = e.target.files[0];
+    const file = upload[0];
 
 
     const fullName = file.name;

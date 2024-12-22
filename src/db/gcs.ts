@@ -1,4 +1,4 @@
-export const putObject = (object, bucket, key) => {
+export const putObject = (object: File, bucket: string, key:string) => {
     let form = new FormData()
     form.append('bucket', bucket)
     form.append('objectKey', key)

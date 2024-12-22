@@ -296,7 +296,7 @@ export const ExpenseManager = () => {
       })
   }
 
-  const processSaveExpense = (): boolean => {
+  const processSaveExpense = () => {
     let exp = {
       expenseDate: editingExpense.origin.expenseDate,
       itemName: editingExpense.origin.itemName,
@@ -325,40 +325,34 @@ export const ExpenseManager = () => {
     console.info("Save expense %s...", exp.id)
     return saveExpense(exp)
       .then((rsp: Response) => rsp.ok)
-    // .then((resp: any) => {
-    //   if (resp.ok) {
-    //     console.log("Save expense %s successully", exp.id)
-    //     return true
-    //   } else {
-    //     console.log("Failed to save expense %s", exp.id)
-    //     console.error(resp)
-    //     return false
-    //   }
-    // })
   }
 
   const handleSaveAndCompleteExpense = () => {
-    let result = processSaveExpense()
-    if (result) {
-      setEditingExpense(defaultEditingExpense)
-      cancelEditingExpense()
-    } else {
-      console.error("Failed to save expense")
-    }
+    processSaveExpense()
+      .then((result: boolean) => {
+        if (result) {
+          setEditingExpense(defaultEditingExpense)
+          cancelEditingExpense()
+        } else {
+          console.error("Failed to save expense")
+        }
+      })
   }
 
   const handleSaveAndContinueExpense = () => {
 
-    let result = processSaveExpense()
-    if (result) {
-      setEditingExpense(defaultEditingExpense)
-      if(expMsgRef.current===null){
-        return
-      }
-      expMsgRef.current.focus()
-    } else {
-      console.error("Failed to save expense")
-    }
+    processSaveExpense()
+      .then((result: boolean) => {
+        if (result) {
+          setEditingExpense(defaultEditingExpense)
+          if (expMsgRef.current === null) {
+            return
+          }
+          expMsgRef.current.focus()
+        } else {
+          console.error("Failed to save expense")
+        }
+      })
   }
 
   return (

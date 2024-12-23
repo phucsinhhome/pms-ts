@@ -29,7 +29,11 @@ export type ResRoom = {
   totalPrice: number
 }
 
-export function ReservationManager() {
+type ReservationManagerProps = {
+  activeMenu: any
+}
+
+export function ReservationManager(props: ReservationManagerProps) {
   const [reservations, setReservations] = useState<Reservation[]>([])
 
   const [fromDate, setFromDate] = useState(new Date());
@@ -79,6 +83,7 @@ export function ReservationManager() {
 
   useEffect(() => {
     fetchReservations(new Date(), 0, Number(DEFAULT_PAGE_SIZE));
+    props.activeMenu()
   }, []);
 
   const filterOpts = [

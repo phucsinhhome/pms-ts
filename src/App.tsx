@@ -28,7 +28,31 @@ export const defaultChat: Chat = {
   lastName: "Tran",
   username: undefined
 }
-const menus = ['profit', 'invoice', 'expenses', 'order', 'inventory']
+
+type MenuItem = {
+  path: string,
+  displayName: string
+}
+
+const menus: MenuItem[] = [{
+  path: 'profit',
+  displayName: 'Profit'
+}, {
+  path: 'invoice',
+  displayName: 'Invoice'
+}, {
+  path: 'expenses',
+  displayName: 'Expense'
+}, {
+  path: 'reservation',
+  displayName: 'Res'
+}, {
+  path: 'order',
+  displayName: 'Order'
+}, {
+  path: 'inventory',
+  displayName: 'Inventory'
+}]
 
 export default function App() {
 
@@ -75,7 +99,7 @@ export default function App() {
     return [chat.firstName, chat.lastName].join(' ')
   }
   const menuStyle = (m: string) => {
-    return m === activeMenu ? "px-1 py-1 bg-gray-500 text-center text-amber-900 text-sm font-sans rounded-sm shadow-sm"
+    return m === activeMenu.path ? "px-1 py-1 bg-gray-500 text-center text-amber-900 text-sm font-sans rounded-sm shadow-sm"
       : "px-1 py-1 bg-gray-200 text-center text-amber-900 text-sm font-sans rounded-sm shadow-sm"
   }
 
@@ -85,9 +109,9 @@ export default function App() {
       <Router>
         <div className="mt-2 ml-2 pr-1 w-full flex flex-row items-center space-x-0.5">
           {
-            menus.map((menu: string) => <Link to={menu}
-              className={menuStyle(menu)}>
-              {menu.toLocaleUpperCase()}
+            menus.map((menu: MenuItem) => <Link to={menu.path}
+              className={menuStyle(menu.path)}>
+              {menu.displayName}
             </Link>)
           }
           <Link to="settings" className="absolute right-2">
@@ -102,16 +126,16 @@ export default function App() {
           <Route path="invoice" element={<InvoiceManager activeMenu={() => setActiveMenu(menus[1])} />} />
           <Route path="invoice/:invoiceId" element={<InvoiceEditor chat={chat} displayName={fullName()} authorizedUserId={authorizedUserId} activeMenu={() => setActiveMenu(menus[1])} />} />
           <Route path="expenses" element={<ExpenseManager chat={chat} displayName={fullName()} authorizedUserId={authorizedUserId} activeMenu={() => setActiveMenu(menus[2])} />} />
-          <Route path="reservation" element={<ReservationManager />} />
-          <Route path="order" element={<OrderManager chat={chat} displayName={fullName()} authorizedUserId={authorizedUserId} activeMenu={() => setActiveMenu(menus[3])} />} />
-          <Route path="order/:orderId/:staffId" element={<OrderEditor activeMenu={() => setActiveMenu(menus[3])} />} />
-          <Route path="inventory" element={<Inventory activeMenu={() => setActiveMenu(menus[4])} />} />
+          <Route path="reservation" element={<ReservationManager activeMenu={() => setActiveMenu(menus[3])} />} />
+          <Route path="order" element={<OrderManager chat={chat} displayName={fullName()} authorizedUserId={authorizedUserId} activeMenu={() => setActiveMenu(menus[4])} />} />
+          <Route path="order/:orderId/:staffId" element={<OrderEditor activeMenu={() => setActiveMenu(menus[4])} />} />
+          <Route path="inventory" element={<Inventory activeMenu={() => setActiveMenu(menus[5])} />} />
           <Route path="settings" element={<Settings
             syncing={syncing}
             changeSyncing={(n: boolean) => setSyncing(n)}
             syncingRes={syncingRes}
             changeResSyncing={(n: boolean) => setSyncingRes(n)}
-            activeMenu={() => setActiveMenu('')}
+            activeMenu={() => setActiveMenu({ path: 'settings', displayName: 'Settings' })}
           />} />
         </Routes>
       </Router>

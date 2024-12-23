@@ -6,7 +6,7 @@ import Moment from "react-moment";
 import { Configs, internalRooms } from "./InvoiceEditor";
 import { addDays, formatISODate } from "../Service/Utils";
 import { DEFAULT_PAGE_SIZE } from "../App";
-import { Pagination } from "../Profit/Models";
+import { Pagination } from "./ProfitReport";
 
 export type Reservation = {
   id: string,

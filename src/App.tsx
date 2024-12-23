@@ -11,15 +11,29 @@ import { IoMdSettings } from "react-icons/io";
 import { OrderManager } from "./Components/Order/OrderManager";
 import { EditOrder } from "./Components/Order/EditOrder";
 import { Inventory } from "./Components/Inventory/Inventory";
+import { init, retrieveLaunchParams, useLaunchParams } from '@telegram-apps/sdk-react';
 
-const tele = window.Telegram.WebApp;
+// const tele = window.Telegram.WebApp;
 export const DEFAULT_PAGE_SIZE = Number(process.env.REACT_APP_DEFAULT_PAGE_SIZE)
 
-export const initialUser = tele.initDataUnsafe.user
-export const currentUser = tele.initDataUnsafe.user || {
-  id: "1351151927",
-  first_name: "Minh",
-  last_name: "Tran"
+// export const initialUser = tele.initDataUnsafe.user
+// export const currentUser = tele.initDataUnsafe.user || {
+//   id: "1351151927",
+//   first_name: "Minh",
+//   last_name: "Tran"
+// }
+
+export type Chat = {
+  id: number,
+  firstName: string,
+  lastName: string | undefined,
+  username: string | undefined
+}
+export const defaultChat: Chat = {
+  id: 1351151927,
+  firstName: "Minh",
+  lastName: "Tran",
+  username: undefined
 }
 
 // export const currentUserFullname = () => {
@@ -33,15 +47,30 @@ export const currentUserFullname = () => {
 
 export default function App() {
 
+  const [chat, setChat] = useState<Chat>(defaultChat)
+  const [apiVersion, setAPIVersion] = useState<string>('6.0')
   const [syncing, setSyncing] = useState(false)
   const [syncingRes, setSyncingRes] = useState(false)
 
   useEffect(() => {
     document.title = "PMS"
-    tele.ready();
-    tele.expand();
-    tele.disableVerticalSwipes();
-    console.info("TELEGRAM BOT API VERSION: %s", tele.version)
+    init();
+    const launchParams = retrieveLaunchParams();
+    if (launchParams.initData && launchParams.initData.user) {
+      const user = launchParams.initData.user
+      setChat({
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        username: user.username
+      })
+    }
+    setAPIVersion(launchParams.version)
+
+    // tele.ready();
+    // tele.expand();
+    // tele.disableVerticalSwipes();
+    console.info("TELEGRAM BOT API VERSION: %s", launchParams.version)
   }, []);
 
 
@@ -88,8 +117,8 @@ export default function App() {
       </Router>
       <div className="absolute top-0 right-0 flex flex-col mt-10 mr-2 bg-neutral-200 p-1 opacity-90 rounded-md shadow-lg">
         <span className=" font text-[10px] font-bold text-gray-800 dark:text-white">{currentUserFullname()}</span>
-        <span className=" font text-[8px] italic text-gray-600 dark:text-white">{currentUser.id}</span>
-        <span className=" font font-mono text-center text-[8px] text-gray-900 dark:text-white">{"API " + tele.version}</span>
+        <span className=" font text-[8px] italic text-gray-600 dark:text-white">{chat.id}</span>
+        <span className=" font font-mono text-center text-[8px] text-gray-900 dark:text-white">{"API " + apiVersion}</span>
       </div>
     </div>
   );

@@ -1,12 +1,12 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
 import { Link } from "react-router-dom";
 import { Avatar, Button, Dropdown, FileInput, Label, Modal, Textarea, TextInput } from "flowbite-react";
-import { adjustQuantity as adjustInventoryQuantity, listProducts, listProductsWithName, saveProduct } from "../../db/product";
+import { adjustQuantity as adjustInventoryQuantity, listProducts, listProductsWithName, saveProduct } from "../db/product";
 import { HiOutlineCash } from "react-icons/hi";
-import { DEFAULT_PAGE_SIZE } from "../../App";
-import { formatMoneyAmount, formatVND } from "../../Service/Utils";
-import { putObject } from "../../db/gcs";
-import { Pagination } from "../Profit/Models";
+import { formatMoneyAmount, formatVND } from "../Service/Utils";
+import { putObject } from "../db/gcs";
+import { DEFAULT_PAGE_SIZE } from "../App";
+import { Pagination } from "./ProfitReport";
 
 export type Product = {
   id: string,

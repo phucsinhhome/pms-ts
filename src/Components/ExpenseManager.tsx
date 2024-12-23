@@ -11,7 +11,7 @@ import { formatISODate, formatISODateTime, formatMoneyAmount, formatVND } from "
 import { PiBrainThin } from "react-icons/pi";
 import { FaRotate } from "react-icons/fa6";
 import { listExpenseByExpenserAndDate } from "../db/expense";
-import { Pagination } from "../Profit/Models";
+import { Pagination } from "./ProfitReport";
 import { saveExpense } from "../db/expense";
 
 export type Expense = {

@@ -719,6 +719,7 @@ export const InvoiceEditor = (props: InvoiceProps) => {
     setOpenViewInvModal(true)
   }
   const closeViewInv = () => {
+    setSharedInvData(null)
     setOpenViewInvModal(false)
   }
 
@@ -864,7 +865,7 @@ export const InvoiceEditor = (props: InvoiceProps) => {
   const sharedInvRef = useRef<HTMLDivElement>(null)
   const sharedInvImg = useRef<HTMLDivElement>(null)
   // const [btnSharedInvText, setBtnSharedInvText] = useState("Copy")
-  const [sharedInvData, setSharedInvData] = useState<string>()
+  const [sharedInvData, setSharedInvData] = useState<string | null>()
 
   const downloadSharedInv = async () => {
     const element = sharedInvRef.current;
@@ -873,33 +874,47 @@ export const InvoiceEditor = (props: InvoiceProps) => {
       return
     }
     const canvas = await html2canvas(element);
+    setSharedInvData(canvas.toDataURL('image/png'))
 
-    canvas.toBlob((blob) => {
-      if (blob === null) {
-        console.warn("Invalid blob")
-        return
+    canvas.toBlob(async (blob) => {
+      if (blob) {
+        try {
+          await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
+          console.log('Image copied to clipboard');
+        } catch (err) {
+          console.error('Failed to copy image: ', err);
+        }
       }
-      var filename = invoice.id + ".png"
-      var key = formatDatePartition(new Date()) + "/" + filename
-      uploadBlobToPresignedURL(Configs.invoice.editInvoice.bucket, key, blob, filename)
-        .then(rsp => {
-          if (rsp.ok) {
-            getPresignedLinkWithDefaultDuration(Configs.invoice.editInvoice.bucket, key, (error, url) => {
-              setSharedInvData(url)
-              if (sharedInvImg.current) {
-                sharedInvImg.current.scrollIntoView()
-              }
-            })
-          }
-          return null
-        }).catch(e => {
-          console.error("Failed to upload file %s", filename)
-          console.log(e)
-          return null
-        })
-    },
-      "image/png",
-      1)
+    }
+      , 'image/png');
+
+
+    // canvas.toBlob((blob) => {
+    //   if (blob === null) {
+    //     console.warn("Invalid blob")
+    //     return
+    //   }
+    //   var filename = invoice.id + ".png"
+    //   var key = formatDatePartition(new Date()) + "/" + filename
+    //   uploadBlobToPresignedURL(Configs.invoice.editInvoice.bucket, key, blob, filename)
+    //     .then(rsp => {
+    //       if (rsp.ok) {
+    //         getPresignedLinkWithDefaultDuration(Configs.invoice.editInvoice.bucket, key, (error, url) => {
+    //           setSharedInvData(url)
+    //           if (sharedInvImg.current) {
+    //             sharedInvImg.current.scrollIntoView()
+    //           }
+    //         })
+    //       }
+    //       return null
+    //     }).catch(e => {
+    //       console.error("Failed to upload file %s", filename)
+    //       console.log(e)
+    //       return null
+    //     })
+    // },
+    //   "image/png",
+    //   1)
   }
 
   return (
@@ -1688,16 +1703,19 @@ export const InvoiceEditor = (props: InvoiceProps) => {
             <div className="w-full text-center" hidden={sharedInvData == null}>
               <span
                 className="font-sans italic pb-2 text-amber-700"
-              >Touch then <span className="text font-bold">Download</span>
+              >Copied to <span className="text font-bold">Clipboard</span>
               </span>
             </div>
-            <div className="flex flex-col items-center" hidden={sharedInvData == null}>
-              <img
-                src={sharedInvData}
-                alt=""
-                className="h-40 rounded-sm shadow-xl"
-              />
-            </div>
+            {
+              sharedInvData && (<div className="flex flex-col items-center" hidden={sharedInvData == null}>
+                <img
+                  src={sharedInvData}
+                  alt=""
+                  className="h-40 rounded-sm shadow-xl"
+                />
+              </div>)
+            }
+
           </div>
 
         </Modal.Body>

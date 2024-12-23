@@ -92,9 +92,9 @@ export const ExpenseManager = (props: ExpenseProps) => {
     // let expenserId = (initialUser !== null && initialUser !== undefined) ? initialUser.id : null
     return listExpenseByExpenserAndDate(props.authorizedUserId, byDate, pageNumber, pageSize)
       .then((data: any) => {
-        if(data ===undefined){
+        if (data === undefined) {
           console.warn("Invalid expense response")
-          return 
+          return
         }
         let sortedExps = data.content
         setExpenses(sortedExps)
@@ -221,7 +221,10 @@ export const ExpenseManager = (props: ExpenseProps) => {
     let iName = e.target.value
     let eI = {
       ...editingExpense,
-      itemName: iName
+      origin: {
+        ...editingExpense.origin,
+        itemName: iName
+      }
     }
     setEditingExpense(eI)
   }
@@ -230,7 +233,10 @@ export const ExpenseManager = (props: ExpenseProps) => {
     let iName = e.target.value
     let eI = {
       ...editingExpense,
-      service: iName
+      origin: {
+        ...editingExpense.origin,
+        service: iName
+      }
     }
     setEditingExpense(eI)
   }
@@ -243,12 +249,15 @@ export const ExpenseManager = (props: ExpenseProps) => {
     setClassifyingExp(true)
     console.log("Classify the service by expense name [%s]", nItemName)
     classifyServiceByItemName(nItemName)
-      .then((srv) => {
-        var nexItem = {
+      .then((srv: string) => {
+        let eI = {
           ...editingExpense,
-          service: srv
+          origin: {
+            ...editingExpense.origin,
+            service: srv
+          }
         }
-        setEditingExpense(nexItem)
+        setEditingExpense(eI)
         setClassifyingExp(false)
       })
   }
@@ -258,8 +267,11 @@ export const ExpenseManager = (props: ExpenseProps) => {
     let uP = formatMoneyAmount(v)
     let eI = {
       ...editingExpense,
-      amount: uP.amount * editingExpense.origin.quantity,
-      unitPrice: uP.amount,
+      origin: {
+        ...editingExpense.origin,
+        amount: uP.amount * editingExpense.origin.quantity,
+        unitPrice: uP.amount,
+      },
       formattedUnitPrice: uP.formattedAmount
     }
     setEditingExpense(eI)
@@ -269,8 +281,11 @@ export const ExpenseManager = (props: ExpenseProps) => {
     let nQ = editingExpense.origin.quantity + delta
     let eI = {
       ...editingExpense,
-      quantity: nQ,
-      amount: editingExpense.origin.unitPrice * nQ
+      origin: {
+        ...editingExpense.origin,
+        quantity: nQ,
+        amount: editingExpense.origin.unitPrice * nQ
+      }
     }
     setEditingExpense(eI)
   }

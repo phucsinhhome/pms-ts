@@ -1,6 +1,6 @@
 import { formatDatePartition } from "../Service/Utils";
 import { syncStatusOfMonth } from "../Service/StatusSyncingService";
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { Label, Spinner, TextInput } from "flowbite-react";
 import { IoIosSync } from "react-icons/io";
 import { collectRes } from "../db/reservation_extractor";
@@ -9,13 +9,20 @@ export type SettingProps = {
   syncing: boolean,
   changeSyncing: any,
   syncingRes: boolean,
-  changeResSyncing: any
+  changeResSyncing: any,
+  activeMenu: any
 }
 
 export const Settings = (props: SettingProps) => {
 
   const [datePartition, setDatePartition] = useState(formatDatePartition(new Date()))
   const [syncedResNextDays, setSyncedResNextDays] = useState(formatDatePartition(new Date()))
+
+  useEffect(() => {
+    props.activeMenu()
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const syncStatus = () => {
     props.changeResSyncing(true)

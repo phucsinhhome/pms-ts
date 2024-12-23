@@ -45,8 +45,12 @@ export type Issuer = {
   displayName: string
 }
 
+type InvoiceManagerProps = {
+  activeMenu: any
+}
 
-export const InvoiceManager = () => {
+
+export const InvoiceManager = (props: InvoiceManagerProps) => {
   const [invoices, setInvoices] = useState<Invoice[]>([])
 
   const [fromDate, setFromDate] = useState(new Date());
@@ -128,6 +132,7 @@ export const InvoiceManager = () => {
 
   useEffect(() => {
     fetchInvoices();
+    props.activeMenu();
 
     // eslint-disable-next-line
   }, [pagination.pageNumber, fromDate]);

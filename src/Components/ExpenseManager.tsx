@@ -54,7 +54,8 @@ const defaultEditingExpense = {
 type ExpenseProps = {
   chat: Chat,
   authorizedUserId: string | null,
-  displayName: string
+  displayName: string,
+  activeMenu: any
 }
 
 export const ExpenseManager = (props: ExpenseProps) => {
@@ -107,8 +108,9 @@ export const ExpenseManager = (props: ExpenseProps) => {
   }
 
   useEffect(() => {
+    props.activeMenu()
     fetchExpenses()
-
+    
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pagination.pageNumber]);
 

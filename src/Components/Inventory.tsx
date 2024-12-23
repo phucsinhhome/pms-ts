@@ -19,8 +19,12 @@ export type Product = {
   imageUrls: string[]
 }
 
+type InventoryProps = {
+  activeMenu: any
+}
 
-export const Inventory = () => {
+
+export const Inventory = (props: InventoryProps) => {
 
   const GOOGLE_CLOUD_STORAGE = 'https://storage.googleapis.com'
   const defaultImageKey = "psassistant/product/pizza.png"
@@ -89,6 +93,7 @@ export const Inventory = () => {
   useEffect(() => {
 
     fetchAllProducts();
+    props.activeMenu()
 
     // eslint-disable-next-line
   }, [location, pagination.pageNumber]);

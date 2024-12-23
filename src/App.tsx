@@ -3,7 +3,7 @@ import "./App.css";
 import ProfitReport from "./Components/ProfitReport";
 import { InvoiceManager } from "./Components/InvoiceManager"
 import { InvoiceEditor } from "./Components/InvoiceEditor"
-import { BrowserRouter as Router, Link, Route, Routes } from "react-router-dom"
+import { BrowserRouter as Router, Link, Route, Routes, Navigate } from "react-router-dom"
 import { ExpenseManager } from "./Components/ExpenseManager";
 import { ReservationManager } from "./Components/ReservationManager";
 import { Settings } from "./Components/Settings";
@@ -28,6 +28,7 @@ export const defaultChat: Chat = {
   lastName: "Tran",
   username: undefined
 }
+const menus = ['profit', 'invoice', 'expenses', 'order', 'inventory']
 
 export default function App() {
 
@@ -36,6 +37,7 @@ export default function App() {
   const [authorizedUserId, setAuthorizedUserId] = useState<string | null>(null)
   const [syncing, setSyncing] = useState(false)
   const [syncingRes, setSyncingRes] = useState(false)
+  const [activeMenu, setActiveMenu] = useState(menus[0])
 
   function Component() {
     let launchParams = null
@@ -72,18 +74,22 @@ export default function App() {
   const fullName = () => {
     return [chat.firstName, chat.lastName].join(' ')
   }
+  const menuStyle = (m: string) => {
+    return m === activeMenu ? "px-1 py-1 bg-gray-500 text-center text-amber-900 text-sm font-sans rounded-sm shadow-sm"
+      : "px-1 py-1 bg-gray-200 text-center text-amber-900 text-sm font-sans rounded-sm shadow-sm"
+  }
 
 
   return (
     <div className="flex flex-col relative h-[100dvh] min-h-0 bg-slate-50">
       <Router>
         <div className="mt-2 ml-2 pr-1 w-full flex flex-row items-center space-x-0.5">
-          <Link to="profit" className="px-1 py-1 bg-gray-200 text-center text-amber-900 text-sm font-sans rounded-sm shadow-sm">Profit</Link>
-          <Link to="invoice" className="px-1 py-1 bg-gray-200 text-center text-amber-900 text-sm font-sans rounded-sm shadow-sm">Invoice</Link>
-          <Link to="expenses" className="px-1 py-1 bg-gray-200 text-center text-amber-900 text-sm font-sans rounded-sm shadow-sm" >Expense</Link>
-          <Link to="reservation" className="px-1 py-1 bg-gray-200 text-center text-amber-900 text-sm font-sans rounded-sm shadow-sm">Res</Link>
-          <Link to="order" className="px-1 py-1 bg-gray-200 text-center text-amber-900 text-sm font-sans rounded-sm shadow-sm">Order</Link>
-          <Link to="inventory" className="px-1 py-1 bg-gray-200 text-center text-amber-900 text-sm font-sans rounded-sm shadow-sm">Inventory</Link>
+          {
+            menus.map((menu: string) => <Link to={menu}
+              className={menuStyle(menu)}>
+              {menu.toLocaleUpperCase()}
+            </Link>)
+          }
           <Link to="settings" className="absolute right-2">
             <IoMdSettings
               className="pointer-events-auto cursor-pointer w-14 h-7"
@@ -91,20 +97,21 @@ export default function App() {
           </Link>
         </div>
         <Routes>
-          <Route path="/" element={<ProfitReport />} />
-          <Route path="profit" element={<ProfitReport />} />
-          <Route path="invoice" element={<InvoiceManager />} />
-          <Route path="invoice/:invoiceId" element={<InvoiceEditor chat={chat} displayName={fullName()} authorizedUserId={authorizedUserId} />} />
-          <Route path="expenses" element={<ExpenseManager chat={chat} displayName={fullName()} authorizedUserId={authorizedUserId} />} />
+          <Route path="/" element={<Navigate to={"profit"} />} />
+          <Route path="profit" element={<ProfitReport activeMenu={() => setActiveMenu(menus[0])} />} />
+          <Route path="invoice" element={<InvoiceManager activeMenu={() => setActiveMenu(menus[1])} />} />
+          <Route path="invoice/:invoiceId" element={<InvoiceEditor chat={chat} displayName={fullName()} authorizedUserId={authorizedUserId} activeMenu={() => setActiveMenu(menus[1])} />} />
+          <Route path="expenses" element={<ExpenseManager chat={chat} displayName={fullName()} authorizedUserId={authorizedUserId} activeMenu={() => setActiveMenu(menus[2])} />} />
           <Route path="reservation" element={<ReservationManager />} />
-          <Route path="order" element={<OrderManager chat={chat} displayName={fullName()} authorizedUserId={authorizedUserId} />} />
-          <Route path="order/:orderId/:staffId" element={<OrderEditor />} />
-          <Route path="inventory" element={<Inventory />} />
+          <Route path="order" element={<OrderManager chat={chat} displayName={fullName()} authorizedUserId={authorizedUserId} activeMenu={() => setActiveMenu(menus[3])} />} />
+          <Route path="order/:orderId/:staffId" element={<OrderEditor activeMenu={() => setActiveMenu(menus[3])} />} />
+          <Route path="inventory" element={<Inventory activeMenu={() => setActiveMenu(menus[4])} />} />
           <Route path="settings" element={<Settings
             syncing={syncing}
             changeSyncing={(n: boolean) => setSyncing(n)}
             syncingRes={syncingRes}
             changeResSyncing={(n: boolean) => setSyncingRes(n)}
+            activeMenu={() => setActiveMenu('')}
           />} />
         </Routes>
       </Router>

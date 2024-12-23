@@ -74,7 +74,11 @@ const defaultPeriod: RPeriod = {
   }
 }
 
-export default function ProfitReport() {
+type ProfitReportProps = {
+  activeMenu: any
+}
+
+export default function ProfitReport(props: ProfitReportProps) {
   const defaultReport: PReport = {
     fromDate: "2023-12-01",
     toDate: "2023-12-13",
@@ -165,6 +169,7 @@ export default function ProfitReport() {
 
   useEffect(() => {
     fetchReport()
+    props.activeMenu()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params]);
 

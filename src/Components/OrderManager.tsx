@@ -39,7 +39,8 @@ export type Order = {
 type OrderManagerProps = {
   chat: Chat,
   authorizedUserId: string | null,
-  displayName: string
+  displayName: string,
+  activeMenu: any
 }
 
 export const OrderManager = (props: OrderManagerProps) => {
@@ -86,6 +87,7 @@ export const OrderManager = (props: OrderManagerProps) => {
 
   useEffect(() => {
     fetchUpcomingOrders(0, DEFAULT_PAGE_SIZE);
+    props.activeMenu()
     // eslint-disable-next-line
   }, []);
 

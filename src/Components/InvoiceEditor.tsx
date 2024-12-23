@@ -151,7 +151,8 @@ const defaultEmptyInvoice = {
 type InvoiceProps = {
   chat: Chat,
   authorizedUserId: string | null,
-  displayName: string
+  displayName: string,
+  activeMenu: any
 }
 
 export const InvoiceEditor = (props: InvoiceProps) => {
@@ -211,6 +212,7 @@ export const InvoiceEditor = (props: InvoiceProps) => {
 
   useEffect(() => {
     console.info("Editing invoice %s", invoiceId)
+    props.activeMenu()
     if (invoiceId === undefined) {
       console.warn("Invalid invoice id. It should be value of 'new' or a certain ID value")
       return
@@ -242,7 +244,7 @@ export const InvoiceEditor = (props: InvoiceProps) => {
       listAllProducts()
         .then(data => setProducts(data))
     }
-  }, [invoiceId, products.length])
+  }, [invoiceId, products.length, props])
 
 
   const handleSaveInvoice = () => {

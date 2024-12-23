@@ -13,7 +13,11 @@ type OrderParams = {
   staffId: string
 }
 
-export const OrderEditor = () => {
+type OrderEditorProps = {
+  activeMenu: any
+}
+
+export const OrderEditor = (props: OrderEditorProps) => {
 
   const [order, setOrder] = useState<Order>()
   const [message, setMessage] = useState('No item')
@@ -52,6 +56,7 @@ export const OrderEditor = () => {
 
   useEffect(() => {
     readOrder();
+    props.activeMenu()
 
     // eslint-disable-next-line
   }, [orderId]);

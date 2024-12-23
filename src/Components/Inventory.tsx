@@ -2,7 +2,7 @@ import React, { useState, useEffect, ChangeEvent } from "react";
 import { Link } from "react-router-dom";
 import { Avatar, Button, Dropdown, FileInput, Label, Modal, Textarea, TextInput } from "flowbite-react";
 import { adjustQuantity as adjustInventoryQuantity, listProducts, listProductsWithName, saveProduct } from "../db/product";
-import { HiOutlineCash } from "react-icons/hi";
+import { HiOutlineCash, HiX } from "react-icons/hi";
 import { formatMoneyAmount, formatVND } from "../Service/Utils";
 import { putObject } from "../db/gcs";
 import { DEFAULT_PAGE_SIZE } from "../App";
@@ -162,7 +162,20 @@ export const Inventory = () => {
     let v = e.target.value
     let eI = {
       ...editingProduct,
-      name: v
+      origin: {
+        ...editingProduct.origin,
+        name: v
+      }
+    }
+    setEditingProduct(eI)
+  }
+  const emptyProductName = () => {
+    let eI = {
+      ...editingProduct,
+      origin: {
+        ...editingProduct.origin,
+        name: ''
+      }
     }
     setEditingProduct(eI)
   }
@@ -172,7 +185,10 @@ export const Inventory = () => {
     let uP = formatMoneyAmount(v)
     let eI = {
       ...editingProduct,
-      unitPrice: uP.amount,
+      origin: {
+        ...editingProduct.origin,
+        unitPrice: uP.amount
+      },
       formattedUnitPrice: uP.formattedAmount
     }
     setEditingProduct(eI)
@@ -184,7 +200,10 @@ export const Inventory = () => {
     }
     let eI = {
       ...editingProduct,
-      quantity: editingProduct.origin.quantity + delta
+      origin: {
+        ...editingProduct.origin,
+        quantity: editingProduct.origin.quantity + delta
+      }
     }
     setEditingProduct(eI)
   }
@@ -193,7 +212,10 @@ export const Inventory = () => {
     let v = e.target.value
     let eI = {
       ...editingProduct,
-      description: v
+      origin: {
+        ...editingProduct.origin,
+        description: v
+      }
     }
     setEditingProduct(eI)
   }
@@ -201,7 +223,10 @@ export const Inventory = () => {
   const changeProductGroup = (gN: string) => {
     let eI = {
       ...editingProduct,
-      group: gN
+      origin: {
+        ...editingProduct.origin,
+        group: gN
+      }
     }
     setEditingProduct(eI)
   }
@@ -247,6 +272,11 @@ export const Inventory = () => {
       }).catch(() => {
         setProducts([])
       })
+  }
+
+  const emptyFilterText = () => {
+    setFilteredName('')
+    fetchAllProducts()
   }
 
   const changeFeatureImage = (e: ChangeEvent<HTMLInputElement>) => {
@@ -327,6 +357,7 @@ export const Inventory = () => {
           value={filteredName}
           onChange={changeFilteredName}
           className="w-full"
+          rightIcon={() => <HiX onClick={emptyFilterText} />}
         />
       </div>
       <div className="max-h-fit overflow-hidden">
@@ -448,7 +479,7 @@ export const Inventory = () => {
                 required={true}
                 value={editingProduct.origin.name}
                 onChange={changeProductName}
-                // rightIcon={HiOutlineCash}
+                rightIcon={() => <HiX onClick={emptyProductName} />}
                 className="w-full"
               />
             </div>

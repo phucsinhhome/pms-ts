@@ -6,6 +6,7 @@ import { fetchOrders } from "../db/order";
 import { Button, Modal, TextInput } from "flowbite-react";
 import { listInvoiceByGuestName, listStayingAndComingInvoicesAndPrepaid } from "../db/invoice";
 import { Invoice } from "./InvoiceManager";
+import { HiX } from "react-icons/hi";
 
 
 
@@ -134,6 +135,11 @@ export const OrderManager = (props: OrderManagerProps) => {
       })
   }
 
+  const emptyFilteredName = () => {
+    setFilteredName('')
+    findTheInvoice()
+  }
+
   const copyOrderLink = (invoice: Invoice) => {
     let url = process.env.REACT_APP_MENU_WEB_APP + '/menu/food/' + invoice.id
     navigator.clipboard.writeText(url)
@@ -222,6 +228,7 @@ export const OrderManager = (props: OrderManagerProps) => {
               value={filteredName}
               onChange={changeFilteredName}
               className="w-full"
+              rightIcon={() => <HiX onClick={emptyFilteredName} />}
             />
           </div>
           <div className="flex flex-col space-y-6pb-4 sm:pb-6 lg:px-8 xl:pb-8">

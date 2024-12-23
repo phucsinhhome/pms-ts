@@ -92,6 +92,25 @@ export const Configs = {
   }
 }
 
+const defaultEmptyInvoice = {
+  id: "new",
+  guestName: "Guest Name",
+  issuer: '',
+  issuerId: '',
+  subTotal: 0,
+  checkInDate: formatISODate(new Date()),
+  checkOutDate: formatISODate(new Date()),
+  prepaied: false,
+  paymentMethod: paymentMethods[0].id,
+  reservationCode: '',
+  items: [],
+  creatorId: '',
+  rooms: [],
+  sheetName: '',
+  signed: false,
+  country: ''
+}
+
 type InvoiceProps = {
   chat: Chat,
   authorizedUserId: string | null,
@@ -99,24 +118,7 @@ type InvoiceProps = {
 }
 
 export const EditInvoice = (props: InvoiceProps) => {
-  const [invoice, setInvoice] = useState<Invoice>({
-    id: "new",
-    guestName: "",
-    issuer: props.displayName,
-    issuerId: props.chat.id,
-    subTotal: 0,
-    checkInDate: formatISODate(new Date()),
-    checkOutDate: formatISODate(new Date()),
-    prepaied: false,
-    paymentMethod: 'cash',
-    reservationCode: '',
-    items: [],
-    creatorId: props.chat.id,
-    rooms: [],
-    sheetName: '',
-    signed: false,
-    country: ''
-  })
+  const [invoice, setInvoice] = useState<Invoice>(defaultEmptyInvoice)
 
   const [invoiceUrl, setInvoiceUrl] = useState({ filename: "", presignedUrl: "", hidden: true })
   const { invoiceId } = useParams()
@@ -389,13 +391,16 @@ export const EditInvoice = (props: InvoiceProps) => {
       console.warn("Invalid invoice")
       return
     }
-    setEditingGuestName(invoice.guestName)
+    setEditingGuestName(invoice.guestName === defaultEmptyInvoice.guestName ? '' : invoice.guestName)
     setOpenGuestNameModal(true)
   }
 
-  //ChangeEventHandler<HTMLInputElement>
   const changeGuestName = (e: React.ChangeEvent<HTMLInputElement>) => {
     let nGN = e.target.value
+    if (nGN === '') {
+      console.warn("Invalid guest name")
+      return
+    }
     setEditingGuestName(nGN)
     setOpenGuestNameModal(true)
   }
@@ -418,22 +423,6 @@ export const EditInvoice = (props: InvoiceProps) => {
     setOpenGuestNameModal(false)
     setDirty(true)
   }
-  //============ CHECK IN-OUT ====================//
-  // const editDate = (dateFieldName: Date) => {
-  //   if (invoice === undefined) {
-  //     console.warn("Invalid invoice")
-  //     return
-  //   }
-  //   let dId: keyof Invoice = dateFieldName
-  //   console.info("ID: %s", dId)
-  //   let eD = {
-  //     dateField: dId,
-  //     value: new Date(invoice[dId])
-  //   }
-  //   console.log(eD)
-  //   setEditingDate(dateFieldName)
-  //   setOpenEditDateModal(true)
-  // }
 
   const editDate = (dateFieldName: keyof Invoice) => {
     if (invoice === undefined) {
@@ -470,10 +459,7 @@ export const EditInvoice = (props: InvoiceProps) => {
       [editingDate.dateField]: formatISODate(selectedDate)
     }
     setInvoice(nInv)
-    // let eD = {
-    //   dateField: null,
-    //   value: new Date()
-    // }
+
     setEditingDate(undefined)
     setOpenEditDateModal(false)
     setDirty(true)
@@ -481,11 +467,6 @@ export const EditInvoice = (props: InvoiceProps) => {
 
 
   const cancelEditDate = () => {
-
-    // let eD = {
-    //   dateField: null,
-    //   value: new Date()
-    // }
     setEditingDate(undefined)
     setOpenEditDateModal(false)
   }
@@ -1209,13 +1190,13 @@ export const EditInvoice = (props: InvoiceProps) => {
           <Modal.Header>Guest name</Modal.Header>
           <Modal.Body>
             <div className="text-center">
-              <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+              <div className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
                 <TextInput
                   value={editingGuestName}
                   onChange={changeGuestName}
                   ref={guestNameTextInput}
                 />
-              </p>
+              </div>
             </div>
           </Modal.Body>
           <Modal.Footer className="flex justify-center gap-4">
@@ -1779,7 +1760,7 @@ export const EditInvoice = (props: InvoiceProps) => {
           </div>
         </Modal.Body>
         <Modal.Footer className="flex justify-center gap-4">
-          <Button color="gray" onClick={confirmSelectRoom}>
+          <Button onClick={confirmSelectRoom}>
             Done
           </Button>
           <Button color="gray" onClick={cancelSelectRoom}>

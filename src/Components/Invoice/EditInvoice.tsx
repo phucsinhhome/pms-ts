@@ -301,14 +301,6 @@ export const EditInvoice = (props: InvoiceProps) => {
   }
 
   const invoiceLink = useRef(null)
-
-  // useEffect(() => {
-  //   if(invoiceLink.current==null){
-  //     return
-  //   }
-  //   invoiceLink.current.click()
-  // }, [invoiceUrl])
-
   const exportable = props.authorizedUserId === null ? true : false
 
 
@@ -605,7 +597,10 @@ export const EditInvoice = (props: InvoiceProps) => {
     try {
       let eI = {
         ...editingItem,
-        itemName: iName
+        origin: {
+          ...editingItem.origin,
+          itemName: iName
+        }
       }
       setEditingItem(eI)
       let fProducts = products.filter(p => p.name.toLowerCase().includes(iName.toLowerCase()))
@@ -627,11 +622,14 @@ export const EditInvoice = (props: InvoiceProps) => {
       console.log("Classify the service by service name [%s]", nItemName)
       return classifyServiceByItemName(nItemName)
         .then((srv) => {
-          var nexItem = {
+          let eI = {
             ...editingItem,
-            service: srv
+            origin: {
+              ...editingItem.origin,
+              service: srv
+            }
           }
-          setEditingItem(nexItem)
+          setEditingItem(eI)
           setDirty(true)
           console.info("How is it")
           return true
@@ -1468,7 +1466,7 @@ export const EditInvoice = (props: InvoiceProps) => {
                 <Button onClick={createOrUpdateItem} className="mx-2">
                   Save
                 </Button>
-                <Button onClick={cancelEditingItem} className="mx-2">
+                <Button color='gray' onClick={cancelEditingItem} className="mx-2">
                   Cancel
                 </Button>
               </div>

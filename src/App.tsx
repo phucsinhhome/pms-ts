@@ -24,13 +24,13 @@ export const DEFAULT_PAGE_SIZE = Number(process.env.REACT_APP_DEFAULT_PAGE_SIZE)
 // }
 
 export type Chat = {
-  id: number,
+  id: string,
   firstName: string,
   lastName: string | undefined,
   username: string | undefined
 }
 export const defaultChat: Chat = {
-  id: 1351151927,
+  id: '1351151927',
   firstName: "Minh",
   lastName: "Tran",
   username: undefined
@@ -45,6 +45,7 @@ export default function App() {
 
   const [chat, setChat] = useState<Chat>(defaultChat)
   const [apiVersion, setAPIVersion] = useState<string>('6.0')
+  const [authorizedUserId, setAuthorizedUserId] = useState<string | null>(null)
   const [syncing, setSyncing] = useState(false)
   const [syncingRes, setSyncingRes] = useState(false)
 
@@ -55,11 +56,12 @@ export default function App() {
     if (launchParams.initData && launchParams.initData.user) {
       const user = launchParams.initData.user
       setChat({
-        id: user.id,
+        id: String(user.id),
         firstName: user.firstName,
         lastName: user.lastName,
         username: user.username
       })
+      setAuthorizedUserId(String(user.id))
     }
     setAPIVersion(launchParams.version)
 
@@ -94,7 +96,7 @@ export default function App() {
           <Route path="profit" element={<ProfitReport />} />
           <Route path="invoice" element={<InvoiceManager />} />
           <Route path="invoice/:invoiceId" element={<EditInvoice />} />
-          <Route path="expenses" element={<ExpenseManager />} />
+          <Route path="expenses" element={<ExpenseManager chat={chat} displayName={fullName()} authorizedUserId={authorizedUserId} />} />
           {/* <Route path="expenses/:expenseId" element={<EditExpense />} /> */}
           <Route path="reservation" element={<ReservationManager />} />
           {/* <Route path="reservation/:reservationId" element={<EditReservation />} /> */}

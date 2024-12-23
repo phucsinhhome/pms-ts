@@ -20,7 +20,7 @@ export const listExpenseByDate = (byDate: string, pageNumber: number, pageSize: 
     .then(response => response.json())
 }
 
-export const listExpenseByExpenserAndDate = async (expenserId: string, byDate: string, pageNumber: number, pageSize: number): Promise<any> => {
+export const listExpenseByExpenserAndDate = async (expenserId: string | null, byDate: string, pageNumber: number, pageSize: number): Promise<any> => {
   console.info("Fetching %s expenses by date %s", expenserId, byDate)
   let url = `${process.env.REACT_APP_EXPENSE_SERVICE_ENDPOINT}/list/bydate?byDate=${byDate}&page=${pageNumber}&size=${pageSize}`
   if (expenserId !== null && expenserId !== undefined && expenserId !== "") {

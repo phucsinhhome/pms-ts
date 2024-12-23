@@ -5,7 +5,7 @@ import { deleteExpense, newExpId } from "../../db/expense";
 import Moment from "react-moment";
 import run from "../../Service/ExpenseExtractionService";
 import { classifyServiceByItemName } from "../../Service/ItemClassificationService";
-import { currentUser, currentUserFullname, initialUser } from "../../App";
+import { Chat, DEFAULT_PAGE_SIZE } from "../../App";
 import { HiOutlineCash } from "react-icons/hi";
 import { formatISODate, formatISODateTime, formatMoneyAmount, formatVND } from "../../Service/Utils";
 import { PiBrainThin } from "react-icons/pi";
@@ -51,9 +51,14 @@ const defaultEditingExpense = {
   originItemName: "",
   itemMessage: ""
 }
-const DEFAULT_PAGE_SIZE = process.env.REACT_APP_DEFAULT_PAGE_SIZE
 
-export const ExpenseManager = () => {
+type ExpenseProps = {
+  chat: Chat,
+  authorizedUserId: string | null,
+  displayName: string
+}
+
+export const ExpenseManager = (props: ExpenseProps) => {
 
   const [expenses, setExpenses] = useState([defaultEmptExpense])
   const [generatingExp, setGeneratingExp] = useState(false);
@@ -67,7 +72,7 @@ export const ExpenseManager = () => {
 
   const [pagination, setPagination] = useState<Pagination>({
     pageNumber: 0,
-    pageSize: Number(DEFAULT_PAGE_SIZE),
+    pageSize: DEFAULT_PAGE_SIZE,
     totalElements: 200,
     totalPages: 20
   })
@@ -84,8 +89,8 @@ export const ExpenseManager = () => {
 
   const fetchData = (pageNumber: number, pageSize: number) => {
     let byDate = formatISODate(new Date())
-    let expenserId = (initialUser !== null && initialUser !== undefined) ? initialUser.id : null
-    return listExpenseByExpenserAndDate(expenserId, byDate, pageNumber, pageSize)
+    // let expenserId = (initialUser !== null && initialUser !== undefined) ? initialUser.id : null
+    return listExpenseByExpenserAndDate(props.authorizedUserId, byDate, pageNumber, pageSize)
       .then((data: any) => {
         {
           let sortedExps = data.content
@@ -136,8 +141,8 @@ export const ExpenseManager = () => {
           amount: pr,
           service: eE.service,
           expenseDate: formatISODateTime(new Date()),
-          expenserName: currentUserFullname(),
-          expenserId: currentUser.id
+          expenserName: props.displayName,
+          expenserId: props.chat.id
         }
         return exp
       })
@@ -302,8 +307,8 @@ export const ExpenseManager = () => {
       itemName: editingExpense.origin.itemName,
       quantity: editingExpense.origin.quantity,
       unitPrice: editingExpense.origin.unitPrice,
-      expenserId: currentUser.id,
-      expenserName: currentUserFullname(),
+      expenserId: props.chat.id,
+      expenserName: props.displayName,
       service: editingExpense.origin.service,
       id: editingExpense.origin.id,
       amount: editingExpense.origin.amount
@@ -318,9 +323,9 @@ export const ExpenseManager = () => {
       console.info("Updated expense date to %s", expDate)
     }
     if (exp.expenserId === null) {
-      exp.expenserId = currentUser.id
-      exp.expenserName = currentUserFullname()
-      console.info("Updated expenser to %s", currentUser.id)
+      exp.expenserId = props.chat.id
+      exp.expenserName = props.displayName
+      console.info("Updated expenser to %s", props.chat.id)
     }
     console.info("Save expense %s...", exp.id)
     return saveExpense(exp)
@@ -417,7 +422,7 @@ export const ExpenseManager = () => {
                         </div>
 
                         <span className="font font-mono font-black w-20">{exp.service}</span>
-                        <span className="font font-mono font-thin text-gray-320 italic">{(initialUser !== null && initialUser !== undefined) ? "" : exp.expenserId}</span>
+                        <span className="font font-mono font-thin text-gray-320 italic">{props.authorizedUserId !== null ? "" : exp.expenserId}</span>
                       </div>
                     </div>
                   </Table.Cell>

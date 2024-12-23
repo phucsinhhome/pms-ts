@@ -237,6 +237,10 @@ export const Inventory = (props: InventoryProps) => {
   }
 
   const createOrUpdateProduct = () => {
+    if (editingProduct.origin.name === '') {
+      console.warn("Invalid product name")
+      return
+    }
     saveProduct(editingProduct.origin)
       .then(rsp => {
         if (rsp.ok) {
@@ -614,7 +618,7 @@ export const Inventory = (props: InventoryProps) => {
           </div>
         </Modal.Body>
         <Modal.Footer className="flex justify-center">
-          <Button onClick={createOrUpdateProduct} className="mx-2">
+          <Button onClick={createOrUpdateProduct} className="mx-2" disabled={editingProduct.origin.name === ''}>
             Save
           </Button>
           <Button onClick={cancelEditingProduct} className="mx-2">

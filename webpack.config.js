@@ -36,6 +36,11 @@ const config = {
   //     "crypto": false
   //   }
   // }
+  resolve: {
+    fallback: {
+      "vm": require.resolve("vm-browserify")
+    }
+  }
 };
 
 module.exports = () => {

@@ -38,6 +38,7 @@
     "stream-http": "^3.2.0",
     "tailwind-datepicker-react": "^1.2.3",
     "typescript": "^5.7.2",
+    "vm-browserify": "^1.1.2",
     "web-vitals": "^2.1.4"
   },
   "overrides": {

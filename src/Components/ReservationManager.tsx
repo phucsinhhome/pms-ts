@@ -84,7 +84,7 @@ export function ReservationManager(props: ReservationManagerProps) {
   useEffect(() => {
     fetchReservations(new Date(), 0, Number(DEFAULT_PAGE_SIZE));
     props.activeMenu()
-  }, []);
+  }, [props]);
 
   const filterOpts = [
     {

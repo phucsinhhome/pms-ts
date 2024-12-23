@@ -38,7 +38,7 @@ const config = {
   // }
   resolve: {
     fallback: {
-      "vm": require.resolve("vm-browserify")
+      "vm": false
     }
   }
 };

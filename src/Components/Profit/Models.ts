@@ -1,4 +1,4 @@
-type REntity = {
+export type REntity = {
     expense: number,
     revenue: number,
     name: string,
@@ -6,7 +6,7 @@ type REntity = {
     profit: number
 }
 
-type PReport = {
+export type PReport = {
     fromDate: string,
     toDate: string,
     id?: string,

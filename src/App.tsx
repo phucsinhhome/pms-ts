@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Component, useEffect, useState } from "react";
 import "./App.css";
 import ProfitReport from "./Components/Profit/ProfitReport";
 import { InvoiceManager } from "./Components/Invoice/InvoiceManager"
@@ -11,7 +11,7 @@ import { IoMdSettings } from "react-icons/io";
 import { OrderManager } from "./Components/Order/OrderManager";
 import { EditOrder } from "./Components/Order/EditOrder";
 import { Inventory } from "./Components/Inventory/Inventory";
-import { init, retrieveLaunchParams } from '@telegram-apps/sdk-react';
+import { init, retrieveLaunchParams, useLaunchParams } from '@telegram-apps/sdk-react';
 
 export const DEFAULT_PAGE_SIZE = Number(process.env.REACT_APP_DEFAULT_PAGE_SIZE)
 
@@ -37,10 +37,18 @@ export default function App() {
   const [syncing, setSyncing] = useState(false)
   const [syncingRes, setSyncingRes] = useState(false)
 
-  useEffect(() => {
-    document.title = "PMS"
-    init();
-    const launchParams = retrieveLaunchParams();
+  function Component() {
+    let launchParams = null
+    try {
+      init();
+      launchParams = retrieveLaunchParams();
+    } catch (e) {
+      console.warn("Failed to retrieve launch params")
+    }
+    if (launchParams === null) {
+      console.warn("No authorized user login. So, use the default user and chat.")
+      return
+    }
     if (launchParams.initData && launchParams.initData.user) {
       const user = launchParams.initData.user
       setChat({
@@ -50,9 +58,15 @@ export default function App() {
         username: user.username
       })
       setAuthorizedUserId(String(user.id))
+      console.warn("User %s", String(user.id))
     }
     setAPIVersion(launchParams.version)
     console.info("API VERSION: %s", launchParams.version)
+  }
+
+  useEffect(() => {
+    document.title = "PMS"
+    Component()
   }, []);
 
   const fullName = () => {
@@ -77,12 +91,13 @@ export default function App() {
           </Link>
         </div>
         <Routes>
+          <Route path="/" element={<ProfitReport />} />
           <Route path="profit" element={<ProfitReport />} />
           <Route path="invoice" element={<InvoiceManager />} />
           <Route path="invoice/:invoiceId" element={<EditInvoice chat={chat} displayName={fullName()} authorizedUserId={authorizedUserId} />} />
           <Route path="expenses" element={<ExpenseManager chat={chat} displayName={fullName()} authorizedUserId={authorizedUserId} />} />
           <Route path="reservation" element={<ReservationManager />} />
-          <Route path="order" element={<OrderManager />} />
+          <Route path="order" element={<OrderManager chat={chat} displayName={fullName()} authorizedUserId={authorizedUserId} />} />
           <Route path="order/:orderId/:staffId" element={<EditOrder />} />
           <Route path="inventory" element={<Inventory />} />
           <Route path="settings" element={<Settings

@@ -8,6 +8,10 @@ import { getInvoice, listInvoiceByGuestName } from "../../db/invoice";
 import { Order, OrderStatus } from "./OrderManager";
 import { Invoice } from "../Invoice/InvoiceManager";
 
+type OrderParams = {
+  orderId: string,
+  staffId: string
+}
 
 export const EditOrder = () => {
 
@@ -19,8 +23,12 @@ export const EditOrder = () => {
   const [choosenInvoice, setChoosenInvoice] = useState<Invoice>()
   const [filteredName, setFilteredName] = useState('')
 
-  const { orderId, staffId } = useParams()
+  const { orderId, staffId } = useParams<OrderParams>()
   const readOrder = () => {
+    if (orderId === undefined) {
+      console.warn("Invalid order id")
+      return
+    }
     console.info("Loading the order")
 
     fetchOrder(orderId)
@@ -49,6 +57,10 @@ export const EditOrder = () => {
   }, [orderId]);
 
   const sendToPreparation = () => {
+    if (order === undefined) {
+      console.warn("Invalid order")
+      return
+    }
     var confirmedAt = formatISODateTime(new Date())
     var confirmedOrder = {
       ...order,
@@ -70,7 +82,14 @@ export const EditOrder = () => {
   }
 
   const stopPreparation = () => {
-
+    if (orderId === undefined) {
+      console.warn("Invalid order id")
+      return
+    }
+    if (staffId === undefined) {
+      console.warn("Invalid staff id")
+      return
+    }
     rejectOrder(orderId, staffId)
       .then((rsp: Response) => {
         if (rsp.ok) {

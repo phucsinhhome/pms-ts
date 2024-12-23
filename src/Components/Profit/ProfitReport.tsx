@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { adjustMonths, beginOfMonth, lastDateOf as lastDayOfMonth, formatVND, formatISODate, formatDateMonthDate, lastDateOfMonth } from "../../Service/Utils";
 import { fetchPReportThisMonth } from "../../db/profit";
+import { PReport } from "./Models";
 
 type RAspect = {
   name: string,
@@ -74,7 +75,7 @@ export default function ProfitReport() {
 
   const [report, setReportData] = useState(defaultReport)
 
-  const [params, setParams] = useState({
+  const [params, setParams] = useState<ROption>({
     aspect: aspects[0].key,
     periodName: defaultPeriod.name,
     fromDate: defaultPeriod.range.fromDate,

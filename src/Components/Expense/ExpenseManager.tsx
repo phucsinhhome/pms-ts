@@ -92,17 +92,15 @@ export const ExpenseManager = (props: ExpenseProps) => {
     // let expenserId = (initialUser !== null && initialUser !== undefined) ? initialUser.id : null
     return listExpenseByExpenserAndDate(props.authorizedUserId, byDate, pageNumber, pageSize)
       .then((data: any) => {
-        {
-          let sortedExps = data.content
-          setExpenses(sortedExps)
-          setPagination({
-            pageNumber: data.number,
-            pageSize: data.size,
-            totalElements: data.totalElements,
-            totalPages: data.totalPages
-          })
-          return true
-        }
+        let sortedExps = data.content
+        setExpenses(sortedExps)
+        setPagination({
+          pageNumber: data.number,
+          pageSize: data.size,
+          totalElements: data.totalElements,
+          totalPages: data.totalPages
+        })
+        return true
       })
   }
 

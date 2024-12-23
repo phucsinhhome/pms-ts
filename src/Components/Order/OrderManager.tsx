@@ -1,7 +1,7 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
 import { Link } from "react-router-dom";
 import { beginOfDay, formatISODate, formatISODateTime, formatVNDateTime } from "../../Service/Utils";
-import { currentUser, DEFAULT_PAGE_SIZE } from "../../App";
+import { Chat, DEFAULT_PAGE_SIZE } from "../../App";
 import { fetchOrders } from "../../db/order";
 import { Button, Modal, TextInput } from "flowbite-react";
 import { listInvoiceByGuestName, listStayingAndComingInvoicesAndPrepaid } from "../../db/invoice";
@@ -35,7 +35,13 @@ export type Order = {
   items: OrderItem[]
 }
 
-export const OrderManager = () => {
+type OrderManagerProps = {
+  chat: Chat,
+  authorizedUserId: string | null,
+  displayName: string
+}
+
+export const OrderManager = (props: OrderManagerProps) => {
   const [orders, setOrders] = useState<Order[]>([])
   const [filteredName, setFilteredName] = useState('')
   const [invoices, setInvoices] = useState<Invoice[]>([])
@@ -154,7 +160,7 @@ export const OrderManager = () => {
                   <div className="grid grid-cols-1">
                     <div className="flex flex-row">
                       <Link
-                        to={order.id + "/" + currentUser.id}
+                        to={order.id + "/" + props.chat.id}
                         state={{ pageNumber: pagination.pageNumber, pageSize: pagination.pageSize }}
                         className="font-medium text-blue-600 hover:underline dark:text-blue-500 overflow-hidden"
                       >

@@ -808,6 +808,7 @@ export const EditInvoice = (props: InvoiceProps) => {
       .map(rId => rooms.find(r => r.id === rId))
       .filter(r => r !== undefined)
       .map(r => r.name)
+
     let nInv = {
       ...invoice,
       rooms: rs

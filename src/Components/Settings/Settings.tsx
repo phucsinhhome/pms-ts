@@ -72,7 +72,7 @@ export const Settings = (props: SettingProps) => {
               required={true}
               value={datePartition}
               onChange={changePartition}
-              rightIcon={() => syncing ?
+              rightIcon={() => props.syncing ?
                 <Spinner aria-label="Default status example"
                   className="w-14 h-10"
                 />
@@ -97,7 +97,7 @@ export const Settings = (props: SettingProps) => {
               onChange={(e) => setSyncedResNextDays(e.target.value)}
               type="number"
 
-              rightIcon={() => syncingRes ?
+              rightIcon={() => props.syncingRes ?
                 <Spinner aria-label="Default status example"
                   className="w-14 h-10"
                 />

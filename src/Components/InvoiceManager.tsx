@@ -6,6 +6,7 @@ import { DEFAULT_PAGE_SIZE } from "../App";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 import { formatISODate, formatVND } from "../Service/Utils";
 import { deleteInvoice, listStayingAndComingInvoices } from "../db/invoice";
+import { Pagination } from "./ProfitReport";
 
 export type InvoiceItem = {
   id: string,
@@ -51,11 +52,11 @@ export const InvoiceManager = () => {
   const [fromDate, setFromDate] = useState(new Date());
   const [deltaDays, setDeltaDays] = useState(0)
 
-  const [pagination, setPagination] = useState({
+  const [pagination, setPagination] = useState<Pagination>({
     pageNumber: 0,
-    pageSize: DEFAULT_PAGE_SIZE === undefined ? 10 : +DEFAULT_PAGE_SIZE,
-    totalElements: 200,
-    totalPages: 20
+    pageSize: DEFAULT_PAGE_SIZE,
+    totalElements: 0,
+    totalPages: 0
   })
 
   const [openModal, setOpenModal] = useState(false)
@@ -70,14 +71,16 @@ export const InvoiceManager = () => {
     console.info("Change filter date to %s", newDD.toISOString())
     setFromDate(newDD)
     setDeltaDays(numDays)
-    fetchInvoices(newDD, pagination.pageNumber, pagination.pageSize)
+    // fetchInvoices(newDD, pagination.pageNumber, pagination.pageSize)
   }
 
   const handlePaginationClick = (pageNumber: number) => {
     console.log("Pagination nav bar click to page %s", pageNumber)
     var pNum = pageNumber < 0 ? 0 : pageNumber > pagination.totalPages - 1 ? pagination.totalPages - 1 : pageNumber;
-    var pSize = pagination.pageSize
-    fetchInvoices(fromDate, pNum, pSize)
+    setPagination({
+      ...pagination,
+      pageNumber: pNum
+    })
   }
 
   const isCurrentlyStaying = (invoice: Invoice) => {
@@ -102,12 +105,12 @@ export const InvoiceManager = () => {
     });
   }
 
-  const fetchInvoices = (fromDate: Date, pageNumber: number, pageSize: number) => {
+  const fetchInvoices = () => {
 
     var fd = formatISODate(fromDate)
     console.info("Loading invoices from date %s...", fd)
 
-    listStayingAndComingInvoices(fd, pageNumber, pageSize)
+    listStayingAndComingInvoices(fd, pagination.pageNumber, pagination.pageSize)
       .then(rsp => {
         if (rsp.ok) {
           rsp.json()
@@ -127,14 +130,10 @@ export const InvoiceManager = () => {
   }
 
   useEffect(() => {
-    if (location == null || location.state == null) {
-      console.warn("Invalid prop location!")
-      return
-    }
-    fetchInvoices(new Date(), location.state.pageNumber, location.state.pageSize);
+    fetchInvoices();
 
     // eslint-disable-next-line
-  }, [location]);
+  }, [pagination.pageNumber, fromDate]);
 
   const filterOpts = [
     {
@@ -190,7 +189,7 @@ export const InvoiceManager = () => {
         .then(rsp => {
           if (rsp.ok) {
             console.info("Delete invoice %s successfully", deletingInv.id)
-            fetchInvoices(fromDate, pagination.pageNumber, pagination.pageSize)
+            fetchInvoices()
           }
         })
         .catch(err => {

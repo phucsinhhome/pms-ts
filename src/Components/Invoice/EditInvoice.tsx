@@ -1010,7 +1010,7 @@ export const EditInvoice = (props: InvoiceProps) => {
 
             <div className="flex flex-wrap -mx-3 mb-3">
               <div className="flex flex-row px-3 items-center">
-                <div>{paymentIcons.find(ic=>ic.id===selectedPaymentMethod.id)?.src}</div>
+                <div>{paymentIcons.find(ic => ic.id === selectedPaymentMethod.id)?.src}</div>
                 <Label
                   id="paymentMethod"
                   value={selectedPaymentMethod.name}
@@ -1168,21 +1168,21 @@ export const EditInvoice = (props: InvoiceProps) => {
               </Table.HeadCell>
             </Table.Head>
             <Table.Body className="divide-y" >
-              {invoice.items.map((exp) => {
+              {invoice.items.map((item) => {
                 return (
-                  <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800 text-sm my-1 py-1" key={exp.id}>
+                  <Table.Row key={item.id} className="bg-white dark:border-gray-700 dark:bg-gray-800 text-sm my-1 py-1" >
                     <Table.Cell className="sm:px-1 py-1">
                       <div className="grid grid-cols-1 py-0 my-0">
                         <div
                           className="font text-sm text-blue-600 hover:underline dark:text-blue-500"
-                          onClick={() => editItem(exp)}
+                          onClick={() => editItem(item)}
                         >
-                          {exp.itemName}
+                          {item.itemName}
                         </div>
                         <div className="flex flex-row text-[10px] space-x-1">
-                          <span className="w-6">{"x" + exp.quantity}</span>
-                          <span className="w-24">{formatVND(exp.amount)}</span>
-                          <span className="font font-mono font-black">{exp.service}</span>
+                          <span className="w-6">{"x" + item.quantity}</span>
+                          <span className="w-24">{formatVND(item.amount)}</span>
+                          <span className="font font-mono font-black">{item.service}</span>
                         </div>
                       </div>
                     </Table.Cell>
@@ -1194,7 +1194,7 @@ export const EditInvoice = (props: InvoiceProps) => {
                         height="24"
                         fill="none"
                         viewBox="0 0 24 24"
-                        onClick={() => askForDelItemConfirmation(exp)}
+                        onClick={() => askForDelItemConfirmation(item)}
                       >
                         <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
                       </svg>
@@ -1277,7 +1277,7 @@ export const EditInvoice = (props: InvoiceProps) => {
                 issuers.map(user => {
                   return (
                     <div
-                      id={user.id}
+                      key={user.id}
                       className="flex flex-col border-spacing-1 shadow-sm hover:shadow-lg rounded-lg items-center "
                       onClick={() => changeIssuer(user)}
                     >
@@ -1300,26 +1300,11 @@ export const EditInvoice = (props: InvoiceProps) => {
           <Modal.Header>Payment</Modal.Header>
           <Modal.Body>
             <div className="flex flex-row items-center w-full space-x-2">
-              {/* <div className="block w-1/5" >
-                <svg id="cash" onClick={changePaymentMethod} className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24" > <path fillRule="evenodd" d="M7 6a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-2v-4a3 3 0 0 0-3-3H7V6Z" clipRule="evenodd" /> <path fillRule="evenodd" d="M2 11a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-7Zm7.5 1a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Z" clipRule="evenodd" /> <path d="M10.5 14.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z" /></svg>
-              </div>
-              <div className="block w-1/5" >
-                <svg id="creditCard" onClick={changePaymentMethod} className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" ><path stroke="currentColor" stroke-linecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10h18M6 14h2m3 0h5M3 7v10a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1Z" /></svg >
-              </div>
-              <div className="block w-1/5" >
-                <svg id="momo" onClick={changePaymentMethod} className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10h18M6 14h2m3 0h5M3 7v10a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1Z" /></svg>
-              </div>
-              <div className="block w-1/5" >
-                <svg id="paypal" onClick={changePaymentMethod} className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10h18M6 14h2m3 0h5M3 7v10a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1Z" /></svg>
-              </div>
-              <div className="block w-1/5" >
-                <svg id="bankTransfer" onClick={changePaymentMethod} className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10h18M6 14h2m3 0h5M3 7v10a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1Z" /></svg>
-              </div> */}
               {
                 paymentMethods.map(pM => {
                   return (
                     <div
-                      className="block w-1/5"
+                      className="block w-1/5" key={pM.id}
                     >
                       <img
                         src={pM.srcLargeImg}
@@ -1533,27 +1518,27 @@ export const EditInvoice = (props: InvoiceProps) => {
                   </Table.HeadCell>
                 </Table.Head>
                 <Table.Body className="divide-y" >
-                  {invoice.items.map((exp) => {
+                  {invoice.items.map((item) => {
                     return (
                       <Table.Row
                         className="bg-white dark:border-gray-700 dark:bg-gray-800 text-sm w-full"
-                        key={exp.id}
+                        key={item.id}
                       >
                         <Table.Cell className="py-0 pl-0 pr-1">
                           <div className="grid grid-cols-1 py-0 my-0">
                             <div
                               className="font text-sm text-blue-600 font-sans font-semibold hover:underline dark:text-blue-500"
                             >
-                              {exp.itemName}
+                              {item.itemName}
                             </div>
                             <div className="flex flex-row text-[9px] space-x-1">
-                              <span className="w-6">{"x" + exp.quantity}</span>
-                              <span className="w-24">{formatVND(exp.unitPrice)}</span>
+                              <span className="w-6">{"x" + item.quantity}</span>
+                              <span className="w-24">{formatVND(item.unitPrice)}</span>
                             </div>
                           </div>
                         </Table.Cell>
                         <Table.Cell className="text-right py-0 px-1">
-                          {formatVND(exp.amount)}
+                          {formatVND(item.amount)}
                         </Table.Cell>
                       </Table.Row>
                     )

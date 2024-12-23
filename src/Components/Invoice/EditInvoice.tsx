@@ -1745,7 +1745,7 @@ export const EditInvoice = (props: InvoiceProps) => {
           </div>
         </Modal.Body>
         <Modal.Footer className="flex justify-center gap-4">
-          <Link to='' onClick={confirmNoRes}>No Book</Link>
+          <Button onClick={confirmNoRes}>No Book</Button>
           <Link to={"../invoice"}>Cancel</Link>
         </Modal.Footer>
       </Modal>

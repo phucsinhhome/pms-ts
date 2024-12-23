@@ -2,10 +2,9 @@ import React, { useState, useEffect, useRef, ChangeEvent } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { exportInvoice, getInvoice, updateInvoice } from "../db/invoice";
 import { Table, TextInput, Label, Datepicker, Modal, Button } from 'flowbite-react';
-import { getPresignedLinkWithDefaultDuration } from "../Service/FileMinio";
 import { HiOutlineCash, HiOutlineClipboardCopy, HiUserCircle } from "react-icons/hi";
 import { classifyServiceByItemName } from "../Service/ItemClassificationService";
-import { addDays, formatDatePartition, formatISODate, formatMoneyAmount, formatShortDate, formatVND } from "../Service/Utils";
+import { addDays, formatISODate, formatMoneyAmount, formatShortDate, formatVND } from "../Service/Utils";
 import { Chat, DEFAULT_PAGE_SIZE } from "../App";
 import { getUsers as issuers } from "../db/users";
 import Moment from "react-moment";
@@ -17,7 +16,6 @@ import { paymentMethods, rooms } from "../db/staticdata";
 import { ResultCallback } from "minio/dist/main/internal/type";
 import { Product } from "./Inventory";
 import { Reservation, ResRoom } from "./ReservationManager";
-import { uploadBlobToPresignedURL } from "../Service/FileMinio";
 import { getPresignedLink } from "../Service/FileMinio";
 
 

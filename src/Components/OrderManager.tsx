@@ -111,13 +111,14 @@ export const OrderManager = (props: OrderManagerProps) => {
   }
 
   const hideInvoices = () => {
+    setFilteredName('')
     setShowInvoices(false)
   }
   const changeFilteredName = (e: ChangeEvent<HTMLInputElement>) => {
     let fN = e.target.value
     setFilteredName(fN)
     if (fN === '') {
-      setInvoices([])
+      findTheInvoice()
       return
     }
     let fromDate = formatISODate(new Date())
@@ -146,7 +147,7 @@ export const OrderManager = (props: OrderManagerProps) => {
   return (
     <div className="h-full pt-3">
       <div className="flex flex-row items-center w-full pb-4 px-2">
-        <Button onClick={findTheInvoice}>Order Link</Button>
+        <Button onClick={findTheInvoice}>Copy Link</Button>
       </div>
       <div className="h-3/5 px-2 overflow-hidden">
         <div className="flex flex-col space-y-2">

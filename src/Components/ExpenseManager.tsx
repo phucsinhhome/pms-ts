@@ -5,7 +5,7 @@ import Moment from "react-moment";
 import run from "../Service/ExpenseExtractionService";
 import { classifyServiceByItemName } from "../Service/ItemClassificationService";
 import { Chat, DEFAULT_PAGE_SIZE } from "../App";
-import { HiOutlineCash } from "react-icons/hi";
+import { HiOutlineCash, HiX } from "react-icons/hi";
 import { formatISODate, formatISODateTime, formatMoneyAmount, formatVND } from "../Service/Utils";
 import { PiBrainThin } from "react-icons/pi";
 import { FaRotate } from "react-icons/fa6";
@@ -200,6 +200,7 @@ export const ExpenseManager = (props: ExpenseProps) => {
   const cancelEditingExpense = () => {
     setEditingExpense(defaultEditingExpense)
     setOpenEditingExpenseModal(false)
+    fetchExpenses()
   }
 
   const changeItemMessage = (e: ChangeEvent<HTMLInputElement>) => {
@@ -218,6 +219,17 @@ export const ExpenseManager = (props: ExpenseProps) => {
       origin: {
         ...editingExpense.origin,
         itemName: iName
+      }
+    }
+    setEditingExpense(eI)
+  }
+
+  const emptyItemName = () => {
+    let eI = {
+      ...editingExpense,
+      origin: {
+        ...editingExpense.origin,
+        itemName: ''
       }
     }
     setEditingExpense(eI)
@@ -313,6 +325,11 @@ export const ExpenseManager = (props: ExpenseProps) => {
   }
 
   const processSaveExpense = () => {
+
+    if (editingExpense.origin.itemName === '') {
+      console.warn("Invalid expense. Expense name must not be empty")
+      return Promise.resolve(false)
+    }
     let exp = {
       expenseDate: editingExpense.origin.expenseDate,
       itemName: editingExpense.origin.itemName,
@@ -347,7 +364,6 @@ export const ExpenseManager = (props: ExpenseProps) => {
     processSaveExpense()
       .then((result: boolean) => {
         if (result) {
-          setEditingExpense(defaultEditingExpense)
           cancelEditingExpense()
         } else {
           console.error("Failed to save expense")
@@ -538,6 +554,7 @@ export const ExpenseManager = (props: ExpenseProps) => {
                 onChange={changeItemName}
                 onBlur={blurItemName}
                 className="w-full"
+                rightIcon={() => <HiX onClick={emptyItemName} />}
               />
             </div>
             <div className="flex flex-row w-full align-middle">
@@ -638,10 +655,10 @@ export const ExpenseManager = (props: ExpenseProps) => {
               />
             </div>
             <div className="w-full flex justify-center">
-              <Button onClick={handleSaveAndCompleteExpense} className="mx-2">
+              <Button onClick={handleSaveAndCompleteExpense} className="mx-2" disabled={editingExpense.origin.itemName === ''}>
                 Save & Close
               </Button>
-              <Button onClick={handleSaveAndContinueExpense} className="mx-2">
+              <Button onClick={handleSaveAndContinueExpense} className="mx-2" disabled={editingExpense.origin.itemName === ''}>
                 Save & Continue
               </Button>
               <Button onClick={cancelEditingExpense} className="mx-2">

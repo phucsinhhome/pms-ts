@@ -11,17 +11,10 @@ import { IoMdSettings } from "react-icons/io";
 import { OrderManager } from "./Components/Order/OrderManager";
 import { EditOrder } from "./Components/Order/EditOrder";
 import { Inventory } from "./Components/Inventory/Inventory";
-import { init, retrieveLaunchParams, useLaunchParams } from '@telegram-apps/sdk-react';
+import { init, retrieveLaunchParams } from '@telegram-apps/sdk-react';
 
-// const tele = window.Telegram.WebApp;
 export const DEFAULT_PAGE_SIZE = Number(process.env.REACT_APP_DEFAULT_PAGE_SIZE)
 
-// export const initialUser = tele.initDataUnsafe.user
-// export const currentUser = tele.initDataUnsafe.user || {
-//   id: "1351151927",
-//   first_name: "Minh",
-//   last_name: "Tran"
-// }
 
 export type Chat = {
   id: string,
@@ -35,11 +28,6 @@ export const defaultChat: Chat = {
   lastName: "Tran",
   username: undefined
 }
-
-// export const currentUserFullname = () => {
-//   let sufix = currentUser.last_name === null || currentUser.last_name === undefined || currentUser.last_name === "" ? "" : (" " + currentUser.last_name)
-//   return currentUser.first_name + sufix
-// }
 
 export default function App() {
 
@@ -64,11 +52,7 @@ export default function App() {
       setAuthorizedUserId(String(user.id))
     }
     setAPIVersion(launchParams.version)
-
-    // tele.ready();
-    // tele.expand();
-    // tele.disableVerticalSwipes();
-    console.info("TELEGRAM BOT API VERSION: %s", launchParams.version)
+    console.info("API VERSION: %s", launchParams.version)
   }, []);
 
   const fullName = () => {
@@ -95,25 +79,17 @@ export default function App() {
         <Routes>
           <Route path="profit" element={<ProfitReport />} />
           <Route path="invoice" element={<InvoiceManager />} />
-          <Route path="invoice/:invoiceId" element={<EditInvoice />} />
+          <Route path="invoice/:invoiceId" element={<EditInvoice chat={chat} displayName={fullName()} authorizedUserId={authorizedUserId} />} />
           <Route path="expenses" element={<ExpenseManager chat={chat} displayName={fullName()} authorizedUserId={authorizedUserId} />} />
-          {/* <Route path="expenses/:expenseId" element={<EditExpense />} /> */}
           <Route path="reservation" element={<ReservationManager />} />
-          {/* <Route path="reservation/:reservationId" element={<EditReservation />} /> */}
           <Route path="order" element={<OrderManager />} />
           <Route path="order/:orderId/:staffId" element={<EditOrder />} />
           <Route path="inventory" element={<Inventory />} />
-          {/* <Route path="settings" element={<Settings
-            syncing={syncing} changeSyncing={(n:boolean) => setSyncing(n)}
-            syncingRes={syncingRes} changeResSyncing={(n:boolean) => setSyncingRes(n)}
-          />} /> */}
           <Route path="settings" element={<Settings
-            // props={
             syncing={syncing}
             changeSyncing={(n: boolean) => setSyncing(n)}
             syncingRes={syncingRes}
             changeResSyncing={(n: boolean) => setSyncingRes(n)}
-          // }
           />} />
         </Routes>
       </Router>

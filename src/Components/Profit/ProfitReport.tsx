@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-// import { getProfitReportThisMonth } from "../../db/profit";
-// import  Link  from "react-router-dom";
 import { Link } from "react-router-dom";
 import { adjustMonths, beginOfMonth, lastDateOf as lastDayOfMonth, formatVND, formatISODate, formatDateMonthDate, lastDateOfMonth } from "../../Service/Utils";
 import { fetchPReportThisMonth } from "../../db/profit";

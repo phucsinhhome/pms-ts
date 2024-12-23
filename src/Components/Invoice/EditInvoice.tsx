@@ -6,7 +6,7 @@ import { getPresignedLinkWithDefaultDuration } from "../../Service/FileMinio";
 import { HiOutlineCash, HiOutlineClipboardCopy } from "react-icons/hi";
 import { classifyServiceByItemName } from "../../Service/ItemClassificationService";
 import { addDays, formatDatePartition, formatISODate, formatMoneyAmount, formatShortDate, formatVND } from "../../Service/Utils";
-import { currentUser, currentUserFullname, DEFAULT_PAGE_SIZE, initialUser } from "../../App";
+import { Chat, DEFAULT_PAGE_SIZE } from "../../App";
 import { getUsers as issuers } from "../../db/users";
 import Moment from "react-moment";
 import { listLatestReservations } from "../../db/reservation";
@@ -74,12 +74,18 @@ export const Configs = {
   }
 }
 
-export const EditInvoice = () => {
+type InvoiceProps = {
+  chat: Chat,
+  authorizedUserId: string | null,
+  displayName: string
+}
+
+export const EditInvoice = (props: InvoiceProps) => {
   const [invoice, setInvoice] = useState<Invoice>({
     id: "new",
     guestName: "",
-    issuer: currentUserFullname(),
-    issuerId: currentUser.id,
+    issuer: props.displayName,
+    issuerId: props.chat.id,
     subTotal: 0,
     checkInDate: formatISODate(new Date()),
     checkOutDate: formatISODate(new Date()),
@@ -87,7 +93,7 @@ export const EditInvoice = () => {
     paymentMethod: 'cash',
     reservationCode: '',
     items: [],
-    creatorId: currentUser.id,
+    creatorId: props.chat.id,
     rooms: [],
     sheetName: '',
     signed: false,
@@ -285,7 +291,7 @@ export const EditInvoice = () => {
   //   invoiceLink.current.click()
   // }, [invoiceUrl])
 
-  const exportable = (initialUser === null || initialUser) === undefined ? true : false
+  const exportable = props.authorizedUserId === null ? true : false
 
 
   const exportInv = () => {
@@ -686,12 +692,12 @@ export const EditInvoice = () => {
 
   const confirmSelectRes = (res: Reservation) => {
     try {
-      let invId = currentUser.id + (Date.now() % 10000000)
+      let invId = props.chat.id + (Date.now() % 10000000)
       let inv = {
-        id: currentUser.id + new Date().getTime(),
+        id: props.chat.id + new Date().getTime(),
         guestName: res.guestName,
-        issuer: currentUserFullname(),
-        issuerId: currentUser.id,
+        issuer: props.displayName,
+        issuerId: props.chat.id,
         checkInDate: formatISODate(new Date(res.checkInDate)),
         checkOutDate: formatISODate(new Date(res.checkOutDate)),
         prepaied: false,
@@ -699,7 +705,7 @@ export const EditInvoice = () => {
         paymentPhotos: [],
         reservationCode: res.code,
         rooms: internalRooms(res.rooms),
-        creatorId: currentUser.id,
+        creatorId: props.chat.id,
         sheetName: '',
         signed: false,
         country: '',
@@ -723,12 +729,12 @@ export const EditInvoice = () => {
 
   const confirmNoRes = () => {
     try {
-      let invId = currentUser.id + (Date.now() % 10000000)
+      let invId = props.chat.id + (Date.now() % 10000000)
       let inv = {
-        id: currentUser.id + new Date().getTime(),
+        id: props.chat.id + new Date().getTime(),
         guestName: Configs.invoice.initialInvoice.guestName,
-        issuer: currentUserFullname(),
-        issuerId: currentUser.id,
+        issuer: props.displayName,
+        issuerId: props.chat.id,
         checkInDate: formatISODate(new Date()),
         checkOutDate: formatISODate(addDays(new Date(), 1)),
         prepaied: false,
@@ -736,7 +742,7 @@ export const EditInvoice = () => {
         paymentPhotos: [],
         reservationCode: '',
         rooms: ["R1"],
-        creatorId: currentUser.id,
+        creatorId: props.chat.id,
         sheetName: '',
         signed: false,
         country: '',
@@ -831,7 +837,7 @@ export const EditInvoice = () => {
     const canvas = await html2canvas(element);
 
     canvas.toBlob((blob) => {
-      if(blob===null){
+      if (blob === null) {
         console.warn("Invalid blob")
         return
       }

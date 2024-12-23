@@ -29,7 +29,7 @@ export const Inventory = () => {
 
   const [pagination, setPagination] = useState<Pagination>({
     pageNumber: 0,
-    pageSize: Number(DEFAULT_PAGE_SIZE),
+    pageSize: DEFAULT_PAGE_SIZE,
     totalPages: 0,
     totalElements: 0
   })

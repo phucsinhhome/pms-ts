@@ -1,24 +1,9 @@
 import { formatDatePartition } from "../../Service/Utils";
-// import { syncStatusOfMonth } from "../../Service/StatusSyncingService";
 import { syncStatusOfMonth } from "../../Service/StatusSyncingService";
 import React, { ChangeEvent, useState } from "react";
 import { Label, Spinner, TextInput } from "flowbite-react";
 import { IoIosSync } from "react-icons/io";
-// import { collectRes } from "../../db/reservation_extractor";
 import { collectRes } from "../../db/reservation_extractor";
-
-// const syncedResOptions = [
-//   {
-//     nextDays: 0,
-//     displayName: 'Today'
-//   }, {
-//     nextDays: 1,
-//     displayName: 'Tomorrow'
-//   }, {
-//     nextDays: 5,
-//     displayName: 'Next 5 days'
-//   }
-// ]
 
 export type SettingProps = {
   syncing: boolean,
@@ -27,16 +12,13 @@ export type SettingProps = {
   changeResSyncing: any
 }
 
-export const Settings = (syncing: boolean,
-  changeSyncing: any,
-  syncingRes: boolean,
-  changeResSyncing: any) => {
+export const Settings = (props: SettingProps) => {
 
   const [datePartition, setDatePartition] = useState(formatDatePartition(new Date()))
   const [syncedResNextDays, setSyncedResNextDays] = useState(formatDatePartition(new Date()))
 
   const syncStatus = () => {
-    changeSyncing(true)
+    props.changeResSyncing(true)
     console.info("Sync status")
     syncStatusOfMonth(datePartition)
       .then((rsp: Response) => {
@@ -47,12 +29,12 @@ export const Settings = (syncing: boolean,
       }).catch((e: any) => {
         console.error(e)
       }).finally(() => {
-        changeSyncing(false)
+        props.changeSyncing(false)
       })
   }
 
   const syncResStatus = () => {
-    changeResSyncing(true)
+    props.changeResSyncing(true)
     console.info("Sync reservation...")
     let fromDate = formatDatePartition(new Date())
     let toDate = formatDatePartition(new Date())
@@ -65,11 +47,11 @@ export const Settings = (syncing: boolean,
       }).catch(e => {
         console.error(e)
       }).finally(() => {
-        changeResSyncing(false)
+        props.changeResSyncing(false)
       })
   }
 
-  const changePartition = (e:ChangeEvent<HTMLInputElement>) => {
+  const changePartition = (e: ChangeEvent<HTMLInputElement>) => {
     let iMsg = e.target.value
     setDatePartition(iMsg)
   }
@@ -125,11 +107,6 @@ export const Settings = (syncing: boolean,
                 />
               }
             />
-            {/* <Label
-              className="w-32"
-            >
-              {"reservation"}
-            </Label> */}
           </div>
         </div>
 

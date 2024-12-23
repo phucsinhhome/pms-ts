@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
-import ProfitReport from "./Components/Profit/ProfitReport";
-import { InvoiceManager } from "./Components/Invoice/InvoiceManager"
-import { EditInvoice } from "./Components/Invoice/EditInvoice"
+import ProfitReport from "./Components/ProfitReport";
+import { InvoiceManager } from "./Components/InvoiceManager"
+import { InvoiceEditor } from "./Components/InvoiceEditor"
 import { BrowserRouter as Router, Link, Route, Routes } from "react-router-dom"
-import { ExpenseManager } from "./Components/Expense/ExpenseManager";
-import { ReservationManager } from "./Components/Reservation/ReservationManager";
-import { Settings } from "./Components/Settings/Settings";
+import { ExpenseManager } from "./Components/ExpenseManager";
+import { ReservationManager } from "./Components/ReservationManager";
+import { Settings } from "./Components/Settings";
 import { IoMdSettings } from "react-icons/io";
-import { OrderManager } from "./Components/Order/OrderManager";
-import { EditOrder } from "./Components/Order/EditOrder";
-import { Inventory } from "./Components/Inventory/Inventory";
+import { OrderManager } from "./Components/OrderManager";
+import { OrderEditor } from "./Components/OrderEditor";
+import { Inventory } from "./Components/Inventory";
 import { init, retrieveLaunchParams } from '@telegram-apps/sdk-react';
 
 export const DEFAULT_PAGE_SIZE = Number(process.env.REACT_APP_DEFAULT_PAGE_SIZE)
@@ -94,11 +94,11 @@ export default function App() {
           <Route path="/" element={<ProfitReport />} />
           <Route path="profit" element={<ProfitReport />} />
           <Route path="invoice" element={<InvoiceManager />} />
-          <Route path="invoice/:invoiceId" element={<EditInvoice chat={chat} displayName={fullName()} authorizedUserId={authorizedUserId} />} />
+          <Route path="invoice/:invoiceId" element={<InvoiceEditor chat={chat} displayName={fullName()} authorizedUserId={authorizedUserId} />} />
           <Route path="expenses" element={<ExpenseManager chat={chat} displayName={fullName()} authorizedUserId={authorizedUserId} />} />
           <Route path="reservation" element={<ReservationManager />} />
           <Route path="order" element={<OrderManager chat={chat} displayName={fullName()} authorizedUserId={authorizedUserId} />} />
-          <Route path="order/:orderId/:staffId" element={<EditOrder />} />
+          <Route path="order/:orderId/:staffId" element={<OrderEditor />} />
           <Route path="inventory" element={<Inventory />} />
           <Route path="settings" element={<Settings
             syncing={syncing}

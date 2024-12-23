@@ -1,4 +1,4 @@
-import { Invoice } from "../Components/Invoice/InvoiceManager";
+import { Invoice } from "../Components/InvoiceManager";
 
 export const Configs = {
   logo: process.env.REACT_APP_PS_LOGO

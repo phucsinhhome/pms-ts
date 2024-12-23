@@ -1,24 +1,24 @@
 import React, { useState, useEffect, useRef, ChangeEvent } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
-import { exportInvoice, getInvoice, updateInvoice } from "../../db/invoice";
+import { exportInvoice, getInvoice, updateInvoice } from "../db/invoice";
 import { Table, TextInput, Label, Datepicker, Modal, Button } from 'flowbite-react';
-import { getPresignedLinkWithDefaultDuration } from "../../Service/FileMinio";
+import { getPresignedLinkWithDefaultDuration } from "../Service/FileMinio";
 import { HiOutlineCash, HiOutlineClipboardCopy, HiUserCircle } from "react-icons/hi";
-import { classifyServiceByItemName } from "../../Service/ItemClassificationService";
-import { addDays, formatDatePartition, formatISODate, formatMoneyAmount, formatShortDate, formatVND } from "../../Service/Utils";
-import { Chat, DEFAULT_PAGE_SIZE } from "../../App";
-import { getUsers as issuers } from "../../db/users";
+import { classifyServiceByItemName } from "../Service/ItemClassificationService";
+import { addDays, formatDatePartition, formatISODate, formatMoneyAmount, formatShortDate, formatVND } from "../Service/Utils";
+import { Chat, DEFAULT_PAGE_SIZE } from "../App";
+import { getUsers as issuers } from "../db/users";
 import Moment from "react-moment";
-import { listLatestReservations } from "../../db/reservation";
-import { listAllProducts } from "../../db/product";
+import { listLatestReservations } from "../db/reservation";
+import { listAllProducts } from "../db/product";
 import html2canvas from "html2canvas";
-import { Invoice, InvoiceItem, Issuer } from "./InvoiceManager";
-import { paymentMethods, rooms } from "../../db/staticdata";
+import { Invoice, InvoiceItem, Issuer } from "./Invoice/InvoiceManager";
+import { paymentMethods, rooms } from "../db/staticdata";
 import { ResultCallback } from "minio/dist/main/internal/type";
 import { Product } from "../Inventory/Inventory";
-import { Reservation, ResRoom } from "../Reservation/ReservationManager";
-import { uploadBlobToPresignedURL } from "../../Service/FileMinio";
-import { getPresignedLink } from "../../Service/FileMinio";
+import { Reservation, ResRoom } from "./ReservationManager";
+import { uploadBlobToPresignedURL } from "../Service/FileMinio";
+import { getPresignedLink } from "../Service/FileMinio";
 
 
 const paymentIcons = [
@@ -156,7 +156,7 @@ type InvoiceProps = {
   displayName: string
 }
 
-export const EditInvoice = (props: InvoiceProps) => {
+export const InvoiceEditor = (props: InvoiceProps) => {
   const [invoice, setInvoice] = useState<Invoice>(defaultEmptyInvoice)
 
   const [invoiceUrl, setInvoiceUrl] = useState({ filename: "", presignedUrl: "", hidden: true })

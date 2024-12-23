@@ -1,4 +1,4 @@
-import { Order, OrderItem } from "../Components/Order/OrderManager";
+import { Order, OrderItem } from "../Components/OrderManager";
 
 export const fetchOrders = (fromTime: string, page: number, size: number) => {
   console.info("Fetch upcoming orders")

@@ -1,4 +1,4 @@
-import { Issuer } from "../Components/Invoice/InvoiceManager";
+import { Issuer } from "../Components/InvoiceManager";
 
 export const getUsers: Issuer[] = [{
     id: "1351151927",

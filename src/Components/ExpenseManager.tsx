@@ -1,18 +1,18 @@
 import React, { useState, useEffect, useRef, ChangeEvent } from "react";
 import { useLocation } from "react-router-dom";
 import { Table, TextInput, Label, Spinner, Modal, Button } from "flowbite-react";
-import { deleteExpense, newExpId } from "../../db/expense";
+import { deleteExpense, newExpId } from "../db/expense";
 import Moment from "react-moment";
-import run from "../../Service/ExpenseExtractionService";
-import { classifyServiceByItemName } from "../../Service/ItemClassificationService";
-import { Chat, DEFAULT_PAGE_SIZE } from "../../App";
+import run from "../Service/ExpenseExtractionService";
+import { classifyServiceByItemName } from "../Service/ItemClassificationService";
+import { Chat, DEFAULT_PAGE_SIZE } from "../App";
 import { HiOutlineCash } from "react-icons/hi";
-import { formatISODate, formatISODateTime, formatMoneyAmount, formatVND } from "../../Service/Utils";
+import { formatISODate, formatISODateTime, formatMoneyAmount, formatVND } from "../Service/Utils";
 import { PiBrainThin } from "react-icons/pi";
 import { FaRotate } from "react-icons/fa6";
-import { listExpenseByExpenserAndDate } from "../../db/expense";
+import { listExpenseByExpenserAndDate } from "../db/expense";
 import { Pagination } from "../Profit/Models";
-import { saveExpense } from "../../db/expense";
+import { saveExpense } from "../db/expense";
 
 export type Expense = {
   id: string,

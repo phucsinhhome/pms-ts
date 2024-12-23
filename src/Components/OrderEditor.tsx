@@ -1,19 +1,19 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
 import { useParams } from "react-router-dom";
 import { Avatar, Button, Label, Modal, TextInput } from "flowbite-react";
-import { DEFAULT_PAGE_SIZE } from "../../App";
-import { formatISODate, formatISODateTime, formatRooms, formatVND } from "../../Service/Utils";
-import { confirmOrder, fetchOrder, rejectOrder } from "../../db/order";
-import { getInvoice, listInvoiceByGuestName } from "../../db/invoice";
+import { DEFAULT_PAGE_SIZE } from "../App";
+import { formatISODate, formatISODateTime, formatRooms, formatVND } from "../Service/Utils";
+import { confirmOrder, fetchOrder, rejectOrder } from "../db/order";
+import { getInvoice, listInvoiceByGuestName } from "../db/invoice";
 import { Order, OrderStatus } from "./OrderManager";
-import { Invoice } from "../Invoice/InvoiceManager";
+import { Invoice } from "./InvoiceManager";
 
 type OrderParams = {
   orderId: string,
   staffId: string
 }
 
-export const EditOrder = () => {
+export const OrderEditor = () => {
 
   const [order, setOrder] = useState<Order>()
   const [message, setMessage] = useState('No item')

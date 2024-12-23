@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { listLatestReservations } from "../../db/reservation";
+import { listLatestReservations } from "../db/reservation";
 import { Link } from "react-router-dom";
 import { Table } from "flowbite-react";
 import Moment from "react-moment";
-import { Configs, internalRooms } from "../Invoice/EditInvoice";
-import { addDays, formatISODate } from "../../Service/Utils";
-import { DEFAULT_PAGE_SIZE } from "../../App";
+import { Configs, internalRooms } from "./InvoiceEditor";
+import { addDays, formatISODate } from "../Service/Utils";
+import { DEFAULT_PAGE_SIZE } from "../App";
 import { Pagination } from "../Profit/Models";
 
 export type Reservation = {

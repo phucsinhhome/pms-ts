@@ -1,4 +1,4 @@
-import { Reservation } from "../Components/Reservation/ReservationManager";
+import { Reservation } from "../Components/ReservationManager";
 
 const requestOptions = {
   method: 'GET'

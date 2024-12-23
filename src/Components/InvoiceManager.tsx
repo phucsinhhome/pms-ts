@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button, Modal, Table } from "flowbite-react";
 import Moment from "react-moment";
-import { DEFAULT_PAGE_SIZE } from "../../App";
+import { DEFAULT_PAGE_SIZE } from "../App";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
-import { formatISODate, formatVND } from "../../Service/Utils";
-import { deleteInvoice, listStayingAndComingInvoices } from "../../db/invoice";
+import { formatISODate, formatVND } from "../Service/Utils";
+import { deleteInvoice, listStayingAndComingInvoices } from "../db/invoice";
 
 export type InvoiceItem = {
   id: string,

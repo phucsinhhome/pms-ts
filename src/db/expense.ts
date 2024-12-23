@@ -1,4 +1,4 @@
-import { Expense } from "../Components/Expense/ExpenseManager"
+import { Expense } from "../Components/ExpenseManager"
 
 const requestOptions = {
   method: 'GET'

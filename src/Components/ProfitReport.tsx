@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { adjustMonths, beginOfMonth, lastDateOf as lastDayOfMonth, formatVND, formatISODate, formatDateMonthDate, lastDateOfMonth } from "../../Service/Utils";
-import { fetchPReportThisMonth } from "../../db/profit";
-import { PReport } from "./Models";
+import { adjustMonths, beginOfMonth, lastDateOf as lastDayOfMonth, formatVND, formatISODate, formatDateMonthDate, lastDateOfMonth } from "../Service/Utils";
+import { fetchPReportThisMonth } from "../db/profit";
 
 type RAspect = {
   name: string,
@@ -27,6 +26,29 @@ type ROption = {
   periodName: string,
   fromDate: string,
   toDate: string
+}
+
+export type REntity = {
+  expense: number,
+  revenue: number,
+  name: string,
+  displayName: string,
+  profit: number
+}
+
+export type PReport = {
+  fromDate: string,
+  toDate: string,
+  id?: string,
+  overall: REntity,
+  breakdown: REntity[]
+}
+
+export type Pagination = {
+  pageNumber: number,
+  pageSize: number,
+  totalElements: number,
+  totalPages: number
 }
 
 const aspects: RAspect[] = [

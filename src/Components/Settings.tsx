@@ -1,9 +1,9 @@
-import { formatDatePartition } from "../../Service/Utils";
-import { syncStatusOfMonth } from "../../Service/StatusSyncingService";
+import { formatDatePartition } from "../Service/Utils";
+import { syncStatusOfMonth } from "../Service/StatusSyncingService";
 import React, { ChangeEvent, useState } from "react";
 import { Label, Spinner, TextInput } from "flowbite-react";
 import { IoIosSync } from "react-icons/io";
-import { collectRes } from "../../db/reservation_extractor";
+import { collectRes } from "../db/reservation_extractor";
 
 export type SettingProps = {
   syncing: boolean,

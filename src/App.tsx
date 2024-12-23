@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import ProfitReport from "./Components/Profit/ProfitReport";
 import { InvoiceManager } from "./Components/Invoice/InvoiceManager"
@@ -11,7 +11,7 @@ import { IoMdSettings } from "react-icons/io";
 import { OrderManager } from "./Components/Order/OrderManager";
 import { EditOrder } from "./Components/Order/EditOrder";
 import { Inventory } from "./Components/Inventory/Inventory";
-import { init, retrieveLaunchParams, useLaunchParams } from '@telegram-apps/sdk-react';
+import { init, retrieveLaunchParams } from '@telegram-apps/sdk-react';
 
 export const DEFAULT_PAGE_SIZE = Number(process.env.REACT_APP_DEFAULT_PAGE_SIZE)
 

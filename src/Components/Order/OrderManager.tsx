@@ -49,7 +49,7 @@ export const OrderManager = (props: OrderManagerProps) => {
 
   const [pagination, setPagination] = useState({
     pageNumber: 0,
-    pageSize: Number(DEFAULT_PAGE_SIZE),
+    pageSize: DEFAULT_PAGE_SIZE,
     totalElements: 0,
     totalPages: 0
   })
@@ -84,7 +84,7 @@ export const OrderManager = (props: OrderManagerProps) => {
   }
 
   useEffect(() => {
-    fetchUpcomingOrders(0, Number(DEFAULT_PAGE_SIZE));
+    fetchUpcomingOrders(0, DEFAULT_PAGE_SIZE);
     // eslint-disable-next-line
   }, []);
 
@@ -122,7 +122,7 @@ export const OrderManager = (props: OrderManagerProps) => {
     }
     let fromDate = formatISODate(new Date())
 
-    listInvoiceByGuestName(fromDate, fN, 0, Number(DEFAULT_PAGE_SIZE))
+    listInvoiceByGuestName(fromDate, fN, 0, DEFAULT_PAGE_SIZE)
       .then(rsp => {
         if (rsp.ok) {
           rsp.json()

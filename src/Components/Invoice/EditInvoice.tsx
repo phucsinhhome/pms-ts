@@ -1765,6 +1765,7 @@ export const EditInvoice = (props: InvoiceProps) => {
                 return (
                   <div
                     id={r.id}
+                    key={r.id}
                     className={selectedRooms.includes(r.id) ?
                       "flex flex-col border-spacing-1 shadow-lg hover:shadow-lg rounded-sm items-center px-2 py-2 bg-slate-300" :
                       "flex flex-col border-spacing-1 shadow-lg hover:shadow-lg rounded-sm items-center px-2 py-2"

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Button, Modal, Table } from "flowbite-react";
 import Moment from "react-moment";
 import { DEFAULT_PAGE_SIZE } from "../App";
@@ -62,8 +62,6 @@ export const InvoiceManager = () => {
   const [openModal, setOpenModal] = useState(false)
   const [deletingInv, setDeletingInv] = useState<Invoice>()
 
-  const location = useLocation()
-
   const filterDay = (numDays: number) => {
 
     var newDate = Date.now() + numDays * 86400000
@@ -71,7 +69,6 @@ export const InvoiceManager = () => {
     console.info("Change filter date to %s", newDD.toISOString())
     setFromDate(newDD)
     setDeltaDays(numDays)
-    // fetchInvoices(newDD, pagination.pageNumber, pagination.pageSize)
   }
 
   const handlePaginationClick = (pageNumber: number) => {

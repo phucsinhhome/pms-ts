@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef, ChangeEvent } from "react";
-import { useLocation } from "react-router-dom";
 import { Table, TextInput, Label, Spinner, Modal, Button } from "flowbite-react";
 import { deleteExpense, newExpId } from "../db/expense";
 import Moment from "react-moment";
@@ -73,24 +72,23 @@ export const ExpenseManager = (props: ExpenseProps) => {
   const [pagination, setPagination] = useState<Pagination>({
     pageNumber: 0,
     pageSize: DEFAULT_PAGE_SIZE,
-    totalElements: 200,
-    totalPages: 20
+    totalElements: 0,
+    totalPages: 0
   })
 
   const expMsgRef = useRef<HTMLInputElement>(null)
 
   const handlePaginationClick = (pageNumber: number) => {
     console.log("Pagination nav bar click to page %s", pageNumber)
-    fetchData(pageNumber < 0 ? 0 : pageNumber > pagination.totalPages - 1 ? pagination.totalPages - 1 : pageNumber, pagination.pageSize)
+    setPagination({
+      ...pagination,
+      pageNumber: pageNumber < 0 ? 0 : pageNumber > pagination.totalPages - 1 ? pagination.totalPages - 1 : pageNumber
+    })
   }
 
-  const location = useLocation()
-
-
-  const fetchData = (pageNumber: number, pageSize: number) => {
+  const fetchExpenses = () => {
     let byDate = formatISODate(new Date())
-    // let expenserId = (initialUser !== null && initialUser !== undefined) ? initialUser.id : null
-    return listExpenseByExpenserAndDate(props.authorizedUserId, byDate, pageNumber, pageSize)
+    return listExpenseByExpenserAndDate(props.authorizedUserId, byDate, pagination.pageNumber, pagination.pageSize)
       .then((data: any) => {
         if (data === undefined) {
           console.warn("Invalid expense response")
@@ -109,11 +107,10 @@ export const ExpenseManager = (props: ExpenseProps) => {
   }
 
   useEffect(() => {
-    console.log(location)
-    fetchData(location.state.pageNumber, location.state.pageSize)
+    fetchExpenses()
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location]);
+  }, [pagination.pageNumber]);
 
   const pageClass = (pageNum: number) => {
     var noHighlight = "px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
@@ -156,7 +153,7 @@ export const ExpenseManager = (props: ExpenseProps) => {
       .then((rsp: any) => {
         if (rsp !== null) {
           console.log("Delete expense %s successully", exp.id)
-          fetchData(location.state.pageNumber, location.state.pageSize)
+          fetchExpenses()
         }
       })
   }
@@ -201,11 +198,8 @@ export const ExpenseManager = (props: ExpenseProps) => {
   }
 
   const cancelEditingExpense = () => {
-    fetchData(pagination.pageNumber, pagination.pageSize)
-      .then((res: any) => {
-        setEditingExpense(defaultEditingExpense)
-        setOpenEditingExpenseModal(false)
-      })
+    setEditingExpense(defaultEditingExpense)
+    setOpenEditingExpenseModal(false)
   }
 
   const changeItemMessage = (e: ChangeEvent<HTMLInputElement>) => {

@@ -1,4 +1,4 @@
-import { Product } from "../Components/Inventory/Inventory"
+import { Product } from "../Components/Inventory"
 
 export const listAllProducts = () => {
   console.info("Fetching all products")

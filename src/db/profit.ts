@@ -1,4 +1,5 @@
-import { PReport } from "../Components/Profit/Models"
+import { PReport } from "../Components/ProfitReport"
+
 
 const requestOptions = {
   method: 'GET',

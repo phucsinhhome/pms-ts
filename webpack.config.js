@@ -36,11 +36,6 @@ const config = {
   //     "crypto": false
   //   }
   // }
-  resolve: {
-    fallback: {
-      "vm": false
-    }
-  }
 };
 
 module.exports = () => {

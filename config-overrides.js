@@ -13,7 +13,8 @@ module.exports = function override(config, env) {
         process: false,
         path: require.resolve('path-browserify'),
         url: false,
-        timers: false
+        timers: false,
+        vm: false
     };
     config.plugins.push(
         new webpack.ProvidePlugin({

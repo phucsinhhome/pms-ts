@@ -59,15 +59,17 @@ export const OrderManager = (props: OrderManagerProps) => {
   const handlePaginationClick = (pageNumber: number) => {
     console.log("Pagination nav bar click to page %s", pageNumber)
     var pNum = pageNumber < 0 ? 0 : pageNumber > pagination.totalPages - 1 ? pagination.totalPages - 1 : pageNumber;
-    var pSize = pagination.pageSize
-    fetchUpcomingOrders(pNum, pSize)
+    setPagination({
+      ...pagination,
+      pageNumber: pNum
+    })
   }
 
-  const fetchUpcomingOrders = (pageNumber: number, pageSize: number) => {
+  const fetchUpcomingOrders = () => {
     var fromTime = formatISODateTime(beginOfDay(new Date()))
     console.info("Fetch upcoming order after %s", fromTime)
 
-    fetchOrders(fromTime, pageNumber, pageSize)
+    fetchOrders(fromTime, pagination.pageNumber, pagination.pageSize)
       .then((rsp: Response) => {
         if (rsp.ok) {
           rsp.json()
@@ -86,10 +88,10 @@ export const OrderManager = (props: OrderManagerProps) => {
   }
 
   useEffect(() => {
-    fetchUpcomingOrders(0, DEFAULT_PAGE_SIZE);
+    fetchUpcomingOrders();
     props.activeMenu()
     // eslint-disable-next-line
-  }, []);
+  }, [pagination.pageNumber]);
 
   const pageClass = (pageNum: number) => {
     var noHighlight = "px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"

@@ -41,8 +41,7 @@ export type Invoice = {
 
 export type Issuer = {
   id: string,
-  name: string,
-  imgSrc: string
+  displayName: string
 }
 
 

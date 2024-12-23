@@ -1,20 +1,18 @@
-export const getUsers = [{
+import { Issuer } from "../Components/Invoice/InvoiceManager";
+
+export const getUsers: Issuer[] = [{
     id: "1351151927",
-    name: "Mẫn Trịnh",
-    imgSrc: '<HiUserCircle />'
+    displayName: "Mẫn Trịnh"
 },
 {
     id: "5114683375",
-    name: "Liễu Lê",
-    imgSrc: '<HiUserCircle />'
+    displayName: "Liễu Lê"
 },
 {
     id: "6159537383",
-    name: "Hương Thanh",
-    imgSrc: '<HiUserCircle />'
+    displayName: "Hương Thanh"
 },
 {
     id: "6456500785",
-    name: "Kha Trần",
-    imgSrc: '<HiUserCircle />'
+    displayName: "Kha Trần"
 }]

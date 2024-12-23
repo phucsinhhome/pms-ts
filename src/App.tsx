@@ -41,10 +41,6 @@ export const defaultChat: Chat = {
 //   return currentUser.first_name + sufix
 // }
 
-export const currentUserFullname = () => {
-  return "Minh Tran"
-}
-
 export default function App() {
 
   const [chat, setChat] = useState<Chat>(defaultChat)
@@ -72,6 +68,10 @@ export default function App() {
     // tele.disableVerticalSwipes();
     console.info("TELEGRAM BOT API VERSION: %s", launchParams.version)
   }, []);
+
+  const fullName = () => {
+    return [chat.firstName, chat.lastName].join(' ')
+  }
 
 
   return (
@@ -116,7 +116,7 @@ export default function App() {
         </Routes>
       </Router>
       <div className="absolute top-0 right-0 flex flex-col mt-10 mr-2 bg-neutral-200 p-1 opacity-90 rounded-md shadow-lg">
-        <span className=" font text-[10px] font-bold text-gray-800 dark:text-white">{currentUserFullname()}</span>
+        <span className=" font text-[10px] font-bold text-gray-800 dark:text-white">{fullName()}</span>
         <span className=" font text-[8px] italic text-gray-600 dark:text-white">{chat.id}</span>
         <span className=" font font-mono text-center text-[8px] text-gray-900 dark:text-white">{"API " + apiVersion}</span>
       </div>

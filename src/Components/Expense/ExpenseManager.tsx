@@ -92,6 +92,10 @@ export const ExpenseManager = (props: ExpenseProps) => {
     // let expenserId = (initialUser !== null && initialUser !== undefined) ? initialUser.id : null
     return listExpenseByExpenserAndDate(props.authorizedUserId, byDate, pageNumber, pageSize)
       .then((data: any) => {
+        if(data ===undefined){
+          console.warn("Invalid expense response")
+          return 
+        }
         let sortedExps = data.content
         setExpenses(sortedExps)
         setPagination({

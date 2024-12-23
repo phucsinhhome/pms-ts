@@ -1,13 +1,4 @@
-type PaymentMethod = {
-    id: string,
-    name: string,
-    feeRate: number,
-    template: string,
-    src: string,
-    srcLargeImg: string,
-    paymentInfo: string,
-    defaultIssuerId: string
-}
+import { PaymentMethod } from "../Components/Invoice/EditInvoice"
 
 export const paymentMethods: PaymentMethod[] = [
     {
@@ -15,7 +6,6 @@ export const paymentMethods: PaymentMethod[] = [
         name: "Cash",
         feeRate: 0,
         template: "invoice_without_transfer_fee",
-        src: "<svg class=\"w-6 h-6 text-gray-800 dark:text-white\" aria-hidden=\"true\" xmlns = \"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" fill=\"currentColor\" viewBox=\"0 0 24 24\" ><path fill-rule=\"evenodd\" d = \"M7 6a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-2v-4a3 3 0 0 0-3-3H7V6Z\" clip-rule=\"evenodd\" /><path fill-rule=\"evenodd\" d = \"M2 11a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-7Zm7.5 1a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Z\" clip-rule=\"evenodd\" /><path d=\"M10.5 14.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z\" /></svg>",
         srcLargeImg: "/cash.svg",
         paymentInfo: "/payment/cash.jpeg",
         defaultIssuerId: "6456500785"
@@ -25,7 +15,6 @@ export const paymentMethods: PaymentMethod[] = [
         name: "Credit Card",
         feeRate: 0.025,
         template: "invoice_with_transfer_fee",
-        src: "<svg class=\"w-6 h-6 text-gray-800 dark:text-white\" aria-hidden=\"true\" xmlns = \"http://www.w3.org/2000/svg\" width = \"24\" height = \"24\" fill = \"none\" viewBox = \"0 0 24 24\" ><path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M3 10h18M6 14h2m3 0h5M3 7v10a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1Z\" /></svg >",
         srcLargeImg: "/mastercard.svg",
         paymentInfo: "/payment/creditcard.jpeg",
         defaultIssuerId: "1351151927"
@@ -35,7 +24,6 @@ export const paymentMethods: PaymentMethod[] = [
         name: "MoMo",
         feeRate: 0,
         template: "invoice_without_transfer_fee",
-        src: "<svg class=\"w-6 h-6 text-gray-800 dark:text-white\" aria-hidden=\"true\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" fill=\"none\" viewBox=\"0 0 24 24\"><path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M3 10h18M6 14h2m3 0h5M3 7v10a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1Z\" /></svg>",
         srcLargeImg: "/momo-square.png",
         paymentInfo: "/payment/mono.jpg",
         defaultIssuerId: "1351151927"
@@ -44,7 +32,6 @@ export const paymentMethods: PaymentMethod[] = [
         name: "Paypal",
         feeRate: 0.025,
         template: "invoice_without_transfer_fee",
-        src: "<svg class=\"w-6 h-6 text-gray-800 dark:text-white\" aria-hidden=\"true\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" fill=\"none\" viewBox=\"0 0 24 24\"><path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M3 10h18M6 14h2m3 0h5M3 7v10a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1Z\" /></svg>",
         srcLargeImg: "/paypal.svg",
         paymentInfo: "/payment/paypal.png",
         defaultIssuerId: "1351151927"
@@ -53,7 +40,6 @@ export const paymentMethods: PaymentMethod[] = [
         name: "Bank Transfer",
         feeRate: 0.0,
         template: "invoice_without_transfer_fee",
-        src: "<svg class=\"w-6 h-6 text-gray-800 dark:text-white\" aria-hidden=\"true\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" fill=\"none\" viewBox=\"0 0 24 24\"><path stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M3 10h18M6 14h2m3 0h5M3 7v10a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1Z\" /></svg>",
         srcLargeImg: "/bank.svg",
         paymentInfo: "/payment/bankTransfer.jpg",
         defaultIssuerId: "1351151927"

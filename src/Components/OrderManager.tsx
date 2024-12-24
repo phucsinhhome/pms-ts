@@ -16,7 +16,7 @@ export const OrderStatus ={
   EXPIRED: 'text-gray-700'
 }
 
-type SK = keyof typeof OrderStatus
+export type SK = keyof typeof OrderStatus
 
 export type OrderItem = {
   id: string,

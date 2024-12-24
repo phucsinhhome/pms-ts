@@ -5,7 +5,7 @@ import { DEFAULT_PAGE_SIZE } from "../App";
 import { formatISODate, formatISODateTime, formatRooms, formatVND } from "../Service/Utils";
 import { confirmOrder, fetchOrder, rejectOrder } from "../db/order";
 import { getInvoice, listInvoiceByGuestName } from "../db/invoice";
-import { Order, OrderStatus } from "./OrderManager";
+import { Order, OrderStatus, SK } from "./OrderManager";
 import { Invoice } from "./InvoiceManager";
 
 type OrderParams = {
@@ -191,7 +191,7 @@ export const OrderEditor = (props: OrderEditorProps) => {
             }
           </div>
           <div className="flex flex-row items-center space-x-2">
-            <span className={"font font-mono " + order?.status}>{order?.status}</span>
+            <span className={"font font-mono " + OrderStatus[order?.status as SK]}>{order?.status}</span>
             <span className="font font-mono text-sm text-gray-400">{order?.invoiceId}</span>
           </div>
         </div>
@@ -221,9 +221,9 @@ export const OrderEditor = (props: OrderEditorProps) => {
         </div>
       </div>
       <div className="flex flex-row items-center justify-between">
-        <Button className="px-3 py-2 mt-2 mx-3 h-9" onClick={stopPreparation} disabled={order?.items === undefined || order?.status !== OrderStatus.SENT}>Reject</Button>
-        <Button className="px-3 py-2 mt-2 mx-3 h-9" onClick={() => setShowInvoices(true)} disabled={order?.items === undefined}>Link invoice</Button>
-        <Button className="px-3 py-2 mt-2 mx-3 h-9" onClick={sendToPreparation} disabled={order?.invoiceId === null || order?.items === undefined || order?.status !== OrderStatus.SENT}>Confirm</Button>
+        <Button className="px-3 py-2 mt-2 mx-3 h-9" onClick={stopPreparation} disabled={order?.status !== OrderStatus.SENT}>Reject</Button>
+        <Button className="px-3 py-2 mt-2 mx-3 h-9" onClick={() => setShowInvoices(true)}>Link invoice</Button>
+        <Button className="px-3 py-2 mt-2 mx-3 h-9" onClick={sendToPreparation} disabled={order?.invoiceId === '' || order?.status !== OrderStatus.SENT}>Confirm</Button>
       </div>
 
 

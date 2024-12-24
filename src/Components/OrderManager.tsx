@@ -8,7 +8,7 @@ import { listInvoiceByGuestName, listStayingAndComingInvoicesAndPrepaid } from "
 import { Invoice } from "./InvoiceManager";
 import { HiX } from "react-icons/hi";
 
-export const orderStatuses ={
+export const OrderStatus ={
   SENT: 'text-orange-400',
   CONFIRMED: 'text-green-700',
   REJECTED: 'text-red-700',
@@ -16,7 +16,7 @@ export const orderStatuses ={
   EXPIRED: 'text-gray-700'
 }
 
-type SK = keyof typeof orderStatuses
+type SK = keyof typeof OrderStatus
 
 export type OrderItem = {
   id: string,
@@ -185,7 +185,7 @@ export const OrderManager = (props: OrderManagerProps) => {
                 </div>
                 <div className="pl-0.2 pr-1">
                   <div className="bg-zinc-200 rounded-md py-0.5 w-24 text-center">
-                    <span className={"font font-mono font-bold " + orderStatuses[order.status as SK]}>{order.status}</span>
+                    <span className={"font font-mono font-bold " + OrderStatus[order.status as SK]}>{order.status}</span>
                   </div>
                 </div>
               </div>

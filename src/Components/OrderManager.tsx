@@ -8,15 +8,15 @@ import { listInvoiceByGuestName, listStayingAndComingInvoicesAndPrepaid } from "
 import { Invoice } from "./InvoiceManager";
 import { HiX } from "react-icons/hi";
 
-
-
-export enum OrderStatus {
-  SENT = 'text-orange-400',
-  CONFIRMED = 'text-green-700',
-  REJECTED = 'text-red-700',
-  SERVED = 'text-gray-700',
-  EXPIRED = 'text-gray-700'
+export const orderStatuses ={
+  SENT: 'text-orange-400',
+  CONFIRMED: 'text-green-700',
+  REJECTED: 'text-red-700',
+  SERVED: 'text-gray-700',
+  EXPIRED: 'text-gray-700'
 }
+
+type SK = keyof typeof orderStatuses
 
 export type OrderItem = {
   id: string,
@@ -30,7 +30,7 @@ export type Order = {
   orderId: string,
   id: string,
   guestName: string,
-  status: OrderStatus,
+  status: string,
   startTime: Date,
   invoiceId: string,
   items: OrderItem[]
@@ -185,7 +185,7 @@ export const OrderManager = (props: OrderManagerProps) => {
                 </div>
                 <div className="pl-0.2 pr-1">
                   <div className="bg-zinc-200 rounded-md py-0.5 w-24 text-center">
-                    <span className={"font font-mono font-bold " + order.status}>{order.status}</span>
+                    <span className={"font font-mono font-bold " + orderStatuses[order.status as SK]}>{order.status}</span>
                   </div>
                 </div>
               </div>

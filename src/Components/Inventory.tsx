@@ -22,11 +22,11 @@ export type Product = {
 type InventoryProps = {
   activeMenu: any
 }
-
+export const GOOGLE_CLOUD_STORAGE = 'https://storage.googleapis.com'
 
 export const Inventory = (props: InventoryProps) => {
 
-  const GOOGLE_CLOUD_STORAGE = 'https://storage.googleapis.com'
+  
   const defaultImageKey = "psassistant/product/pizza.png"
   const [filteredName, setFilteredName] = useState('')
   const [products, setProducts] = useState<Product[]>([])
@@ -348,7 +348,7 @@ export const Inventory = (props: InventoryProps) => {
     let imageKey = ['product/images', editingProduct.origin.group, imageName].join('/')
     console.info("The new image name has been generated %s", imageKey)
 
-    return putObject(file, process.env.REACT_APP_PUBLIC_BUCKET!, imageKey)
+    return putObject(file, imageName, process.env.REACT_APP_PUBLIC_BUCKET!, imageKey)
   }
 
   return (

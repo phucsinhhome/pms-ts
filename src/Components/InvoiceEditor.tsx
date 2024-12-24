@@ -14,9 +14,10 @@ import html2canvas from "html2canvas";
 import { Invoice, InvoiceItem, Issuer } from "./InvoiceManager";
 import { paymentMethods, rooms } from "../db/staticdata";
 import { ResultCallback } from "minio/dist/main/internal/type";
-import { Product } from "./Inventory";
+import { GOOGLE_CLOUD_STORAGE, Product } from "./Inventory";
 import { Reservation, ResRoom } from "./ReservationManager";
 import { getPresignedLink } from "../Service/FileMinio";
+import { putBlob, putObject } from "../db/gcs";
 
 
 const paymentIcons = [
@@ -879,7 +880,16 @@ export const InvoiceEditor = (props: InvoiceProps) => {
     canvas.toBlob(async (blob) => {
       if (blob) {
         try {
-          setSharedInvData(URL.createObjectURL(blob))
+          putBlob(blob, 'test1.png', 'ps_data', 'short-terms/test1.png')
+            .then((rsp) => {
+              if (rsp.ok) {
+                let imageUrl = [GOOGLE_CLOUD_STORAGE, 'ps_data', 'short-terms/test1.png'].join('/')
+                setSharedInvData(imageUrl)
+                console.info("Uploaded image to %s", imageUrl)
+              }
+            })
+
+          // setSharedInvData(URL.createObjectURL(blob))
           await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
           console.log('Image copied to clipboard');
         } catch (err) {

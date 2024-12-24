@@ -17,7 +17,7 @@ import { ResultCallback } from "minio/dist/main/internal/type";
 import { GOOGLE_CLOUD_STORAGE, Product } from "./Inventory";
 import { Reservation, ResRoom } from "./ReservationManager";
 import { getPresignedLink } from "../Service/FileMinio";
-import { putBlob, putObject } from "../db/gcs";
+import { putBlob } from "../db/gcs";
 
 
 const paymentIcons = [

@@ -875,21 +875,21 @@ export const InvoiceEditor = (props: InvoiceProps) => {
       return
     }
     const canvas = await html2canvas(element);
-    // setSharedInvData(canvas.toDataURL('image/png'))
 
     canvas.toBlob(async (blob) => {
       if (blob) {
         try {
-          putBlob(blob, 'test1.png', 'ps_data', 'short-terms/test1.png')
+          let bucket = process.env.REACT_APP_SHORT_LIVING_PUBLIC_BUCKET!
+          let objectName = invoice.id + '.png'
+          let objectKey = 'invoices/' + objectName
+          putBlob(blob, objectName, bucket, objectKey)
             .then((rsp) => {
               if (rsp.ok) {
-                let imageUrl = [GOOGLE_CLOUD_STORAGE, 'ps_data', 'short-terms/test1.png'].join('/')
+                let imageUrl = [GOOGLE_CLOUD_STORAGE, bucket, objectKey].join('/')
                 setSharedInvData(imageUrl)
                 console.info("Uploaded image to %s", imageUrl)
               }
             })
-
-          // setSharedInvData(URL.createObjectURL(blob))
           await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
           console.log('Image copied to clipboard');
         } catch (err) {

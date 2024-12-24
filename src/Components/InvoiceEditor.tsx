@@ -874,11 +874,12 @@ export const InvoiceEditor = (props: InvoiceProps) => {
       return
     }
     const canvas = await html2canvas(element);
-    setSharedInvData(canvas.toDataURL('image/png'))
+    // setSharedInvData(canvas.toDataURL('image/png'))
 
     canvas.toBlob(async (blob) => {
       if (blob) {
         try {
+          setSharedInvData(URL.createObjectURL(blob))
           await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
           console.log('Image copied to clipboard');
         } catch (err) {

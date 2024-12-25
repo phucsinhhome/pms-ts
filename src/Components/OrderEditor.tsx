@@ -86,6 +86,16 @@ export const OrderEditor = (props: OrderEditorProps) => {
       })
   }
 
+  const markAsServed = () => {
+    if (order === undefined) {
+      return
+    }
+    setOrder({
+      ...order,
+      status: 'SERVED'
+    })
+  }
+
   const stopPreparation = () => {
     if (orderId === undefined) {
       console.warn("Invalid order id")
@@ -135,6 +145,7 @@ export const OrderEditor = (props: OrderEditorProps) => {
         invoiceId: choosenInvoice.id
       }
       setOrder(o)
+
       console.info("Changed linked invoice to %s", choosenInvoice.id)
     } catch (e) {
       console.error(e)
@@ -225,8 +236,23 @@ export const OrderEditor = (props: OrderEditorProps) => {
       </div>
       <div className="flex flex-row items-center justify-between pt-3 px-2">
         <Button onClick={stopPreparation} disabled={order?.status !== 'SENT'}>Reject</Button>
-        <Button onClick={() => setShowInvoices(true)}>Link invoice</Button>
-        <Button onClick={sendToPreparation} disabled={order?.invoiceId === null || order?.status !== 'SENT'}>Confirm</Button>
+        {
+          order?.invoiceId === null || order?.invoiceId === '' ?
+            <Button onClick={() => setShowInvoices(true)} >Link invoice</Button>
+            : <></>
+        }
+        {
+          order?.status === 'SENT' && order.invoiceId !== null ?
+            <Button onClick={sendToPreparation} >Confirm</Button>
+            : <></>
+        }
+
+        {
+          order?.status === 'CONFIRMED' ?
+            <Button onClick={markAsServed}>Served</Button>
+            : <></>
+        }
+
       </div>
 
 

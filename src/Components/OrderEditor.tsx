@@ -24,7 +24,7 @@ export const OrderEditor = (props: OrderEditorProps) => {
 
   const [showInvoices, setShowInvoices] = useState(false)
   const [invoices, setInvoices] = useState<Invoice[]>([])
-  const [choosenInvoice, setChoosenInvoice] = useState<Invoice>()
+  const [choosenInvoice, setChoosenInvoice] = useState<Invoice | null>()
   const [filteredName, setFilteredName] = useState('')
 
   const { orderId, staffId } = useParams<OrderParams>()
@@ -119,12 +119,15 @@ export const OrderEditor = (props: OrderEditorProps) => {
   const confirmChangeInvoice = () => {
     try {
       if (order === undefined || order === null) {
+        console.warn("Invalid order")
         return
       }
       if (choosenInvoice === undefined || choosenInvoice === null) {
+        console.warn("Invalid choosen invoice")
         return
       }
       if (order.invoiceId === choosenInvoice.id) {
+        console.warn("You choose the same linked invoice")
         return
       }
       var o = {
@@ -132,7 +135,7 @@ export const OrderEditor = (props: OrderEditorProps) => {
         invoiceId: choosenInvoice.id
       }
       setOrder(o)
-      console.info("Changed linked invoice to %s", order.invoiceId)
+      console.info("Changed linked invoice to %s", choosenInvoice.id)
     } catch (e) {
       console.error(e)
     }
@@ -181,11 +184,11 @@ export const OrderEditor = (props: OrderEditorProps) => {
           <div className="flex flex-row items-center space-x-2">
             <span className="font font-bold">{order?.guestName ? order.guestName.toUpperCase() : ""}</span>
             {
-              choosenInvoice !== undefined ?
+              choosenInvoice ?
                 <div className="flex flex-row items-center space-x-2">
                   <span className="font text-[9px] italic">{" linked to: "}</span>
-                  <span>{choosenInvoice.guestName}</span>
-                  <span className="font text-sm font-bold">{"(" + formatRooms(choosenInvoice.rooms) + ")"}</span>
+                  <span>{choosenInvoice?.guestName}</span>
+                  <span className="font text-sm font-bold">{"(" + formatRooms(choosenInvoice?.rooms) + ")"}</span>
                 </div>
                 : <></>
             }
@@ -220,10 +223,10 @@ export const OrderEditor = (props: OrderEditorProps) => {
           }) : <>{message}</>}
         </div>
       </div>
-      <div className="flex flex-row items-center justify-between">
-        <Button className="px-3 py-2 mt-2 mx-3 h-9" onClick={stopPreparation} disabled={order?.status !== OrderStatus.SENT}>Reject</Button>
-        <Button className="px-3 py-2 mt-2 mx-3 h-9" onClick={() => setShowInvoices(true)}>Link invoice</Button>
-        <Button className="px-3 py-2 mt-2 mx-3 h-9" onClick={sendToPreparation} disabled={order?.invoiceId === '' || order?.status !== OrderStatus.SENT}>Confirm</Button>
+      <div className="flex flex-row items-center justify-between pt-3 px-2">
+        <Button onClick={stopPreparation} disabled={order?.status !== 'SENT'}>Reject</Button>
+        <Button onClick={() => setShowInvoices(true)}>Link invoice</Button>
+        <Button onClick={sendToPreparation} disabled={order?.invoiceId === null || order?.status !== 'SENT'}>Confirm</Button>
       </div>
 
 

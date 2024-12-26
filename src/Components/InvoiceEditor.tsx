@@ -300,42 +300,38 @@ export const InvoiceEditor = (props: InvoiceProps) => {
         console.warn("Invalid item")
         return
       }
-      blurItemName()
-        .then((res) => {
-          console.info("Classification result %s", res)
-          let item = {
-            id: editingItem.origin.id,
-            itemName: editingItem.origin.itemName,
-            service: editingItem.origin.service,
-            unitPrice: editingItem.origin.unitPrice,
-            quantity: editingItem.origin.quantity,
-            amount: editingItem.origin.amount
+      let item = {
+        id: editingItem.origin.id,
+        itemName: editingItem.origin.itemName,
+        service: editingItem.origin.service,
+        unitPrice: editingItem.origin.unitPrice,
+        quantity: editingItem.origin.quantity,
+        amount: editingItem.origin.amount
+      }
+      let items = []
+      if (item.id === null || item.id === "") {
+        let newItemId = invoiceId + (Date.now() % 10000000)
+        console.log("Added an item into invoice. Id [%s] was generated", newItemId)
+        items = [
+          ...invoice.items,
+          {
+            ...item,
+            id: newItemId
           }
-          let items = []
-          if (item.id === null || item.id === "") {
-            let newItemId = invoiceId + (Date.now() % 10000000)
-            console.log("Added an item into invoice. Id [%s] was generated", newItemId)
-            items = [
-              ...invoice.items,
-              {
-                ...item,
-                id: newItemId
-              }
-            ]
-          } else {
-            console.log("Update item [%s] ", item.id)
-            items = invoice.items.map((i) => i.id === item.id ? item : i)
-          }
+        ]
+      } else {
+        console.log("Update item [%s] ", item.id)
+        items = invoice.items.map((i) => i.id === item.id ? item : i)
+      }
 
-          let ta = items.map(({ amount }) => amount).reduce((a1, a2) => a1 + a2, 0)
-          const inv = {
-            ...invoice,
-            items: items,
-            subTotal: ta
-          }
-          setInvoice(inv)
-          setOpenEditingItemModal(false)
-        })
+      let ta = items.map(({ amount }) => amount).reduce((a1, a2) => a1 + a2, 0)
+      const inv = {
+        ...invoice,
+        items: items,
+        subTotal: ta
+      }
+      setInvoice(inv)
+      setOpenEditingItemModal(false)
 
     } catch (e) {
       console.error(e)
@@ -1511,7 +1507,7 @@ export const InvoiceEditor = (props: InvoiceProps) => {
 
               </div>
               <div className="w-full flex justify-center">
-                <Button onClick={createOrUpdateItem} className="mx-2">
+                <Button onClick={createOrUpdateItem} className="mx-2" disabled={editingItem.origin.service === null}>
                   Save
                 </Button>
                 <Button color='gray' onClick={cancelEditingItem} className="mx-2">

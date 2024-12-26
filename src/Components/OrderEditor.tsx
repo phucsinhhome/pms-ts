@@ -21,7 +21,6 @@ type OrderEditorProps = {
 export const OrderEditor = (props: OrderEditorProps) => {
 
   const [order, setOrder] = useState<Order>()
-  const [message, setMessage] = useState('No item')
 
   const [showInvoices, setShowInvoices] = useState(false)
   const [invoices, setInvoices] = useState<Invoice[]>([])
@@ -81,7 +80,6 @@ export const OrderEditor = (props: OrderEditorProps) => {
             .then(data => {
               console.info("Send oder to preparation %s successfully", data.orderId)
               setOrder(data)
-              setMessage("Confirmed successfully")
             })
         }
       })
@@ -113,7 +111,6 @@ export const OrderEditor = (props: OrderEditorProps) => {
             .then(data => {
               console.info("Order %s has been rejected", data.orderId)
               setOrder(data)
-              setMessage("Order has been rejected")
             })
         }
       })

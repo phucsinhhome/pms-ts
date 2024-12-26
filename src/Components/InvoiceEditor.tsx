@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, ChangeEvent } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { exportInvoice, getInvoice, updateInvoice } from "../db/invoice";
 import { Table, TextInput, Label, Datepicker, Modal, Button } from 'flowbite-react';
-import { HiOutlineCash, HiOutlineClipboardCopy, HiUserCircle } from "react-icons/hi";
+import { HiOutlineCash, HiOutlineClipboardCopy, HiUserCircle, HiX } from "react-icons/hi";
 import { classifyServiceByItemName } from "../Service/ItemClassificationService";
 import { addDays, formatISODate, formatMoneyAmount, formatShortDate, formatVND } from "../Service/Utils";
 import { Chat, DEFAULT_PAGE_SIZE } from "../App";
@@ -608,6 +608,16 @@ export const InvoiceEditor = (props: InvoiceProps) => {
   }
 
   //================= ITEM NAME ===================//
+  const emptyItemName = () => {
+    setEditingItem({
+      ...editingItem,
+      origin: {
+        ...editingItem.origin,
+        itemName: '',
+        service: ''
+      }
+    })
+  }
   const changeItemName = (e: React.ChangeEvent<HTMLInputElement>) => {
     let iName = e.target.value
     try {
@@ -1383,6 +1393,7 @@ export const InvoiceEditor = (props: InvoiceProps) => {
                   value={editingItem.origin.itemName}
                   onChange={changeItemName}
                   onBlur={blurItemName}
+                  rightIcon={() => <HiX onClick={emptyItemName} />}
                 />
                 <Table hoverable>
                   <Table.Body className="divide-y">
@@ -1507,7 +1518,7 @@ export const InvoiceEditor = (props: InvoiceProps) => {
 
               </div>
               <div className="w-full flex justify-center">
-                <Button onClick={createOrUpdateItem} className="mx-2" disabled={editingItem.origin.service === null}>
+                <Button onClick={createOrUpdateItem} className="mx-2" disabled={editingItem.origin.service === ''}>
                   Save
                 </Button>
                 <Button color='gray' onClick={cancelEditingItem} className="mx-2">

@@ -33,13 +33,14 @@ export const Inventory = (props: InventoryProps) => {
   const [filteredName, setFilteredName] = useState('')
   const [products, setProducts] = useState<Product[]>([])
 
-  const [activeGroup, setActiveGroup] = useState('')
+  // const [activeGroup, setActiveGroup] = useState('')
 
-  const [pagination, setPagination] = useState<Pagination>({
+  const [pagination, setPagination] = useState({
     pageNumber: 0,
     pageSize: DEFAULT_PAGE_SIZE,
     totalPages: 0,
-    totalElements: 0
+    totalElements: 0,
+    activeGroup: ''
   })
 
   const buildImageUrl = (objectKey: string) => {
@@ -96,7 +97,7 @@ export const Inventory = (props: InventoryProps) => {
 
   useEffect(() => {
 
-    fetchAllProducts();
+    filterProducts()
     props.activeMenu()
 
     // eslint-disable-next-line
@@ -107,7 +108,7 @@ export const Inventory = (props: InventoryProps) => {
     filterProducts();
 
     // eslint-disable-next-line
-  }, [filteredName, activeGroup]);
+  }, [filteredName, pagination.activeGroup]);
 
 
   const pageClass = (pageNum: number) => {
@@ -160,11 +161,16 @@ export const Inventory = (props: InventoryProps) => {
   }
 
   const activateGroup = (group: string) => {
-    setActiveGroup(activeGroup === '' ? group : '')
+    setPagination({
+      ...pagination,
+      pageNumber: 0,
+      activeGroup: pagination.activeGroup !== group ? group : ''
+    })
+    // setActiveGroup(activeGroup !== group ? group : '')
   }
 
   const activeGroupStyle = (group: string) => {
-    return activeGroup === group ? 'font font-mono italic' : 'font font-mono'
+    return pagination.activeGroup === group ? 'font font-mono italic' : 'font font-mono'
   }
 
   const viewProductDetail = (product: Product) => {
@@ -281,39 +287,34 @@ export const Inventory = (props: InventoryProps) => {
   }
 
   const changeFilteredName = (e: ChangeEvent<HTMLInputElement>) => {
+    if (pagination.pageNumber !== 0) {
+      setPagination({
+        ...pagination,
+        pageNumber: 0
+      })
+    }
     let fN = e.target.value
     setFilteredName(fN)
-
-    // if (fN === null || fN === '') {
-    //   fetchAllProducts()
-    //   return
-    // }
-
-    // listProductsWithName(fN)
-    //   .then(rsp => {
-    //     if (rsp.ok) {
-    //       rsp.json()
-    //         .then(data => {
-    //           indexProduct(data)
-    //         }).catch(() => setProducts([]))
-    //     }
-    //   }).catch(() => {
-    //     setProducts([])
-    //   })
   }
 
   const filterProducts = () => {
-    if (filteredName === '' && activeGroup === '') {
+    if (filteredName === '' && pagination.activeGroup === '') {
       fetchAllProducts()
       return
     }
-    if (filteredName === '' && activeGroup !== '') {
-      listProductsByGroup(activeGroup, 0, 100)
+    if (filteredName === '' && pagination.activeGroup !== '') {
+      listProductsByGroup(pagination.activeGroup, pagination.pageNumber, pagination.pageSize)
         .then(rsp => {
           if (rsp.ok) {
             rsp.json()
               .then(data => {
                 indexProduct(data.content)
+                if (pagination.totalPages !== data.totalPages) {
+                  setPagination({
+                    ...pagination,
+                    totalPages: data.totalPages
+                  })
+                }
               })
               .catch(() => setProducts([]))
           }
@@ -323,13 +324,19 @@ export const Inventory = (props: InventoryProps) => {
       return
     }
 
-    if (filteredName !== '' && activeGroup === '') {
+    if (filteredName !== '' && pagination.activeGroup === '') {
       listProductsWithName(filteredName)
         .then(rsp => {
           if (rsp.ok) {
             rsp.json()
               .then(data => {
                 indexProduct(data)
+                if (pagination.totalPages > 1) {
+                  setPagination({
+                    ...pagination,
+                    totalPages: 1
+                  })
+                }
               }).catch(() => setProducts([]))
           }
         }).catch(() => {
@@ -338,12 +345,18 @@ export const Inventory = (props: InventoryProps) => {
       return
     }
 
-    listProductsWithNameAndGroup(filteredName, activeGroup, 0, 100)
+    listProductsWithNameAndGroup(filteredName, pagination.activeGroup, pagination.pageNumber, pagination.pageSize)
       .then(rsp => {
         if (rsp.ok) {
           rsp.json()
             .then(data => {
               indexProduct(data.content)
+              if (pagination.totalPages !== data.totalPages) {
+                setPagination({
+                  ...pagination,
+                  totalPages: data.totalPages
+                })
+              }
             })
             .catch(() => setProducts([]))
         }
@@ -425,9 +438,12 @@ export const Inventory = (props: InventoryProps) => {
 
       <div className="flex flex-row px-0.5 py-2 space-x-3">
         <Button onClick={addProduct}>Add</Button>
-        <div className="flex flex-row space-x-1">
+        <div className="flex flex-row space-x-2">
           {
-            groups.map((group) => <Label onClick={() => activateGroup(group)} className={activeGroupStyle(group)}>{group.toUpperCase()}</Label>)
+            groups.map((group) => <Label key={group} onClick={() => activateGroup(group)}
+              className={activeGroupStyle(group)}
+            // className="font font-mono text-sm font-bold bg-slate-300 items-center"
+            >{group.toUpperCase()}</Label>)
           }
         </div>
       </div>

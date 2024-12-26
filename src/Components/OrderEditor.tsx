@@ -7,6 +7,7 @@ import { confirmOrder, fetchOrder, rejectOrder } from "../db/order";
 import { getInvoice, listInvoiceByGuestName } from "../db/invoice";
 import { Order, OrderStatus, SK } from "./OrderManager";
 import { Invoice } from "./InvoiceManager";
+import { groups } from "./Inventory";
 
 type OrderParams = {
   orderId: string,
@@ -210,28 +211,35 @@ export const OrderEditor = (props: OrderEditorProps) => {
           </div>
         </div>
         <div className="flex flex-col space-y-1 pt-2 px-2">
-          {order?.items ? order.items.map((item) => {
-            return (
-              <div
-                className="flex flex-row items-center border px-1 py-1 border-gray-300 shadow-2xl rounded-md bg-white dark:bg-slate-500 "
-                key={item.id}
-              >
-                <div>
-                  <Avatar img={item.featureImgUrl} alt="" rounded className="w-12" />
-                </div>
-                <div className="flex flex-row px-1 w-full">
-                  <span
-                    className="font-medium text-blue-600 dark:text-blue-500 overflow-hidden"
-                  >
-                    {item.quantity + 'x ' + item.name}
-                  </span>
-                </div>
-                <div>
-                  <span className="w-full text text-center font-mono text-red-700 font-semibold">{formatVND(item.unitPrice)}</span>
-                </div>
-              </div>
-            )
-          }) : <>{message}</>}
+          {
+            groups.filter(grp => order?.items.map(i => i.group).includes(grp))
+              .map((grp) => <div>
+                <div className="font font-mono font-bold text-sm text-center ">{grp.toUpperCase()}</div>
+                {order?.items.filter(it => it.group === grp).map((item) => {
+                  return (
+                    <div
+                      className="flex flex-row items-center border px-1 py-1 border-gray-300 shadow-2xl rounded-md bg-white dark:bg-slate-500 "
+                      key={item.id}
+                    >
+                      <div>
+                        <Avatar img={item.featureImgUrl} alt="" rounded className="w-12" />
+                      </div>
+                      <div className="flex flex-row px-1 w-full">
+                        <span
+                          className="font-medium text-blue-600 dark:text-blue-500 overflow-hidden"
+                        >
+                          {item.quantity + 'x ' + item.name}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="w-full text text-center font-mono text-red-700 font-semibold">{formatVND(item.unitPrice)}</span>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>)
+          }
+
         </div>
       </div>
       <div className="flex flex-row items-center justify-between pt-3 px-2">

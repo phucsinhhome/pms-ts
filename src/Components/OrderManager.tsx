@@ -23,6 +23,7 @@ export type OrderItem = {
   name: string,
   unitPrice: number,
   quantity: number,
+  group: string,
   featureImgUrl: string
 }
 

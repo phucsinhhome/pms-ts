@@ -1,7 +1,7 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
 import { Link } from "react-router-dom";
 import { Avatar, Button, Dropdown, FileInput, Label, Modal, Textarea, TextInput } from "flowbite-react";
-import { adjustQuantity as adjustInventoryQuantity, listProducts, listProductsWithName, saveProduct } from "../db/product";
+import { adjustQuantity as adjustInventoryQuantity, listProducts, listProductsByGroup, listProductsWithName, listProductsWithNameAndGroup, saveProduct } from "../db/product";
 import { HiOutlineCash, HiX } from "react-icons/hi";
 import { formatMoneyAmount, formatVND } from "../Service/Utils";
 import { putObject } from "../db/gcs";
@@ -19,6 +19,8 @@ export type Product = {
   imageUrls: string[]
 }
 
+export const groups = ['food', 'baverage', 'breakfast']
+
 type InventoryProps = {
   activeMenu: any
 }
@@ -26,10 +28,12 @@ export const GOOGLE_CLOUD_STORAGE = 'https://storage.googleapis.com'
 
 export const Inventory = (props: InventoryProps) => {
 
-  
+
   const defaultImageKey = "psassistant/product/pizza.png"
   const [filteredName, setFilteredName] = useState('')
   const [products, setProducts] = useState<Product[]>([])
+
+  const [activeGroup, setActiveGroup] = useState('')
 
   const [pagination, setPagination] = useState<Pagination>({
     pageNumber: 0,
@@ -47,7 +51,7 @@ export const Inventory = (props: InventoryProps) => {
     name: '',
     quantity: 0,
     unitPrice: 0,
-    group: '',
+    group: 'food',
     description: '',
     featureImgUrl: buildImageUrl(defaultImageKey),
     imageUrls: [buildImageUrl(defaultImageKey)]
@@ -98,6 +102,13 @@ export const Inventory = (props: InventoryProps) => {
     // eslint-disable-next-line
   }, [location, pagination.pageNumber]);
 
+  useEffect(() => {
+
+    filterProducts();
+
+    // eslint-disable-next-line
+  }, [filteredName, activeGroup]);
+
 
   const pageClass = (pageNum: number) => {
     var noHighlight = "px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
@@ -146,6 +157,14 @@ export const Inventory = (props: InventoryProps) => {
   const addProduct = () => {
     setEditingProduct(defaultEditingProduct)
     setShowProductDetailModal(true)
+  }
+
+  const activateGroup = (group: string) => {
+    setActiveGroup(activeGroup === '' ? group : '')
+  }
+
+  const activeGroupStyle = (group: string) => {
+    return activeGroup === group ? 'font font-mono italic' : 'font font-mono'
   }
 
   const viewProductDetail = (product: Product) => {
@@ -265,18 +284,68 @@ export const Inventory = (props: InventoryProps) => {
     let fN = e.target.value
     setFilteredName(fN)
 
-    if (fN === null || fN === '') {
+    // if (fN === null || fN === '') {
+    //   fetchAllProducts()
+    //   return
+    // }
+
+    // listProductsWithName(fN)
+    //   .then(rsp => {
+    //     if (rsp.ok) {
+    //       rsp.json()
+    //         .then(data => {
+    //           indexProduct(data)
+    //         }).catch(() => setProducts([]))
+    //     }
+    //   }).catch(() => {
+    //     setProducts([])
+    //   })
+  }
+
+  const filterProducts = () => {
+    if (filteredName === '' && activeGroup === '') {
       fetchAllProducts()
       return
     }
+    if (filteredName === '' && activeGroup !== '') {
+      listProductsByGroup(activeGroup, 0, 100)
+        .then(rsp => {
+          if (rsp.ok) {
+            rsp.json()
+              .then(data => {
+                indexProduct(data.content)
+              })
+              .catch(() => setProducts([]))
+          }
+        }).catch(() => {
+          setProducts([])
+        })
+      return
+    }
 
-    listProductsWithName(fN)
+    if (filteredName !== '' && activeGroup === '') {
+      listProductsWithName(filteredName)
+        .then(rsp => {
+          if (rsp.ok) {
+            rsp.json()
+              .then(data => {
+                indexProduct(data)
+              }).catch(() => setProducts([]))
+          }
+        }).catch(() => {
+          setProducts([])
+        })
+      return
+    }
+
+    listProductsWithNameAndGroup(filteredName, activeGroup, 0, 100)
       .then(rsp => {
         if (rsp.ok) {
           rsp.json()
             .then(data => {
-              indexProduct(data)
-            }).catch(() => setProducts([]))
+              indexProduct(data.content)
+            })
+            .catch(() => setProducts([]))
         }
       }).catch(() => {
         setProducts([])
@@ -354,8 +423,13 @@ export const Inventory = (props: InventoryProps) => {
   return (
     <div className="px-2 h-full pt-3">
 
-      <div className="px-0.5 py-2">
+      <div className="flex flex-row px-0.5 py-2 space-x-3">
         <Button onClick={addProduct}>Add</Button>
+        <div className="flex flex-row space-x-1">
+          {
+            groups.map((group) => <Label onClick={() => activateGroup(group)} className={activeGroupStyle(group)}>{group.toUpperCase()}</Label>)
+          }
+        </div>
       </div>
       <div className="pb-2">
         <TextInput
@@ -525,9 +599,9 @@ export const Inventory = (props: InventoryProps) => {
                 value={editingProduct.origin.group}
                 dismissOnClick
               >
-                <Dropdown.Item onClick={() => changeProductGroup('food')}>food</Dropdown.Item>
-                <Dropdown.Item onClick={() => changeProductGroup('baverage')}>baverage</Dropdown.Item>
-                <Dropdown.Item onClick={() => changeProductGroup('breakfast')}>breakfast</Dropdown.Item>
+                {
+                  groups.map((group) => <Dropdown.Item onClick={() => changeProductGroup(group)}>{group.toUpperCase()}</Dropdown.Item>)
+                }
               </Dropdown>
             </div>
             <div className="flex flex-row w-full align-middle">

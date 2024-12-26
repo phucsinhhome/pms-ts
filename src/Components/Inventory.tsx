@@ -149,7 +149,6 @@ export const Inventory = (props: InventoryProps) => {
   }
 
   const indexProduct = (fProducts: Product[]) => {
-    // var iP = fProducts.reduce((map, product) => { map[product.id] = product; return map }, {})
     setProducts(fProducts)
   }
 
@@ -163,15 +162,15 @@ export const Inventory = (props: InventoryProps) => {
     if (pagination.pageNumber !== 0) {
       setPagination({
         ...pagination,
-        pageNumber: 0,
-        // activeGroup: pagination.activeGroup !== group ? group : ''
+        pageNumber: 0
       })
     }
     setActiveGroup(activeGroup !== group ? group : '')
   }
 
   const activeGroupStyle = (group: string) => {
-    return activeGroup === group ? 'font font-mono italic' : 'font font-mono'
+    return activeGroup === group ? 'font font-mono text-sm font-bold text-gray-500 border rounded-sm px-1 py-1 bg-slate-400'
+      : 'font font-mono text-sm font-bold text-gray-500 border rounded-sm px-1 py-1 bg-slate-50'
   }
 
   const viewProductDetail = (product: Product) => {
@@ -439,11 +438,10 @@ export const Inventory = (props: InventoryProps) => {
 
       <div className="flex flex-row px-0.5 py-2 space-x-3">
         <Button onClick={addProduct}>Add</Button>
-        <div className="flex flex-row space-x-2">
+        <div className="flex flex-row items-center space-x-2">
           {
             groups.map((group) => <Label key={group} onClick={() => activateGroup(group)}
               className={activeGroupStyle(group)}
-            // className="font font-mono text-sm font-bold bg-slate-300 items-center"
             >{group.toUpperCase()}</Label>)
           }
         </div>

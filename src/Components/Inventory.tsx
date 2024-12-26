@@ -33,14 +33,13 @@ export const Inventory = (props: InventoryProps) => {
   const [filteredName, setFilteredName] = useState('')
   const [products, setProducts] = useState<Product[]>([])
 
-  // const [activeGroup, setActiveGroup] = useState('')
+  const [activeGroup, setActiveGroup] = useState('')
 
-  const [pagination, setPagination] = useState({
+  const [pagination, setPagination] = useState<Pagination>({
     pageNumber: 0,
     pageSize: DEFAULT_PAGE_SIZE,
     totalPages: 0,
-    totalElements: 0,
-    activeGroup: ''
+    totalElements: 0
   })
 
   const buildImageUrl = (objectKey: string) => {
@@ -108,7 +107,7 @@ export const Inventory = (props: InventoryProps) => {
     filterProducts();
 
     // eslint-disable-next-line
-  }, [filteredName, pagination.activeGroup]);
+  }, [filteredName, activeGroup]);
 
 
   const pageClass = (pageNum: number) => {
@@ -161,16 +160,18 @@ export const Inventory = (props: InventoryProps) => {
   }
 
   const activateGroup = (group: string) => {
-    setPagination({
-      ...pagination,
-      pageNumber: 0,
-      activeGroup: pagination.activeGroup !== group ? group : ''
-    })
-    // setActiveGroup(activeGroup !== group ? group : '')
+    if (pagination.pageNumber !== 0) {
+      setPagination({
+        ...pagination,
+        pageNumber: 0,
+        // activeGroup: pagination.activeGroup !== group ? group : ''
+      })
+    }
+    setActiveGroup(activeGroup !== group ? group : '')
   }
 
   const activeGroupStyle = (group: string) => {
-    return pagination.activeGroup === group ? 'font font-mono italic' : 'font font-mono'
+    return activeGroup === group ? 'font font-mono italic' : 'font font-mono'
   }
 
   const viewProductDetail = (product: Product) => {
@@ -298,12 +299,12 @@ export const Inventory = (props: InventoryProps) => {
   }
 
   const filterProducts = () => {
-    if (filteredName === '' && pagination.activeGroup === '') {
+    if (filteredName === '' && activeGroup === '') {
       fetchAllProducts()
       return
     }
-    if (filteredName === '' && pagination.activeGroup !== '') {
-      listProductsByGroup(pagination.activeGroup, pagination.pageNumber, pagination.pageSize)
+    if (filteredName === '' && activeGroup !== '') {
+      listProductsByGroup(activeGroup, pagination.pageNumber, pagination.pageSize)
         .then(rsp => {
           if (rsp.ok) {
             rsp.json()
@@ -324,7 +325,7 @@ export const Inventory = (props: InventoryProps) => {
       return
     }
 
-    if (filteredName !== '' && pagination.activeGroup === '') {
+    if (filteredName !== '' && activeGroup === '') {
       listProductsWithName(filteredName)
         .then(rsp => {
           if (rsp.ok) {
@@ -345,7 +346,7 @@ export const Inventory = (props: InventoryProps) => {
       return
     }
 
-    listProductsWithNameAndGroup(filteredName, pagination.activeGroup, pagination.pageNumber, pagination.pageSize)
+    listProductsWithNameAndGroup(filteredName, activeGroup, pagination.pageNumber, pagination.pageSize)
       .then(rsp => {
         if (rsp.ok) {
           rsp.json()

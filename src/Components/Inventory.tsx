@@ -647,7 +647,7 @@ export const Inventory = (props: InventoryProps) => {
                 }
               </div>
             </div>
-            <div className="flex flex-row w-full align-middle">
+            {/* <div className="flex flex-row w-full align-middle">
               <div className="flex items-center w-2/5">
                 <Label
                   htmlFor="quantity"
@@ -688,7 +688,7 @@ export const Inventory = (props: InventoryProps) => {
                   </svg>
                 </button>
               </div>
-            </div>
+            </div> */}
             <div className="flex flex-row w-full align-middle">
               <div className="flex items-center w-2/5">
                 <Label

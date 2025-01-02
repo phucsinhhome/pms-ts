@@ -1,13 +1,13 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
 import { Link } from "react-router-dom";
-import { beginOfDay, formatISODate, formatISODateTime, formatISOTime, formatVNDateTime } from "../Service/Utils";
+import { beginOfDay, formatISODate, formatISODateTime, formatISOTime } from "../Service/Utils";
 import { Chat, DEFAULT_PAGE_SIZE } from "../App";
 import { fetchOrders } from "../db/order";
 import { Button, Modal, TextInput } from "flowbite-react";
 import { getInvoice, listInvoiceByGuestName, listStayingAndComingInvoicesAndPrepaid } from "../db/invoice";
 import { Invoice } from "./InvoiceManager";
 import { HiMail, HiX } from "react-icons/hi";
-import { GiCook, GiHouse, GiMeal } from "react-icons/gi";
+import { GiHouse, GiMeal } from "react-icons/gi";
 
 export const OrderStatus = {
   SENT: 'text-orange-400',

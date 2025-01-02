@@ -21,7 +21,7 @@ export type Product = {
 }
 
 export const groups = ['food', 'baverage', 'breakfast']
-const timeOpts = ['PT30M', 'PT1H', 'PT1.5H', 'PT2H']
+const timeOpts = ['PT30M', 'PT1H', 'PT1H30M', 'PT2H']
 
 type InventoryProps = {
   activeMenu: any

@@ -1,14 +1,15 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
 import { Link } from "react-router-dom";
-import { beginOfDay, formatISODate, formatISODateTime, formatVNDateTime } from "../Service/Utils";
+import { beginOfDay, formatISODate, formatISODateTime, formatISOTime, formatVNDateTime } from "../Service/Utils";
 import { Chat, DEFAULT_PAGE_SIZE } from "../App";
 import { fetchOrders } from "../db/order";
 import { Button, Modal, TextInput } from "flowbite-react";
-import { listInvoiceByGuestName, listStayingAndComingInvoicesAndPrepaid } from "../db/invoice";
+import { getInvoice, listInvoiceByGuestName, listStayingAndComingInvoicesAndPrepaid } from "../db/invoice";
 import { Invoice } from "./InvoiceManager";
-import { HiX } from "react-icons/hi";
+import { HiMail, HiX } from "react-icons/hi";
+import { GiCook, GiHouse, GiMeal } from "react-icons/gi";
 
-export const OrderStatus ={
+export const OrderStatus = {
   SENT: 'text-orange-400',
   CONFIRMED: 'text-green-700',
   REJECTED: 'text-red-700',
@@ -34,7 +35,8 @@ export type Order = {
   status: string,
   startTime: Date,
   invoiceId: string,
-  items: OrderItem[]
+  items: OrderItem[],
+  expectedTime: Date
 }
 
 type OrderManagerProps = {
@@ -48,6 +50,7 @@ export const OrderManager = (props: OrderManagerProps) => {
   const [orders, setOrders] = useState<Order[]>([])
   const [filteredName, setFilteredName] = useState('')
   const [invoices, setInvoices] = useState<Invoice[]>([])
+  const [filteredInvoices, setFilteredInvoices] = useState<Invoice[]>([])
   const [showInvoices, setShowInvoices] = useState(false)
 
   const [pagination, setPagination] = useState({
@@ -76,15 +79,26 @@ export const OrderManager = (props: OrderManagerProps) => {
           rsp.json()
             .then(data => {
               setOrders(data.content)
-              var page = {
-                pageNumber: data.number,
-                pageSize: data.size,
-                totalElements: data.totalElements,
-                totalPages: data.totalPages
+              if (data.totalPages !== pagination.totalPages) {
+                var page = {
+                  pageNumber: data.number,
+                  pageSize: data.size,
+                  totalElements: data.totalElements,
+                  totalPages: data.totalPages
+                }
+                setPagination(page)
               }
-              setPagination(page)
             })
         }
+      })
+  }
+
+  const fetchLinkedInvoices = () => {
+    orders.filter((o) => o.status === 'CONFIRMED')
+      .map((o) => o.invoiceId)
+      .forEach((invoiceId) => {
+        getInvoice(invoiceId)
+          .then((inv) => setInvoices([...invoices, inv]))
       })
   }
 
@@ -93,6 +107,12 @@ export const OrderManager = (props: OrderManagerProps) => {
     props.activeMenu()
     // eslint-disable-next-line
   }, [pagination.pageNumber]);
+
+  useEffect(() => {
+    fetchLinkedInvoices();
+    // eslint-disable-next-line
+  }, [orders]);
+
 
   const pageClass = (pageNum: number) => {
     var noHighlight = "px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
@@ -108,7 +128,7 @@ export const OrderManager = (props: OrderManagerProps) => {
         if (rsp.ok) {
           rsp.json()
             .then(data => {
-              setInvoices(data.content)
+              setFilteredInvoices(data.content)
             })
         }
       }).finally(() => {
@@ -134,7 +154,7 @@ export const OrderManager = (props: OrderManagerProps) => {
         if (rsp.ok) {
           rsp.json()
             .then(data => {
-              setInvoices(data.content)
+              setFilteredInvoices(data.content)
             })
         }
       })
@@ -149,7 +169,7 @@ export const OrderManager = (props: OrderManagerProps) => {
     let url = process.env.REACT_APP_MENU_WEB_APP + '/menu/food/' + invoice.id
     navigator.clipboard.writeText(url)
     console.info("Url %s has been copied", url)
-    setInvoices([])
+    setFilteredInvoices([])
     setShowInvoices(false)
     setFilteredName('')
   }
@@ -179,8 +199,20 @@ export const OrderManager = (props: OrderManagerProps) => {
                         {order.guestName}
                       </Link>
                     </div>
-                    <div className="flex flex-row text-sm space-x-1">
-                      <span className="font font-mono text-gray-500 text-[10px]">{formatVNDateTime(new Date(order.startTime))}</span>
+                    <div className="flex flex-row text-sm space-x-3">
+                      <div className="flex flex-row items-center rounded-sm">
+                        <HiMail />
+                        <span className="font font-mono text-gray-500 text-[12px]">{formatISOTime(new Date(order.startTime))}</span>
+                      </div>
+                      {order.expectedTime ? <div className="flex flex-row items-center rounded-sm">
+                        <GiMeal />
+                        <span className="font font-mono text-gray-500 text-[12px]">{formatISOTime(new Date(order.expectedTime))}
+                        </span></div> : <></>
+                      }
+                      {order.invoiceId ? <div className="flex flex-row items-center rounded-sm">
+                        <GiHouse />
+                        <span className="font font-mono text-[12px]">{invoices.find(i => i.id === order.invoiceId)?.rooms}
+                        </span></div> : <></>}
                     </div>
                   </div>
                 </div>
@@ -237,7 +269,7 @@ export const OrderManager = (props: OrderManagerProps) => {
             />
           </div>
           <div className="flex flex-col space-y-6pb-4 sm:pb-6 lg:px-8 xl:pb-8">
-            {invoices.map((invoice) => {
+            {filteredInvoices.map((invoice) => {
               return (
                 <div
                   className="flex flex-row items-center border rounded-md px-2 border-gray-300 bg-white dark:bg-slate-500 "

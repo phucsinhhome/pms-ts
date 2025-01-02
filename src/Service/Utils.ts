@@ -101,6 +101,16 @@ export const formatVNDateTime = (date: Date) => {
     })
 }
 
+export const formatISOTime = (date: Date) => {
+    // Format: 07/30/2024
+    return date.toLocaleTimeString("en-GB", {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false,
+    })
+}
+
 export const formatRooms = (rooms: string[]) => {
     return rooms ? rooms.join('.') : "[]"
 }

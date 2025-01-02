@@ -16,10 +16,12 @@ export type Product = {
   group: string,
   description: string,
   featureImgUrl: string,
-  imageUrls: string[]
+  imageUrls: string[],
+  prepareTime: string
 }
 
 export const groups = ['food', 'baverage', 'breakfast']
+const timeOpts = ['PT30M', 'PT1H', 'PT1.5H', 'PT2H']
 
 type InventoryProps = {
   activeMenu: any
@@ -54,7 +56,8 @@ export const Inventory = (props: InventoryProps) => {
     group: 'food',
     description: '',
     featureImgUrl: buildImageUrl(defaultImageKey),
-    imageUrls: [buildImageUrl(defaultImageKey)]
+    imageUrls: [buildImageUrl(defaultImageKey)],
+    prepareTime: 'PT1H'
   }
   const defaultEditingProduct = {
     origin: defaultEmptyProduct,
@@ -256,6 +259,17 @@ export const Inventory = (props: InventoryProps) => {
       origin: {
         ...editingProduct.origin,
         group: gN
+      }
+    }
+    setEditingProduct(eI)
+  }
+
+  const changePrepareTime = (pT: string) => {
+    let eI = {
+      ...editingProduct,
+      origin: {
+        ...editingProduct.origin,
+        prepareTime: pT
       }
     }
     setEditingProduct(eI)
@@ -482,7 +496,7 @@ export const Inventory = (props: InventoryProps) => {
                       </Link>
                     </div>
                     <div className="flex flex-row text-sm space-x-1">
-                      <span className="font font-mono text-gray-500 text-[10px]">{product.description}</span>
+                      <span className="font font-mono text-gray-500 text-[10px]">{product.prepareTime}</span>
                     </div>
                   </div>
                 </div>
@@ -600,24 +614,38 @@ export const Inventory = (props: InventoryProps) => {
                 className="w-full"
               />
             </div>
-            <div className="flex flex-row w-full align-middle">
+            <div className="flex flex-col w-full align-middle border rounded-md px-2 py-1">
               <div className="flex items-center w-2/5">
                 <Label
                   htmlFor="group"
                   value="Group"
                 />
               </div>
-              <Dropdown
-                id="group"
-                label={editingProduct.origin.group}
-                inline
-                value={editingProduct.origin.group}
-                dismissOnClick
-              >
+              <div className="flex flex-row space-x-2">
                 {
-                  groups.map((group) => <Dropdown.Item onClick={() => changeProductGroup(group)}>{group.toUpperCase()}</Dropdown.Item>)
+                  groups.map((group) => <div
+                    className={editingProduct.origin.group === group ? "border rounded-sm px-1 bg-slate-500" : "border rounded-sm px-1 bg-slate-200"}
+                    onClick={() => changeProductGroup(group)}>
+                    {group.toUpperCase()}
+                  </div>)
                 }
-              </Dropdown>
+              </div>
+            </div>
+            <div className="flex flex-row w-full align-middle">
+              <div className="flex items-center w-2/5">
+                <Label
+                  htmlFor="prepareTime"
+                  value="Prepare Time"
+                />
+              </div>
+              <div className="flex flex-row space-x-2">
+                {
+                  timeOpts.map((pT) => <div
+                    className={editingProduct.origin.prepareTime === pT ? "border rounded-sm px-1 bg-slate-500" : "border rounded-sm px-1 bg-slate-200"}
+                    onClick={() => changePrepareTime(pT)}
+                  >{pT}</div>)
+                }
+              </div>
             </div>
             <div className="flex flex-row w-full align-middle">
               <div className="flex items-center w-2/5">

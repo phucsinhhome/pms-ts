@@ -629,7 +629,7 @@ export const Inventory = (props: InventoryProps) => {
                   timeOpts.map((pT) => <div
                     className={editingProduct.origin.prepareTime === pT ? "border rounded-sm px-1 bg-slate-500" : "border rounded-sm px-1 bg-slate-200"}
                     onClick={() => changePrepareTime(pT)}
-                  >{pT}</div>)
+                  >{pT.substring(2)}</div>)
                 }
               </div>
             </div>

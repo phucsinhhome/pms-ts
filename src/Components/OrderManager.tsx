@@ -2,7 +2,7 @@ import React, { useState, useEffect, ChangeEvent } from "react";
 import { Link } from "react-router-dom";
 import { beginOfDay, formatISODate, formatISODateTime, formatISOTime } from "../Service/Utils";
 import { Chat, DEFAULT_PAGE_SIZE } from "../App";
-import { fetchOrders } from "../db/order";
+import { fetchUpcomingOrders } from "../db/order";
 import { Button, Modal, TextInput } from "flowbite-react";
 import { getInvoice, listInvoiceByGuestName, listStayingAndComingInvoicesAndPrepaid } from "../db/invoice";
 import { Invoice } from "./InvoiceManager";
@@ -46,12 +46,15 @@ type OrderManagerProps = {
   activeMenu: any
 }
 
+const listOpts = ['coming', 'all']
+
 export const OrderManager = (props: OrderManagerProps) => {
   const [orders, setOrders] = useState<Order[]>([])
   const [filteredName, setFilteredName] = useState('')
   const [invoices, setInvoices] = useState<Invoice[]>([])
   const [filteredInvoices, setFilteredInvoices] = useState<Invoice[]>([])
   const [showInvoices, setShowInvoices] = useState(false)
+  const [activeListOpt, setActiveListOpt] = useState(listOpts[0])
 
   const [pagination, setPagination] = useState({
     pageNumber: 0,
@@ -69,11 +72,11 @@ export const OrderManager = (props: OrderManagerProps) => {
     })
   }
 
-  const fetchUpcomingOrders = () => {
+  const fetchOrders = () => {
     var fromTime = formatISODateTime(beginOfDay(new Date()))
     console.info("Fetch upcoming order after %s", fromTime)
 
-    fetchOrders(fromTime, pagination.pageNumber, pagination.pageSize)
+    fetchUpcomingOrders(fromTime, activeListOpt, pagination.pageNumber, pagination.pageSize)
       .then((rsp: Response) => {
         if (rsp.ok) {
           rsp.json()
@@ -103,7 +106,7 @@ export const OrderManager = (props: OrderManagerProps) => {
   }
 
   useEffect(() => {
-    fetchUpcomingOrders();
+    fetchOrders();
     props.activeMenu()
     // eslint-disable-next-line
   }, [pagination.pageNumber]);
@@ -112,6 +115,11 @@ export const OrderManager = (props: OrderManagerProps) => {
     fetchLinkedInvoices();
     // eslint-disable-next-line
   }, [orders]);
+
+  useEffect(() => {
+    fetchOrders()
+    // eslint-disable-next-line
+  }, [activeListOpt]);
 
 
   const pageClass = (pageNum: number) => {
@@ -174,11 +182,22 @@ export const OrderManager = (props: OrderManagerProps) => {
     setFilteredName('')
   }
 
+  const changeListOpt = () => {
+    let cIdx = listOpts.findIndex(o => o === activeListOpt)
+    if (cIdx === listOpts.length - 1) {
+      setActiveListOpt(listOpts[0])
+      return
+    }
+    setActiveListOpt(listOpts[cIdx + 1])
+  }
 
   return (
     <div className="h-full pt-3">
-      <div className="flex flex-row items-center w-full pb-4 px-2">
+      <div className="flex flex-row items-center w-full pb-4 px-2 space-x-3">
         <Button onClick={findTheInvoice}>Copy Link</Button>
+        <div onClick={changeListOpt} className="px-2 font-mono text-sm border rounded-sm shadow-sm bg-slate-200">
+          {activeListOpt.toUpperCase()}
+        </div>
       </div>
       <div className="h-3/5 px-2 overflow-hidden">
         <div className="flex flex-col space-y-2">

@@ -109,8 +109,7 @@ export default function App() {
       <Router>
         <div className="mt-2 ml-2 pr-1 w-full flex flex-row items-center space-x-0.5">
           {
-            menus.map((menu: MenuItem) => <Link to={menu.path}
-              className={menuStyle(menu.path)}>
+            menus.map((menu: MenuItem) => <Link to={menu.path} className={menuStyle(menu.path)}>
               {menu.displayName}
             </Link>)
           }

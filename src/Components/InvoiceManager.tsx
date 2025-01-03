@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, ChangeEvent } from "react";
 import { Link } from "react-router-dom";
-import { Button, Modal, Table } from "flowbite-react";
+import { Button, Modal, Table, TextInput } from "flowbite-react";
 import Moment from "react-moment";
 import { DEFAULT_PAGE_SIZE } from "../App";
-import { HiOutlineExclamationCircle } from "react-icons/hi";
+import { HiOutlineExclamationCircle, HiX } from "react-icons/hi";
 import { formatISODate, formatVND } from "../Service/Utils";
-import { deleteInvoice, listStayingAndComingInvoices } from "../db/invoice";
+import { deleteInvoice, listInvoiceByGuestName, listStayingAndComingInvoices } from "../db/invoice";
 import { Pagination } from "./ProfitReport";
 
 export type InvoiceItem = {
@@ -65,6 +65,7 @@ export const InvoiceManager = (props: InvoiceManagerProps) => {
 
   const [openModal, setOpenModal] = useState(false)
   const [deletingInv, setDeletingInv] = useState<Invoice>()
+  const [filterGName, setFilterGName] = useState('')
 
   const filterDay = (numDays: number) => {
 
@@ -84,27 +85,27 @@ export const InvoiceManager = (props: InvoiceManagerProps) => {
     })
   }
 
-  const isCurrentlyStaying = (invoice: Invoice) => {
-    const now = new Date();
-    const checkInDate = new Date(invoice.checkInDate);
-    const checkOutDate = new Date(invoice.checkOutDate);
-    return now >= checkInDate && now <= checkOutDate;
-  };
+  // const isCurrentlyStaying = (invoice: Invoice) => {
+  //   const now = new Date();
+  //   const checkInDate = new Date(invoice.checkInDate);
+  //   const checkOutDate = new Date(invoice.checkOutDate);
+  //   return now >= checkInDate && now <= checkOutDate;
+  // };
 
-  const sortInvoices = (invoices: Invoice[]): Invoice[] => {
-    return invoices.sort((a, b) => {
-      const aCurrentlyStaying = isCurrentlyStaying(a);
-      const bCurrentlyStaying = isCurrentlyStaying(b);
+  // const sortInvoices = (invoices: Invoice[]): Invoice[] => {
+  //   return invoices.sort((a, b) => {
+  //     const aCurrentlyStaying = isCurrentlyStaying(a);
+  //     const bCurrentlyStaying = isCurrentlyStaying(b);
 
-      if (aCurrentlyStaying && !bCurrentlyStaying) return -1;
-      if (!aCurrentlyStaying && bCurrentlyStaying) return 1;
+  //     if (aCurrentlyStaying && !bCurrentlyStaying) return -1;
+  //     if (!aCurrentlyStaying && bCurrentlyStaying) return 1;
 
-      const aCheckOutDate = new Date(a.checkOutDate).getTime();
-      const bCheckOutDate = new Date(b.checkOutDate).getTime();
+  //     const aCheckOutDate = new Date(a.checkOutDate).getTime();
+  //     const bCheckOutDate = new Date(b.checkOutDate).getTime();
 
-      return aCheckOutDate - bCheckOutDate;
-    });
-  }
+  //     return aCheckOutDate - bCheckOutDate;
+  //   });
+  // }
 
   const fetchInvoices = () => {
 
@@ -116,15 +117,16 @@ export const InvoiceManager = (props: InvoiceManagerProps) => {
         if (rsp.ok) {
           rsp.json()
             .then(data => {
-              const sortedInvs = sortInvoices(data.content)
-              setInvoices(sortedInvs)
-              var page = {
-                pageNumber: data.number,
-                pageSize: data.size,
-                totalElements: data.totalElements,
-                totalPages: data.totalPages
+              setInvoices(data.content)
+              if (data.totalPages !== pagination.totalPages) {
+                var page = {
+                  pageNumber: data.number,
+                  pageSize: data.size,
+                  totalElements: data.totalElements,
+                  totalPages: data.totalPages
+                }
+                setPagination(page)
               }
-              setPagination(page)
             })
         }
       })
@@ -216,11 +218,44 @@ export const InvoiceManager = (props: InvoiceManagerProps) => {
     return false
   }
 
+  const changeFilterGName = (e: ChangeEvent<HTMLInputElement>) => {
+    let fN = e.target.value
+    setFilterGName(fN)
+    if (fN === '') {
+      fetchInvoices()
+      return
+    }
+    let fromDate = formatISODate(new Date())
+
+    listInvoiceByGuestName(fromDate, fN, 0, DEFAULT_PAGE_SIZE)
+      .then(rsp => {
+        if (rsp.ok) {
+          rsp.json()
+            .then(data => {
+              setInvoices(data.content)
+              if (data.totalPages !== pagination.totalPages) {
+                var page = {
+                  pageNumber: data.number,
+                  pageSize: data.size,
+                  totalElements: data.totalElements,
+                  totalPages: data.totalPages
+                }
+                setPagination(page)
+              }
+            })
+        }
+      })
+  }
+
+  const emptyFilteredName = () => {
+    setFilterGName('')
+    fetchInvoices()
+  }
+
   return (
     <div className="h-full pt-3">
-      <div className="flex flex-wrap pb-4 px-2 space-x-4 space-y-2">
+      <div className="flex flex-row pb-4 px-2 space-x-4 space-y-2">
         <div className="flex flex-row items-center pl-4"
-        // onClick={chooseRes}
         >
           <svg
             className="w-5 h-5 text-amber-700 dark:text-white"
@@ -240,6 +275,15 @@ export const InvoiceManager = (props: InvoiceManagerProps) => {
             Add Invoice
           </Link>
         </div>
+        <TextInput
+          id="filteredName"
+          placeholder="John Smith"
+          type="text"
+          required={true}
+          value={filterGName}
+          onChange={changeFilterGName}
+          rightIcon={() => <HiX onClick={emptyFilteredName} />}
+        />
       </div>
       <div className="flex flex-row space-x-4 px-4">
         {filterOpts.map((opt) => {

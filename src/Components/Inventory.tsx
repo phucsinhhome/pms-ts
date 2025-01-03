@@ -1,6 +1,6 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
 import { Link } from "react-router-dom";
-import { Avatar, Button, Dropdown, FileInput, Label, Modal, Textarea, TextInput } from "flowbite-react";
+import { Avatar, Button, FileInput, Label, Modal, Textarea, TextInput } from "flowbite-react";
 import { adjustQuantity as adjustInventoryQuantity, listProducts, listProductsByGroup, listProductsWithName, listProductsWithNameAndGroup, saveProduct } from "../db/product";
 import { HiOutlineCash, HiX } from "react-icons/hi";
 import { formatMoneyAmount, formatVND } from "../Service/Utils";
@@ -223,20 +223,6 @@ export const Inventory = (props: InventoryProps) => {
         unitPrice: uP.amount
       },
       formattedUnitPrice: uP.formattedAmount
-    }
-    setEditingProduct(eI)
-  }
-
-  const changeProductQuantity = (delta: number) => {
-    if (delta <= 0 && editingProduct.origin.quantity <= 0) {
-      return
-    }
-    let eI = {
-      ...editingProduct,
-      origin: {
-        ...editingProduct.origin,
-        quantity: editingProduct.origin.quantity + delta
-      }
     }
     setEditingProduct(eI)
   }

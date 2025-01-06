@@ -7,6 +7,8 @@ import { formatMoneyAmount, formatVND } from "../Service/Utils";
 import { putObject } from "../db/gcs";
 import { DEFAULT_PAGE_SIZE } from "../App";
 import { Pagination } from "./ProfitReport";
+import { listAllPGroups } from "../db/pgroup";
+import { PGroup } from "./PGroupManager";
 
 export type Product = {
   id: string,
@@ -19,8 +21,6 @@ export type Product = {
   imageUrls: string[],
   prepareTime: string
 }
-
-export const groups = ['food', 'baverage', 'breakfast']
 const timeOpts = ['PT30M', 'PT1H', 'PT1H30M', 'PT2H']
 
 type InventoryProps = {
@@ -35,6 +35,7 @@ export const Inventory = (props: InventoryProps) => {
   const [filteredName, setFilteredName] = useState('')
   const [products, setProducts] = useState<Product[]>([])
 
+  const [pGroups, setPGroups] = useState<PGroup[]>([])
   const [activeGroup, setActiveGroup] = useState('')
 
   const [pagination, setPagination] = useState<Pagination>({
@@ -99,11 +100,18 @@ export const Inventory = (props: InventoryProps) => {
 
   useEffect(() => {
 
+    fetchPGroups()
+
+    // eslint-disable-next-line
+  }, []);
+
+  useEffect(() => {
+
     filterProducts()
     props.activeMenu()
 
     // eslint-disable-next-line
-  }, [location, pagination.pageNumber]);
+  }, [pagination.pageNumber]);
 
   useEffect(() => {
 
@@ -111,6 +119,18 @@ export const Inventory = (props: InventoryProps) => {
 
     // eslint-disable-next-line
   }, [filteredName, activeGroup]);
+
+  const fetchPGroups = () => {
+    listAllPGroups()
+      .then(rsp => {
+        if (rsp.ok) {
+          rsp.json()
+            .then(data => {
+              setPGroups(data.content)
+            })
+        }
+      })
+  }
 
 
   const pageClass = (pageNum: number) => {
@@ -440,9 +460,9 @@ export const Inventory = (props: InventoryProps) => {
         <Button onClick={addProduct}>Add</Button>
         <div className="flex flex-row items-center space-x-2">
           {
-            groups.map((group) => <Label key={group} onClick={() => activateGroup(group)}
-              className={activeGroupStyle(group)}
-            >{group.toUpperCase()}</Label>)
+            pGroups.map((group) => <Label key={group.groupId} onClick={() => activateGroup(group.name)}
+              className={activeGroupStyle(group.name)}
+            >{group.displayName}</Label>)
           }
         </div>
       </div>
@@ -609,11 +629,11 @@ export const Inventory = (props: InventoryProps) => {
               </div>
               <div className="flex flex-row space-x-2">
                 {
-                  groups.map((group) => <div
-                    key={group}
-                    className={editingProduct.origin.group === group ? "border rounded-sm px-1 bg-slate-500" : "border rounded-sm px-1 bg-slate-200"}
-                    onClick={() => changeProductGroup(group)}>
-                    {group.toUpperCase()}
+                  pGroups.map((group) => <div
+                    key={group.groupId}
+                    className={editingProduct.origin.group === group.name ? "border rounded-sm px-1 bg-slate-500" : "border rounded-sm px-1 bg-slate-200"}
+                    onClick={() => changeProductGroup(group.name)}>
+                    {group.displayName}
                   </div>)
                 }
               </div>

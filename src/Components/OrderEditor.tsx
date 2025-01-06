@@ -7,7 +7,8 @@ import { confirmOrder, fetchOrder, rejectOrder } from "../db/order";
 import { getInvoice, listInvoiceByGuestName } from "../db/invoice";
 import { Order, OrderStatus, SK } from "./OrderManager";
 import { Invoice } from "./InvoiceManager";
-import { groups } from "./Inventory";
+import { PGroup } from "./PGroupManager";
+import { listAllPGroups } from "../db/pgroup";
 
 type OrderParams = {
   orderId: string,
@@ -20,6 +21,7 @@ type OrderEditorProps = {
 
 export const OrderEditor = (props: OrderEditorProps) => {
 
+  const [pGroups, setPGroups] = useState<PGroup[]>([])
   const [order, setOrder] = useState<Order>()
 
   const [showInvoices, setShowInvoices] = useState(false)
@@ -57,9 +59,20 @@ export const OrderEditor = (props: OrderEditorProps) => {
   useEffect(() => {
     readOrder();
     props.activeMenu()
+    fetchProductGroups()
 
     // eslint-disable-next-line
   }, [orderId]);
+
+  const fetchProductGroups = () => {
+    listAllPGroups()
+      .then(rsp => {
+        if (rsp.ok) {
+          rsp.json()
+            .then(data => setPGroups(data.content))
+        }
+      })
+  }
 
   const sendToPreparation = () => {
     if (order === undefined) {
@@ -209,10 +222,10 @@ export const OrderEditor = (props: OrderEditorProps) => {
         </div>
         <div className="flex flex-col space-y-1 pt-2 px-2">
           {
-            groups.filter(grp => order?.items.map(i => i.group).includes(grp))
+            pGroups.filter(grp => order?.items.map(i => i.group).includes(grp.name))
               .map((grp) => <div>
-                <div className="font font-mono font-bold text-sm text-center ">{grp.toUpperCase()}</div>
-                {order?.items.filter(it => it.group === grp).map((item) => {
+                <div className="font font-mono font-bold text-sm text-center ">{grp.displayName}</div>
+                {order?.items.filter(it => it.group === grp.name).map((item) => {
                   return (
                     <div
                       className="flex flex-row items-center border px-1 py-1 border-gray-300 shadow-2xl rounded-md bg-white dark:bg-slate-500 "

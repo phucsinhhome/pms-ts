@@ -12,6 +12,7 @@ import { OrderManager } from "./Components/OrderManager";
 import { OrderEditor } from "./Components/OrderEditor";
 import { Inventory } from "./Components/Inventory";
 import { init, retrieveLaunchParams } from '@telegram-apps/sdk-react';
+import { PGroupManager } from "./Components/PGroupManager";
 
 export const DEFAULT_PAGE_SIZE = Number(process.env.REACT_APP_DEFAULT_PAGE_SIZE)
 
@@ -109,7 +110,7 @@ export default function App() {
       <Router>
         <div className="mt-2 ml-2 pr-1 w-full flex flex-row items-center space-x-0.5">
           {
-            menus.map((menu: MenuItem) => <Link to={menu.path} className={menuStyle(menu.path)}>
+            menus.map((menu: MenuItem) => <Link key={menu.path} to={menu.path} className={menuStyle(menu.path)}>
               {menu.displayName}
             </Link>)
           }
@@ -129,6 +130,7 @@ export default function App() {
           <Route path="order" element={<OrderManager chat={chat} displayName={fullName()} authorizedUserId={authorizedUserId} activeMenu={() => setActiveMenu(menus[4])} />} />
           <Route path="order/:orderId/:staffId" element={<OrderEditor activeMenu={() => setActiveMenu(menus[4])} />} />
           <Route path="inventory" element={<Inventory activeMenu={() => setActiveMenu(menus[5])} />} />
+          <Route path="product-group" element={<PGroupManager activeMenu={() => setActiveMenu({ path: 'product-group', displayName: 'Group' })} />} />
           <Route path="settings" element={<Settings
             syncing={syncing}
             changeSyncing={(n: boolean) => setSyncing(n)}

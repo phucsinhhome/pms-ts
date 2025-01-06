@@ -97,16 +97,12 @@ export function ReservationManager(props: ReservationManagerProps) {
     },
     {
       days: -5,
-      label: 'Last 5 days'
+      label: '5 days'
     },
     {
       days: -1 * new Date().getDate(),
-      label: 'From 1st'
+      label: '1st'
     }]
-  const filterClass = (days: number) => {
-    var classNamePattern = "font-bold text-amber-800 rounded px-2 py-1"
-    return classNamePattern + " " + (deltaDays === days ? "bg-slate-400" : "bg-slate-200");
-  }
 
   const pageClass = (pageNum: number) => {
     var noHighlight = "px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
@@ -137,14 +133,16 @@ export function ReservationManager(props: ReservationManagerProps) {
           </Link>
         </div>
       </div>
-      <div className="flex flex-row space-x-4 px-4">
+      <div className="flex flex-row space-x-2 px-4">
         {filterOpts.map((opt) => {
           return (<Link
             to=''
             key={opt.days}
             onClick={() => filterDay(opt.days)}
             relative="route"
-            className={filterClass(opt.days)}
+            className={deltaDays === opt.days ?
+              "font-mono rounded px-2 py-0.5 bg-slate-400"
+              : "font-mono rounded px-2 py-0.5 bg-slate-200"}
           >
             {opt.label}
           </Link>)

@@ -21,7 +21,7 @@ export type Product = {
   imageUrls: string[],
   prepareTime: string
 }
-const timeOpts = ['PT30M', 'PT1H', 'PT1H30M', 'PT2H']
+const timeOpts = ['PT5M', 'PT15M', 'PT30M', 'PT1H', 'PT1H30M', 'PT2H']
 
 type InventoryProps = {
   activeMenu: any
@@ -581,7 +581,7 @@ export const Inventory = (props: InventoryProps) => {
       >
         <Modal.Header />
         <Modal.Body>
-          <div className="flex flex-col space-y-6 px-6 pb-4 sm:pb-6 lg:px-8 xl:pb-8">
+          <div className="flex flex-col space-y-6 px-1 pb-2 sm:pb-6 lg:px-8 xl:pb-8">
             <div className="flex flex-row w-full align-middle">
               <div className="flex items-center w-2/5">
                 <Label
@@ -638,7 +638,7 @@ export const Inventory = (props: InventoryProps) => {
                 }
               </div>
             </div>
-            <div className="flex flex-row w-full align-middle">
+            <div className="flex flex-col w-full align-middle border rounded-md px-2 py-1">
               <div className="flex items-center w-2/5">
                 <Label
                   htmlFor="prepareTime"
@@ -655,7 +655,7 @@ export const Inventory = (props: InventoryProps) => {
                 }
               </div>
             </div>
-            <div className="flex flex-row w-full align-middle">
+            <div className="flex flex-col w-full align-middle px-2 py-1">
               <div className="flex items-center w-2/5">
                 <Label
                   htmlFor="description"

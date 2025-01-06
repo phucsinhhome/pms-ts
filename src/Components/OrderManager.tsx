@@ -1,6 +1,6 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
 import { Link } from "react-router-dom";
-import { beginOfDay, formatISODate, formatISODateTime, formatISOTime } from "../Service/Utils";
+import { beginOfDay, formatISODate, formatISODateTime, formatISOHourMinute, formatISOTime, utcToHourMinute } from "../Service/Utils";
 import { Chat, DEFAULT_PAGE_SIZE } from "../App";
 import { fetchUpcomingOrders } from "../db/order";
 import { Button, Modal, TextInput } from "flowbite-react";
@@ -33,10 +33,10 @@ export type Order = {
   id: string,
   guestName: string,
   status: string,
-  startTime: Date,
+  startTime: string,
   invoiceId: string,
   items: OrderItem[],
-  expectedTime: Date
+  expectedTime: string
 }
 
 type OrderManagerProps = {
@@ -97,7 +97,8 @@ export const OrderManager = (props: OrderManagerProps) => {
   }
 
   const fetchLinkedInvoices = () => {
-    orders.filter((o) => o.status === 'CONFIRMED')
+    orders
+      .filter(o=>o.invoiceId && o.invoiceId!==null)
       .map((o) => o.invoiceId)
       .forEach((invoiceId) => {
         getInvoice(invoiceId)
@@ -221,11 +222,11 @@ export const OrderManager = (props: OrderManagerProps) => {
                     <div className="flex flex-row text-sm space-x-3">
                       <div className="flex flex-row items-center rounded-sm">
                         <HiMail />
-                        <span className="font font-mono text-gray-500 text-[12px]">{formatISOTime(new Date(order.startTime))}</span>
+                        <span className="font font-mono text-gray-500 text-[12px]">{utcToHourMinute(order.startTime)}</span>
                       </div>
                       {order.expectedTime ? <div className="flex flex-row items-center rounded-sm">
                         <GiMeal />
-                        <span className="font font-mono text-gray-500 text-[12px]">{formatISOTime(new Date(order.expectedTime))}
+                        <span className="font font-mono text-gray-500 text-[12px]">{utcToHourMinute(order.expectedTime)}
                         </span></div> : <></>
                       }
                       {order.invoiceId ? <div className="flex flex-row items-center rounded-sm">

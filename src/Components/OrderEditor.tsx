@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { Avatar, Button, Label, Modal, TextInput } from "flowbite-react";
 import { DEFAULT_PAGE_SIZE } from "../App";
 import { formatISODate, formatISODateTime, formatRooms, formatVND } from "../Service/Utils";
-import { confirmOrder, fetchOrder, rejectOrder } from "../db/order";
+import { confirmOrder, fetchOrder, rejectOrder, saveOrder } from "../db/order";
 import { getInvoice, listInvoiceByGuestName } from "../db/invoice";
 import { Order, OrderStatus, SK } from "./OrderManager";
 import { Invoice } from "./InvoiceManager";
@@ -102,9 +102,16 @@ export const OrderEditor = (props: OrderEditorProps) => {
     if (order === undefined) {
       return
     }
-    setOrder({
+    saveOrder({
       ...order,
       status: 'SERVED'
+    }).then(rsp => {
+      if (rsp.ok) {
+        rsp.json()
+          .then(data => {
+            setOrder(data)
+          })
+      }
     })
   }
 

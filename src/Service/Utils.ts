@@ -111,6 +111,24 @@ export const formatISOTime = (date: Date) => {
     })
 }
 
+export const utcToHourMinute = (dateString: string) => {
+    // Format: 15:25
+    return new Date(dateString + 'Z').toLocaleTimeString("en-GB", {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false,
+    })
+}
+
+export const formatISOHourMinute = (date: Date) => {
+    // Format: 15:25
+    return date.toLocaleTimeString("en-GB", {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false,
+    })
+}
+
 export const formatRooms = (rooms: string[]) => {
     return rooms ? rooms.join('.') : "[]"
 }

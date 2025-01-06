@@ -1392,7 +1392,6 @@ export const InvoiceEditor = (props: InvoiceProps) => {
                   required={true}
                   value={editingItem.origin.itemName}
                   onChange={changeItemName}
-                  onBlur={blurItemName}
                   rightIcon={() => <HiX onClick={emptyItemName} />}
                 />
                 <Table hoverable>

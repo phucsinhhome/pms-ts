@@ -26,6 +26,16 @@ export const adjustOrderItem = (orderId: string, item: OrderItem) => {
   return fetch(`${process.env.REACT_APP_ORDER_ENDPOINT}/${orderId}/product/adjust`, opts);
 }
 
+export const saveOrder = (order: Order) => {
+  console.info("Save order %s", order.id)
+  var opts = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(order)
+  }
+  return fetch(`${process.env.REACT_APP_ORDER_ENDPOINT}/save`, opts);
+}
+
 export const fetchAvailability = (itemIds: string[]) => {
   console.info("Commit the order")
   var opts = {

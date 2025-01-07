@@ -83,10 +83,11 @@ export const OrderEditor = (props: OrderEditorProps) => {
     var confirmedOrder = {
       ...order,
       confirmedAt: confirmedAt,
-      confirmedBy: staffId
+      confirmedBy: staffId,
+      status: 'CONFIRMED'
     }
 
-    confirmOrder(confirmedOrder)
+    saveOrder(confirmedOrder)
       .then((rsp: Response) => {
         if (rsp.ok) {
           rsp.json()
@@ -102,15 +103,23 @@ export const OrderEditor = (props: OrderEditorProps) => {
     if (order === undefined) {
       return
     }
-    saveOrder({
+    // Note: this is a workaround to add the items to invoice when mark the order as SERVED
+    confirmOrder({
       ...order,
-      status: 'SERVED'
+      servedAt: formatISODateTime(new Date())
     }).then(rsp => {
       if (rsp.ok) {
-        rsp.json()
-          .then(data => {
-            setOrder(data)
-          })
+        saveOrder({
+          ...order,
+          status: 'SERVED'
+        }).then(rsp => {
+          if (rsp.ok) {
+            rsp.json()
+              .then(data => {
+                setOrder(data)
+              })
+          }
+        })
       }
     })
   }

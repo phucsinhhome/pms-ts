@@ -36,7 +36,8 @@ export type Order = {
   startTime: string,
   invoiceId: string,
   items: OrderItem[],
-  expectedTime: string
+  expectedTime: string,
+  servedAt: string
 }
 
 type OrderManagerProps = {

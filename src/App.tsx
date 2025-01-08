@@ -13,6 +13,7 @@ import { OrderEditor } from "./Components/OrderEditor";
 import { Inventory } from "./Components/Inventory";
 import { init, retrieveLaunchParams } from '@telegram-apps/sdk-react';
 import { PGroupManager } from "./Components/PGroupManager";
+import {initializeApp} from 'firebase/app';
 
 export const DEFAULT_PAGE_SIZE = Number(process.env.REACT_APP_DEFAULT_PAGE_SIZE)
 
@@ -55,6 +56,11 @@ const menus: MenuItem[] = [{
   displayName: 'Inventory'
 }]
 
+const firebaseConfig = {
+  apiKey: "AIzaSyCBezCmltRK5ppPbg0xGP65DkKXYxLWehw",
+  authDomain: "localhost"
+}
+
 export default function App() {
 
   const [chat, setChat] = useState<Chat>(defaultChat)
@@ -63,6 +69,7 @@ export default function App() {
   const [syncing, setSyncing] = useState(false)
   const [syncingRes, setSyncingRes] = useState(false)
   const [activeMenu, setActiveMenu] = useState(menus[0])
+  const app = initializeApp(firebaseConfig)
 
   function Component() {
     let launchParams = null
@@ -148,3 +155,4 @@ export default function App() {
     </div>
   );
 }
+

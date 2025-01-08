@@ -483,10 +483,10 @@ export const Inventory = (props: InventoryProps) => {
           {products.map((product) => {
             return (
               <div
-                className="flex flex-row items-center border border-gray-300 shadow-2xl rounded-md bg-white dark:bg-slate-500 "
+                className="flex flex-row items-center border border-gray-300 shadow-2xl rounded-md bg-white dark:bg-slate-500 relative"
                 key={product.id}
               >
-                <div className="pl-0.5 pr-1">
+                <div className="pl-0.5 pr-1 py-2">
                   <Avatar img={product.featureImgUrl} alt="dish image" rounded className="w-12" />
                 </div>
                 <div className="px-0 w-full">
@@ -496,7 +496,7 @@ export const Inventory = (props: InventoryProps) => {
                         to=''
                         onClick={() => viewProductDetail(product)}
                         state={{ pageNumber: pagination.pageNumber, pageSize: pagination.pageSize }}
-                        className="font-medium text-blue-600 hover:underline dark:text-blue-500 overflow-hidden"
+                        className="font-medium text-green-800 hover:underline dark:text-gray-200 overflow-hidden"
                       >
                         {product.name}
                       </Link>
@@ -506,11 +506,11 @@ export const Inventory = (props: InventoryProps) => {
                     </div>
                   </div>
                 </div>
-                <div className="flex flex-col pl-0.2 pr-2">
-                  <div>
-                    <span className="w-full text text-center font-mono text-red-700 font-semibold">{formatVND(product.unitPrice)}</span>
+                <div className="flex flex-col w-28 px-1 absolute right-1">
+                  <div className="text text-center w-full">
+                    <span className="text-sm text-amber-800">{formatVND(product.unitPrice)}</span>
                   </div>
-                  <div className="relative flex items-center w-full mb-2">
+                  <div className="flex w-full items-center mb-2 text-center">
                     <button
                       type="button"
                       id="decrement-button"
@@ -526,7 +526,7 @@ export const Inventory = (props: InventoryProps) => {
                       type="number"
                       id="quantity-input"
                       data-input-counter aria-describedby="helper-text-explanation"
-                      className="bg-gray-50 border-x-0 border-gray-300 h-7 text-center text-gray-900 focus:ring-blue-500 focus:border-blue-500 block w-11 py-1 pr-0 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      className="bg-gray-50 border-x-0 border-gray-300 h-7 w-full min-w-min text-center text-gray-900 block py-1"
                       placeholder="9"
                       required
                       value={product.quantity}

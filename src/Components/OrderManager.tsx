@@ -37,7 +37,8 @@ export type Order = {
   invoiceId: string,
   items: OrderItem[],
   expectedTime: string,
-  servedAt: string
+  servedAt: string,
+  rooms: string[]
 }
 
 type OrderManagerProps = {
@@ -52,7 +53,6 @@ const listOpts = ['coming', 'all']
 export const OrderManager = (props: OrderManagerProps) => {
   const [orders, setOrders] = useState<Order[]>([])
   const [filteredName, setFilteredName] = useState('')
-  const [invoices, setInvoices] = useState<Invoice[]>([])
   const [filteredInvoices, setFilteredInvoices] = useState<Invoice[]>([])
   const [showInvoices, setShowInvoices] = useState(false)
   const [activeListOpt, setActiveListOpt] = useState(listOpts[0])
@@ -73,38 +73,52 @@ export const OrderManager = (props: OrderManagerProps) => {
     })
   }
 
-  const fetchOrders = () => {
+  const fetchOrders = async () => {
     var fromTime = formatISODateTime(beginOfDay(new Date()))
     console.info("Fetch upcoming order after %s", fromTime)
 
-    fetchUpcomingOrders(fromTime, activeListOpt, pagination.pageNumber, pagination.pageSize)
+    const ordersData = await fetchUpcomingOrders(fromTime, activeListOpt, pagination.pageNumber, pagination.pageSize)
       .then((rsp: Response) => {
         if (rsp.ok) {
-          rsp.json()
-            .then(data => {
-              setOrders(data.content)
-              if (data.totalPages !== pagination.totalPages) {
-                var page = {
-                  pageNumber: data.number,
-                  pageSize: data.size,
-                  totalElements: data.totalElements,
-                  totalPages: data.totalPages
-                }
-                setPagination(page)
-              }
-            })
+          return rsp.json()
         }
       })
+
+
+    var orders: Order[] = ordersData.content
+    if (orders.length <= 0) {
+      setOrders([])
+      return
+    }
+    Promise.all(orders.map(async (order: Order): Promise<Order> => {
+      if (order.orderId === undefined || order.orderId === '') {
+        return transf(order)
+      }
+      const data = await getInvoice(order.invoiceId);
+      return {
+        ...order,
+        rooms: data.rooms
+      };
+    })).then(ords => {
+      setOrders(ords)
+      if (ordersData.totalPages !== pagination.totalPages) {
+        var page = {
+          pageNumber: ordersData.number,
+          pageSize: ordersData.size,
+          totalElements: ordersData.totalElements,
+          totalPages: ordersData.totalPages
+        }
+        setPagination(page)
+      }
+    })
+
   }
 
-  const fetchLinkedInvoices = () => {
-    orders
-      .filter(o=>o.invoiceId && o.invoiceId!==null)
-      .map((o) => o.invoiceId)
-      .forEach((invoiceId) => {
-        getInvoice(invoiceId)
-          .then((inv) => setInvoices([...invoices, inv]))
-      })
+  const transf = async (order: Order) => {
+    return {
+      ...order,
+      rooms: []
+    }
   }
 
   useEffect(() => {
@@ -112,11 +126,6 @@ export const OrderManager = (props: OrderManagerProps) => {
     props.activeMenu()
     // eslint-disable-next-line
   }, [pagination.pageNumber]);
-
-  useEffect(() => {
-    fetchLinkedInvoices();
-    // eslint-disable-next-line
-  }, [orders]);
 
   useEffect(() => {
     fetchOrders()
@@ -232,7 +241,7 @@ export const OrderManager = (props: OrderManagerProps) => {
                       }
                       {order.invoiceId ? <div className="flex flex-row items-center rounded-sm">
                         <GiHouse />
-                        <span className="font font-mono text-[12px]">{invoices.find(i => i.id === order.invoiceId)?.rooms}
+                        <span className="font font-mono text-[12px]">{order.rooms}
                         </span></div> : <></>}
                     </div>
                   </div>

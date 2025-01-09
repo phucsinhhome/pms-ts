@@ -56,6 +56,7 @@ export const OrderManager = (props: OrderManagerProps) => {
   const [filteredInvoices, setFilteredInvoices] = useState<Invoice[]>([])
   const [showInvoices, setShowInvoices] = useState(false)
   const [activeListOpt, setActiveListOpt] = useState(listOpts[0])
+  const orderedStatuses = ['CONFIRMED', 'SENT', 'SERVED', 'CREATED']
 
   const [pagination, setPagination] = useState({
     pageNumber: 0,
@@ -74,8 +75,10 @@ export const OrderManager = (props: OrderManagerProps) => {
   }
 
   const fetchOrders = async () => {
-    var fromTime = formatISODateTime(beginOfDay(new Date()))
-    console.info("Fetch upcoming order after %s", fromTime)
+    var today = new Date()
+    var yesterday = new Date(today.setDate(today.getDate() - 1))
+    var fromTime = formatISODateTime(yesterday)
+    console.info(`Fetch upcoming order after ${fromTime}`)
 
     const ordersData = await fetchUpcomingOrders(fromTime, activeListOpt, pagination.pageNumber, pagination.pageSize)
       .then((rsp: Response) => {
@@ -99,18 +102,23 @@ export const OrderManager = (props: OrderManagerProps) => {
         ...order,
         rooms: data.rooms
       };
-    })).then(ords => {
-      setOrders(ords)
-      if (ordersData.totalPages !== pagination.totalPages) {
-        var page = {
-          pageNumber: ordersData.number,
-          pageSize: ordersData.size,
-          totalElements: ordersData.totalElements,
-          totalPages: ordersData.totalPages
+    }))
+      .then(ords => {
+        var sortedOrders: Order[] = []
+        orderedStatuses
+          .map(s => ords.filter(o => o.status === s))
+          .forEach((ors: Order[]) => sortedOrders.push(...ors))
+        setOrders(sortedOrders)
+        if (ordersData.totalPages !== pagination.totalPages) {
+          var page = {
+            pageNumber: ordersData.number,
+            pageSize: ordersData.size,
+            totalElements: ordersData.totalElements,
+            totalPages: ordersData.totalPages
+          }
+          setPagination(page)
         }
-        setPagination(page)
-      }
-    })
+      })
 
   }
 

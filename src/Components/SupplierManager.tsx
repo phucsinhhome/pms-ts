@@ -1,13 +1,13 @@
 import React, { useState, useEffect, ChangeEvent, useRef } from "react";
 import { Link } from "react-router-dom";
-import { formatISODate, formatISODateTime, formatMoneyAmount, formatVND, randomId, utcToHourMinute } from "../Service/Utils";
+import { formatISODateTime, formatMoneyAmount, formatVND, randomId, utcToHourMinute } from "../Service/Utils";
 import { Chat, DEFAULT_PAGE_SIZE } from "../App";
 import { Button, Label, Modal, Spinner, TextInput } from "flowbite-react";
 import { InvoiceItem } from "./InvoiceManager";
 import { HiMail, HiOutlineCash, HiX } from "react-icons/hi";
 import { GiCoinflip, GiMeal } from "react-icons/gi";
 import { SERVICE_NAMES } from "../Service/ItemClassificationService";
-import { generateSInvoice, listSupplierInvoices, saveSInvoice } from "../db/supplier";
+import { generateSInvoice, listSupplierInvoices, paidSInvoice, rejectSInvoice, saveSInvoice } from "../db/supplier";
 import { PiBrainThin } from "react-icons/pi";
 
 export const SInvoiceStatus = {
@@ -37,7 +37,7 @@ export type SupplierInvoice = {
 const emptySInvoice = {
   supplierId: '1111111',
   id: '',
-  name: '',
+  name: 'Mekong Tour Comp',
   status: "CREATED" as SIStatus,
   createdTime: '',
   confirmedTime: '',
@@ -117,7 +117,9 @@ export const SupplierManager = (props: SupplierManagerProps) => {
 
 
   const fetchInvoices = () => {
-    let fromTime = formatISODateTime(new Date())
+    let createdTime = new Date()
+    createdTime.setHours(0, 0, 0, 0)
+    let fromTime = formatISODateTime(createdTime)
     listSupplierInvoices(fromTime, pagination.pageNumber, pagination.pageSize)
       .then(rsp => {
         if (rsp.ok) {
@@ -150,14 +152,27 @@ export const SupplierManager = (props: SupplierManagerProps) => {
     if (invoiceTxt === '') {
       return
     }
+    if (eInvoice.status === "PAID") {
+      console.warn("Cannot edit paid invoice")
+      return
+    }
     setGenerating(true)
     generateSInvoice(invoiceTxt)
       .then(rsp => {
         if (rsp.ok) {
           rsp.json()
-            .then(data => {
+            .then((data: SupplierInvoice) => {
               console.info("Generate invoice successfully")
-              editInvoice(data)
+              setEInvoice({
+                ...eInvoice,
+                description: data.description,
+                items: data.items.map((item: InvoiceItem) => {
+                  return {
+                    ...item,
+                    id: randomId()
+                  }
+                })
+              })
             })
         }
       }).finally(() => {
@@ -174,23 +189,99 @@ export const SupplierManager = (props: SupplierManagerProps) => {
     editInvoice(emptySInvoice)
   }
 
+  const confirmInvoice = () => {
+    let inv: SupplierInvoice = {
+      ...eInvoice,
+      status: 'CONFIRMED',
+      confirmedTime: formatISODateTime(new Date())
+    }
+
+    saveSInvoice(inv)
+      .then(rsp => {
+        if (rsp.ok) {
+          rsp.json()
+            .then((data: SupplierInvoice) => {
+              console.info(`Confirm invoice ${data.id} successfully`)
+              setEInvoice(data)
+            })
+        }
+      })
+  }
+  const takenPlaceInvoice = () => {
+    let inv: SupplierInvoice = {
+      ...eInvoice,
+      status: 'TAKEN_PLACE'
+    }
+
+    saveSInvoice(inv)
+      .then(rsp => {
+        if (rsp.ok) {
+          rsp.json()
+            .then((data: SupplierInvoice) => {
+              console.info(`Taken place invoice ${data.id} successfully`)
+              setEInvoice(data)
+            })
+        }
+      })
+  }
+
+  const paidInvoice = () => {
+    let inv: SupplierInvoice = {
+      ...eInvoice,
+      status: 'PAID',
+      paidTime: formatISODateTime(new Date())
+    }
+
+    paidSInvoice(inv)
+      .then(rsp => {
+        if (rsp.ok) {
+          rsp.json()
+            .then((data: SupplierInvoice) => {
+              console.info(`Paid invoice ${data.id} successfully`)
+              setEInvoice(data)
+            })
+        }
+      })
+  }
+
+  const rejectInvoice = () => {
+    let inv: SupplierInvoice = {
+      ...eInvoice,
+      status: 'REJECTED'
+    }
+
+    rejectSInvoice(inv.id, props.chat.id)
+      .then(rsp => {
+        if (rsp.ok) {
+          rsp.json()
+            .then((data: string) => {
+              console.info(`Reject invoice ${inv.id} successfully`)
+              setEInvoice(inv)
+            })
+        }
+      })
+  }
+
   const saveInvoice = () => {
     if (!eInvoice) {
       return
     }
-    let createdTime = formatISODateTime(new Date())
+
     let inv: SupplierInvoice = {
-      ...eInvoice,
-      issuerId: props.chat.id,
-      supplierId: emptySInvoice.supplierId,
-      createdTime: createdTime,
-      items: eInvoice.items.map(i => {
-        return {
-          ...i,
-          id: randomId()
-        }
-      })
+      ...eInvoice
     }
+
+    if (inv.id === undefined || inv.id === '') {
+      let createdTime = formatISODateTime(new Date())
+      inv = {
+        ...eInvoice,
+        issuerId: props.chat.id,
+        createdTime: createdTime
+      }
+      console.info(`New supplier invoice has been created at ${createdTime}`)
+    }
+
+
     saveSInvoice(inv)
       .then(rsp => {
         if (rsp.ok) {
@@ -213,20 +304,6 @@ export const SupplierManager = (props: SupplierManagerProps) => {
 
   const emptyInvoiceTxt = () => {
     setInvoiceTxt('')
-  }
-
-  const changeSupplierName = (e: ChangeEvent<HTMLInputElement>) => {
-    setEInvoice({
-      ...eInvoice,
-      name: e.target.value
-    })
-  }
-
-  const emptySupplierName = () => {
-    setEInvoice({
-      ...eInvoice,
-      name: ''
-    })
   }
 
   const changeDescription = (e: ChangeEvent<HTMLInputElement>) => {
@@ -296,9 +373,9 @@ export const SupplierManager = (props: SupplierManagerProps) => {
   }
 
   return (
-    <div className="h-full pt-3 relative">
-      <div className="flex flex-row">
-        <Button className="font text-sm" onClick={createInvoice}>Add</Button>
+    <div className="h-full pt-3 space-y-3 relative">
+      <div className="flex flex-row px-2">
+        <Button onClick={createInvoice}>Add</Button>
       </div>
       <div className="flex flex-col px-2 overflow-hidden space-y-1.5">
         {invoices.map((invoice) => {
@@ -340,8 +417,8 @@ export const SupplierManager = (props: SupplierManagerProps) => {
                 </div>
               </div>
               <div className="pl-0.2 pr-1">
-                <div className="bg-zinc-200 rounded-sm py-0.5 w-24 text-center">
-                  <span className={"font font-mono " + SInvoiceStatus[invoice.status]}>{invoice.status}</span>
+                <div className="bg-zinc-200 rounded-sm w-24 text-center">
+                  <span className={`font font-mono ${SInvoiceStatus[invoice.status]}`}>{invoice.status}</span>
                 </div>
               </div>
             </div>
@@ -399,25 +476,15 @@ export const SupplierManager = (props: SupplierManagerProps) => {
             />
           </div>
           <div className="flex flex-col space-y-2 pb-2">
-            <div className="flex flex-row w-full align-middle">
-              <div className="flex items-center w-2/5">
-                <Label
-                  htmlFor="name"
-                  value="Name"
-                />
-              </div>
-              <TextInput
-                id="name"
-                placeholder="Name of the supplier"
-                type="text"
-                required={true}
-                value={eInvoice?.name}
-                onChange={changeSupplierName}
-                rightIcon={() => <HiX onClick={emptySupplierName} />}
-                className="w-full"
-                color={textInputColor(eInvoice.name)}
+            <div className="flex flex-row w-full align-middle space-x-2">
+              <Label
+                value={eInvoice.name}
+              />
+              <Label className="font font-mono"
+                value={formatVND(eInvoice.subTotal)}
               />
             </div>
+
             <div className="flex flex-col w-full align-middle">
               <div className="flex items-center">
                 <Label
@@ -438,11 +505,11 @@ export const SupplierManager = (props: SupplierManagerProps) => {
               />
             </div>
           </div>
-          <div className="flex flex-col px-2 overflow-hidden space-y-1.5">
+          <div className="flex flex-col overflow-hidden space-y-1.5">
             {eInvoice?.items.map((item) => {
               return (
                 <div
-                  className="flex flex-row items-center border border-gray-300 shadow-2xl rounded-md bg-white dark:bg-slate-500 "
+                  className="flex flex-row items-center border border-gray-300 shadow-xl pl-2 rounded-md bg-white dark:bg-slate-500 "
                   key={item.id}
                 >
                   <div className="w-full">
@@ -488,12 +555,21 @@ export const SupplierManager = (props: SupplierManagerProps) => {
           </div>
         </Modal.Body>
         <Modal.Footer className="flex justify-center">
-          <Button onClick={saveInvoice}>
-            Save
-          </Button>
-          <Button onClick={hideInvoiceDetail} color="gray">
-            Cancel
-          </Button>
+          {
+            eInvoice.status !== 'PAID' && eInvoice.status !== 'REJECTED' ? <Button onClick={saveInvoice}>Save</Button> : <></>
+          }
+          {
+            eInvoice.status === 'CREATED' ? <Button onClick={confirmInvoice}>Confirm</Button> : <></>
+          }
+          {
+            eInvoice.status === 'CONFIRMED' ? <Button onClick={takenPlaceInvoice}>Taken place</Button> : <></>
+          }
+          {
+            eInvoice.status === 'TAKEN_PLACE' ? <Button onClick={paidInvoice}>Paid</Button> : <></>
+          }
+          {
+            eInvoice.status === 'CREATED' || eInvoice.status === 'CONFIRMED' ? <Button onClick={rejectInvoice} color='red'>Reject</Button> : <></>
+          }
         </Modal.Footer>
       </Modal>
 

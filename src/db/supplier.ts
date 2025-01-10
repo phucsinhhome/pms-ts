@@ -28,3 +28,21 @@ export const saveSInvoice = (invoice: SupplierInvoice) => {
   }
   return fetch(`${process.env.REACT_APP_SUPPLIER_ENDPOINT}/invoice/save`, opts);
 }
+
+export const paidSInvoice = (invoice: SupplierInvoice) => {
+  console.info("Paid supplier invoice")
+  var opts = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(invoice)
+  }
+  return fetch(`${process.env.REACT_APP_SUPPLIER_ENDPOINT}/invoice/paid`, opts);
+}
+
+export const rejectSInvoice = (invoiceId: string, staffId: string) => {
+  console.info("Reject supplier invoice")
+  var opts = {
+    method: 'POST'
+  }
+  return fetch(`${process.env.REACT_APP_SUPPLIER_ENDPOINT}/invoice/reject?invoiceId=${invoiceId}&staffId=${staffId}`, opts);
+}

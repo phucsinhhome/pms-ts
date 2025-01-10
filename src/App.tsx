@@ -13,6 +13,7 @@ import { OrderEditor } from "./Components/OrderEditor";
 import { Inventory } from "./Components/Inventory";
 import { init, retrieveLaunchParams } from '@telegram-apps/sdk-react';
 import { PGroupManager } from "./Components/PGroupManager";
+import { SupplierManager } from "./Components/SupplierManager";
 
 export const DEFAULT_PAGE_SIZE = Number(process.env.REACT_APP_DEFAULT_PAGE_SIZE)
 
@@ -131,6 +132,7 @@ export default function App() {
           <Route path="order/:orderId/:staffId" element={<OrderEditor activeMenu={() => setActiveMenu(menus[4])} />} />
           <Route path="inventory" element={<Inventory activeMenu={() => setActiveMenu(menus[5])} />} />
           <Route path="product-group" element={<PGroupManager activeMenu={() => setActiveMenu({ path: 'product-group', displayName: 'Group' })} />} />
+          <Route path="supplier" element={<SupplierManager chat={chat} displayName={fullName()} authorizedUserId={authorizedUserId} activeMenu={() => setActiveMenu({ path: 'supplier', displayName: 'Supplier' })} />} />
           <Route path="settings" element={<Settings
             syncing={syncing}
             changeSyncing={(n: boolean) => setSyncing(n)}

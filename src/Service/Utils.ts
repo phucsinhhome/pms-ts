@@ -2,6 +2,11 @@ export const formatVND = (amount: number) => {
     return amount.toLocaleString('us-US', { style: 'currency', currency: 'VND' })
 }
 
+export const randomId = () => {
+    const arr = crypto.randomUUID().split("-")
+    return `${arr[0]}${arr[1]}`
+}
+
 export const formatMoneyAmount = (value: string) => {
     const numStr = value.replace(/[^0-9.]/g, ''); // Remove non-numeric characters
     const [integerPart, decimalPart] = numStr.split('.');

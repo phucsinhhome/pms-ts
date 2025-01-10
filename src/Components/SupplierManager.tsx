@@ -1,27 +1,26 @@
-import React, { useState, useEffect, ChangeEvent } from "react";
+import React, { useState, useEffect, ChangeEvent, useRef } from "react";
 import { Link } from "react-router-dom";
-import { formatISODate, formatISODateTime, formatMoneyAmount, formatVND, utcToHourMinute } from "../Service/Utils";
+import { formatISODate, formatISODateTime, formatMoneyAmount, formatVND, randomId, utcToHourMinute } from "../Service/Utils";
 import { Chat, DEFAULT_PAGE_SIZE } from "../App";
-import { fetchUpcomingOrders } from "../db/order";
-import { Button, Label, Modal, TextInput } from "flowbite-react";
-import { getInvoice, listInvoiceByGuestName, listStayingAndComingInvoicesAndPrepaid } from "../db/invoice";
-import { Invoice, InvoiceItem } from "./InvoiceManager";
+import { Button, Label, Modal, Spinner, TextInput } from "flowbite-react";
+import { InvoiceItem } from "./InvoiceManager";
 import { HiMail, HiOutlineCash, HiX } from "react-icons/hi";
-import { GiCoinflip, GiHouse, GiMeal } from "react-icons/gi";
+import { GiCoinflip, GiMeal } from "react-icons/gi";
 import { SERVICE_NAMES } from "../Service/ItemClassificationService";
-import { listSupplierInvoices } from "../db/supplier";
+import { generateSInvoice, listSupplierInvoices, saveSInvoice } from "../db/supplier";
+import { PiBrainThin } from "react-icons/pi";
 
 export const SInvoiceStatus = {
-  SENT: 'text-orange-400',
+  CREATED: 'text-orange-400',
   CONFIRMED: 'text-green-700',
   REJECTED: 'text-red-700',
-  SERVED: 'text-gray-700',
-  EXPIRED: 'text-gray-700'
+  TAKEN_PLACE: 'text-gray-700',
+  PAID: 'text-gray-700'
 }
 
 type SIStatus = keyof typeof SInvoiceStatus
 
-type SupplierInvoice = {
+export type SupplierInvoice = {
   supplierId: string,
   id: string,
   name: string,
@@ -35,7 +34,21 @@ type SupplierInvoice = {
   subTotal: number
 }
 
-const defaultEmptyItem = {
+const emptySInvoice = {
+  supplierId: '1111111',
+  id: '',
+  name: '',
+  status: "CREATED" as SIStatus,
+  createdTime: '',
+  confirmedTime: '',
+  paidTime: '',
+  issuerId: '',
+  items: [],
+  description: '',
+  subTotal: 0
+}
+
+const emptyItem = {
   id: '',
   itemName: '',
   unitPrice: 0,
@@ -61,13 +74,16 @@ export const SupplierManager = (props: SupplierManagerProps) => {
 
 
   const [showItemDetail, setShowItemDetail] = useState(false)
-  const [eItem, setEItem] = useState<EInvoiceItem>(defaultEmptyItem)
+  const [eItem, setEItem] = useState<EInvoiceItem>(emptyItem)
 
-  const [eInvoice, setEInvoice] = useState<SupplierInvoice>()
+  const [eInvoice, setEInvoice] = useState<SupplierInvoice>(emptySInvoice)
   const [showInvoiceDetail, setShowInvoiceDetail] = useState(false)
 
-  const orderedStatuses = ['CONFIRMED', 'CREATED', 'SERVED', 'CREATED']
+  const [generating, setGenerating] = useState(false)
+  const [invoiceTxt, setInvoiceTxt] = useState('')
   const services = SERVICE_NAMES
+
+  const invoiceTxtRef = useRef<HTMLInputElement>(null)
 
   const [pagination, setPagination] = useState({
     pageNumber: 0,
@@ -92,9 +108,12 @@ export const SupplierManager = (props: SupplierManagerProps) => {
   }, [pagination.pageNumber]);
 
   useEffect(() => {
+    if (showInvoiceDetail) {
+      return
+    }
     fetchInvoices()
     // eslint-disable-next-line
-  }, []);
+  }, [showInvoiceDetail]);
 
 
   const fetchInvoices = () => {
@@ -127,20 +146,101 @@ export const SupplierManager = (props: SupplierManagerProps) => {
     setShowInvoiceDetail(false)
   }
 
-  const changeSupplierName = (e: ChangeEvent) => {
+  const generate = () => {
+    if (invoiceTxt === '') {
+      return
+    }
+    setGenerating(true)
+    generateSInvoice(invoiceTxt)
+      .then(rsp => {
+        if (rsp.ok) {
+          rsp.json()
+            .then(data => {
+              console.info("Generate invoice successfully")
+              editInvoice(data)
+            })
+        }
+      }).finally(() => {
+        setGenerating(false)
+      })
+  }
 
+  const editInvoice = (invoice: SupplierInvoice) => {
+    setEInvoice(invoice)
+    setShowInvoiceDetail(true)
+  }
+
+  const createInvoice = () => {
+    editInvoice(emptySInvoice)
+  }
+
+  const saveInvoice = () => {
+    if (!eInvoice) {
+      return
+    }
+    let createdTime = formatISODateTime(new Date())
+    let inv: SupplierInvoice = {
+      ...eInvoice,
+      issuerId: props.chat.id,
+      supplierId: emptySInvoice.supplierId,
+      createdTime: createdTime,
+      items: eInvoice.items.map(i => {
+        return {
+          ...i,
+          id: randomId()
+        }
+      })
+    }
+    saveSInvoice(inv)
+      .then(rsp => {
+        if (rsp.ok) {
+          rsp.json()
+            .then((data: SupplierInvoice) => {
+              console.info(`Save invoice ${data.id} successfully`)
+            })
+        }
+      }).finally(() => {
+        setShowInvoiceDetail(false)
+        setEInvoice(emptySInvoice)
+      })
+  }
+
+
+
+  const changeInvoiceTxt = (e: ChangeEvent<HTMLInputElement>) => {
+    setInvoiceTxt(e.target.value)
+  }
+
+  const emptyInvoiceTxt = () => {
+    setInvoiceTxt('')
+  }
+
+  const changeSupplierName = (e: ChangeEvent<HTMLInputElement>) => {
+    setEInvoice({
+      ...eInvoice,
+      name: e.target.value
+    })
   }
 
   const emptySupplierName = () => {
-
+    setEInvoice({
+      ...eInvoice,
+      name: ''
+    })
   }
 
   const changeDescription = (e: ChangeEvent<HTMLInputElement>) => {
-
+    setEInvoice({
+      ...eInvoice,
+      description: e.target.value
+    })
   }
 
   const emptyDescription = () => {
-
+    setEInvoice({
+      ...eInvoice,
+      description: ''
+    })
   }
 
   const editItem = (item: EInvoiceItem) => {
@@ -191,10 +291,14 @@ export const SupplierManager = (props: SupplierManagerProps) => {
     setShowItemDetail(false)
   }
 
+  const textInputColor = (txt: string) => {
+    return txt === '' ? 'failure' : 'gray'
+  }
+
   return (
     <div className="h-full pt-3 relative">
       <div className="flex flex-row">
-        <Button className="font text-sm">Add</Button>
+        <Button className="font text-sm" onClick={createInvoice}>Add</Button>
       </div>
       <div className="flex flex-col px-2 overflow-hidden space-y-1.5">
         {invoices.map((invoice) => {
@@ -208,6 +312,7 @@ export const SupplierManager = (props: SupplierManagerProps) => {
                   <div className="flex flex-row text-sm">
                     <span
                       className="font-sans text-green-800 hover:underline overflow-hidden"
+                      onClick={() => editInvoice(invoice)}
                     >
                       {invoice.description}
                     </span>
@@ -268,11 +373,32 @@ export const SupplierManager = (props: SupplierManagerProps) => {
         show={showInvoiceDetail}
         popup={true}
         onClose={hideInvoiceDetail}
+        initialFocus={invoiceTxtRef}
       >
         <Modal.Header />
         <Modal.Body>
-          <span className="font italic">Invoice Details</span>
-          <div className="flex flex-col space-y-6 pb-4">
+          <div className="flex flex-col w-full pb-4">
+            <TextInput
+              id="invoiceTxt"
+              placeholder="8h 31/12 mekong 6 adults"
+              required={true}
+              value={invoiceTxt}
+              onChange={changeInvoiceTxt}
+              className="w-full"
+              icon={() => <HiX onClick={emptyInvoiceTxt} />}
+              rightIcon={() => generating ?
+                <Spinner aria-label="Default status example"
+                  className="w-14 h-10"
+                />
+                : <PiBrainThin
+                  onClick={() => generate()}
+                  className="pointer-events-auto cursor-pointer w-14 h-10"
+                />
+              }
+              ref={invoiceTxtRef}
+            />
+          </div>
+          <div className="flex flex-col space-y-2 pb-2">
             <div className="flex flex-row w-full align-middle">
               <div className="flex items-center w-2/5">
                 <Label
@@ -289,10 +415,11 @@ export const SupplierManager = (props: SupplierManagerProps) => {
                 onChange={changeSupplierName}
                 rightIcon={() => <HiX onClick={emptySupplierName} />}
                 className="w-full"
+                color={textInputColor(eInvoice.name)}
               />
             </div>
-            <div className="flex flex-row w-full align-middle">
-              <div className="flex items-center w-2/5">
+            <div className="flex flex-col w-full align-middle">
+              <div className="flex items-center">
                 <Label
                   htmlFor="description"
                   value="Description"
@@ -307,6 +434,7 @@ export const SupplierManager = (props: SupplierManagerProps) => {
                 onChange={changeDescription}
                 rightIcon={() => <HiX onClick={emptyDescription} />}
                 className="w-full"
+                color={textInputColor(eInvoice.description)}
               />
             </div>
           </div>
@@ -314,7 +442,7 @@ export const SupplierManager = (props: SupplierManagerProps) => {
             {eInvoice?.items.map((item) => {
               return (
                 <div
-                  className="flex flex-row items-center border border-gray-300 shadow-2xl rounded-md px-2 bg-white dark:bg-slate-500 "
+                  className="flex flex-row items-center border border-gray-300 shadow-2xl rounded-md bg-white dark:bg-slate-500 "
                   key={item.id}
                 >
                   <div className="w-full">
@@ -360,7 +488,10 @@ export const SupplierManager = (props: SupplierManagerProps) => {
           </div>
         </Modal.Body>
         <Modal.Footer className="flex justify-center">
-          <Button onClick={hideInvoiceDetail}>
+          <Button onClick={saveInvoice}>
+            Save
+          </Button>
+          <Button onClick={hideInvoiceDetail} color="gray">
             Cancel
           </Button>
         </Modal.Footer>
@@ -374,7 +505,7 @@ export const SupplierManager = (props: SupplierManagerProps) => {
       >
         <Modal.Header />
         <Modal.Body>
-          <span className="font italic">Invoice Details</span>
+          <span className="font italic">Item Details</span>
           <div className="flex flex-col space-y-6 pb-4">
             <div className="flex flex-row w-full align-middle">
               <div className="flex items-center w-2/5">

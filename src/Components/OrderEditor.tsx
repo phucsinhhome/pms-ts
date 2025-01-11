@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { Avatar, Button, Label, Modal, TextInput } from "flowbite-react";
 import { DEFAULT_PAGE_SIZE } from "../App";
 import { formatISODate, formatISODateTime, formatRooms, formatVND } from "../Service/Utils";
-import { confirmOrder, fetchOrder, rejectOrder, saveOrder } from "../db/order";
+import { confirmOrder, fetchOrder, rejectOrder, saveOrder, serveOrder } from "../db/order";
 import { getInvoice, listInvoiceByGuestName } from "../db/invoice";
 import { Order, OrderStatus, SK } from "./OrderManager";
 import { Invoice } from "./InvoiceManager";
@@ -103,23 +103,17 @@ export const OrderEditor = (props: OrderEditorProps) => {
     if (order === undefined) {
       return
     }
-    // Note: this is a workaround to add the items to invoice when mark the order as SERVED
-    confirmOrder({
+    
+    serveOrder({
       ...order,
       servedAt: formatISODateTime(new Date())
     }).then(rsp => {
       if (rsp.ok) {
-        saveOrder({
-          ...order,
-          status: 'SERVED'
-        }).then(rsp => {
-          if (rsp.ok) {
-            rsp.json()
-              .then(data => {
-                setOrder(data)
-              })
-          }
-        })
+        rsp.json()
+          .then(data => {
+            setOrder(data)
+            console.info(`Serve order ${order.id} successfully`)
+          })
       }
     })
   }

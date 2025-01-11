@@ -98,6 +98,16 @@ export const confirmOrder = (order: Order) => {
   return fetch(`${process.env.REACT_APP_ORDER_ENDPOINT}/confirm`, opts);
 }
 
+export const serveOrder = (order: Order) => {
+  console.info("Serve the order")
+  var opts = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(order)
+  }
+  return fetch(`${process.env.REACT_APP_ORDER_ENDPOINT}/serve`, opts);
+}
+
 export const rejectOrder = (orderId: string, staffId: string) => {
   console.info("Reject the order")
   var opts = {

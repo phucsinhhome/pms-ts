@@ -87,7 +87,7 @@ export const OrderEditor = (props: OrderEditorProps) => {
       status: 'CONFIRMED'
     }
 
-    saveOrder(confirmedOrder)
+    confirmOrder(confirmedOrder)
       .then((rsp: Response) => {
         if (rsp.ok) {
           rsp.json()

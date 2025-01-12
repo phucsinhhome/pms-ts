@@ -29,6 +29,16 @@ export const saveSInvoice = (invoice: SupplierInvoice) => {
   return fetch(`${process.env.REACT_APP_SUPPLIER_ENDPOINT}/invoice/save`, opts);
 }
 
+export const takenPlaceSInvoice = (invoice: SupplierInvoice) => {
+  console.info("Taken place supplier invoice")
+  var opts = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(invoice)
+  }
+  return fetch(`${process.env.REACT_APP_SUPPLIER_ENDPOINT}/invoice/take-place`, opts);
+}
+
 export const paidSInvoice = (invoice: SupplierInvoice) => {
   console.info("Paid supplier invoice")
   var opts = {

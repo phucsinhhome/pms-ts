@@ -7,7 +7,7 @@ import { InvoiceItem } from "./InvoiceManager";
 import { HiMail, HiOutlineCash, HiX } from "react-icons/hi";
 import { GiCoinflip, GiMeal } from "react-icons/gi";
 import { SERVICE_NAMES } from "../Service/ItemClassificationService";
-import { generateSInvoice, listSupplierInvoices, paidSInvoice, rejectSInvoice, saveSInvoice } from "../db/supplier";
+import { generateSInvoice, listSupplierInvoices, paidSInvoice, rejectSInvoice, saveSInvoice, takenPlaceSInvoice } from "../db/supplier";
 import { PiBrainThin } from "react-icons/pi";
 
 export const SInvoiceStatus = {
@@ -26,12 +26,14 @@ export type SupplierInvoice = {
   name: string,
   status: SIStatus,
   createdTime: string,
-  confirmedTime: string,
+  takenPlaceAt: string,
   paidTime: string,
   issuerId: string,
   items: InvoiceItem[],
   description: string,
-  subTotal: number
+  subTotal: number,
+  paymentPhotos: string[],
+  paymentMethod: string,
 }
 
 const emptySInvoice = {
@@ -40,12 +42,14 @@ const emptySInvoice = {
   name: 'Mekong Tour Comp',
   status: "CREATED" as SIStatus,
   createdTime: '',
-  confirmedTime: '',
+  takenPlaceAt: '',
   paidTime: '',
   issuerId: '',
   items: [],
   description: '',
-  subTotal: 0
+  subTotal: 0,
+  paymentPhotos: [],
+  paymentMethod: '',
 }
 
 const emptyItem = {
@@ -69,6 +73,47 @@ type SupplierManagerProps = {
   activeMenu: any
 }
 
+const sampleSInvoice: SupplierInvoice = {
+  "id": '',
+  "supplierId": '',
+  "description": "Tour Mekong morning 11.01.2024",
+  "name": 'Linh',
+  "createdTime": "2024-01-11T08:00:00",
+  "takenPlaceAt": '',
+  "paidTime": '',
+  "status": 'CREATED',
+  "issuerId": '',
+  "items": [
+    {
+      "id": '114534543',
+      "itemName": "Base tour price",
+      "unitPrice": 800000,
+      "quantity": 1,
+      "service": "TOUR",
+      "amount": 800000
+    },
+    {
+      "id": '223454545',
+      "itemName": "Additional adult fee",
+      "unitPrice": 100000,
+      "quantity": 1,
+      "service": "TOUR",
+      "amount": 100000
+    },
+    {
+      "id": '3345465',
+      "itemName": "Additional coconut fee",
+      "unitPrice": 10000,
+      "quantity": 5,
+      "service": "TOUR",
+      "amount": 50000
+    }
+  ],
+  "paymentPhotos": [''],
+  "paymentMethod": '',
+  "subTotal": 950000
+}
+
 export const SupplierManager = (props: SupplierManagerProps) => {
   const [invoices, setInvoices] = useState<SupplierInvoice[]>([])
 
@@ -82,6 +127,10 @@ export const SupplierManager = (props: SupplierManagerProps) => {
   const [generating, setGenerating] = useState(false)
   const [invoiceTxt, setInvoiceTxt] = useState('')
   const services = SERVICE_NAMES
+
+  const [showTakenConfirmation, setShowTakenConfirmation] = useState(false)
+  const [takenDates, setTakenDates] = useState<string[]>([])
+  const [takenDate, setTakenDate] = useState<string>('')
 
   const invoiceTxtRef = useRef<HTMLInputElement>(null)
 
@@ -163,15 +212,19 @@ export const SupplierManager = (props: SupplierManagerProps) => {
           rsp.json()
             .then((data: SupplierInvoice) => {
               console.info("Generate invoice successfully")
+              let nItems = data.items.map((item: InvoiceItem) => {
+                return {
+                  ...item,
+                  id: randomId()
+                }
+              })
+
               setEInvoice({
                 ...eInvoice,
                 description: data.description,
-                items: data.items.map((item: InvoiceItem) => {
-                  return {
-                    ...item,
-                    id: randomId()
-                  }
-                })
+                subTotal: data.subTotal,
+                createdTime: data.createdTime,
+                items: nItems
               })
             })
         }
@@ -181,19 +234,21 @@ export const SupplierManager = (props: SupplierManagerProps) => {
   }
 
   const editInvoice = (invoice: SupplierInvoice) => {
+    setInvoiceTxt('')
     setEInvoice(invoice)
     setShowInvoiceDetail(true)
   }
 
   const createInvoice = () => {
-    editInvoice(emptySInvoice)
+    // editInvoice(emptySInvoice)
+    editInvoice(sampleSInvoice)
   }
 
   const confirmInvoice = () => {
     let inv: SupplierInvoice = {
       ...eInvoice,
       status: 'CONFIRMED',
-      confirmedTime: formatISODateTime(new Date())
+      takenPlaceAt: formatISODateTime(new Date())
     }
 
     saveSInvoice(inv)
@@ -210,10 +265,10 @@ export const SupplierManager = (props: SupplierManagerProps) => {
   const takenPlaceInvoice = () => {
     let inv: SupplierInvoice = {
       ...eInvoice,
-      status: 'TAKEN_PLACE'
+      takenPlaceAt: takenDate
     }
 
-    saveSInvoice(inv)
+    takenPlaceSInvoice(inv)
       .then(rsp => {
         if (rsp.ok) {
           rsp.json()
@@ -222,13 +277,15 @@ export const SupplierManager = (props: SupplierManagerProps) => {
               setEInvoice(data)
             })
         }
+      }).finally(() => {
+        setShowInvoiceDetail(true)
+        setShowTakenConfirmation(false)
       })
   }
 
   const paidInvoice = () => {
     let inv: SupplierInvoice = {
       ...eInvoice,
-      status: 'PAID',
       paidTime: formatISODateTime(new Date())
     }
 
@@ -321,7 +378,13 @@ export const SupplierManager = (props: SupplierManagerProps) => {
   }
 
   const editItem = (item: EInvoiceItem) => {
-    setEItem(item)
+    let uP = formatMoneyAmount(String(item.unitPrice))
+    setEItem({
+      ...item,
+      formattedUnitPrice: uP.formattedAmount
+    })
+    setShowInvoiceDetail(false)
+    setShowItemDetail(true)
   }
 
   const changeService = (service: string) => {
@@ -360,22 +423,69 @@ export const SupplierManager = (props: SupplierManagerProps) => {
     setEItem({
       ...eItem,
       unitPrice: uP.amount,
-      amount: uP.amount * eItem.quantity
+      amount: uP.amount * eItem.quantity,
+      formattedUnitPrice: uP.formattedAmount
     })
   }
 
   const hideItemDetail = () => {
     setShowItemDetail(false)
+    setShowInvoiceDetail(true)
+  }
+
+  const saveItem = () => {
+    let idx = eInvoice.items.findIndex(e => e.id === eItem.id)
+    let nItems = [...eInvoice.items]
+    nItems.splice(idx, 1, eItem)
+    setEInvoice({
+      ...eInvoice,
+      items: nItems,
+      subTotal: nItems.map(i => i.amount).reduce((i1, i2) => i1 + i2)
+    })
+    hideItemDetail()
   }
 
   const textInputColor = (txt: string) => {
     return txt === '' ? 'failure' : 'gray'
   }
 
+  const confirmTakenDate = () => {
+    let days: string[] = []
+    var i = 0
+    while (i < 5) {
+      let today = new Date()
+      today.setDate(today.getDate() - i)
+      days.push(formatISODateTime(today))
+      i += 1
+    }
+    setTakenDates(days)
+    setTakenDate(days[0])
+    setShowInvoiceDetail(false)
+    setShowTakenConfirmation(true)
+  }
+
+  const hideConfirmTakenDate = () => {
+    setEInvoice({
+      ...eInvoice,
+      takenPlaceAt: takenDate
+    })
+    setShowInvoiceDetail(true)
+    setShowTakenConfirmation(false)
+  }
+
+  const changeTakenDate = (date: string) => {
+    setTakenDate(date)
+  }
+
   return (
     <div className="h-full pt-3 space-y-3 relative">
-      <div className="flex flex-row px-2">
+      <div className="flex flex-row px-2 space-x-3">
         <Button onClick={createInvoice}>Add</Button>
+        <div className="flex flex-wrap space-x-2">
+          {
+            Object.keys(SInvoiceStatus).map((status) => <div className="font-mono text-sm">{status}</div>)
+          }
+        </div>
       </div>
       <div className="flex flex-col px-2 overflow-hidden space-y-1.5">
         {invoices.map((invoice) => {
@@ -403,9 +513,9 @@ export const SupplierManager = (props: SupplierManagerProps) => {
                       <HiMail />
                       <span className="font font-mono text-gray-500 text-[12px]">{utcToHourMinute(invoice.createdTime)}</span>
                     </div>
-                    {invoice.confirmedTime ? <div className="flex flex-row items-center rounded-sm">
+                    {invoice.takenPlaceAt ? <div className="flex flex-row items-center rounded-sm">
                       <GiMeal />
-                      <span className="font font-mono text-gray-500 text-[12px]">{utcToHourMinute(invoice.confirmedTime)}
+                      <span className="font font-mono text-gray-500 text-[12px]">{utcToHourMinute(invoice.takenPlaceAt)}
                       </span></div> : <></>
                     }
                     {invoice.paidTime ? <div className="flex flex-row items-center rounded-sm">
@@ -476,11 +586,11 @@ export const SupplierManager = (props: SupplierManagerProps) => {
             />
           </div>
           <div className="flex flex-col space-y-2 pb-2">
-            <div className="flex flex-row w-full align-middle space-x-2">
+            <div className="flex flex-row w-full align-middle space-x-4">
               <Label
                 value={eInvoice.name}
               />
-              <Label className="font font-mono"
+              <Label className="font font-mono text-sm text-amber-800"
                 value={formatVND(eInvoice.subTotal)}
               />
             </div>
@@ -515,13 +625,11 @@ export const SupplierManager = (props: SupplierManagerProps) => {
                   <div className="w-full">
                     <div className="grid grid-cols-1">
                       <div className="flex flex-row">
-                        <Link
-                          to={item.id + "/" + props.chat.id}
-                          state={{ pageNumber: pagination.pageNumber, pageSize: pagination.pageSize }}
-                          className="font-medium text-blue-600 hover:underline dark:text-blue-500 overflow-hidden"
+                        <span
+                          className="font-medium text-green-800 hover:underline dark:text-blue-500 overflow-hidden"
                         >
                           {item.itemName}
-                        </Link>
+                        </span>
                       </div>
                       <div className="flex flex-row text-sm space-x-3">
                         <div className="flex flex-row items-center rounded-sm">
@@ -559,17 +667,41 @@ export const SupplierManager = (props: SupplierManagerProps) => {
             eInvoice.status !== 'PAID' && eInvoice.status !== 'REJECTED' ? <Button onClick={saveInvoice}>Save</Button> : <></>
           }
           {
-            eInvoice.status === 'CREATED' ? <Button onClick={confirmInvoice}>Confirm</Button> : <></>
+            eInvoice.status === 'CREATED' && eInvoice.id !== '' ? <Button onClick={confirmInvoice}>Confirm</Button> : <></>
           }
           {
-            eInvoice.status === 'CONFIRMED' ? <Button onClick={takenPlaceInvoice}>Taken place</Button> : <></>
+            eInvoice.status === 'CONFIRMED' ? <Button onClick={confirmTakenDate}>Taken place</Button> : <></>
           }
           {
             eInvoice.status === 'TAKEN_PLACE' ? <Button onClick={paidInvoice}>Paid</Button> : <></>
           }
           {
-            eInvoice.status === 'CREATED' || eInvoice.status === 'CONFIRMED' ? <Button onClick={rejectInvoice} color='red'>Reject</Button> : <></>
+            (eInvoice.status === 'CREATED' || eInvoice.status === 'CONFIRMED') && eInvoice.id !== '' ? <Button onClick={rejectInvoice} color='red'>Reject</Button> : <></>
           }
+        </Modal.Footer>
+      </Modal>
+
+      <Modal
+        show={showTakenConfirmation}
+        popup={true}
+        onClose={hideConfirmTakenDate}
+      >
+        <Modal.Header />
+        <Modal.Body>
+          <div className="flex flex-col space-x-2">
+            {
+              takenDates.map((date: string) => <div
+                onClick={() => changeTakenDate(date)}
+                className="font font-sans text-emerald-950 border rounded-sm shadow-sm px-2">
+                {date.substring(0, 10)}</div>)
+            }
+          </div>
+          <div className="flex flex-col space-y-2 pb-2">
+            <span>The expenses will be added with for the date {takenDate}</span>
+          </div>
+        </Modal.Body>
+        <Modal.Footer className="flex justify-center">
+          <Button onClick={takenPlaceInvoice}>Confirm</Button>
         </Modal.Footer>
       </Modal>
 
@@ -581,7 +713,6 @@ export const SupplierManager = (props: SupplierManagerProps) => {
       >
         <Modal.Header />
         <Modal.Body>
-          <span className="font italic">Item Details</span>
           <div className="flex flex-col space-y-6 pb-4">
             <div className="flex flex-row w-full align-middle">
               <div className="flex items-center w-2/5">
@@ -615,45 +746,53 @@ export const SupplierManager = (props: SupplierManagerProps) => {
                 type="currency"
                 step={5000}
                 required={true}
-                value={eItem?.formattedUnitPrice}
+                value={eItem.formattedUnitPrice}
                 onChange={changeUnitPrice}
                 rightIcon={HiOutlineCash}
                 className="w-full"
               />
             </div>
-            <div className="flex w-full items-center mb-2 text-center">
-              <button
-                type="button"
-                id="decrement-button"
-                data-input-counter-decrement="quantity-input"
-                className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-s-lg py-1 px-2 h-7 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
-                onClick={() => changeQuantity(-1)}
-              >
-                <svg className="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
-                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h16" />
-                </svg>
-              </button>
-              <input
-                type="number"
-                id="quantity-input"
-                data-input-counter aria-describedby="helper-text-explanation"
-                className="bg-gray-50 border-x-0 border-gray-300 h-7 w-full min-w-min text-center text-gray-900 block py-1"
-                placeholder="9"
-                required
-                value={eItem?.quantity}
-                readOnly
-              />
-              <button
-                type="button"
-                id="increment-button"
-                data-input-counter-increment="quantity-input"
-                className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-e-lg py-1 px-2 h-7 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
-                onClick={() => changeQuantity(1)}
-              >
-                <svg className="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 1v16M1 9h16" />
-                </svg>
-              </button>
+            <div className="flex flex-row w-full align-middle">
+              <div className="flex items-center w-2/5">
+                <Label
+                  htmlFor="quantity"
+                  value="Quantity"
+                />
+              </div>
+              <div className="flex w-full h-9 items-center text-center">
+                <button
+                  type="button"
+                  id="decrement-button"
+                  data-input-counter-decrement="quantity-input"
+                  className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-s-lg px-2 h-full focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
+                  onClick={() => changeQuantity(-1)}
+                >
+                  <svg className="w-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
+                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h16" />
+                  </svg>
+                </button>
+                <input
+                  type="number"
+                  id="quantity"
+                  data-input-counter aria-describedby="helper-text-explanation"
+                  className="bg-gray-50 border-x-0 border-gray-300 w-full min-w-min h-full text-center text-gray-900 block"
+                  placeholder="9"
+                  required
+                  value={eItem?.quantity}
+                  readOnly
+                />
+                <button
+                  type="button"
+                  id="increment-button"
+                  data-input-counter-increment="quantity-input"
+                  className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-e-lg px-2 h-full focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
+                  onClick={() => changeQuantity(1)}
+                >
+                  <svg className="w-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
+                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 1v16M1 9h16" />
+                  </svg>
+                </button>
+              </div>
             </div>
             <div className="flex flex-col w-full align-middle border rounded-md px-2 py-1">
               <div className="flex items-center w-2/5">
@@ -673,7 +812,7 @@ export const SupplierManager = (props: SupplierManagerProps) => {
                 }
               </div>
             </div>
-            <div className="flex flex-col w-full align-middle px-2 py-1">
+            <div className="flex flex-row w-full align-middle px-2 py-1">
               <div className="flex items-center w-2/5">
                 <Label
                   htmlFor="amount"
@@ -691,7 +830,7 @@ export const SupplierManager = (props: SupplierManagerProps) => {
           </div>
         </Modal.Body>
         <Modal.Footer className="flex justify-center">
-          <Button onClick={hideItemDetail} disabled={eItem.itemName === ''}>
+          <Button onClick={saveItem} disabled={eItem.itemName === ''}>
             Save
           </Button>
           <Button onClick={hideItemDetail} color='gray'>

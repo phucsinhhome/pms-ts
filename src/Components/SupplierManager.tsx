@@ -1,5 +1,4 @@
 import React, { useState, useEffect, ChangeEvent, useRef } from "react";
-import { Link } from "react-router-dom";
 import { formatISODateTime, formatMoneyAmount, formatVND, randomId, utcToHourMinute } from "../Service/Utils";
 import { Chat, DEFAULT_PAGE_SIZE } from "../App";
 import { Button, Label, Modal, Spinner, TextInput } from "flowbite-react";
@@ -128,9 +127,7 @@ export const SupplierManager = (props: SupplierManagerProps) => {
   const [invoiceTxt, setInvoiceTxt] = useState('')
   const services = SERVICE_NAMES
 
-  const [showTakenConfirmation, setShowTakenConfirmation] = useState(false)
-  const [takenDates, setTakenDates] = useState<string[]>([])
-  const [takenDate, setTakenDate] = useState<string>('')
+  const [resultMessage, setResultMessage] = useState('')
 
   const invoiceTxtRef = useRef<HTMLInputElement>(null)
 
@@ -167,6 +164,7 @@ export const SupplierManager = (props: SupplierManagerProps) => {
 
   const fetchInvoices = () => {
     let createdTime = new Date()
+    createdTime.setDate(createdTime.getDate() - 5)
     createdTime.setHours(0, 0, 0, 0)
     let fromTime = formatISODateTime(createdTime)
     listSupplierInvoices(fromTime, pagination.pageNumber, pagination.pageSize)
@@ -195,6 +193,7 @@ export const SupplierManager = (props: SupplierManagerProps) => {
 
   const hideInvoiceDetail = () => {
     setShowInvoiceDetail(false)
+    setResultMessage('')
   }
 
   const generate = () => {
@@ -223,7 +222,7 @@ export const SupplierManager = (props: SupplierManagerProps) => {
                 ...eInvoice,
                 description: data.description,
                 subTotal: data.subTotal,
-                createdTime: data.createdTime,
+                createdTime: formatISODateTime(new Date(data.createdTime)),
                 items: nItems
               })
             })
@@ -247,8 +246,7 @@ export const SupplierManager = (props: SupplierManagerProps) => {
   const confirmInvoice = () => {
     let inv: SupplierInvoice = {
       ...eInvoice,
-      status: 'CONFIRMED',
-      takenPlaceAt: formatISODateTime(new Date())
+      status: 'CONFIRMED'
     }
 
     saveSInvoice(inv)
@@ -265,7 +263,7 @@ export const SupplierManager = (props: SupplierManagerProps) => {
   const takenPlaceInvoice = () => {
     let inv: SupplierInvoice = {
       ...eInvoice,
-      takenPlaceAt: takenDate
+      takenPlaceAt: eInvoice.createdTime
     }
 
     takenPlaceSInvoice(inv)
@@ -275,11 +273,11 @@ export const SupplierManager = (props: SupplierManagerProps) => {
             .then((data: SupplierInvoice) => {
               console.info(`Taken place invoice ${data.id} successfully`)
               setEInvoice(data)
+              setResultMessage(`Taken place successfully`)
             })
         }
       }).finally(() => {
         setShowInvoiceDetail(true)
-        setShowTakenConfirmation(false)
       })
   }
 
@@ -296,6 +294,7 @@ export const SupplierManager = (props: SupplierManagerProps) => {
             .then((data: SupplierInvoice) => {
               console.info(`Paid invoice ${data.id} successfully`)
               setEInvoice(data)
+              setResultMessage(`Paid successfully`)
             })
         }
       })
@@ -329,7 +328,7 @@ export const SupplierManager = (props: SupplierManagerProps) => {
     }
 
     if (inv.id === undefined || inv.id === '') {
-      let createdTime = formatISODateTime(new Date())
+      let createdTime = eInvoice.createdTime === '' ? formatISODateTime(new Date()) : eInvoice.createdTime
       inv = {
         ...eInvoice,
         issuerId: props.chat.id,
@@ -447,34 +446,6 @@ export const SupplierManager = (props: SupplierManagerProps) => {
 
   const textInputColor = (txt: string) => {
     return txt === '' ? 'failure' : 'gray'
-  }
-
-  const confirmTakenDate = () => {
-    let days: string[] = []
-    var i = 0
-    while (i < 5) {
-      let today = new Date()
-      today.setDate(today.getDate() - i)
-      days.push(formatISODateTime(today))
-      i += 1
-    }
-    setTakenDates(days)
-    setTakenDate(days[0])
-    setShowInvoiceDetail(false)
-    setShowTakenConfirmation(true)
-  }
-
-  const hideConfirmTakenDate = () => {
-    setEInvoice({
-      ...eInvoice,
-      takenPlaceAt: takenDate
-    })
-    setShowInvoiceDetail(true)
-    setShowTakenConfirmation(false)
-  }
-
-  const changeTakenDate = (date: string) => {
-    setTakenDate(date)
   }
 
   return (
@@ -661,6 +632,9 @@ export const SupplierManager = (props: SupplierManagerProps) => {
               )
             })}
           </div>
+          <div className="pt-3 text-center">
+            <span className="font italic text-green-800">{resultMessage}</span>
+          </div>
         </Modal.Body>
         <Modal.Footer className="flex justify-center">
           {
@@ -670,7 +644,7 @@ export const SupplierManager = (props: SupplierManagerProps) => {
             eInvoice.status === 'CREATED' && eInvoice.id !== '' ? <Button onClick={confirmInvoice}>Confirm</Button> : <></>
           }
           {
-            eInvoice.status === 'CONFIRMED' ? <Button onClick={confirmTakenDate}>Taken place</Button> : <></>
+            eInvoice.status === 'CONFIRMED' ? <Button onClick={takenPlaceInvoice}>Taken place</Button> : <></>
           }
           {
             eInvoice.status === 'TAKEN_PLACE' ? <Button onClick={paidInvoice}>Paid</Button> : <></>
@@ -680,31 +654,6 @@ export const SupplierManager = (props: SupplierManagerProps) => {
           }
         </Modal.Footer>
       </Modal>
-
-      <Modal
-        show={showTakenConfirmation}
-        popup={true}
-        onClose={hideConfirmTakenDate}
-      >
-        <Modal.Header />
-        <Modal.Body>
-          <div className="flex flex-col space-x-2">
-            {
-              takenDates.map((date: string) => <div
-                onClick={() => changeTakenDate(date)}
-                className="font font-sans text-emerald-950 border rounded-sm shadow-sm px-2">
-                {date.substring(0, 10)}</div>)
-            }
-          </div>
-          <div className="flex flex-col space-y-2 pb-2">
-            <span>The expenses will be added with for the date {takenDate}</span>
-          </div>
-        </Modal.Body>
-        <Modal.Footer className="flex justify-center">
-          <Button onClick={takenPlaceInvoice}>Confirm</Button>
-        </Modal.Footer>
-      </Modal>
-
 
       <Modal
         show={showItemDetail}

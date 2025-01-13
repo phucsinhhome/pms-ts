@@ -8,6 +8,22 @@ export const listSupplierInvoices = (createdTime: string, page: number, size: nu
   return fetch(`${process.env.REACT_APP_SUPPLIER_ENDPOINT}/invoice/list?createdTime=${createdTime}&page=${page}&size=${size}`, opts);
 }
 
+export const listAllSupplierInvoices = (page: number, size: number) => {
+  console.info("Fetching all supplier invoices from backend")
+  const opts = {
+    method: 'GET'
+  }
+  return fetch(`${process.env.REACT_APP_SUPPLIER_ENDPOINT}/invoice/list?page=${page}&size=${size}`, opts);
+}
+
+export const listSupplierInvoicesByStatus = (statuses: string[], page: number, size: number) => {
+  console.info("Fetching supplier invoices from backend by statuses")
+  const opts = {
+    method: 'GET'
+  }
+  return fetch(`${process.env.REACT_APP_SUPPLIER_ENDPOINT}/invoice/list?statuses=${statuses}&page=${page}&size=${size}`, opts);
+}
+
 
 export const generateSInvoice = (text: string) => {
   console.info("Generate supplier invoice")

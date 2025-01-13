@@ -1,5 +1,5 @@
 import React, { useState, useEffect, ChangeEvent, useRef } from "react";
-import { formatISODateTime, formatMoneyAmount, formatVND, randomId, utcToHourMinute } from "../Service/Utils";
+import { formatISODateTime, formatMoneyAmount, formatVND, randomId, utcToDate, utcToHourMinute } from "../Service/Utils";
 import { Chat, DEFAULT_PAGE_SIZE } from "../App";
 import { Button, Label, Modal, Spinner, TextInput } from "flowbite-react";
 import { InvoiceItem } from "./InvoiceManager";
@@ -75,9 +75,9 @@ type SupplierManagerProps = {
 const sampleSInvoice: SupplierInvoice = {
   "id": '',
   "supplierId": '',
-  "description": "Tour Mekong morning 11.01.2024",
+  "description": "Tour Mekong morning 13.01.2025",
   "name": 'Linh',
-  "createdTime": "2024-01-11T08:00:00",
+  "createdTime": "2025-01-15T08:00:00",
   "takenPlaceAt": '',
   "paidTime": '',
   "status": 'CREATED',
@@ -130,8 +130,6 @@ export const SupplierManager = (props: SupplierManagerProps) => {
   const [statuses, setStatuses] = useState<string[]>([])
 
   const [resultMessage, setResultMessage] = useState('')
-
-  const invoiceTxtRef = useRef<HTMLInputElement>(null)
 
   const [pagination, setPagination] = useState({
     pageNumber: 0,
@@ -269,7 +267,16 @@ export const SupplierManager = (props: SupplierManagerProps) => {
 
   const createInvoice = () => {
     // editInvoice(emptySInvoice)
-    editInvoice(sampleSInvoice)
+    editInvoice({
+      ...sampleSInvoice,
+      createdTime: formatISODateTime(new Date()),
+      items: sampleSInvoice.items.map((item: InvoiceItem) => {
+        return {
+          ...item,
+          id: randomId()
+        }
+      })
+    })
   }
 
   const confirmInvoice = () => {
@@ -497,6 +504,7 @@ export const SupplierManager = (props: SupplierManagerProps) => {
         <div className="flex flex-row space-x-2">
           {
             filterStatuses.map((status) => <Label
+              key={status}
               className={statuses.includes(status) ?
                 "font font-mono text-sm font-bold text-gray-500 border rounded-sm px-1 py-1 h-fit bg-slate-400"
                 : "font font-mono text-sm font-bold text-gray-500 border rounded-sm px-1 py-1 h-fit bg-slate-50"}
@@ -529,30 +537,20 @@ export const SupplierManager = (props: SupplierManagerProps) => {
                     </span>
                   </div>
                   <div className="flex flex-row text-sm space-x-3">
-                    <div className="flex flex-row items-center rounded-sm">
+                    <div className="flex flex-row items-center rounded-sm w-16">
                       <GiCoinflip />
                       <span className="font font-mono text-gray-500 text-[12px]">{formatVND(invoice.subTotal)}</span>
                     </div>
                     <div className="flex flex-row items-center rounded-sm">
                       <HiMail />
-                      <span className="font font-mono text-gray-500 text-[12px]">{utcToHourMinute(invoice.createdTime)}</span>
+                      <span className="font font-mono text-gray-500 text-[12px]">{utcToDate(invoice.createdTime)}</span>
                     </div>
-                    {invoice.takenPlaceAt ? <div className="flex flex-row items-center rounded-sm">
-                      <GiMeal />
-                      <span className="font font-mono text-gray-500 text-[12px]">{utcToHourMinute(invoice.takenPlaceAt)}
-                      </span></div> : <></>
-                    }
-                    {invoice.paidTime ? <div className="flex flex-row items-center rounded-sm">
-                      <GiMeal />
-                      <span className="font font-mono text-gray-500 text-[12px]">{utcToHourMinute(invoice.paidTime)}
-                      </span></div> : <></>
-                    }
                   </div>
                 </div>
               </div>
               <div className="pl-0.2 pr-1">
                 <div className="bg-zinc-200 rounded-sm w-24 text-center">
-                  <span className={`font font-mono ${SInvoiceStatus[invoice.status]}`}>{invoice.status}</span>
+                  <span className={`font font-mono min-w-fit ${SInvoiceStatus[invoice.status]}`}>{invoice.status}</span>
                 </div>
               </div>
             </div>
@@ -584,30 +582,30 @@ export const SupplierManager = (props: SupplierManagerProps) => {
         show={showInvoiceDetail}
         popup={true}
         onClose={hideInvoiceDetail}
-        initialFocus={invoiceTxtRef}
       >
         <Modal.Header />
         <Modal.Body>
           <div className="flex flex-col w-full pb-4">
-            <TextInput
-              id="invoiceTxt"
-              placeholder="8h 31/12 mekong 6 adults"
-              required={true}
-              value={invoiceTxt}
-              onChange={changeInvoiceTxt}
-              className="w-full"
-              icon={() => <HiX onClick={emptyInvoiceTxt} />}
-              rightIcon={() => generating ?
-                <Spinner aria-label="Default status example"
-                  className="w-14 h-10"
-                />
-                : <PiBrainThin
-                  onClick={() => generate()}
-                  className="pointer-events-auto cursor-pointer w-14 h-10"
-                />
-              }
-              ref={invoiceTxtRef}
-            />
+            {
+              eInvoice.status === 'PAID' || eInvoice.status === 'REJECTED' ? <></> : <TextInput
+                id="invoiceTxt"
+                placeholder="8h 31/12 mekong 6 adults"
+                required={true}
+                value={invoiceTxt}
+                onChange={changeInvoiceTxt}
+                className="w-full"
+                icon={() => <HiX onClick={emptyInvoiceTxt} />}
+                rightIcon={() => generating ?
+                  <Spinner aria-label="Default status example"
+                    className="w-14 h-10"
+                  />
+                  : <PiBrainThin
+                    onClick={() => generate()}
+                    className="pointer-events-auto cursor-pointer w-14 h-10"
+                  />
+                }
+              />
+            }
           </div>
           <div className="flex flex-col space-y-2 pb-2">
             <div className="flex flex-row w-full align-middle space-x-4">
@@ -636,6 +634,7 @@ export const SupplierManager = (props: SupplierManagerProps) => {
                 rightIcon={() => <HiX onClick={emptyDescription} />}
                 className="w-full"
                 color={textInputColor(eInvoice.description)}
+                disabled={eInvoice.status === 'PAID'}
               />
             </div>
           </div>
@@ -703,7 +702,7 @@ export const SupplierManager = (props: SupplierManagerProps) => {
             eInvoice.status === 'TAKEN_PLACE' ? <Button onClick={paidInvoice}>Paid</Button> : <></>
           }
           {
-            (eInvoice.status === 'CREATED' || eInvoice.status === 'CONFIRMED') && eInvoice.id !== '' ? <Button onClick={rejectInvoice} color='red'>Reject</Button> : <></>
+            eInvoice.id !== '' && eInvoice.status !== 'REJECTED' ? <Button onClick={rejectInvoice} color='red'>Reject</Button> : <></>
           }
         </Modal.Footer>
       </Modal>

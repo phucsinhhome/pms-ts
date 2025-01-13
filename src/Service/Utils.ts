@@ -132,6 +132,13 @@ export const utcToHourMinute = (dateString: string) => {
     })
 }
 
+export const utcToDate = (dateString: string) => {
+    // Output Format: dd.MM.yyyy
+    let date = new Date(dateString + 'Z')
+    let [dates, months, years] = [date.getDate(), date.getMonth() + 1, date.getFullYear()]
+    return `${dates}.${months}.${years}`
+}
+
 export const formatISOHourMinute = (date: Date) => {
     // Format: 15:25
     return date.toLocaleTimeString("en-GB", {

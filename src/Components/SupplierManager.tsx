@@ -733,6 +733,7 @@ export const SupplierManager = (props: SupplierManagerProps) => {
                 rightIcon={() => <HiX onClick={emptyItemName} />}
                 className="w-full"
                 color={eItem.itemName ? 'gray' : 'failure'}
+                disabled={eInvoice.status === 'PAID'}
               />
             </div>
             <div className="flex flex-row w-full align-middle">
@@ -752,6 +753,7 @@ export const SupplierManager = (props: SupplierManagerProps) => {
                 onChange={changeUnitPrice}
                 rightIcon={HiOutlineCash}
                 className="w-full"
+                disabled={eInvoice.status === 'PAID'}
               />
             </div>
             <div className="flex flex-row w-full align-middle">
@@ -768,6 +770,7 @@ export const SupplierManager = (props: SupplierManagerProps) => {
                   data-input-counter-decrement="quantity-input"
                   className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-s-lg px-2 h-full focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
                   onClick={() => changeQuantity(-1)}
+                  disabled={eInvoice.status === 'PAID'}
                 >
                   <svg className="w-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
                     <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h16" />
@@ -789,6 +792,7 @@ export const SupplierManager = (props: SupplierManagerProps) => {
                   data-input-counter-increment="quantity-input"
                   className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-e-lg px-2 h-full focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
                   onClick={() => changeQuantity(1)}
+                  disabled={eInvoice.status === 'PAID'}
                 >
                   <svg className="w-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
                     <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 1v16M1 9h16" />
@@ -832,7 +836,7 @@ export const SupplierManager = (props: SupplierManagerProps) => {
           </div>
         </Modal.Body>
         <Modal.Footer className="flex justify-center">
-          <Button onClick={saveItem} disabled={eItem.itemName === ''}>
+          <Button onClick={saveItem} disabled={eItem.itemName === '' || eInvoice.status === 'PAID'}>
             Save
           </Button>
           <Button onClick={hideItemDetail} color='gray'>

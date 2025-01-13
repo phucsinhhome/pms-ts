@@ -14,9 +14,9 @@ import { Inventory } from "./Components/Inventory";
 import { init, retrieveLaunchParams } from '@telegram-apps/sdk-react';
 import { PGroupManager } from "./Components/PGroupManager";
 import { SupplierManager } from "./Components/SupplierManager";
+import { AppConfig, appConfigs, defaultAppConfigs } from "./db/configs";
 
 export const DEFAULT_PAGE_SIZE = Number(process.env.REACT_APP_DEFAULT_PAGE_SIZE)
-
 
 export type Chat = {
   id: string,
@@ -64,6 +64,7 @@ export default function App() {
   const [syncing, setSyncing] = useState(false)
   const [syncingRes, setSyncingRes] = useState(false)
   const [activeMenu, setActiveMenu] = useState(menus[0])
+  const [configs, setConfigs] = useState<AppConfig>(defaultAppConfigs)
 
   function Component() {
     let launchParams = null
@@ -95,6 +96,7 @@ export default function App() {
   useEffect(() => {
     document.title = "PMS"
     Component()
+    fetchConfig()
   }, []);
 
   const fullName = () => {
@@ -105,6 +107,11 @@ export default function App() {
       : "px-1 py-1 bg-gray-200 text-center text-amber-900 text-sm font-sans rounded-sm shadow-sm"
   }
 
+  const fetchConfig = async () => {
+    console.info("Fetch the configuration...")
+    let cfg = await appConfigs()
+    setConfigs(cfg)
+  }
 
   return (
     <div className="flex flex-col relative h-[100dvh] min-h-0 bg-slate-50">
@@ -142,11 +149,11 @@ export default function App() {
           />} />
         </Routes>
       </Router>
-      <div className="absolute top-0 right-0 flex flex-col mt-10 mr-2 bg-neutral-200 p-1 opacity-90 rounded-md shadow-lg">
+      {configs.app.showProfile ? <div className="absolute top-0 right-0 flex flex-col mt-10 mr-2 bg-neutral-200 p-1 opacity-90 rounded-md shadow-lg">
         <span className=" font text-[10px] font-bold text-gray-800 dark:text-white">{fullName()}</span>
         <span className=" font text-[8px] italic text-gray-600 dark:text-white">{chat.id}</span>
         <span className=" font font-mono text-center text-[8px] text-gray-900 dark:text-white">{"API " + apiVersion}</span>
-      </div>
+      </div> : <></>}
     </div>
   );
 }

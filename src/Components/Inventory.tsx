@@ -454,7 +454,7 @@ export const Inventory = (props: InventoryProps) => {
   }
 
   return (
-    <div className="px-2 h-full pt-3">
+    <div className="px-2 h-full pt-3 relative">
 
       <div className="flex flex-row px-0.5 py-2 space-x-3">
         <Button onClick={addProduct}>Add</Button>
@@ -551,7 +551,7 @@ export const Inventory = (props: InventoryProps) => {
           })}
         </div>
       </div>
-      <div className="flex flex-row items-center justify-between">
+      <div className="flex flex-row items-center justify-between absolute bottom-1">
         <nav className="flex items-center justify-between pt-2" aria-label="Table navigation">
           <ul className="inline-flex items-center -space-x-px">
             <li onClick={() => handlePaginationClick(pagination.pageNumber - 1)} className="block px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">

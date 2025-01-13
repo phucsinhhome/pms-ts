@@ -24,6 +24,14 @@ export const listSupplierInvoicesByStatus = (statuses: string[], page: number, s
   return fetch(`${process.env.REACT_APP_SUPPLIER_ENDPOINT}/invoice/list?statuses=${statuses}&page=${page}&size=${size}`, opts);
 }
 
+export const listSupplierInvoicesByTimeAndStatus = (createdTime: string, statuses: string[], page: number, size: number) => {
+  console.info("Fetching supplier invoices by time and status")
+  const opts = {
+    method: 'GET'
+  }
+  return fetch(`${process.env.REACT_APP_SUPPLIER_ENDPOINT}/invoice/list?createdTime=${createdTime}&statuses=${statuses}&page=${page}&size=${size}`, opts);
+}
+
 
 export const generateSInvoice = (text: string) => {
   console.info("Generate supplier invoice")

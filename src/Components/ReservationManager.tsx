@@ -113,7 +113,7 @@ export function ReservationManager(props: ReservationManagerProps) {
 
 
   return (
-    <div className="h-full pt-3">
+    <div className="h-full pt-3 relative">
       <div className="flex flex-wrap pb-4 px-2 space-x-4 space-y-2">
         <div className="flex flex-row items-center mb-2">
           <svg
@@ -193,8 +193,7 @@ export function ReservationManager(props: ReservationManagerProps) {
           </Table.Body>
         </Table>
       </div>
-      <nav className="flex items-center justify-between pt-4" aria-label="Table navigation">
-        <span className="text-sm font-normal text-gray-500 dark:text-gray-400">Showing <span className="font-semibold text-gray-900 dark:text-white">{pagination.pageSize * pagination.pageNumber + 1}-{pagination.pageSize * pagination.pageNumber + pagination.pageSize}</span> of <span className="font-semibold text-gray-900 dark:text-white">{pagination.totalElements}</span></span>
+      <nav className="flex items-center justify-between pt-4 absolute bottom-1" aria-label="Table navigation">
         <ul className="inline-flex items-center -space-x-px">
           <li onClick={() => handlePaginationClick(pagination.pageNumber - 1)} className="block px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
             <svg className="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd"></path></svg>

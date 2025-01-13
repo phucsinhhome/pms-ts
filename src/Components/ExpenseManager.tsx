@@ -12,6 +12,8 @@ import { FaRotate } from "react-icons/fa6";
 import { listExpenseByExpenserAndDate } from "../db/expense";
 import { Pagination } from "./ProfitReport";
 import { saveExpense } from "../db/expense";
+import { Link } from "react-router-dom";
+import { GiUmbrella } from "react-icons/gi";
 
 export type Expense = {
   id: string,
@@ -110,7 +112,7 @@ export const ExpenseManager = (props: ExpenseProps) => {
   useEffect(() => {
     props.activeMenu()
     fetchExpenses()
-    
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pagination.pageNumber]);
 
@@ -390,11 +392,11 @@ export const ExpenseManager = (props: ExpenseProps) => {
   }
 
   return (
-    <div className="h-full pt-3">
-      <div className="flex flex-row px-2">
-        <div className="flex flex-row items-center pl-4 pb-2">
+    <div className="h-full pt-3 relative">
+      <div className="flex flex-row px-2 space-x-2 align-middle">
+        <div className="flex flex-row items-center pl-4">
           <svg
-            className="w-5 h-5 text-amber-700 dark:text-white"
+            className="w-5 text-amber-700 dark:text-white"
             aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
             width="24"
             height="24"
@@ -407,9 +409,14 @@ export const ExpenseManager = (props: ExpenseProps) => {
             onClick={() => editExpense(defaultEmptExpense)}
             className="font-bold text-amber-800"
           >
-            Add Expense
+            Add
           </span>
         </div>
+        <div className="flex flex-row items-center align-middle">
+          <GiUmbrella />
+          <Link to='../supplier' className="font-bold text-amber-800 pl-0.5">Tours</Link>
+        </div>
+
       </div>
       <div className="h-3/5 max-h-fit overflow-hidden">
         <Table hoverable={true}>
@@ -435,14 +442,13 @@ export const ExpenseManager = (props: ExpenseProps) => {
                   key={exp.id}
                 >
                   <Table.Cell className="sm:px-1 pr-1 py-0.5">
-                    <Moment format="DD.MM">{new Date(exp.expenseDate)}</Moment>
+                    <Moment format="DD.MM">{new Date(exp.expenseDate + 'Z')}</Moment>
                   </Table.Cell>
                   <Table.Cell className="sm:px-1 py-0.5">
                     <div className="grid grid-cols-1">
                       <Label
                         onClick={() => editExpense(exp)}
-                        // state={{ pageNumber: pagination.pageNumber, pageSize: pagination.pageSize }}
-                        className="font-medium text-blue-600 hover:underline dark:text-blue-500"
+                        className="font-medium text-green-800 hover:underline dark:text-blue-500"
                         value={exp.itemName}
                       />
                       <div className="flex flex-row text-sm space-x-1">
@@ -474,8 +480,7 @@ export const ExpenseManager = (props: ExpenseProps) => {
           </Table.Body>
         </Table>
       </div>
-      <nav className="flex items-center justify-between pt-4" aria-label="Table navigation">
-        <span className="text-sm font-normal text-gray-500 dark:text-gray-400">Showing <span className="font-semibold text-gray-900 dark:text-white">{pagination.pageSize * pagination.pageNumber + 1}-{pagination.pageSize * pagination.pageNumber + pagination.pageSize}</span> of <span className="font-semibold text-gray-900 dark:text-white">{pagination.totalElements}</span></span>
+      <nav className="flex items-center justify-between pt-4 absolute bottom-1" aria-label="Table navigation">
         <ul className="inline-flex items-center -space-x-px">
           <li onClick={() => handlePaginationClick(pagination.pageNumber - 1)} className="block px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
             <svg className="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd"></path></svg>

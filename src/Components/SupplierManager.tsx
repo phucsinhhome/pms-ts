@@ -6,7 +6,7 @@ import { InvoiceItem } from "./InvoiceManager";
 import { HiMail, HiOutlineCash, HiX } from "react-icons/hi";
 import { GiCoinflip, GiMeal } from "react-icons/gi";
 import { SERVICE_NAMES } from "../Service/ItemClassificationService";
-import { generateSInvoice, listSupplierInvoices, paidSInvoice, rejectSInvoice, saveSInvoice, takenPlaceSInvoice } from "../db/supplier";
+import { generateSInvoice, listSupplierInvoices, listSupplierInvoicesByTimeAndStatus, paidSInvoice, rejectSInvoice, saveSInvoice, takenPlaceSInvoice } from "../db/supplier";
 import { PiBrainThin } from "react-icons/pi";
 
 export const SInvoiceStatus = {
@@ -126,6 +126,8 @@ export const SupplierManager = (props: SupplierManagerProps) => {
   const [generating, setGenerating] = useState(false)
   const [invoiceTxt, setInvoiceTxt] = useState('')
   const services = SERVICE_NAMES
+  const filterStatuses: string[] = ['CONFIRMED', 'TAKEN_PLACE', 'PAID']
+  const [statuses, setStatuses] = useState<string[]>([])
 
   const [resultMessage, setResultMessage] = useState('')
 
@@ -161,12 +163,39 @@ export const SupplierManager = (props: SupplierManagerProps) => {
     // eslint-disable-next-line
   }, [showInvoiceDetail]);
 
+  useEffect(() => {
+    // if (statuses.length <= 0) {
+    //   return
+    // }
+    fetchInvoices()
+    // eslint-disable-next-line
+  }, [statuses.length]);
+
 
   const fetchInvoices = () => {
     let createdTime = new Date()
     createdTime.setDate(createdTime.getDate() - 5)
     createdTime.setHours(0, 0, 0, 0)
     let fromTime = formatISODateTime(createdTime)
+
+    if (statuses.length > 0) {
+      listSupplierInvoicesByTimeAndStatus(fromTime, statuses, pagination.pageNumber, pagination.pageSize)
+        .then(rsp => {
+          if (rsp.ok) {
+            rsp.json()
+              .then(data => {
+                setInvoices(data.content)
+                if (data.totalPages !== pagination.totalPages) {
+                  setPagination({
+                    ...pagination,
+                    totalPages: data.totalPages
+                  })
+                }
+              })
+          }
+        })
+      return
+    }
     listSupplierInvoices(fromTime, pagination.pageNumber, pagination.pageSize)
       .then(rsp => {
         if (rsp.ok) {
@@ -448,15 +477,39 @@ export const SupplierManager = (props: SupplierManagerProps) => {
     return txt === '' ? 'failure' : 'gray'
   }
 
+  const filterStatus = (status: string) => {
+    let uS = [...statuses]
+    let idx = uS.indexOf(status)
+    console.info(`Idx of status ${status} is ${idx}`)
+    if (idx >= 0) {
+      uS.splice(idx, 1)
+    } else {
+      uS = [...statuses, status]
+    }
+    console.log(uS)
+    setStatuses(uS)
+  }
+
   return (
     <div className="h-full pt-3 space-y-3 relative">
       <div className="flex flex-row px-2 space-x-3">
         <Button onClick={createInvoice}>Add</Button>
-        <div className="flex flex-wrap space-x-2">
+        <div className="flex flex-row space-x-2">
           {
-            Object.keys(SInvoiceStatus).map((status) => <div className="font-mono text-sm">{status}</div>)
+            filterStatuses.map((status) => <Label
+              className={statuses.includes(status) ?
+                "font font-mono text-sm font-bold text-gray-500 border rounded-sm px-1 py-1 h-fit bg-slate-400"
+                : "font font-mono text-sm font-bold text-gray-500 border rounded-sm px-1 py-1 h-fit bg-slate-50"}
+              onClick={() => filterStatus(status)}>{status}</Label>)
           }
         </div>
+      </div>
+      <div className="flex flex-row px-2 space-x-3">
+        {invoices.length > 0 ? <div className="space-x-1">
+          <Label>Total:</Label>
+          <Label>{formatVND(invoices.map(i => i.subTotal).reduce((i1, i2) => i1 + i2))}</Label>
+        </div> : <></>
+        }
       </div>
       <div className="flex flex-col px-2 overflow-hidden space-y-1.5">
         {invoices.map((invoice) => {

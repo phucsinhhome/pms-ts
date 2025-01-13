@@ -296,7 +296,7 @@ export const InvoiceManager = (props: InvoiceManagerProps) => {
           </Link>)
         })}
       </div>
-      <div className="h-3/5 max-h-fit overflow-hidden">
+      <div>
         <Table hoverable={true}>
           <Table.Head>
             <Table.HeadCell className="pr-1">

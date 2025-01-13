@@ -478,7 +478,7 @@ export const Inventory = (props: InventoryProps) => {
           rightIcon={() => <HiX onClick={emptyFilterText} />}
         />
       </div>
-      <div className="max-h-fit overflow-hidden">
+      <div>
         <div className="flex flex-col space-y-1">
           {products.map((product) => {
             return (

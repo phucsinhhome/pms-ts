@@ -418,7 +418,7 @@ export const ExpenseManager = (props: ExpenseProps) => {
         </div>
 
       </div>
-      <div className="h-3/5 max-h-fit overflow-hidden">
+      <div>
         <Table hoverable={true}>
           <Table.Head>
             <Table.HeadCell className="sm:px-1">

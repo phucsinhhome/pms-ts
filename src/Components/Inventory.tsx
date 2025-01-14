@@ -450,7 +450,7 @@ export const Inventory = (props: InventoryProps) => {
   }
 
   return (
-    <div className="px-2 h-full pt-3 relative">
+    <div className="px-2">
 
       <div className="flex flex-row px-0.5 py-2 space-x-3">
         <Button onClick={addProduct}>Add</Button>
@@ -470,82 +470,79 @@ export const Inventory = (props: InventoryProps) => {
           required={true}
           value={filteredName}
           onChange={changeFilteredName}
-          className="w-full"
           rightIcon={() => <HiX onClick={emptyFilterText} />}
         />
       </div>
-      <div>
-        <div className="flex flex-col space-y-1">
-          {products.map((product) => {
-            return (
-              <div
-                className="flex flex-row items-center border border-gray-300 shadow-2xl rounded-md bg-white dark:bg-slate-500 relative"
-                key={product.id}
-              >
-                <div className="pl-0.5 pr-1 py-2">
-                  <Avatar img={product.featureImgUrl} alt="dish image" rounded className="w-12" />
-                </div>
-                <div className="px-0 w-full">
-                  <div className="grid grid-cols-1">
-                    <div className="flex flex-row">
-                      <Link
-                        to=''
-                        onClick={() => viewProductDetail(product)}
-                        state={{ pageNumber: pagination.pageNumber, pageSize: pagination.pageSize }}
-                        className="font-medium text-green-800 hover:underline dark:text-gray-200 overflow-hidden"
-                      >
-                        {product.name}
-                      </Link>
-                    </div>
-                    <div className="flex flex-row text-sm space-x-1">
-                      <span className="font font-mono text-gray-500 text-[10px]">{product.prepareTime}</span>
-                    </div>
-                  </div>
-                </div>
-                <div className="flex flex-col w-28 px-1 absolute right-1">
-                  <div className="text text-center w-full">
-                    <span className="text-sm text-amber-800">{formatVND(product.unitPrice)}</span>
-                  </div>
-                  <div className="flex w-full items-center mb-2 text-center">
-                    <button
-                      type="button"
-                      id="decrement-button"
-                      data-input-counter-decrement="quantity-input"
-                      className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-s-lg py-1 px-2 h-7 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
-                      onClick={() => changeQuantity(product, -1)}
-                    >
-                      <svg className="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
-                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h16" />
-                      </svg>
-                    </button>
-                    <input
-                      type="number"
-                      id="quantity-input"
-                      data-input-counter aria-describedby="helper-text-explanation"
-                      className="bg-gray-50 border-x-0 border-gray-300 h-7 w-full min-w-min text-center text-gray-900 block py-1"
-                      placeholder="9"
-                      required
-                      value={product.quantity}
-                      readOnly
-                    />
-                    <button
-                      type="button"
-                      id="increment-button"
-                      data-input-counter-increment="quantity-input"
-                      className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-e-lg py-1 px-2 h-7 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
-                      onClick={() => changeQuantity(product, 1)}
-                    >
-                      <svg className="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 1v16M1 9h16" />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-
+      <div className="flex flex-col space-y-1">
+        {products.map((product) => {
+          return (
+            <div
+              className="flex flex-row items-center border border-gray-300 shadow-2xl rounded-md bg-white dark:bg-slate-500 relative"
+              key={product.id}
+            >
+              <div className="pl-0.5 pr-1 py-2">
+                <Avatar img={product.featureImgUrl} alt="dish image" rounded className="w-12" />
               </div>
-            )
-          })}
-        </div>
+              <div className="px-0 w-full">
+                <div className="grid grid-cols-1">
+                  <div className="flex flex-row">
+                    <Link
+                      to=''
+                      onClick={() => viewProductDetail(product)}
+                      state={{ pageNumber: pagination.pageNumber, pageSize: pagination.pageSize }}
+                      className="font-medium text-green-800 hover:underline dark:text-gray-200 overflow-hidden"
+                    >
+                      {product.name}
+                    </Link>
+                  </div>
+                  <div className="flex flex-row text-sm space-x-1">
+                    <span className="font font-mono text-gray-500 text-[10px]">{product.prepareTime}</span>
+                  </div>
+                </div>
+              </div>
+              <div className="flex flex-col w-28 px-1 absolute right-1">
+                <div className="text text-center w-full">
+                  <span className="text-sm text-amber-800">{formatVND(product.unitPrice)}</span>
+                </div>
+                <div className="flex w-full items-center mb-2 text-center">
+                  <button
+                    type="button"
+                    id="decrement-button"
+                    data-input-counter-decrement="quantity-input"
+                    className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-s-lg py-1 px-2 h-7 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
+                    onClick={() => changeQuantity(product, -1)}
+                  >
+                    <svg className="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
+                      <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h16" />
+                    </svg>
+                  </button>
+                  <input
+                    type="number"
+                    id="quantity-input"
+                    data-input-counter aria-describedby="helper-text-explanation"
+                    className="bg-gray-50 border-x-0 border-gray-300 h-7 w-full min-w-min text-center text-gray-900 block py-1"
+                    placeholder="9"
+                    required
+                    value={product.quantity}
+                    readOnly
+                  />
+                  <button
+                    type="button"
+                    id="increment-button"
+                    data-input-counter-increment="quantity-input"
+                    className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-e-lg py-1 px-2 h-7 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
+                    onClick={() => changeQuantity(product, 1)}
+                  >
+                    <svg className="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
+                      <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 1v16M1 9h16" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          )
+        })}
       </div>
       <div className="flex flex-row items-center justify-between absolute bottom-1">
         <nav className="flex items-center justify-between pt-2" aria-label="Table navigation">

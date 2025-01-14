@@ -114,7 +114,7 @@ export default function App() {
   }
 
   return (
-    <div className="flex flex-col relative h-[100dvh] min-h-0 bg-slate-50">
+    <div className="flex flex-col relative h-[100dvh] bg-slate-50">
       <Router>
         <div className="mt-2 ml-2 pr-1 w-full flex flex-row items-center space-x-0.5">
           {

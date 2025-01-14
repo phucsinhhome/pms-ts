@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, ChangeEvent } from "react";
+import React, { useState, useEffect, useRef, ChangeEvent, memo } from "react";
 import { Table, TextInput, Label, Spinner, Modal, Button } from "flowbite-react";
 import { deleteExpense, generate, newExpId } from "../db/expense";
 import Moment from "react-moment";
@@ -59,7 +59,7 @@ type ExpenseProps = {
   activeMenu: any
 }
 
-export const ExpenseManager = (props: ExpenseProps) => {
+export const ExpenseManager = memo((props: ExpenseProps) => {
 
   const [expenses, setExpenses] = useState([defaultEmptExpense])
   const [generatingExp, setGeneratingExp] = useState(false);
@@ -114,6 +114,12 @@ export const ExpenseManager = (props: ExpenseProps) => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pagination.pageNumber]);
+
+  useEffect(() => {
+    fetchExpenses()
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.chat]);
 
   const pageClass = (pageNum: number) => {
     var noHighlight = "px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
@@ -683,4 +689,4 @@ export const ExpenseManager = (props: ExpenseProps) => {
       </Modal>
     </div >
   );
-}
+})

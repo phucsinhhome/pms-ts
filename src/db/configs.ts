@@ -1,13 +1,22 @@
+import { Chat } from "../App"
+
 export type AppConfig = {
     app: {
         showProfile: boolean
-    }
+    },
+    users: Chat[]
 }
 
 export const defaultAppConfigs: AppConfig = {
     app: {
         showProfile: false
-    }
+    },
+    users: [{
+        id: '1351151927',
+        firstName: "Minh",
+        lastName: "Tran",
+        username: 'minhtranes'
+    }]
 }
 
 export const appConfigs = async (): Promise<AppConfig> => {

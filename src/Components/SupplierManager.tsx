@@ -320,7 +320,8 @@ export const SupplierManager = (props: SupplierManagerProps) => {
   const paidInvoice = () => {
     let inv: SupplierInvoice = {
       ...eInvoice,
-      paidTime: formatISODateTime(new Date())
+      paidTime: formatISODateTime(new Date()),
+      issuerId: props.chat.id
     }
 
     paidSInvoice(inv)

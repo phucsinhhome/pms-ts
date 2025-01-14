@@ -67,3 +67,14 @@ export const deleteExpense = (expense: Expense) => {
     })
     .then(response => response.json())
 }
+
+export const generate = (expenseTxt: string) => {
+  console.info(`Generate expense ${expenseTxt}...`)
+  var opts = {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain' },
+    body: JSON.stringify(expenseTxt)
+  }
+
+  return fetch(`${process.env.REACT_APP_EXPENSE_SERVICE_ENDPOINT}/generate`, opts)
+}

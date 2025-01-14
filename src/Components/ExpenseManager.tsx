@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef, ChangeEvent } from "react";
 import { Table, TextInput, Label, Spinner, Modal, Button } from "flowbite-react";
-import { deleteExpense, newExpId } from "../db/expense";
+import { deleteExpense, generate, newExpId } from "../db/expense";
 import Moment from "react-moment";
-import run from "../Service/ExpenseExtractionService";
 import { classifyServiceByItemName } from "../Service/ItemClassificationService";
 import { Chat, DEFAULT_PAGE_SIZE } from "../App";
 import { HiOutlineCash, HiX } from "react-icons/hi";
@@ -34,7 +33,7 @@ type EditingExpense = {
   originItemName: string
 }
 
-const defaultEmptExpense = {
+const defaultEmptExpense: Expense = {
   id: '',
   expenseDate: formatISODateTime(new Date()),
   itemName: "",
@@ -121,34 +120,6 @@ export const ExpenseManager = (props: ExpenseProps) => {
     var highlight = "px-3 py-2 leading-tight text-bold text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"
 
     return pagination.pageNumber === pageNum ? highlight : noHighlight
-  }
-
-  const generateExpenseFromMessage = (msg: string) => {
-    return run(msg)
-      .then(data => {
-        console.info("Complete extracting expense from message %s", msg);
-        console.info(data);
-        let jsonD = JSON.parse(data)
-
-        let eE = jsonD.expenses[0]
-
-        let pr = parseInt(eE.price);
-        let qty = parseInt(eE.quantity);
-        let uP = Math.floor(pr / qty); // Use Math.floor() if you prefer rounding down
-        console.info("Price: " + pr + ", Quantity: " + qty + ", Unit Price: " + uP)
-        var exp = {
-          id: '',
-          itemName: eE.item,
-          quantity: qty,
-          unitPrice: uP,
-          amount: pr,
-          service: eE.service,
-          expenseDate: formatISODateTime(new Date()),
-          expenserName: props.displayName,
-          expenserId: props.chat.id
-        }
-        return exp
-      })
   }
 
   const handleDeleteExpense = (exp: Expense) => {
@@ -300,31 +271,66 @@ export const ExpenseManager = (props: ExpenseProps) => {
     setEditingExpense(eI)
   }
 
-  const generatePopupExpense = () => {
+  const generatePopupExpense = async () => {
     let expMsg = editingExpense.itemMessage
     console.info("Extracting expense from message %s", expMsg)
     if (expMsg.length < 5) {
-      console.warn("Message must be longer than 5 characters")
+      console.warn(`Too short message ${expMsg}. It must be longer than 5 characters`)
       return
     }
     setGeneratingExp(true)
-    generateExpenseFromMessage(expMsg)
-      .then(exp => {
-        let uP = formatMoneyAmount(String(exp.unitPrice))
-        let eI = {
-          origin: exp,
-          formattedUnitPrice: uP.formattedAmount,
-          originItemName: exp.itemName,
-          itemMessage: expMsg
+    try {
+      let exp = await generateExpense(expMsg)
+      if (exp === undefined) {
+        console.warn(`Invalid generated expense. Failed to generate expense from ${expMsg}!`)
+        return
+      }
+      let uP = formatMoneyAmount(String(exp.unitPrice))
+      let eI = {
+        origin: exp,
+        formattedUnitPrice: uP.formattedAmount,
+        originItemName: exp.itemName,
+        itemMessage: expMsg
+      }
+      setEditingExpense(eI)
+    }
+    finally {
+      setGeneratingExp(false)
+    }
+  }
+
+  const generateExpense = (msg: string) => {
+    return generate(msg)
+      .then(rsp => {
+        if (!rsp.ok) {
+          return {
+            ...defaultEmptExpense,
+            expenseDate: formatISODateTime(new Date()),
+            expenserName: props.displayName,
+            expenserId: props.chat.id
+          }
         }
-        setEditingExpense(eI)
-        setGeneratingExp(false)
+        return rsp.json()
+          .then((data: Expense) => {
+            console.info(`Complete extracting expense from message ${msg}`);
+            console.info(`Name: ${data.itemName}, Quantity: ${data.quantity}, Unit Price: ${data.unitPrice}`)
+            return {
+              ...data,
+              id: '',
+              amount: data.unitPrice * data.quantity,
+              expenseDate: formatISODateTime(new Date()),
+              expenserName: props.displayName,
+              expenserId: props.chat.id
+            }
+          })
       })
-      .catch(e => {
-        console.error("Failed to generate expcetion from %s", expMsg, e)
-      })
-      .finally(() => {
-        setGeneratingExp(false)
+      .catch((e) => {
+        return {
+          ...defaultEmptExpense,
+          expenseDate: formatISODateTime(new Date()),
+          expenserName: props.displayName,
+          expenserId: props.chat.id
+        }
       })
   }
 
@@ -448,7 +454,7 @@ export const ExpenseManager = (props: ExpenseProps) => {
                     <div className="grid grid-cols-1">
                       <Label
                         onClick={() => editExpense(exp)}
-                        className="font-medium text-green-800 hover:underline dark:text-blue-500"
+                        className="font-sans text-green-800 hover:underline dark:text-gray-100"
                         value={exp.itemName}
                       />
                       <div className="flex flex-row text-sm space-x-1">

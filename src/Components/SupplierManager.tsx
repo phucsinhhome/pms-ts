@@ -1,5 +1,5 @@
-import React, { useState, useEffect, ChangeEvent, useRef } from "react";
-import { formatISODateTime, formatMoneyAmount, formatVND, randomId, utcToDate, utcToHourMinute } from "../Service/Utils";
+import React, { useState, useEffect, ChangeEvent } from "react";
+import { formatISODateTime, formatMoneyAmount, formatVND, randomId, utcToDate } from "../Service/Utils";
 import { Chat, DEFAULT_PAGE_SIZE } from "../App";
 import { Button, Label, Modal, Spinner, TextInput } from "flowbite-react";
 import { InvoiceItem } from "./InvoiceManager";

@@ -326,7 +326,7 @@ export const InvoiceManager = (props: InvoiceManagerProps) => {
                       <Link
                         to={inv.id}
                         state={{ pageNumber: pagination.pageNumber, pageSize: pagination.pageSize }}
-                        className={isDeleteable(inv) ? "font-medium text-blue-600 hover:underline dark:text-blue-500" : "font-medium text-gray-600 hover:underline dark:text-white-500"}
+                        className={isDeleteable(inv) ? "font-sans text-green-800 hover:underline dark:text-gray-100" : "font-sans text-gray-600 hover:underline dark:text-white-500"}
                       >
                         {inv.guestName}
                       </Link>

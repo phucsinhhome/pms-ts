@@ -4,11 +4,11 @@ import { Avatar, Button, FileInput, Label, Modal, Textarea, TextInput } from "fl
 import { adjustQuantity as adjustInventoryQuantity, listProducts, listProductsByGroup, listProductsWithName, listProductsWithNameAndGroup, saveProduct } from "../db/product";
 import { HiOutlineCash, HiX } from "react-icons/hi";
 import { formatMoneyAmount, formatVND } from "../Service/Utils";
-import { putObject } from "../db/gcs";
 import { DEFAULT_PAGE_SIZE } from "../App";
 import { Pagination } from "./ProfitReport";
 import { listAllPGroups } from "../db/pgroup";
 import { PGroup } from "./PGroupManager";
+import { putObject } from "../Service/FileMinio";
 
 export type Product = {
   id: string,
@@ -392,39 +392,35 @@ export const Inventory = (props: InventoryProps) => {
 
   const changeFeatureImage = (e: ChangeEvent<HTMLInputElement>) => {
     onFileChange(e, 'feature')
-      ?.then((rsp: Response) => {
-        if (rsp.ok) {
-          rsp.json()
-            .then(data => {
-              setEditingProduct({
-                ...editingProduct,
-                origin: {
-                  ...editingProduct.origin,
-                  featureImgUrl: buildImageUrl(data.objectKey)
-                }
-              })
-            })
+      ?.then(data => {
+        if (data === null) {
+          return
         }
+        setEditingProduct({
+          ...editingProduct,
+          origin: {
+            ...editingProduct.origin,
+            featureImgUrl: data?.objectURL
+          }
+        })
       })
   }
 
   const changeContentImage = (e: ChangeEvent<HTMLInputElement>, idx: number) => {
     onFileChange(e, 'content_' + idx)
-      ?.then((rsp: Response) => {
-        if (rsp.ok) {
-          rsp.json()
-            .then(data => {
-              setEditingProduct({
-                ...editingProduct,
-                origin: {
-                  ...editingProduct.origin,
-                  imageUrls: [
-                    buildImageUrl(data.objectKey)
-                  ]
-                }
-              })
-            })
+      ?.then(data => {
+        if (data === null) {
+          return
         }
+        setEditingProduct({
+          ...editingProduct,
+          origin: {
+            ...editingProduct.origin,
+            imageUrls: [
+              data.objectURL
+            ]
+          }
+        })
       })
   }
 

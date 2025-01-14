@@ -95,7 +95,11 @@ export const OrderManager = (props: OrderManagerProps) => {
       return
     }
     Promise.all(orders.map(async (order: Order): Promise<Order> => {
-      if (order.orderId === undefined || order.orderId === '') {
+      if (order.orderId === undefined
+        || order.orderId === ''
+        || order.invoiceId === undefined
+        || order.invoiceId === null
+        || order.invoiceId === '') {
         return transf(order)
       }
       const data = await getInvoice(order.invoiceId);

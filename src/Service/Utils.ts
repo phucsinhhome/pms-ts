@@ -139,6 +139,13 @@ export const utcToDate = (dateString: string) => {
     return `${dates}.${months}.${years}`
 }
 
+export const utcToDateTime = (dateString: string) => {
+    // Output Format: dd.MM.yyyy
+    let date = new Date(dateString + 'Z')
+    let [dates, months, years, hours, minutes] = [date.getDate(), date.getMonth() + 1, date.getFullYear(), date.getHours(), date.getMinutes()]
+    return `${dates}.${months}.${years} ${hours}:${minutes}`
+}
+
 export const formatISOHourMinute = (date: Date) => {
     // Format: 15:25
     return date.toLocaleTimeString("en-GB", {

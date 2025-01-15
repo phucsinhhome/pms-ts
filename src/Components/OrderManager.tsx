@@ -1,6 +1,6 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
 import { Link } from "react-router-dom";
-import { formatISODate, formatISODateTime, utcToHourMinute } from "../Service/Utils";
+import { formatISODate, formatISODateTime, utcToDate, utcToDateTime, utcToHourMinute } from "../Service/Utils";
 import { Chat, DEFAULT_PAGE_SIZE } from "../App";
 import { listOrderByStatuses, listOrders } from "../db/order";
 import { Button, Modal, TextInput } from "flowbite-react";
@@ -226,6 +226,17 @@ export const OrderManager = (props: OrderManagerProps) => {
     }
   }
 
+  const timeOrDate = (dateString: string) => {
+    let today = formatISODate(new Date())
+
+    let date = new Date(dateString + 'Z')
+    let [dates, months, hours, minutes] = [date.getDate(), date.getMonth() + 1, date.getHours(), date.getMinutes()]
+
+    return dateString.startsWith(today) ?
+      `${hours}:${minutes}`
+      : `${dates}.${months} ${hours}:${minutes}`
+  }
+
   return (
     <div className="h-full pt-3 relative">
       <div className="flex flex-row items-center w-full pb-4 px-2 space-x-3">
@@ -263,11 +274,11 @@ export const OrderManager = (props: OrderManagerProps) => {
                   <div className="flex flex-row text-sm space-x-3">
                     <div className="flex flex-row items-center rounded-sm">
                       <HiMail />
-                      <span className="font font-mono text-gray-500 text-[12px]">{utcToHourMinute(order.startTime)}</span>
+                      <span className="font font-mono text-gray-500 text-[12px]">{timeOrDate(order.startTime)}</span>
                     </div>
                     {order.expectedTime ? <div className="flex flex-row items-center rounded-sm">
                       <GiMeal />
-                      <span className="font font-mono text-gray-500 text-[12px]">{utcToHourMinute(order.expectedTime)}
+                      <span className="font font-mono text-gray-500 text-[12px]">{timeOrDate(order.expectedTime)}
                       </span></div> : <></>
                     }
                     {order.invoiceId ? <div className="flex flex-row items-center rounded-sm">

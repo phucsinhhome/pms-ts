@@ -1,5 +1,21 @@
 import { Order, OrderItem } from "../Components/OrderManager";
 
+export const listOrders = (fromTime: string, page: number, size: number) => {
+  console.info(`Fetch orders from backend from ${fromTime}`)
+  var opts = {
+    method: 'GET'
+  }
+  return fetch(`${process.env.REACT_APP_ORDER_ENDPOINT}/list?fromTime=${fromTime}&page=${page}&size=${size}`, opts);
+}
+
+export const listOrderByStatuses = (fromTime: string, statuses: string[], page: number, size: number) => {
+  console.info(`Fetch orders from backend from ${fromTime} with statuses ${statuses}`)
+  var opts = {
+    method: 'GET'
+  }
+  return fetch(`${process.env.REACT_APP_ORDER_ENDPOINT}/list?fromTime=${fromTime}&statuses=${statuses}&page=${page}&size=${size}`, opts);
+}
+
 export const fetchUpcomingOrders = (fromTime: string, filter: string, page: number, size: number) => {
   console.info("Fetch orders from backend")
   var opts = {

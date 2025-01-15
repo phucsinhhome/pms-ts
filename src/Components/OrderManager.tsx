@@ -2,7 +2,7 @@ import React, { useState, useEffect, ChangeEvent } from "react";
 import { Link } from "react-router-dom";
 import { formatISODate, formatISODateTime, utcToHourMinute } from "../Service/Utils";
 import { Chat, DEFAULT_PAGE_SIZE } from "../App";
-import { fetchUpcomingOrders } from "../db/order";
+import { listOrderByStatuses, listOrders } from "../db/order";
 import { Button, Modal, TextInput } from "flowbite-react";
 import { getInvoice, listInvoiceByGuestName, listStayingAndComingInvoicesAndPrepaid } from "../db/invoice";
 import { Invoice } from "./InvoiceManager";
@@ -16,6 +16,8 @@ export const OrderStatus = {
   SERVED: 'text-gray-700',
   EXPIRED: 'text-gray-700'
 }
+
+const filterables: string[] = ["CONFIRMED", "SENT", "SERVED"]
 
 export type SK = keyof typeof OrderStatus
 
@@ -48,15 +50,12 @@ type OrderManagerProps = {
   activeMenu: any
 }
 
-const listOpts = ['coming', 'all']
-
 export const OrderManager = (props: OrderManagerProps) => {
   const [orders, setOrders] = useState<Order[]>([])
   const [filteredName, setFilteredName] = useState('')
   const [filteredInvoices, setFilteredInvoices] = useState<Invoice[]>([])
   const [showInvoices, setShowInvoices] = useState(false)
-  const [activeListOpt, setActiveListOpt] = useState(listOpts[0])
-  const orderedStatuses = ['CONFIRMED', 'SENT', 'SERVED', 'CREATED']
+  const [activeStatuses, setActiveStatuses] = useState(["CONFIRMED", "SENT"])
 
   const [pagination, setPagination] = useState({
     pageNumber: 0,
@@ -81,13 +80,23 @@ export const OrderManager = (props: OrderManagerProps) => {
     var fromTime = formatISODateTime(today)
     console.info(`Fetch upcoming order after ${fromTime}`)
 
-    const ordersData = await fetchUpcomingOrders(fromTime, activeListOpt, pagination.pageNumber, pagination.pageSize)
-      .then((rsp: Response) => {
-        if (rsp.ok) {
-          return rsp.json()
-        }
-      })
-
+    let ordersData = { content: [], totalPages: 0, number: 0, size: 0, totalElements: 0 }
+    if (activeStatuses.length === 0) {
+      ordersData = await listOrders(fromTime, pagination.pageNumber, pagination.pageSize)
+        .then((rsp: Response) => {
+          if (rsp.ok) {
+            return rsp.json()
+          }
+        })
+    }
+    if (activeStatuses.length > 0) {
+      ordersData = await listOrderByStatuses(fromTime, activeStatuses, pagination.pageNumber, pagination.pageSize)
+        .then((rsp: Response) => {
+          if (rsp.ok) {
+            return rsp.json()
+          }
+        })
+    }
 
     var orders: Order[] = ordersData.content
     if (orders.length <= 0) {
@@ -110,7 +119,7 @@ export const OrderManager = (props: OrderManagerProps) => {
     }))
       .then(ords => {
         var sortedOrders: Order[] = []
-        orderedStatuses
+        filterables
           .map(s => ords.filter(o => o.status === s))
           .forEach((ors: Order[]) => sortedOrders.push(...ors))
         setOrders(sortedOrders)
@@ -143,7 +152,7 @@ export const OrderManager = (props: OrderManagerProps) => {
   useEffect(() => {
     fetchOrders()
     // eslint-disable-next-line
-  }, [activeListOpt]);
+  }, [activeStatuses]);
 
 
   const pageClass = (pageNum: number) => {
@@ -206,21 +215,31 @@ export const OrderManager = (props: OrderManagerProps) => {
     setFilteredName('')
   }
 
-  const changeListOpt = () => {
-    let cIdx = listOpts.findIndex(o => o === activeListOpt)
-    if (cIdx === listOpts.length - 1) {
-      setActiveListOpt(listOpts[0])
-      return
+  const changeListOpt = (sts: string) => {
+    let aL = [...activeStatuses]
+    let cIdx = activeStatuses.findIndex(o => o === sts)
+    if (cIdx >= 0) {
+      aL.splice(cIdx, 1)
+      setActiveStatuses(aL)
+    } else {
+      setActiveStatuses([...aL, sts])
     }
-    setActiveListOpt(listOpts[cIdx + 1])
   }
 
   return (
     <div className="h-full pt-3 relative">
       <div className="flex flex-row items-center w-full pb-4 px-2 space-x-3">
         <Button onClick={findTheInvoice}>Copy Link</Button>
-        <div onClick={changeListOpt} className="px-2 font-mono text-sm border rounded-sm shadow-sm bg-slate-200">
-          {activeListOpt.toUpperCase()}
+        <div className="flex flex-row space-x-2">
+          {
+            filterables.map(sts => <div onClick={() => changeListOpt(sts)}
+              className={activeStatuses.includes(sts) ?
+                "px-2 font-mono text-sm border rounded-sm shadow-sm bg-slate-400" :
+                "px-2 font-mono text-sm border rounded-sm shadow-sm bg-slate-200"
+              }>
+              {sts}
+            </div>)
+          }
         </div>
       </div>
       <div className="flex flex-col px-2 overflow-hidden space-y-1.5">

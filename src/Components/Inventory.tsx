@@ -26,12 +26,12 @@ const timeOpts = ['PT5M', 'PT15M', 'PT30M', 'PT1H', 'PT1H30M', 'PT2H']
 type InventoryProps = {
   activeMenu: any
 }
-export const GOOGLE_CLOUD_STORAGE = 'https://storage.googleapis.com'
 
 export const Inventory = (props: InventoryProps) => {
 
 
-  const defaultImageKey = "psassistant/product/pizza.png"
+  const bucket = process.env.REACT_APP_PUBLIC_BUCKET!
+  const defaultImageKey = "product/images/pizza.png"
   const [filteredName, setFilteredName] = useState('')
   const [products, setProducts] = useState<Product[]>([])
 
@@ -46,7 +46,7 @@ export const Inventory = (props: InventoryProps) => {
   })
 
   const buildImageUrl = (objectKey: string) => {
-    return [GOOGLE_CLOUD_STORAGE, process.env.REACT_APP_PUBLIC_BUCKET, objectKey].join("/")
+    return `https://${process.env.REACT_APP_FILE_SERVICE_ENDPOINT}/os/${bucket}/${objectKey}`
   }
 
   const defaultEmptyProduct = {

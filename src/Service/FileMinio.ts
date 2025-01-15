@@ -21,23 +21,6 @@ export function getPresignedLinkWithDefaultDuration(bucket: string, key: string,
     getPresignedLink(bucket, key, 300, fnCallback)
 }
 
-// export const uploadBlob = (bucket: string, key: string, blob: BlobPart, filename: string) => {
-//     var file = new File([blob], filename);
-//     var fs = Fs.createReadStream(file);
-//     return minioClient.putObject(bucket, key, fs, file.size);
-// }
-
-// export const putObject = (bucket: string, key: string, blob: Blob, filename: string) => {
-//     var file = new File([blob], filename)
-//     let opts = {
-//         method: 'PUT',
-//         body: file
-//     }
-//     return minioClient
-//         .presignedPutObject(bucket, key, 300)
-//         .then((url) => fetch(url, opts))
-// }
-
 export const putObject = async (file: File, filename: string, bucket: string, key: string) => {
     let opts = {
         method: 'PUT',

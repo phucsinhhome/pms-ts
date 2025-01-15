@@ -14,10 +14,9 @@ import html2canvas from "html2canvas";
 import { Invoice, InvoiceItem, Issuer } from "./InvoiceManager";
 import { paymentMethods, rooms } from "../db/staticdata";
 import { ResultCallback } from "minio/dist/main/internal/type";
-import { GOOGLE_CLOUD_STORAGE, Product } from "./Inventory";
+import { Product } from "./Inventory";
 import { Reservation, ResRoom } from "./ReservationManager";
 import { getPresignedLink } from "../Service/FileMinio";
-import { putBlob } from "../db/gcs";
 
 
 const paymentIcons = [
@@ -871,7 +870,6 @@ export const InvoiceEditor = (props: InvoiceProps) => {
   //================ SHARED INVOICE ==========================//
   const sharedInvRef = useRef<HTMLDivElement>(null)
   const sharedInvImg = useRef<HTMLDivElement>(null)
-  // const [btnSharedInvText, setBtnSharedInvText] = useState("Copy")
   const [sharedInvData, setSharedInvData] = useState<string | null>()
 
   const downloadSharedInv = async () => {
@@ -885,53 +883,15 @@ export const InvoiceEditor = (props: InvoiceProps) => {
     canvas.toBlob(async (blob) => {
       if (blob) {
         try {
-          let bucket = process.env.REACT_APP_SHORT_LIVING_PUBLIC_BUCKET!
-          let objectName = invoice.id + '.png'
-          let objectKey = 'invoices/' + objectName
-          putBlob(blob, objectName, bucket, objectKey)
-            .then((rsp) => {
-              if (rsp.ok) {
-                let imageUrl = [GOOGLE_CLOUD_STORAGE, bucket, objectKey].join('/')
-                setSharedInvData(imageUrl)
-                console.info("Uploaded image to %s", imageUrl)
-              }
-            })
+          setSharedInvData(URL.createObjectURL(blob))
           await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
           console.log('Image copied to clipboard');
         } catch (err) {
           console.error('Failed to copy image: ', err);
         }
       }
-    }
-      , 'image/png');
+    }, 'image/png');
 
-
-    // canvas.toBlob((blob) => {
-    //   if (blob === null) {
-    //     console.warn("Invalid blob")
-    //     return
-    //   }
-    //   var filename = invoice.id + ".png"
-    //   var key = formatDatePartition(new Date()) + "/" + filename
-    //   uploadBlobToPresignedURL(Configs.invoice.editInvoice.bucket, key, blob, filename)
-    //     .then(rsp => {
-    //       if (rsp.ok) {
-    //         getPresignedLinkWithDefaultDuration(Configs.invoice.editInvoice.bucket, key, (error, url) => {
-    //           setSharedInvData(url)
-    //           if (sharedInvImg.current) {
-    //             sharedInvImg.current.scrollIntoView()
-    //           }
-    //         })
-    //       }
-    //       return null
-    //     }).catch(e => {
-    //       console.error("Failed to upload file %s", filename)
-    //       console.log(e)
-    //       return null
-    //     })
-    // },
-    //   "image/png",
-    //   1)
   }
 
   return (

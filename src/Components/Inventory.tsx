@@ -1,7 +1,7 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
 import { Link } from "react-router-dom";
 import { Avatar, Button, FileInput, Label, Modal, Textarea, TextInput } from "flowbite-react";
-import { adjustQuantity as adjustInventoryQuantity, listProducts, listProductsByGroup, listProductsWithName, listProductsWithNameAndGroup, saveProduct } from "../db/product";
+import { adjustQuantity as adjustInventoryQuantity, listProductItems, listProductItemsByGroup, listProductItemsWithName, listProductItemsWithNameAndGroup } from "../db/inventory";
 import { HiOutlineCash, HiX } from "react-icons/hi";
 import { formatMoneyAmount, formatVND } from "../Service/Utils";
 import { DEFAULT_PAGE_SIZE } from "../App";
@@ -9,6 +9,7 @@ import { Pagination } from "./ProfitReport";
 import { listAllPGroups } from "../db/pgroup";
 import { PGroup } from "./PGroupManager";
 import { putObject } from "../Service/FileMinio";
+import { saveProduct } from "../db/product";
 
 export type Product = {
   id: string,
@@ -88,7 +89,7 @@ export const Inventory = (props: InventoryProps) => {
   const fetchAllProducts = () => {
     console.info("Loading all the products")
 
-    listProducts(pagination.pageNumber, pagination.pageSize)
+    listProductItems(pagination.pageNumber, pagination.pageSize)
       .then(rsp => {
         if (rsp.ok) {
           rsp.json()
@@ -331,7 +332,7 @@ export const Inventory = (props: InventoryProps) => {
       return
     }
     if (filteredName === '' && activeGroup !== '') {
-      listProductsByGroup(activeGroup, pagination.pageNumber, pagination.pageSize)
+      listProductItemsByGroup(activeGroup, pagination.pageNumber, pagination.pageSize)
         .then(rsp => {
           if (rsp.ok) {
             rsp.json()
@@ -353,7 +354,7 @@ export const Inventory = (props: InventoryProps) => {
     }
 
     if (filteredName !== '' && activeGroup === '') {
-      listProductsWithName(filteredName)
+      listProductItemsWithName(filteredName)
         .then(rsp => {
           if (rsp.ok) {
             rsp.json()
@@ -373,7 +374,7 @@ export const Inventory = (props: InventoryProps) => {
       return
     }
 
-    listProductsWithNameAndGroup(filteredName, activeGroup, pagination.pageNumber, pagination.pageSize)
+    listProductItemsWithNameAndGroup(filteredName, activeGroup, pagination.pageNumber, pagination.pageSize)
       .then(rsp => {
         if (rsp.ok) {
           rsp.json()

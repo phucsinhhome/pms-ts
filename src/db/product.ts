@@ -5,7 +5,7 @@ export const listAllProducts = () => {
   const opts = {
     method: 'GET'
   }
-  return fetch(`${process.env.REACT_APP_INVENTORY_ENDPOINT}/list/like?name=*`, opts)
+  return fetch(`${process.env.REACT_APP_PRODUCT_SERVICE_ENDPOINT}/list/like?name=*`, opts)
     .then(response => response.json())
 }
 
@@ -14,17 +14,7 @@ export const listProducts = (page: number, size: number) => {
   const opts = {
     method: 'GET'
   }
-  return fetch(`${process.env.REACT_APP_INVENTORY_ENDPOINT}/list?page=${page}&size=${size}`, opts)
-}
-
-export const adjustQuantity = (adjustment: ItemAdjustment) => {
-  console.info("Adjust the product")
-  const opts = {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(adjustment)
-  }
-  return fetch(`${process.env.REACT_APP_INVENTORY_ENDPOINT}/quantity/adjust`, opts)
+  return fetch(`${process.env.REACT_APP_PRODUCT_SERVICE_ENDPOINT}/list?page=${page}&size=${size}`, opts)
 }
 
 export const saveProduct = (product: Product) => {
@@ -34,7 +24,7 @@ export const saveProduct = (product: Product) => {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(product)
   }
-  return fetch(`${process.env.REACT_APP_INVENTORY_ENDPOINT}/save`, opts)
+  return fetch(`${process.env.REACT_APP_PRODUCT_SERVICE_ENDPOINT}/save`, opts)
 }
 
 export const listProductsWithName = (name: string) => {
@@ -43,7 +33,7 @@ export const listProductsWithName = (name: string) => {
   const opts = {
     method: 'GET'
   }
-  return fetch(`${process.env.REACT_APP_INVENTORY_ENDPOINT}/list/like?name=${name}`, opts)
+  return fetch(`${process.env.REACT_APP_PRODUCT_SERVICE_ENDPOINT}/list/like?name=${name}`, opts)
 }
 
 export const listProductsByGroup = (group: string, page: number, size: number) => {
@@ -52,7 +42,7 @@ export const listProductsByGroup = (group: string, page: number, size: number) =
   const opts = {
     method: 'GET'
   }
-  return fetch(`${process.env.REACT_APP_INVENTORY_ENDPOINT}/list/group?group=${group}&page=${page}&size=${size}`, opts)
+  return fetch(`${process.env.REACT_APP_PRODUCT_SERVICE_ENDPOINT}/list/group?group=${group}&page=${page}&size=${size}`, opts)
 }
 
 export const listProductsWithNameAndGroup = (name: string, group: string, page: number, size: number) => {
@@ -61,5 +51,5 @@ export const listProductsWithNameAndGroup = (name: string, group: string, page: 
   const opts = {
     method: 'GET'
   }
-  return fetch(`${process.env.REACT_APP_INVENTORY_ENDPOINT}/search?group=${group}&name=${name}&page=${page}&size=${size}`, opts)
+  return fetch(`${process.env.REACT_APP_PRODUCT_SERVICE_ENDPOINT}/search?group=${group}&name=${name}&page=${page}&size=${size}`, opts)
 }

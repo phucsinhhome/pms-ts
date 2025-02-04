@@ -21,6 +21,13 @@ export type Product = {
   imageUrls: string[],
   prepareTime: string
 }
+
+export type ItemAdjustment = {
+  itemId: string,
+  delta: number,
+  quantity: number
+}
+
 const timeOpts = ['PT5M', 'PT15M', 'PT30M', 'PT1H', 'PT1H30M', 'PT2H']
 
 type InventoryProps = {
@@ -148,25 +155,26 @@ export const Inventory = (props: InventoryProps) => {
       return
     }
 
-    var item = {
-      ...product,
-      quantity: product.quantity + delta
+    var item: ItemAdjustment = {
+      itemId: product.id,
+      delta: delta,
+      quantity: product.quantity
     }
     adjustInventoryQuantity(item)
       .then(rsp => {
         if (rsp.ok) {
           rsp.json()
-            .then((data: Product) => {
+            .then((data: ItemAdjustment) => {
               setProducts(products.map(p => {
-                if (p.id === data.id) { p.quantity = data.quantity }
+                if (p.id === data.itemId) { p.quantity = data.quantity }
                 return p
               }))
-              console.info("Change item %s with quantity %s order successfully", item.id, item.quantity)
+              console.info("Change item %s with quantity %s order successfully", item.itemId, item.quantity)
             })
         } else if (rsp.status === 400) {
-          console.warn('The item %s does not exist', item.id)
+          console.warn('The item %s does not exist', item.itemId)
         } else if (rsp.status === 304) {
-          console.warn('The item %s ran out', item.id)
+          console.warn('The item %s ran out', item.itemId)
         }
       })
   }

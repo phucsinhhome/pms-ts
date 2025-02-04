@@ -1,4 +1,4 @@
-import { Product } from "../Components/Inventory"
+import { ItemAdjustment, Product } from "../Components/Inventory"
 
 export const listAllProducts = () => {
   console.info("Fetching all products")
@@ -17,14 +17,14 @@ export const listProducts = (page: number, size: number) => {
   return fetch(`${process.env.REACT_APP_INVENTORY_ENDPOINT}/list?page=${page}&size=${size}`, opts)
 }
 
-export const adjustQuantity = (product: Product) => {
+export const adjustQuantity = (adjustment: ItemAdjustment) => {
   console.info("Adjust the product")
   const opts = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(product)
+    body: JSON.stringify(adjustment)
   }
-  return fetch(`${process.env.REACT_APP_INVENTORY_ENDPOINT}/save`, opts)
+  return fetch(`${process.env.REACT_APP_INVENTORY_ENDPOINT}/quantity/adjust`, opts)
 }
 
 export const saveProduct = (product: Product) => {

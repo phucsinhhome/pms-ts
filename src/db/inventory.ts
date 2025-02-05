@@ -1,14 +1,5 @@
 import { ItemAdjustment } from "../Components/Inventory"
 
-export const listAllProductItems = () => {
-  console.info("Fetching all products")
-  const opts = {
-    method: 'GET'
-  }
-  return fetch(`${process.env.REACT_APP_INVENTORY_ENDPOINT}/list`, opts)
-    .then(response => response.json())
-}
-
 export const listProductItems = (page: number, size: number) => {
   console.info("Fetching all products from the inventory")
   const opts = {
@@ -33,7 +24,7 @@ export const listProductItemsWithName = (name: string) => {
   const opts = {
     method: 'GET'
   }
-  return fetch(`${process.env.REACT_APP_INVENTORY_ENDPOINT}/list/like?name=${name}`, opts)
+  return fetch(`${process.env.REACT_APP_INVENTORY_ENDPOINT}/list?name=${name}&page=0&size=100`, opts)
 }
 
 export const listProductItemsByGroup = (group: string, page: number, size: number) => {
@@ -42,7 +33,7 @@ export const listProductItemsByGroup = (group: string, page: number, size: numbe
   const opts = {
     method: 'GET'
   }
-  return fetch(`${process.env.REACT_APP_INVENTORY_ENDPOINT}/list/group?group=${group}&page=${page}&size=${size}`, opts)
+  return fetch(`${process.env.REACT_APP_INVENTORY_ENDPOINT}/list?group=${group}&page=${page}&size=${size}`, opts)
 }
 
 export const listProductItemsWithNameAndGroup = (name: string, group: string, page: number, size: number) => {
@@ -51,5 +42,5 @@ export const listProductItemsWithNameAndGroup = (name: string, group: string, pa
   const opts = {
     method: 'GET'
   }
-  return fetch(`${process.env.REACT_APP_INVENTORY_ENDPOINT}/search?group=${group}&name=${name}&page=${page}&size=${size}`, opts)
+  return fetch(`${process.env.REACT_APP_INVENTORY_ENDPOINT}/list?group=${group}&name=${name}&page=${page}&size=${size}`, opts)
 }

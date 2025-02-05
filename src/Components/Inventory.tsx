@@ -180,8 +180,8 @@ export const Inventory = (props: InventoryProps) => {
       })
   }
 
-  const indexProduct = (fProducts: Product[]) => {
-    setProducts(fProducts)
+  const indexProduct = (products: Product[]) => {
+    setProducts(products)
   }
 
 
@@ -358,8 +358,8 @@ export const Inventory = (props: InventoryProps) => {
         .then(rsp => {
           if (rsp.ok) {
             rsp.json()
-              .then(data => {
-                indexProduct(data)
+              .then((data) => {
+                indexProduct(data.content)
                 if (pagination.totalPages > 1) {
                   setPagination({
                     ...pagination,

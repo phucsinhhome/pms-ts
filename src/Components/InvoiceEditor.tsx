@@ -9,7 +9,6 @@ import { Chat, DEFAULT_PAGE_SIZE } from "../App";
 import { getUsers as issuers } from "../db/users";
 import Moment from "react-moment";
 import { listLatestReservations } from "../db/reservation";
-import { listAllProductItems } from "../db/inventory";
 import html2canvas from "html2canvas";
 import { Invoice, InvoiceItem, Issuer } from "./InvoiceManager";
 import { paymentMethods, rooms } from "../db/staticdata";
@@ -17,6 +16,7 @@ import { ResultCallback } from "minio/dist/main/internal/type";
 import { Product } from "./Inventory";
 import { Reservation, ResRoom } from "./ReservationManager";
 import { getPresignedLink } from "../Service/FileMinio";
+import { listAllProductItems } from "../db/inventory";
 
 
 const paymentIcons = [
@@ -242,7 +242,13 @@ export const InvoiceEditor = (props: InvoiceProps) => {
     if (products.length <= 0) {
       console.info("Fetch the products")
       listAllProductItems()
-        .then(data => setProducts(data))
+        .then(rsp => {
+          if (rsp.ok) {
+            rsp.json()
+              .then((data) => setProducts(data.content))
+          }
+        })
+
     }
   }, [invoiceId, products.length, props])
 

@@ -1,5 +1,13 @@
 import { ItemAdjustment } from "../Components/Inventory"
 
+export const listAllProductItems = () => {
+  console.info("Fetching all products from the inventory")
+  const opts = {
+    method: 'GET'
+  }
+  return fetch(`${process.env.REACT_APP_INVENTORY_ENDPOINT}/list?page=0&size=100`, opts)
+}
+
 export const listProductItems = (page: number, size: number) => {
   console.info("Fetching all products from the inventory")
   const opts = {

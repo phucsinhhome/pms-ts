@@ -11,10 +11,9 @@ import { IoMdSettings } from "react-icons/io";
 import { OrderManager } from "./Components/OrderManager";
 import { OrderEditor } from "./Components/OrderEditor";
 import { Inventory } from "./Components/Inventory";
-import { init, retrieveLaunchParams } from '@telegram-apps/sdk-react';
 import { PGroupManager } from "./Components/PGroupManager";
 import { SupplierManager } from "./Components/SupplierManager";
-import { AppConfig, appConfigs, defaultAppConfigs } from "./db/configs";
+import { AppConfig, appConfigs } from "./db/configs";
 import { Login } from "./Components/Login";
 
 export const DEFAULT_PAGE_SIZE = Number(process.env.REACT_APP_DEFAULT_PAGE_SIZE)
@@ -64,35 +63,23 @@ export const App = () => {
   const [syncing, setSyncing] = useState(false)
   const [syncingRes, setSyncingRes] = useState(false)
   const [activeMenu, setActiveMenu] = useState(menus[0])
-  const [configs, setConfigs] = useState<AppConfig>(defaultAppConfigs)
+  const [configs, setConfigs] = useState<AppConfig>()
 
   const navigate = useNavigate()
 
   function loadLauchParams() {
-    let launchParams = null
 
-    try {
-      init();
-      launchParams = retrieveLaunchParams();
-    } catch (e) {
-      console.warn("Failed to retrieve launch params")
-    }
-    if (launchParams === null) {
-      navigate('login', { replace: true })
-      console.warn("No authorized user login. So, use the default user and chat.")
+    if (chat) {
+      console.info(`Filter the user with id ${chat.id}`)
+      var user = configs?.users.find(u => u.id === chat.id)
+      if (user !== null) {
+        setChat(user)
+      }
       return
     }
-    if (launchParams.initData && launchParams.initData.user) {
-      const user = launchParams.initData.user
-      setChat({
-        id: String(user.id),
-        firstName: user.firstName,
-        lastName: user.lastName,
-        username: user.username
-      })
-      setAuthorizedUserId(String(user.id))
-      console.warn("User %s", String(user.id))
-    }
+
+    navigate('login', { replace: true })
+    console.warn("No authorized user login. So, use the default user and chat.")
   }
 
   useEffect(() => {
@@ -101,7 +88,9 @@ export const App = () => {
   }, []);
 
   useEffect(() => {
-    loadLauchParams()
+    if(configs){
+      loadLauchParams()
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [configs]);
 
@@ -158,7 +147,11 @@ export const App = () => {
         <Route path="expenses" element={<ExpenseManager chat={getChat()} displayName={fullName()} authorizedUserId={authorizedUserId} activeMenu={() => setActiveMenu(menus[2])} />} />
         <Route path="reservation" element={<ReservationManager activeMenu={() => setActiveMenu(menus[3])} />} />
         <Route path="order" element={<OrderManager chat={getChat()} displayName={fullName()} authorizedUserId={authorizedUserId} activeMenu={() => setActiveMenu(menus[4])} />} />
-        <Route path="order/:orderId/:staffId" element={<OrderEditor activeMenu={() => setActiveMenu(menus[4])} />} />
+        <Route path="order/:orderId/:staffId"
+          element={<OrderEditor
+            setChat={(chat: Chat) => setChat(chat)}
+            activeMenu={() => setActiveMenu(menus[4])} />}
+        />
         <Route path="inventory" element={<Inventory activeMenu={() => setActiveMenu(menus[5])} />} />
         <Route path="product-group" element={<PGroupManager activeMenu={() => setActiveMenu({ path: 'product-group', displayName: 'Group' })} />} />
         <Route path="supplier" element={<SupplierManager chat={getChat()} displayName={fullName()} authorizedUserId={authorizedUserId} activeMenu={() => setActiveMenu({ path: 'supplier', displayName: 'Supplier' })} />} />
@@ -166,7 +159,7 @@ export const App = () => {
           element={<Login
             chat={getChat()}
             setChat={(chat: Chat) => setChat(chat)}
-            users={configs.users} />}
+            users={configs?.users} />}
         />
         <Route path="settings" element={<Settings
           syncing={syncing}
@@ -176,7 +169,7 @@ export const App = () => {
           activeMenu={() => setActiveMenu({ path: 'settings', displayName: 'Settings' })}
         />} />
       </Routes>
-      {configs.app.showProfile && authorizedUserId ? <div
+      {configs?.app.showProfile && authorizedUserId ? <div
         className="absolute top-0 right-0 flex flex-col mt-10 mr-2 bg-neutral-200 p-1 opacity-90 rounded-md shadow-lg"
         onClick={() => {
           setChat(undefined)

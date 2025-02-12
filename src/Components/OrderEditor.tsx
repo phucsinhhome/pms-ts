@@ -16,6 +16,7 @@ type OrderParams = {
 }
 
 type OrderEditorProps = {
+  setChat: any,
   activeMenu: any
 }
 
@@ -57,6 +58,15 @@ export const OrderEditor = (props: OrderEditorProps) => {
   }
 
   useEffect(() => {
+    if (staffId !== null) {
+      props.setChat({
+        id: staffId,
+        firstName: staffId,
+        lastName: "",
+        username: staffId
+      })
+      console.info(`Update the user to ${staffId}`)
+    }
     readOrder();
     props.activeMenu()
     fetchProductGroups()
@@ -103,7 +113,7 @@ export const OrderEditor = (props: OrderEditorProps) => {
     if (order === undefined) {
       return
     }
-    
+
     serveOrder({
       ...order,
       servedAt: formatISODateTime(new Date())
@@ -233,7 +243,7 @@ export const OrderEditor = (props: OrderEditorProps) => {
         <div className="flex flex-col space-y-1 pt-2 px-2">
           {
             pGroups.filter(grp => order?.items.map(i => i.group).includes(grp.name))
-              .map((grp) => <div>
+              .map((grp) => <div key={grp.name}>
                 <div className="font font-mono font-bold text-sm text-center ">{grp.displayName}</div>
                 {order?.items.filter(it => it.group === grp.name).map((item) => {
                   return (

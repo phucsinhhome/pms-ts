@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, ChangeEvent } from "react";
 import { Table, TextInput, Label, Modal, Button } from "flowbite-react";
 import { HiX } from "react-icons/hi";
-import { deletePGroup, listAllPGroups } from "../db/pgroup";
+import { deletePGroup, listAllPGroups, savePGroup } from "../db/pgroup";
 
 export type PGroup = {
   groupId: string | null,
@@ -15,6 +15,8 @@ export type PGroup = {
   includedGroupId: string | null,
   includedGroup: boolean
 }
+
+
 
 const defaultPGroup = {
   groupId: null,
@@ -72,7 +74,7 @@ export const PGroupManager = (props: PGroupProps) => {
         }
       })
   }
-  
+
   const askForDelConfirmation = (group: PGroup) => {
     setDeletingPGroup(group);
     setOpenDelModal(true)
@@ -97,7 +99,7 @@ export const PGroupManager = (props: PGroupProps) => {
     }
 
   }
-  
+
   const editPGroup = (group: PGroup) => {
     setEditingPGroup(group)
     setOpenEditingModal(true)
@@ -133,6 +135,22 @@ export const PGroupManager = (props: PGroupProps) => {
       displayName: ''
     }
     setEditingPGroup(eI)
+  }
+
+  const saveAndClose = () => {
+    // Add your save logic here
+    // Assuming you have a function to save the product group to the back-end API
+    savePGroup(editingPGroup)
+      .then((rsp) => {
+        if (rsp.ok) {
+          setOpenEditingModal(false);
+          fetchPGroups();
+        } else {
+          console.error("Failed to save the product group", rsp.statusText);
+        }
+      }).catch((error) => {
+        console.error("Failed to save the product group", error);
+      });
   }
 
   return (
@@ -267,7 +285,7 @@ export const PGroupManager = (props: PGroupProps) => {
               />
             </div>
             <div className="w-full flex justify-center">
-              <Button className="mx-2">
+              <Button className="mx-2" onClick={saveAndClose}>
                 Save & Close
               </Button>
               <Button onClick={cancelEditing} className="mx-2">
@@ -280,3 +298,4 @@ export const PGroupManager = (props: PGroupProps) => {
     </div >
   );
 }
+

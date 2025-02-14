@@ -16,3 +16,16 @@ export const deletePGroup = (pgroup: PGroup) => {
   }
   return fetch(`${process.env.REACT_APP_PRODUCT_GROUP_ENDPOINT}`, opts)
 }
+
+// Ensure that savePGroup is exported from this module
+export const savePGroup = (group: PGroup) => {
+  console.info("Saving product group %s", group.groupId)
+  const opts = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(group)
+  }
+  return fetch(`${process.env.REACT_APP_PRODUCT_GROUP_ENDPOINT}`, opts)
+};

@@ -1132,7 +1132,7 @@ export const InvoiceEditor = (props: InvoiceProps) => {
             </div> : null
           }
           <div
-            className="flex flex-row items-center text-amber-800 px-1 py-1 hover:bg-slate-200"
+            className="flex flex-row items-center font-sans font-bold text-amber-800 px-1 py-1 hover:bg-slate-200"
             onClick={handleSaveInvoice}
           >
             <svg
@@ -1143,7 +1143,7 @@ export const InvoiceEditor = (props: InvoiceProps) => {
             >
               <path d="M12 1.5a.75.75 0 0 1 .75.75V7.5h-1.5V2.25A.75.75 0 0 1 12 1.5ZM11.25 7.5v5.69l-1.72-1.72a.75.75 0 0 0-1.06 1.06l3 3a.75.75 0 0 0 1.06 0l3-3a.75.75 0 1 0-1.06-1.06l-1.72 1.72V7.5h3.75a3 3 0 0 1 3 3v9a3 3 0 0 1-3 3h-9a3 3 0 0 1-3-3v-9a3 3 0 0 1 3-3h3.75Z" />
             </svg>
-            <span className="font-sans font-bold">
+            <span>
               Save
             </span>
           </div>

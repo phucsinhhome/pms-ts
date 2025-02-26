@@ -1,7 +1,7 @@
-import { formatDatePartition, formatISODate } from "../Service/Utils";
+import { formatDatePartition } from "../Service/Utils";
 import { syncStatusOfMonth } from "../Service/StatusSyncingService";
 import React, { ChangeEvent, useEffect, useState } from "react";
-import { Button, Label, Spinner, TextInput } from "flowbite-react";
+import { Label, Spinner, TextInput } from "flowbite-react";
 import { IoIosSync } from "react-icons/io";
 import { collectRes } from "../db/reservation_extractor";
 
@@ -25,7 +25,7 @@ export const Settings = (props: SettingProps) => {
   }, []);
 
   const syncStatus = () => {
-    props.changeResSyncing(true)
+    props.changeSyncing(true)
     console.info("Sync status")
     syncStatusOfMonth(datePartition)
       .then((rsp: Response) => {
@@ -43,8 +43,14 @@ export const Settings = (props: SettingProps) => {
   const syncResStatus = () => {
     props.changeResSyncing(true)
     console.info("Sync reservation...")
-    let fromDate = formatDatePartition(new Date())
-    let toDate = formatDatePartition(new Date())
+    const currentDate = new Date();
+    var year = currentDate.getFullYear();
+    var month = String(currentDate.getMonth() + 1).padStart(2, '0');
+    var day = String(currentDate.getDate()).padStart(2, '0');
+    const formattedDate = `${year}-${month}-${day}`;
+    console.info("Current date in ISO format: ", formattedDate);
+    let fromDate = formattedDate
+    let toDate = formattedDate
     collectRes(fromDate, toDate)
       .then(rsp => {
         if (rsp.ok) {
@@ -61,28 +67,6 @@ export const Settings = (props: SettingProps) => {
   const changePartition = (e: ChangeEvent<HTMLInputElement>) => {
     let iMsg = e.target.value
     setDatePartition(iMsg)
-  }
-
-  const syncReservation = () => {
-    console.info("Sync reservations")
-    const currentDate = new Date();
-    const year = currentDate.getFullYear();
-    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-    const day = String(currentDate.getDate()).padStart(2, '0');
-    const formattedDate = `${year}-${month}-${day}`;
-    let fromDate = formattedDate
-    let toDate = formattedDate
-    collectRes(fromDate, toDate)
-      .then(rsp => {
-        if (rsp.ok) {
-          console.info("Collect reservations from %s to %s successfully", fromDate, toDate)
-        }
-        console.log(rsp)
-      }).catch(e => {
-        console.error(e)
-      }).finally(() => {
-        props.changeResSyncing(false)
-      })
   }
 
   return (
@@ -136,11 +120,6 @@ export const Settings = (props: SettingProps) => {
                 />
               }
             />
-          </div>
-        </div>
-        <div className="flex flex-col w-full py-2 px-2">
-          <div className="flex flex-row items-center mb-2">
-            <Button onClick={() => syncReservation()}>Sync Reservations</Button>
           </div>
         </div>
       </div >

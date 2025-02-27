@@ -2,7 +2,6 @@ import { formatDatePartition } from "../Service/Utils";
 import { syncStatusOfMonth } from "../Service/StatusSyncingService";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { Button, Label, Spinner, TextInput } from "flowbite-react";
-import { IoIosSync } from "react-icons/io";
 import { collectRes } from "../db/reservation_extractor";
 
 export type SettingProps = {
@@ -16,7 +15,6 @@ export type SettingProps = {
 export const Settings = (props: SettingProps) => {
 
   const [datePartition, setDatePartition] = useState(formatDatePartition(new Date()))
-  const [syncedResNextDays, setSyncedResNextDays] = useState(formatDatePartition(new Date()))
 
   useEffect(() => {
     props.activeMenu()
@@ -71,13 +69,11 @@ export const Settings = (props: SettingProps) => {
 
   return (
     <>
-      <div className="bg-slate-50 px-2">
+      <div className="bg-slate-50 px-2 pt-6">
         <div className="flex flex-col w-full py-2 px-2">
-          <div className="flex flex-row items-center mb-2">
+          <div className="flex flex-row items-center mb-2 border rounded-sm shadow-sm p-2 space-x-2">
             <Label
-              className="w-32"
-            >
-              {"Sync data"}
+            >Sync data with partition
             </Label>
             <TextInput
               id="itemMsg"
@@ -85,31 +81,22 @@ export const Settings = (props: SettingProps) => {
               required={true}
               value={datePartition}
               onChange={changePartition}
-              rightIcon={() => props.syncing ?
-                <Spinner aria-label="Default status example"
-                  className="w-14 h-10"
-                />
-                : <IoIosSync
-                  onClick={() => syncStatus()}
-                  className="pointer-events-auto cursor-pointer w-14 h-10"
-                />
-              }
             />
+            {
+              props.syncing ? <Spinner aria-label="Default status example"
+                className="w-14 h-10"
+              /> : <Button onClick={() => syncStatus()}>Start</Button>
+            }
           </div>
-          <div className="flex flex-row items-center mb-2">
+          <div className="flex flex-row items-center mb-2 border rounded-sm shadow-sm p-2">
             <Label
               className="w-32"
-            >
-              {"Sync reservation"}
-            </Label>
-            <div className="flex flex-row items-center">
-              <Button onClick={() => syncResStatus()}>Sync reservation</Button>
-              {
-                props.syncingRes ? <Spinner aria-label="Default status example"
-                  className="w-14 h-10"
-                /> : <></>
-              }
-            </div>
+            >Sync today reservation</Label>
+            {
+              props.syncingRes ? <Spinner aria-label="Default status example"
+                className="w-14 h-10"
+              /> : <Button onClick={() => syncResStatus()}>Start</Button>
+            }
           </div>
         </div>
       </div >

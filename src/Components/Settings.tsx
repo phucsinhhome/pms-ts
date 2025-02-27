@@ -1,7 +1,7 @@
 import { formatDatePartition } from "../Service/Utils";
 import { syncStatusOfMonth } from "../Service/StatusSyncingService";
 import React, { ChangeEvent, useEffect, useState } from "react";
-import { Label, Spinner, TextInput } from "flowbite-react";
+import { Button, Label, Spinner, TextInput } from "flowbite-react";
 import { IoIosSync } from "react-icons/io";
 import { collectRes } from "../db/reservation_extractor";
 
@@ -102,24 +102,14 @@ export const Settings = (props: SettingProps) => {
             >
               {"Sync reservation"}
             </Label>
-            <TextInput
-              id="itemMsg"
-              placeholder="2024/09/01"
-              required={true}
-              value={syncedResNextDays}
-              onChange={(e) => setSyncedResNextDays(e.target.value)}
-              type="number"
-
-              rightIcon={() => props.syncingRes ?
-                <Spinner aria-label="Default status example"
+            <div className="flex flex-row items-center">
+              <Button onClick={() => syncResStatus()}>Sync reservation</Button>
+              {
+                props.syncingRes ? <Spinner aria-label="Default status example"
                   className="w-14 h-10"
-                />
-                : <IoIosSync
-                  onClick={() => syncResStatus()}
-                  className="pointer-events-auto cursor-pointer w-14 h-10"
-                />
+                /> : <></>
               }
-            />
+            </div>
           </div>
         </div>
       </div >

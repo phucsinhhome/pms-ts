@@ -6,7 +6,7 @@ import { listOrderByStatuses, listOrders } from "../db/order";
 import { Button, Modal, TextInput } from "flowbite-react";
 import { getInvoice, listInvoiceByGuestName, listStayingAndComingInvoicesAndPrepaid } from "../db/invoice";
 import { Invoice } from "./InvoiceManager";
-import { HiMail, HiX } from "react-icons/hi";
+import { HiOutlineClock, HiX } from "react-icons/hi";
 import { GiHouse, GiMeal } from "react-icons/gi";
 
 export const OrderStatus = {
@@ -15,6 +15,14 @@ export const OrderStatus = {
   REJECTED: 'text-red-700',
   SERVED: 'text-gray-700',
   EXPIRED: 'text-gray-700'
+}
+
+const OrderStatusStyle: { [key: string]: string } = {
+  SENT: "bg-orange-100 dark:bg-slate-500",
+  CONFIRMED: "bg-green-100 dark:bg-slate-500",
+  REJECTED: "bg-red-100 dark:bg-slate-500",
+  SERVED: "bg-gray-100 dark:bg-slate-500",
+  EXPIRED: "bg-white dark:bg-slate-500"
 }
 
 const filterables: string[] = ["CONFIRMED", "SENT", "SERVED"]
@@ -40,6 +48,7 @@ export type Order = {
   items: OrderItem[],
   expectedTime: string,
   servedAt: string,
+  group: string,
   rooms: string[]
 }
 
@@ -48,6 +57,13 @@ type OrderManagerProps = {
   authorizedUserId: string | null,
   displayName: string,
   activeMenu: any
+}
+
+const menuDisplayMappings: { [key: string]: string } = {
+  food: 'FOO',
+  baverage: 'BEV',
+  breakfast: 'BRE',
+  other: 'OTH'
 }
 
 export const OrderManager = (props: OrderManagerProps) => {
@@ -237,6 +253,10 @@ export const OrderManager = (props: OrderManagerProps) => {
       : `${dates}.${months} ${hours}:${minutes}`
   }
 
+  const orderStyle = (sts: string) => {
+    return OrderStatusStyle[sts]
+  }
+
   return (
     <div className="h-full pt-3 relative">
       <div className="flex flex-row items-center w-full pb-4 px-2 space-x-3">
@@ -257,41 +277,47 @@ export const OrderManager = (props: OrderManagerProps) => {
         {orders.map((order) => {
           return (
             <div
-              className="flex flex-row items-center border border-gray-300 shadow-2xl rounded-md px-2 bg-white dark:bg-slate-500 "
+              className={'flex flex-col w-full border border-gray-300 shadow-sm rounded-md px-2 ' + orderStyle(order.status)}
               key={order.orderId}
             >
-              <div className="w-full">
-                <div className="grid grid-cols-1">
-                  <div className="flex flex-row">
-                    <Link
-                      to={order.id + "/" + props.chat.id}
-                      state={{ pageNumber: pagination.pageNumber, pageSize: pagination.pageSize }}
-                      className="font-sans text-green-800 hover:underline dark:text-gray-100 overflow-hidden"
-                    >
-                      {order.guestName}
-                    </Link>
-                  </div>
-                  <div className="flex flex-row text-sm space-x-3">
-                    <div className="flex flex-row items-center rounded-sm">
-                      <HiMail />
-                      <span className="font font-mono text-gray-500 text-[12px]">{timeOrDate(order.startTime)}</span>
-                    </div>
-                    {order.expectedTime ? <div className="flex flex-row items-center rounded-sm">
-                      <GiMeal />
-                      <span className="font font-mono text-gray-500 text-[12px]">{timeOrDate(order.expectedTime)}
-                      </span></div> : <></>
-                    }
-                    {order.invoiceId ? <div className="flex flex-row items-center rounded-sm">
-                      <GiHouse />
-                      <span className="font font-mono text-[12px]">{order.rooms}
-                      </span></div> : <></>}
+              <div className="flex flex-row w-full relative">
+                <Link
+                  to={order.id + "/" + props.chat.id}
+                  state={{ pageNumber: pagination.pageNumber, pageSize: pagination.pageSize }}
+                  className="font-sans font-semibold text-green-800 hover:underline dark:text-gray-100 overflow-hidden"
+                >
+                  {order.guestName}
+                </Link>
+                {order.invoiceId ? <div className="flex flex-row items-center rounded-sm pl-2">
+                  <GiHouse />
+                  <span className="font font-mono text-[12px]">{order.rooms}
+                  </span></div> : <></>}
+                <div className="flex flex-row items-center rounded-sm absolute right-0 pt-0.5 space-x-2">
+                  {order.group === 'food' ? <div className="flex flex-row items-center">
+                    <GiMeal />
+                    <span className="font font-semibold text-gray-700 text-[14px]">{timeOrDate(order.expectedTime)}
+                    </span></div> : <></>
+                  }
+                  <div className="flex flex-row items-center w-14">
+                    <HiOutlineClock />
+                    <span className="font font-semibold text-red-950 text-[14px]">{menuDisplayMappings[order.group]}</span>
                   </div>
                 </div>
               </div>
-              <div className="pl-0.2 pr-1">
-                <div className="bg-zinc-200 rounded-sm py-0.5 w-24 text-center">
-                  <span className={"font font-mono " + OrderStatus[order.status as SK]}>{order.status}</span>
-                </div>
+              <hr className="w-full divide-black" />
+              <div className="flex flex-col space-y-1">
+                {order.items.map((item) => {
+                  return (
+                    <div
+                      className="flex flex-row items-center pl-4 pr-2 dark:bg-slate-500 "
+                      key={item.id}
+                    >
+                      <span className="font font-semibold text-[12px] text-gray-700 dark:text-white-500 overflow-hidden">
+                        {item.quantity + ' x ' + item.name}
+                      </span>
+                    </div>
+                  )
+                })}
               </div>
             </div>
           )

@@ -29,7 +29,7 @@ export type ItemAdjustment = {
   quantity: number
 }
 
-const timeOpts = ['PT5M', 'PT15M', 'PT30M', 'PT1H', 'PT1H30M', 'PT2H']
+const timeOpts = ['PT5M', 'PT15M', 'PT30M', 'PT45M', 'PT1H', 'PT1H15M', 'PT1H30M', 'PT2H']
 
 type InventoryProps = {
   activeMenu: any
@@ -463,7 +463,7 @@ export const Inventory = (props: InventoryProps) => {
 
       <div className="flex flex-row px-0.5 py-2 space-x-3">
         <Button onClick={addProduct}>Add</Button>
-        <div className="flex flex-row items-center space-x-2">
+        <div className="flex flex-row items-center space-x-2 overflow-scroll">
           {
             pGroups.map((group) => <Label key={group.groupId} onClick={() => activateGroup(group.name)}
               className={activeGroupStyle(group.name)}
@@ -632,7 +632,7 @@ export const Inventory = (props: InventoryProps) => {
                   value="Group"
                 />
               </div>
-              <div className="flex flex-row space-x-2">
+              <div className="flex flex-row space-x-2 overflow-scroll">
                 {
                   pGroups.map((group) => <div
                     key={group.groupId}
@@ -650,7 +650,7 @@ export const Inventory = (props: InventoryProps) => {
                   value="Prepare Time"
                 />
               </div>
-              <div className="flex flex-row space-x-2">
+              <div className="flex flex-row space-x-2 overflow-scroll">
                 {
                   timeOpts.map((pT) => <div
                     key={pT}

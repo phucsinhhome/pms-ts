@@ -7,6 +7,7 @@ import { HiOutlineExclamationCircle, HiX } from "react-icons/hi";
 import { formatISODate, formatVND } from "../Service/Utils";
 import { deleteInvoice, listInvoiceByGuestName, listStayingAndComingInvoices } from "../db/invoice";
 import { Pagination } from "./ProfitReport";
+import { GiHouse } from "react-icons/gi";
 
 export type InvoiceItem = {
   id: string,
@@ -323,13 +324,19 @@ export const InvoiceManager = (props: InvoiceManagerProps) => {
                   </Table.Cell>
                   <Table.Cell className="sm:px-1 px-1 py-0.5">
                     <div className="grid grid-cols-1">
-                      <Link
-                        to={inv.id}
-                        state={{ pageNumber: pagination.pageNumber, pageSize: pagination.pageSize }}
-                        className={isDeleteable(inv) ? "font-sans text-green-800 hover:underline dark:text-gray-100" : "font-sans text-gray-600 hover:underline dark:text-white-500"}
-                      >
-                        {inv.guestName}
-                      </Link>
+                      <div className="flex flex-row space-x-2 content-center">
+                        <Link
+                          to={inv.id}
+                          state={{ pageNumber: pagination.pageNumber, pageSize: pagination.pageSize }}
+                          className={isDeleteable(inv) ? "font-sans text-green-800 hover:underline dark:text-gray-100" : "font-sans text-gray-600 hover:underline dark:text-white-500"}
+                        >
+                          {inv.guestName}
+                        </Link>
+                        <div className="flex flex-row  items-center space-x-1 ">
+                          <GiHouse />
+                          <span className="font font-mono text-[12px]">{inv.rooms}</span>
+                        </div>
+                      </div>
                       <div className="flex flex-row text-sm space-x-1">
                         <div className="w-24">
                           <span>{formatVND(inv.subTotal)}</span>

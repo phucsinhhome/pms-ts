@@ -4,7 +4,14 @@ export type AppConfig = {
     app: {
         showProfile: boolean
     },
-    users: Chat[]
+    users: Chat[],
+    orderManagement: {
+        copyLink: {
+            defaultGroup: string,
+            defaultMenuApp: string,
+            menuAppMappings: [{ app: string, startWiths: string }]
+        }
+    }
 }
 
 export const defaultAppConfigs: AppConfig = {
@@ -16,7 +23,14 @@ export const defaultAppConfigs: AppConfig = {
         firstName: "Minh",
         lastName: "Tran",
         username: 'minhtranes'
-    }]
+    }],
+    orderManagement: {
+        copyLink: {
+            defaultGroup: 'food',
+            defaultMenuApp: "REACT_APP_MENU_WEB_APP",
+            menuAppMappings: [{app: "REACT_APP_MENU_VI_WEB_APP", startWiths: "/vi[a-z]+/"}]
+        }
+    }
 }
 
 export const appConfigs = async (): Promise<AppConfig> => {

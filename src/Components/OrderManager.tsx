@@ -6,8 +6,11 @@ import { listOrderByStatuses, listOrders } from "../db/order";
 import { Button, Modal, TextInput } from "flowbite-react";
 import { getInvoice, listInvoiceByGuestName, listStayingAndComingInvoicesAndPrepaid } from "../db/invoice";
 import { Invoice } from "./InvoiceManager";
-import { HiOutlineClock, HiX } from "react-icons/hi";
+import { HiClipboardCopy, HiOutlineClock, HiX } from "react-icons/hi";
 import { GiHouse, GiMeal } from "react-icons/gi";
+import { listAllPGroups } from "../db/pgroup";
+import { PGroup } from "./PGroupManager";
+import { AppConfig } from "../db/configs";
 
 export const OrderStatus = {
   SENT: 'text-orange-400',
@@ -56,7 +59,8 @@ type OrderManagerProps = {
   chat: Chat,
   authorizedUserId: string | null,
   displayName: string,
-  activeMenu: any
+  activeMenu: any,
+  configs: AppConfig
 }
 
 const menuDisplayMappings: { [key: string]: string } = {
@@ -72,6 +76,9 @@ export const OrderManager = (props: OrderManagerProps) => {
   const [filteredInvoices, setFilteredInvoices] = useState<Invoice[]>([])
   const [showInvoices, setShowInvoices] = useState(false)
   const [activeStatuses, setActiveStatuses] = useState(["CONFIRMED", "SENT"])
+
+  const [pGroups, setPGroups] = useState<PGroup[]>([])
+  const [activeGroup, setActiveGroup] = useState<PGroup | undefined>()
 
   const [pagination, setPagination] = useState({
     pageNumber: 0,
@@ -170,12 +177,45 @@ export const OrderManager = (props: OrderManagerProps) => {
     // eslint-disable-next-line
   }, [activeStatuses]);
 
+  useEffect(() => {
+
+    if (pGroups.length === 0) {
+      return
+    }
+    let pGroup = pGroups.find(pg => pg.groupId === props.configs.orderManagement.copyLink.defaultGroup)
+    if (pGroup !== undefined) {
+      setActiveGroup(pGroup || undefined)
+    }
+    findTheInvoice()
+
+    // eslint-disable-next-line
+  }, [pGroups]);
 
   const pageClass = (pageNum: number) => {
     var noHighlight = "px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
     var highlight = "px-3 py-2 leading-tight text-bold text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"
 
     return pagination.pageNumber === pageNum ? highlight : noHighlight
+  }
+
+  const fetchPGroups = () => {
+    listAllPGroups()
+      .then(rsp => {
+        if (rsp.ok) {
+          rsp.json()
+            .then(data => {
+              setPGroups(data.content)
+            })
+        }
+      })
+  }
+
+  const chooseCopyOpts = () => {
+    if (pGroups.length === 0) {
+      fetchPGroups()
+      return
+    }
+    findTheInvoice()
   }
 
   const findTheInvoice = () => {
@@ -223,7 +263,14 @@ export const OrderManager = (props: OrderManagerProps) => {
   }
 
   const copyOrderLink = (invoice: Invoice) => {
-    let url = process.env.REACT_APP_MENU_WEB_APP + '/menu/food/' + invoice.id
+    let resolvedMenuApp = props.configs.orderManagement.copyLink.defaultMenuApp
+    props.configs.orderManagement.copyLink.menuAppMappings.forEach(m => {
+      if (activeGroup?.name.startsWith(m.startWiths)) {
+        resolvedMenuApp = m.app
+        console.info("Resolved menu app %s", resolvedMenuApp)
+      }
+    })
+    let url = `${process.env[resolvedMenuApp]}/menu/${activeGroup?.name}/${invoice.id}`
     navigator.clipboard.writeText(url)
     console.info("Url %s has been copied", url)
     setFilteredInvoices([])
@@ -260,7 +307,7 @@ export const OrderManager = (props: OrderManagerProps) => {
   return (
     <div className="h-full pt-3 relative">
       <div className="flex flex-row items-center w-full pb-4 px-2 space-x-3">
-        <Button onClick={findTheInvoice}>Copy Link</Button>
+        <Button onClick={chooseCopyOpts}>Copy Link</Button>
         <div className="flex flex-row space-x-2">
           {
             filterables.map(sts => <div onClick={() => changeListOpt(sts)}
@@ -351,6 +398,25 @@ export const OrderManager = (props: OrderManagerProps) => {
       >
         <Modal.Header />
         <Modal.Body>
+          <div className="flex flex-row items-center px-0 pb-2 space-x-1 overflow-scroll">
+            {
+              pGroups.map((pg) => {
+                return (
+                  <div
+                    key={pg.groupId}
+                    className={pg.groupId === activeGroup?.groupId ?
+                      "px-2 font-mono text-sm border rounded-sm shadow-sm bg-slate-400" :
+                      "px-2 font-mono text-sm border rounded-sm shadow-sm bg-slate-200"
+                    }
+                    onClick={() => setActiveGroup(pg)}
+                  >
+                    {pg.displayName}
+                  </div>
+                )
+              }
+              )
+            }
+          </div>
           <span className="font italic">Choose guest's invoice OR...</span>
           <div className="pb-2">
             <TextInput
@@ -368,7 +434,7 @@ export const OrderManager = (props: OrderManagerProps) => {
             {filteredInvoices.map((invoice) => {
               return (
                 <div
-                  className="flex flex-row items-center border rounded-md px-2 border-gray-300 bg-white dark:bg-slate-500 "
+                  className="flex flex-row items-center border rounded-md px-2 border-gray-300 bg-white dark:bg-slate-500 relative"
                   key={invoice.id}
                 >
                   <div className="px-0 w-full">
@@ -385,8 +451,10 @@ export const OrderManager = (props: OrderManagerProps) => {
                       </div>
                     </div>
                   </div>
-                  <div className="rounded-xl bg-slate-300">
-                    <Link to='' className="font-bold text-amber-900 px-3 py-2 hover:underline" onClick={() => copyOrderLink(invoice)}>Copy</Link>
+                  <div className="flex flex-row items-center rounded-xl bg-slate-300 absolute right-1 px-1 space-x-1">
+                    <HiClipboardCopy />
+                    <span className="font-sans text-sm text-amber-900 py-1 hover:underline"
+                      onClick={() => copyOrderLink(invoice)}>{activeGroup?.displayName}</span>
                   </div>
                 </div>
               )

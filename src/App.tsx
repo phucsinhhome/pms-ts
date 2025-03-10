@@ -13,7 +13,7 @@ import { OrderEditor } from "./Components/OrderEditor";
 import { Inventory } from "./Components/Inventory";
 import { PGroupManager } from "./Components/PGroupManager";
 import { SupplierManager } from "./Components/SupplierManager";
-import { AppConfig, appConfigs } from "./db/configs";
+import { AppConfig, appConfigs, defaultAppConfigs } from "./db/configs";
 import { Login } from "./Components/Login";
 
 export const DEFAULT_PAGE_SIZE = Number(process.env.REACT_APP_DEFAULT_PAGE_SIZE)
@@ -63,7 +63,7 @@ export const App = () => {
   const [syncing, setSyncing] = useState(false)
   const [syncingRes, setSyncingRes] = useState(false)
   const [activeMenu, setActiveMenu] = useState(menus[0])
-  const [configs, setConfigs] = useState<AppConfig>()
+  const [configs, setConfigs] = useState<AppConfig>(defaultAppConfigs)
 
   const navigate = useNavigate()
 
@@ -88,7 +88,7 @@ export const App = () => {
   }, []);
 
   useEffect(() => {
-    if(configs){
+    if (configs) {
       loadLauchParams()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -146,7 +146,13 @@ export const App = () => {
         <Route path="invoice/:invoiceId" element={<InvoiceEditor chat={getChat()} displayName={fullName()} authorizedUserId={authorizedUserId} activeMenu={() => setActiveMenu(menus[1])} />} />
         <Route path="expenses" element={<ExpenseManager chat={getChat()} displayName={fullName()} authorizedUserId={authorizedUserId} activeMenu={() => setActiveMenu(menus[2])} />} />
         <Route path="reservation" element={<ReservationManager activeMenu={() => setActiveMenu(menus[3])} />} />
-        <Route path="order" element={<OrderManager chat={getChat()} displayName={fullName()} authorizedUserId={authorizedUserId} activeMenu={() => setActiveMenu(menus[4])} />} />
+        <Route path="order" element={<OrderManager
+          chat={getChat()}
+          displayName={fullName()}
+          authorizedUserId={authorizedUserId}
+          activeMenu={() => setActiveMenu(menus[4])}
+          configs={configs}
+        />} />
         <Route path="order/:orderId/:staffId"
           element={<OrderEditor
             setChat={(chat: Chat) => setChat(chat)}

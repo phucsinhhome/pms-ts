@@ -3,6 +3,7 @@ import { syncStatusOfMonth } from "../Service/StatusSyncingService";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { Button, Label, Spinner, TextInput } from "flowbite-react";
 import { collectRes } from "../db/reservation_extractor";
+import { Link } from "react-router-dom";
 
 export type SettingProps = {
   syncing: boolean,
@@ -97,6 +98,9 @@ export const Settings = (props: SettingProps) => {
                 className="w-14 h-10"
               /> : <Button onClick={() => syncResStatus()}>Start</Button>
             }
+          </div>
+          <div className="flex flex-row items-center mb-2 border rounded-sm shadow-sm p-2">
+            <Link to="../product-group" className="w-32">Product Groups</Link>
           </div>
         </div>
       </div >

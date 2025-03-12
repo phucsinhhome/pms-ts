@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, ChangeEvent } from "react";
-import { Table, TextInput, Label, Modal, Button } from "flowbite-react";
-import { HiX } from "react-icons/hi";
+import { TextInput, Label, Modal, Button, Textarea } from "flowbite-react";
+import { HiAdjustments, HiUserRemove, HiX } from "react-icons/hi";
 import { deletePGroup, listAllPGroups, savePGroup } from "../db/pgroup";
 
 export type PGroup = {
@@ -111,20 +111,29 @@ export const PGroupManager = (props: PGroupProps) => {
     fetchPGroups()
   }
 
-  const changeName = (e: ChangeEvent<HTMLInputElement>) => {
-    let iMsg = e.target.value
-    let eI = {
-      ...editingPGroup,
-      itemMessage: iMsg
-    }
-    setEditingPGroup(eI)
-  }
-
   const changeDisplayName = (e: ChangeEvent<HTMLInputElement>) => {
     let iName = e.target.value
     let eI = {
       ...editingPGroup,
       displayName: iName
+    }
+    setEditingPGroup(eI)
+  }
+
+  const changeName = (e: ChangeEvent<HTMLInputElement>) => {
+    let iName = e.target.value
+    let eI = {
+      ...editingPGroup,
+      name: iName
+    }
+    setEditingPGroup(eI)
+  }
+
+  const changeDescription = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    let description = e.target.value
+    let eI = {
+      ...editingPGroup,
+      description: description
     }
     setEditingPGroup(eI)
   }
@@ -156,7 +165,7 @@ export const PGroupManager = (props: PGroupProps) => {
   return (
     <div className="h-full pt-3">
       <div className="flex flex-row px-2">
-        <div className="flex flex-row items-center pl-4 pb-2">
+        <div className="flex flex-row items-center pb-2">
           <svg
             className="w-5 h-5 text-amber-700 dark:text-white"
             aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
@@ -175,61 +184,28 @@ export const PGroupManager = (props: PGroupProps) => {
           </span>
         </div>
       </div>
-      <div className="h-3/5 max-h-fit overflow-hidden">
-        <Table hoverable={true}>
-          <Table.Head>
-            <Table.HeadCell className="sm:px-1">
-              Date
-            </Table.HeadCell>
-            <Table.HeadCell className="sm:px-1">
-              Details
-            </Table.HeadCell>
+      <div className="flex flex-col overflow-scroll">
+        {pGroups.map((grp) => {
+          return (
+            <div key={grp.groupId} className="flex flex-col px-2 py-1 border-b border-gray-200 relative">
+              <div className="flex flex-row items-center space-x-2">
+                <span className="font-bold text-green-800 dark:text-blue-500">{grp.displayName}</span>
+                <span className="text-gray-500 text-[12px] dark:text-gray-400">{`(${grp.name} - Id: ${grp.groupId})`}</span>
 
-            <Table.HeadCell>
-              <span className="sr-only">
-                Delete
-              </span>
-            </Table.HeadCell>
-          </Table.Head>
-          <Table.Body className="divide-y" >
-            {pGroups.map((exp) => {
-              return (
-                <Table.Row
-                  className="bg-white"
-                  key={exp.groupId}
-                >
-                  <Table.Cell className="sm:px-1 py-0.5">
-                    <div className="grid grid-cols-1">
-                      <Label
-                        onClick={() => editPGroup(exp)}
-                        className="font-medium text-blue-600 hover:underline dark:text-blue-500"
-                        value={exp.displayName}
-                      />
-                      <div className="flex flex-row text-sm space-x-1">
-                        <span className="font font-mono font-black w-20">{exp.status}</span>
-                      </div>
-                    </div>
-                  </Table.Cell>
-                  <Table.Cell className=" py-0.5">
-                    <svg
-                      className="w-6 h-6 text-red-800 dark:text-white"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24" fill="none" viewBox="0 0 24 24"
-                      onClick={() => askForDelConfirmation(exp)}
-                    >
-                      <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
-                    </svg>
-
-                  </Table.Cell>
-                </Table.Row>
-              )
-            })}
-          </Table.Body>
-        </Table>
+              </div>
+              <div className="flex flex-row items-center space-x-2">
+                <span className="font-mono font-black text-[12px] text-gray-500 dark:text-gray-400">{grp.status}</span>
+                <span className="font-mono font-black text-[12px] text-gray-500 dark:text-gray-400">{grp.availTime}</span>
+                <span className="font-mono font-black text-[12px] text-gray-500 dark:text-gray-400">{grp.unavailTime}</span>
+              </div>
+              <div className="flex flex-row space-x-2 absolute right-1 top-2">
+                <HiUserRemove onClick={() => askForDelConfirmation(grp)} />
+                <HiAdjustments onClick={() => editPGroup(grp)} />
+              </div>
+            </div>
+          )
+        })}
       </div>
-
 
       <Modal show={openDelModal} onClose={cancelDeletion}>
         <Modal.Header>Confirm</Modal.Header>
@@ -255,23 +231,36 @@ export const PGroupManager = (props: PGroupProps) => {
       >
         <Modal.Header />
         <Modal.Body>
-          <div className="space-y-6 px-6 pb-4 sm:pb-6 lg:px-8 xl:pb-8">
-            <div className="flex flex-col w-full">
+          <div className="space-y-1">
+            <div className="flex flex-col w-full align-middle space-y-1">
+              <div className="flex items-center space-x-2">
+                <Label
+                  htmlFor="groupId"
+                  value="Id:"
+                />
+                <span className="font-mono font-black text-sm text-gray-500 dark:text-gray-400">{editingPGroup.groupId}</span>
+              </div>
+            </div>
+            <div className="flex flex-col w-full align-middle space-y-1">
+              <div className="flex items-center">
+                <Label
+                  htmlFor="name"
+                  value="Name:"
+                />
+              </div>
               <TextInput
-                id="itemMsg"
-                placeholder="3 ổ bánh mì 6k"
+                id="name"
                 required={true}
                 value={editingPGroup.name}
                 onChange={changeName}
                 className="w-full"
-                ref={focusRef}
               />
             </div>
-            <div className="flex flex-row w-full align-middle">
-              <div className="flex items-center w-2/5">
+            <div className="flex flex-col w-full align-middle space-y-1 py-2">
+              <div className="flex items-center">
                 <Label
                   htmlFor="itemName"
-                  value="Item Name"
+                  value="Display Name:"
                 />
               </div>
               <TextInput
@@ -284,16 +273,85 @@ export const PGroupManager = (props: PGroupProps) => {
                 rightIcon={() => <HiX onClick={emptyDisplayName} />}
               />
             </div>
-            <div className="w-full flex justify-center">
-              <Button className="mx-2" onClick={saveAndClose}>
-                Save & Close
-              </Button>
-              <Button onClick={cancelEditing} className="mx-2">
-                Cancel
-              </Button>
+            <div className="flex flex-col w-full align-middle space-y-1 py-2">
+              <div className="flex items-center">
+                <Label
+                  htmlFor="description"
+                  value="Description:"
+                />
+              </div>
+              <Textarea
+                id="description"
+                required={false}
+                value={editingPGroup.description}
+                onChange={changeDescription}
+                className="w-full"
+              />
+            </div>
+            <div className="flex flex-col w-full align-middle space-y-1">
+              <div className="flex items-center space-x-2">
+                <Label
+                  htmlFor="displayOffset"
+                  value="Offset:"
+                />
+                <span className="font-mono font-black text-sm text-gray-500 dark:text-gray-400">{editingPGroup.displayOffset}</span>
+              </div>
+            </div>
+            <div className="flex flex-col w-full align-middle space-y-1">
+              <div className="flex items-center space-x-2">
+                <Label
+                  htmlFor="status"
+                  value="Status:"
+                />
+                <span className="font-mono font-black text-sm text-gray-500 dark:text-gray-400">{editingPGroup.status}</span>
+              </div>
+            </div>
+            <div className="flex flex-col w-full align-middle space-y-1">
+              <div className="flex items-center space-x-2">
+                <Label
+                  htmlFor="availTime"
+                  value="Avail Time:"
+                />
+                <span className="font-mono font-black text-sm text-gray-500 dark:text-gray-400">{editingPGroup.availTime}</span>
+              </div>
+            </div>
+            <div className="flex flex-col w-full align-middle space-y-1">
+              <div className="flex items-center space-x-2">
+                <Label
+                  htmlFor="unavailTime"
+                  value="Unavail Time:"
+                />
+                <span className="font-mono font-black text-sm text-gray-500 dark:text-gray-400">{editingPGroup.unavailTime}</span>
+              </div>
+            </div>
+            <div className="flex flex-col w-full align-middle space-y-1">
+              <div className="flex items-center space-x-2">
+                <Label
+                  htmlFor="includedGroup"
+                  value="Is Included Group:"
+                />
+                <span className="font-mono font-black text-sm text-gray-500 dark:text-gray-400">{editingPGroup.includedGroup ? 'true' : 'false'}</span>
+              </div>
+            </div>
+            <div className="flex flex-col w-full align-middle space-y-1" hidden={editingPGroup.includedGroup === true}>
+              <div className="flex items-center space-x-2">
+                <Label
+                  htmlFor="includedGroupId"
+                  value="Included Group Id:"
+                />
+                <span className="font-mono font-black text-sm text-gray-500 dark:text-gray-400">{editingPGroup.includedGroupId}</span>
+              </div>
             </div>
           </div>
         </Modal.Body>
+        <Modal.Footer className="flex justify-center gap-1">
+          <Button className="mx-2" onClick={saveAndClose}>
+            Save
+          </Button>
+          <Button onClick={cancelEditing} className="mx-2">
+            Cancel
+          </Button>
+        </Modal.Footer>
       </Modal>
     </div >
   );

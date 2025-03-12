@@ -64,6 +64,7 @@ export const App = () => {
   const [syncingRes, setSyncingRes] = useState(false)
   const [activeMenu, setActiveMenu] = useState(menus[0])
   const [configs, setConfigs] = useState<AppConfig>(defaultAppConfigs)
+  const foredLogin = process.env.REACT_APP_FORCED_LOGIN === 'true'
 
   const navigate = useNavigate()
 
@@ -77,7 +78,10 @@ export const App = () => {
       }
       return
     }
-
+    if (!foredLogin) {
+      console.error("User is not authorized. Use the default user.")
+      return
+    }
     navigate('login', { replace: true })
     console.warn("No authorized user login. So, use the default user and chat.")
   }
@@ -125,7 +129,7 @@ export const App = () => {
       {/* <Router> */}
 
       {
-        chat ? <div className="mt-2 ml-2 pr-1 w-full flex flex-row items-center space-x-0.5">
+        getChat() ? <div className="mt-2 ml-2 pr-1 w-full flex flex-row items-center space-x-0.5">
           {
             menus.map((menu: MenuItem) => <Link key={menu.path} to={menu.path} className={menuStyle(menu.path)}>
               {menu.displayName}

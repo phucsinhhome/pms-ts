@@ -120,6 +120,16 @@ export const PGroupManager = (props: PGroupProps) => {
     setEditingPGroup(eI)
   }
 
+  const changeGroupId = (e: ChangeEvent<HTMLInputElement>) => {
+    let iName = e.target.value
+    let eI = {
+      ...editingPGroup,
+      groupId: iName,
+      id: iName
+    }
+    setEditingPGroup(eI)
+  }
+
   const changeName = (e: ChangeEvent<HTMLInputElement>) => {
     let iName = e.target.value
     let eI = {
@@ -149,7 +159,17 @@ export const PGroupManager = (props: PGroupProps) => {
   const saveAndClose = () => {
     // Add your save logic here
     // Assuming you have a function to save the product group to the back-end API
-    savePGroup(editingPGroup)
+
+    let grpId = editingPGroup.groupId
+    if (grpId === null || grpId === undefined) {
+      console.error("Invalid group id")
+      return
+    }
+    let savingGroup = {
+      ...editingPGroup
+    }
+
+    savePGroup(savingGroup)
       .then((rsp) => {
         if (rsp.ok) {
           setOpenEditingModal(false);
@@ -233,13 +253,19 @@ export const PGroupManager = (props: PGroupProps) => {
         <Modal.Body>
           <div className="space-y-1">
             <div className="flex flex-col w-full align-middle space-y-1">
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center">
                 <Label
                   htmlFor="groupId"
-                  value="Id:"
+                  value="Group Id OR Id:"
                 />
-                <span className="font-mono font-black text-sm text-gray-500 dark:text-gray-400">{editingPGroup.groupId}</span>
               </div>
+              <TextInput
+                id="groupId"
+                required={true}
+                value={editingPGroup.groupId === null ? '' : editingPGroup.groupId}
+                onChange={changeGroupId}
+                className="w-full"
+              />
             </div>
             <div className="flex flex-col w-full align-middle space-y-1">
               <div className="flex items-center">

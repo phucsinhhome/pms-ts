@@ -60,7 +60,7 @@ type OrderManagerProps = {
   authorizedUserId: string | null,
   displayName: string,
   activeMenu: any,
-  configs: AppConfig
+  configs: AppConfig | undefined
 }
 
 const menuDisplayMappings: { [key: string]: string } = {
@@ -182,7 +182,7 @@ export const OrderManager = (props: OrderManagerProps) => {
     if (pGroups.length === 0) {
       return
     }
-    let pGroup = pGroups.find(pg => pg.groupId === props.configs.orderManagement.copyLink.defaultGroup)
+    let pGroup = pGroups.find(pg => pg.groupId === props.configs?.orderManagement.copyLink.defaultGroup)
     if (pGroup !== undefined) {
       setActiveGroup(pGroup || undefined)
     }
@@ -263,13 +263,17 @@ export const OrderManager = (props: OrderManagerProps) => {
   }
 
   const copyOrderLink = (invoice: Invoice) => {
-    let resolvedMenuApp = props.configs.orderManagement.copyLink.defaultMenuApp
-    props.configs.orderManagement.copyLink.menuAppMappings.forEach(m => {
+    let resolvedMenuApp = props.configs?.orderManagement.copyLink.defaultMenuApp
+    props.configs?.orderManagement.copyLink.menuAppMappings.forEach(m => {
       if (activeGroup?.name.startsWith(m.startWiths)) {
         resolvedMenuApp = m.app
         console.info("Resolved menu app %s", resolvedMenuApp)
       }
     })
+    if (resolvedMenuApp === undefined) {
+      console.error("No menu app found for group %s", activeGroup?.name)
+      return
+    }
     let url = `${process.env[resolvedMenuApp]}/menu/${activeGroup?.name}/${invoice.id}`
     navigator.clipboard.writeText(url)
     console.info("Url %s has been copied", url)

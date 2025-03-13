@@ -41,6 +41,8 @@ export const PGroupManager = (props: PGroupProps) => {
 
   const [openDelModal, setOpenDelModal] = useState(false)
   const [deletingPGroup, setDeletingPGroup] = useState<PGroup>()
+  const [showDelResult, setShowDelResult] = useState(false)
+  const [delResult, setDelResult] = useState("")
 
   const [openEditingModal, setOpenEditingModal] = useState(false)
   const [editingPGroup, setEditingPGroup] = useState<PGroup>(defaultPGroup)
@@ -67,11 +69,22 @@ export const PGroupManager = (props: PGroupProps) => {
   const handleDeletion = (group: PGroup) => {
     console.warn("Deleting group [%s]...", group.groupId)
     deletePGroup(group)
-      .then((rsp: any) => {
-        if (rsp !== null) {
+      .then((rsp) => {
+        if (rsp.ok) {
           console.log("Delete group %s successully", group.groupId)
           fetchPGroups()
+          setDelResult("Delete group successfully")
+          setShowDelResult(true)
         }
+        if (rsp.status === 500) {
+          console.error("Failed to delete the product group", rsp.statusText)
+          setDelResult(`Failed to delete the product group ${group.displayName}. Please check if the group is containing some products.`)
+          setShowDelResult(true)
+        }
+      }).catch((error) => {
+        console.error("Failed to delete the product group", error)
+        setDelResult("Failed to delete the product group")
+        setShowDelResult(true)
       })
   }
 
@@ -182,6 +195,12 @@ export const PGroupManager = (props: PGroupProps) => {
       });
   }
 
+  const closeDelResult = () => {
+    setShowDelResult(false)
+    setDelResult("")
+  }
+
+
   return (
     <div className="h-full pt-3">
       <div className="flex flex-row px-2">
@@ -218,7 +237,7 @@ export const PGroupManager = (props: PGroupProps) => {
                 <span className="font-mono font-black text-[12px] text-gray-500 dark:text-gray-400">{grp.availTime}</span>
                 <span className="font-mono font-black text-[12px] text-gray-500 dark:text-gray-400">{grp.unavailTime}</span>
               </div>
-              <div className="flex flex-row space-x-2 absolute right-1 top-2">
+              <div className="flex flex-row space-x-4 absolute right-3 top-2">
                 <HiUserRemove onClick={() => askForDelConfirmation(grp)} />
                 <HiAdjustments onClick={() => editPGroup(grp)} />
               </div>
@@ -239,6 +258,16 @@ export const PGroupManager = (props: PGroupProps) => {
           <Button color="gray" onClick={cancelDeletion}>
             Cancel
           </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal popup={true} show={showDelResult}>
+        <Modal.Header>Confirm</Modal.Header>
+        <Modal.Body>
+          <span>{delResult}</span>
+        </Modal.Body>
+        <Modal.Footer className="flex justify-center gap-4">
+          <Button onClick={closeDelResult}>Ok</Button>
         </Modal.Footer>
       </Modal>
 

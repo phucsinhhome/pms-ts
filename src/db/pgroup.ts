@@ -14,7 +14,7 @@ export const deletePGroup = (pgroup: PGroup) => {
   const opts = {
     method: 'DELETE'
   }
-  return fetch(`${process.env.REACT_APP_PRODUCT_GROUP_ENDPOINT}`, opts)
+  return fetch(`${process.env.REACT_APP_PRODUCT_GROUP_ENDPOINT}/${pgroup.groupId}`, opts)
 }
 
 // Ensure that savePGroup is exported from this module
@@ -27,5 +27,5 @@ export const savePGroup = (group: PGroup) => {
     },
     body: JSON.stringify(group)
   }
-  return fetch(`${process.env.REACT_APP_PRODUCT_GROUP_ENDPOINT}`, opts)
+  return fetch(`${process.env.REACT_APP_PRODUCT_GROUP_ENDPOINT}/save`, opts)
 };

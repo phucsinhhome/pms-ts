@@ -24,11 +24,12 @@ export type Chat = {
   lastName: string | undefined,
   username: string | undefined
 }
+const defaultChatId = '0000000000'
 export const defaultChat: Chat = {
-  id: '1351151927',
-  firstName: "Minh",
-  lastName: "Tran",
-  username: 'minhtranes'
+  id: defaultChatId,
+  firstName: "Login",
+  lastName: "",
+  username: 'no-user'
 }
 
 type MenuItem = {
@@ -58,22 +59,23 @@ const menus: MenuItem[] = [{
 
 export const App = () => {
 
-  const [chat, setChat] = useState<Chat>()
+  const [chat, setChat] = useState<Chat>(defaultChat)
   const [authorizedUserId, setAuthorizedUserId] = useState<string | null>(null)
   const [syncing, setSyncing] = useState(false)
   const [syncingRes, setSyncingRes] = useState(false)
   const [activeMenu, setActiveMenu] = useState(menus[0])
   const [configs, setConfigs] = useState<AppConfig>(defaultAppConfigs)
   const foredLogin = process.env.REACT_APP_FORCED_LOGIN === 'true'
+  const LOCAL_STATORAGE_SIGNED_IN = 'PS-SIGNED-IN'
 
   const navigate = useNavigate()
 
   function loadLauchParams() {
 
-    if (chat) {
-      console.info(`Filter the user with id ${chat.id}`)
+    if (chat.id !== defaultChatId) {
+      console.info(`Find the user with id ${chat.id}`)
       var user = configs?.users.find(u => u.id === chat.id)
-      if (user !== null) {
+      if (user) {
         setChat(user)
       }
       return
@@ -88,6 +90,11 @@ export const App = () => {
 
   useEffect(() => {
     document.title = "PMS"
+    let signedInChatId = localStorage.getItem(LOCAL_STATORAGE_SIGNED_IN)
+    if (signedInChatId) {
+      console.info(`The signed in chat id is ${signedInChatId}`)
+      setChat(chat => ({ ...chat, id: signedInChatId }))
+    }
     fetchConfig()
   }, []);
 
@@ -99,7 +106,8 @@ export const App = () => {
   }, [configs]);
 
   useEffect(() => {
-    if (!chat) {
+    localStorage.setItem(LOCAL_STATORAGE_SIGNED_IN, chat?.id)
+    if (chat?.id === defaultChatId) {
       setAuthorizedUserId(null)
       return
     }
@@ -107,6 +115,9 @@ export const App = () => {
     setAuthorizedUserId(chat.id)
   }, [chat]);
 
+  const isSignedIn = () => {
+    return chat.id !== defaultChatId
+  }
 
   const fullName = () => {
     return [chat?.firstName, chat?.lastName].join(' ')
@@ -126,10 +137,8 @@ export const App = () => {
 
   return (
     <div className="flex flex-col relative h-[100dvh] min-h-0 bg-slate-50">
-      {/* <Router> */}
-
       {
-        getChat() ? <div className="mt-2 ml-2 pr-1 w-full flex flex-row items-center space-x-0.5">
+        isSignedIn() ? <div className="mt-2 ml-2 pr-1 w-full flex flex-row items-center space-x-0.5">
           {
             menus.map((menu: MenuItem) => <Link key={menu.path} to={menu.path} className={menuStyle(menu.path)}>
               {menu.displayName}
@@ -140,8 +149,7 @@ export const App = () => {
               className="pointer-events-auto cursor-pointer w-14 h-7"
             />
           </Link>
-        </div>
-          : <></>
+        </div> : <></>
       }
       <Routes>
         <Route path="/" element={<Navigate to={"profit"} />} />
@@ -179,15 +187,16 @@ export const App = () => {
           activeMenu={() => setActiveMenu({ path: 'settings', displayName: 'Settings' })}
         />} />
       </Routes>
-      {configs?.app.showProfile && authorizedUserId ? <div
-        className="absolute top-0 right-0 flex flex-col mt-10 mr-2 bg-neutral-200 p-1 opacity-90 rounded-md shadow-lg"
-        onClick={() => {
-          setChat(undefined)
-          navigate('login', { replace: true })
-        }}
-      >
-        <span className="font text-[10px] font-bold text-gray-800 dark:text-white">{fullName()}</span>
-      </div> : <></>}
+      {configs?.app.showProfile ?
+        <div
+          className="absolute top-0 right-0 flex flex-col mt-10 mr-2 bg-neutral-200 p-1 opacity-90 rounded-md shadow-lg"
+          onClick={() => {
+            setChat(defaultChat)
+            navigate('login', { replace: true })
+          }}
+        >
+          <span className="font text-[10px] font-bold text-gray-800 dark:text-white">{fullName()}</span>
+        </div> : <></>}
     </div>
   );
 }

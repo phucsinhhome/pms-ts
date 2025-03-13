@@ -16,7 +16,7 @@ export type AppConfig = {
 
 export const defaultAppConfigs: AppConfig = {
     app: {
-        showProfile: false
+        showProfile: true
     },
     users: [{
         id: '1351151927',

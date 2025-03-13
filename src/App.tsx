@@ -13,7 +13,7 @@ import { OrderEditor } from "./Components/OrderEditor";
 import { Inventory } from "./Components/Inventory";
 import { PGroupManager } from "./Components/PGroupManager";
 import { SupplierManager } from "./Components/SupplierManager";
-import { AppConfig, appConfigs, defaultAppConfigs } from "./db/configs";
+import { AppConfig, appConfigs } from "./db/configs";
 import { Login } from "./Components/Login";
 
 export const DEFAULT_PAGE_SIZE = Number(process.env.REACT_APP_DEFAULT_PAGE_SIZE)
@@ -64,7 +64,7 @@ export const App = () => {
   const [syncing, setSyncing] = useState(false)
   const [syncingRes, setSyncingRes] = useState(false)
   const [activeMenu, setActiveMenu] = useState(menus[0])
-  const [configs, setConfigs] = useState<AppConfig>(defaultAppConfigs)
+  const [configs, setConfigs] = useState<AppConfig>()
   const foredLogin = process.env.REACT_APP_FORCED_LOGIN === 'true'
   const LOCAL_STATORAGE_SIGNED_IN = 'PS-SIGNED-IN'
 
@@ -81,7 +81,11 @@ export const App = () => {
       return
     }
     if (!foredLogin) {
-      console.error("User is not authorized. Use the default user.")
+      console.error("Forced login disabled.")
+      return
+    }
+    if (isSignedIn()) {
+      console.info("The user is already signed in.")
       return
     }
     navigate('login', { replace: true })
@@ -99,9 +103,11 @@ export const App = () => {
   }, []);
 
   useEffect(() => {
-    if (configs) {
-      loadLauchParams()
+    if (configs === undefined) {
+      return
     }
+    loadLauchParams()
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [configs]);
 
@@ -116,6 +122,7 @@ export const App = () => {
   }, [chat]);
 
   const isSignedIn = () => {
+    console.info(`The chat id is ${chat.id}`)
     return chat.id !== defaultChatId
   }
 

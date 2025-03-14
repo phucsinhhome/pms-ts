@@ -201,8 +201,9 @@ export const Inventory = (props: InventoryProps) => {
   }
 
   const activeGroupStyle = (group: string) => {
-    return activeGroup === group ? 'font font-mono text-sm font-bold text-gray-500 border rounded-sm px-1 py-1 bg-slate-400'
-      : 'font font-mono text-sm font-bold text-gray-500 border rounded-sm px-1 py-1 bg-slate-50'
+    return activeGroup === group ?
+      'font font-mono text-sm font-bold text-nowrap text-gray-500 border rounded-sm px-1 py-1 bg-slate-400'
+      : 'font font-mono text-sm font-bold text-nowrap text-gray-500 border rounded-sm px-1 py-1 bg-slate-50'
   }
 
   const viewProductDetail = (product: Product) => {
@@ -636,7 +637,9 @@ export const Inventory = (props: InventoryProps) => {
                 {
                   pGroups.map((group) => <div
                     key={group.groupId}
-                    className={editingProduct.origin.group === group.name ? "border rounded-sm px-1 bg-slate-500" : "border rounded-sm px-1 bg-slate-200"}
+                    className={editingProduct.origin.group === group.name ?
+                      "border rounded-sm px-1 text-nowrap bg-slate-500" :
+                      "border rounded-sm px-1 text-nowrap bg-slate-200"}
                     onClick={() => changeProductGroup(group.name)}>
                     {group.displayName}
                   </div>)

@@ -1508,7 +1508,7 @@ export const InvoiceEditor = (props: InvoiceProps) => {
           <div className="space-y-6 px-0 pb-4 sm:pb-6 lg:px-8 xl:pb-8">
             <div className="flex flex-row pt-2">
               <div className="block w-1/5">
-                <img src="/ps_logo_96.jpg" className="w-25 border border-1 rounded-2xl" alt=""></img>
+                <img src="/logo192.jpg" className="w-25 border border-1 rounded-2xl" alt=""></img>
               </div>
               <div className="flex flex-col w-4/5 ">
                 <span className="text-right font-serif font-bold text-amber-800 capitalize">phuc sinh home</span>

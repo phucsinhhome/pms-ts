@@ -20,7 +20,10 @@ export type Product = {
   description: string,
   featureImgUrl: string,
   imageUrls: string[],
-  prepareTime: string
+  prepareTime: string,
+  status: string,
+  availableFrom: string,
+  availableTo: string
 }
 
 export type ItemAdjustment = {
@@ -66,7 +69,10 @@ export const Inventory = (props: InventoryProps) => {
     description: '',
     featureImgUrl: buildImageUrl(defaultImageKey),
     imageUrls: [buildImageUrl(defaultImageKey)],
-    prepareTime: 'PT1H'
+    prepareTime: 'PT1H',
+    status: 'ENABLED',
+    availableFrom: '08:00',
+    availableTo: '22:00'
   }
   const defaultEditingProduct = {
     origin: defaultEmptyProduct,
@@ -459,6 +465,28 @@ export const Inventory = (props: InventoryProps) => {
     return putObject(file, imageName, process.env.REACT_APP_PUBLIC_BUCKET!, imageKey)
   }
 
+  const changeAvailableFrom = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    let v = e.target.value;
+    let eI = {
+      ...editingProduct,
+      origin: {
+        ...editingProduct.origin,
+        availableFrom: v
+      }
+    };
+    setEditingProduct(eI);
+  };
+  const changeAvailableTo = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    let v = e.target.value;
+    let eI = {
+      ...editingProduct,
+      origin: {
+        ...editingProduct.origin,
+        availableTo: v
+      }
+    };
+    setEditingProduct(eI);
+  };
   return (
     <div className="px-2 h-full pt-3 relative">
 
@@ -587,7 +615,7 @@ export const Inventory = (props: InventoryProps) => {
       >
         <Modal.Header />
         <Modal.Body>
-          <div className="flex flex-col space-y-6 px-1 pb-2 sm:pb-6 lg:px-8 xl:pb-8">
+          <div className="flex flex-col space-y-2">
             <div className="flex flex-row w-full align-middle">
               <div className="flex items-center w-2/5">
                 <Label
@@ -661,6 +689,38 @@ export const Inventory = (props: InventoryProps) => {
                     onClick={() => changePrepareTime(pT)}
                   >{pT.substring(2)}</div>)
                 }
+              </div>
+            </div>
+            <div className="flex flex-col w-full align-middle border rounded-md px-2 py-1">
+              <div className="flex items-center w-2/5">
+                <Label
+                  htmlFor="availbleTime"
+                  value="Available Time"
+                />
+              </div>
+              <div className="flex flex-row space-x-1">
+                <div className="flex items-center w-1/2">
+                  <TextInput
+                    id="availbleFrom"
+                    placeholder="From"
+                    type="time"
+                    required={false}
+                    className="w-full"
+                    value={editingProduct.origin.availableFrom}
+                    onChange={changeAvailableFrom}
+                  />
+                </div>
+                <div className="flex items-center w-1/2">
+                  <TextInput
+                    id="availbleTo"
+                    placeholder="To"
+                    type="time"
+                    required={false}
+                    className="w-full"
+                    value={editingProduct.origin.availableTo}
+                    onChange={changeAvailableTo}
+                  />
+                </div>
               </div>
             </div>
             <div className="flex flex-col w-full align-middle px-2 py-1">

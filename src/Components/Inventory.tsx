@@ -10,6 +10,7 @@ import { listAllPGroups } from "../db/pgroup";
 import { PGroup } from "./PGroupManager";
 import { putObject } from "../Service/FileMinio";
 import { saveProduct } from "../db/product";
+import { GiCheckMark, GiTick } from "react-icons/gi";
 
 export type Product = {
   id: string,
@@ -539,7 +540,7 @@ export const Inventory = (props: InventoryProps) => {
                 <div className="pl-0.5 pr-1 py-2">
                   <Avatar img={product.featureImgUrl} alt="dish image" rounded className="w-12" />
                 </div>
-                <div className="px-0 w-full">
+                <div className={product.status === "ENABLED" ? "px-0 w-full" : "px-0 w-full opacity-55"}>
                   <div className="grid grid-cols-1">
                     <div className="flex flex-row">
                       <Link
@@ -553,19 +554,25 @@ export const Inventory = (props: InventoryProps) => {
                     </div>
                     <div className="flex flex-row text-sm space-x-1">
                       <span className="font font-mono text-gray-500 text-[10px]">{product.prepareTime}</span>
+                      <span className="font font-mono text-gray-500 text-[10px]">{formatVND(product.unitPrice)}</span>
                     </div>
                   </div>
                 </div>
-                <div className="flex flex-col w-28 px-1 absolute right-1">
-                  <div className="text text-center w-full">
-                    <span className="text-sm text-amber-800">{formatVND(product.unitPrice)}</span>
+                <div className="flex flex-col w-28 px-1 absolute bg-slate-50 right-1 space-y-2">
+                  <div className="flex flex-row w-full justify-items-center text-center">
+                    {/* <span className="text-sm text-amber-800">{formatVND(product.unitPrice)}</span> */}
+                    {/* <Button 
+                    className="h-5"
+                    onClick={() => changeQuantity(product, 1)}>{product.status==="ENABLED"?"Disable":"Enable"}</Button> */}
+                    {/* {product.status==="ENABLED"?"Disable":"Enable"} */}
+                    <span className="text-xs text-gray-500 w-full">Disable</span>
                   </div>
-                  <div className="flex w-full items-center mb-2 text-center">
+                  <div className="flex w-full items-center text-center">
                     <button
                       type="button"
                       id="decrement-button"
                       data-input-counter-decrement="quantity-input"
-                      className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-s-lg py-1 px-2 h-7 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
+                      className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-s-lg px-2 h-5 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
                       onClick={() => changeQuantity(product, -1)}
                     >
                       <svg className="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
@@ -576,7 +583,7 @@ export const Inventory = (props: InventoryProps) => {
                       type="number"
                       id="quantity-input"
                       data-input-counter aria-describedby="helper-text-explanation"
-                      className="bg-gray-50 border-x-0 border-gray-300 h-7 w-full min-w-min text-center text-gray-900 block py-1"
+                      className="bg-gray-50 border-x-0 border-gray-300 w-full min-w-min text-center text-sm text-gray-900 block h-5 py-0.5"
                       placeholder="9"
                       required
                       value={product.quantity}
@@ -586,7 +593,7 @@ export const Inventory = (props: InventoryProps) => {
                       type="button"
                       id="increment-button"
                       data-input-counter-increment="quantity-input"
-                      className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-e-lg py-1 px-2 h-7 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
+                      className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-e-lg px-2 h-5 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
                       onClick={() => changeQuantity(product, 1)}
                     >
                       <svg className="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">

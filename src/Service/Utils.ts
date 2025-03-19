@@ -113,6 +113,19 @@ export const formatVNDateTime = (date: Date) => {
     })
 }
 
+export const formatLocalTime = (utcHourMinuteTime: string) => {
+    // Format: 15:25
+    const [hours, minutes] = utcHourMinuteTime.split(':');
+    const date = new Date();
+    date.setUTCHours(parseInt(hours, 10));
+    date.setUTCMinutes(parseInt(minutes, 10));
+    return date.toLocaleTimeString("en-GB", {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false,
+    })
+}
+
 export const formatISOTime = (date: Date) => {
     // Format: 07/30/2024
     return date.toLocaleTimeString("en-GB", {
@@ -147,12 +160,9 @@ export const utcToDateTime = (dateString: string) => {
 }
 
 export const formatISOHourMinute = (date: Date) => {
-    // Format: 15:25
-    return date.toLocaleTimeString("en-GB", {
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: false,
-    })
+    // Format: 15:25 (UTC)
+    const isoTimeString = date.toISOString().substring(11, 16)
+    return isoTimeString
 }
 
 export const formatRooms = (rooms: string[]) => {

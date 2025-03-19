@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Avatar, Button, FileInput, Label, Modal, Textarea, TextInput } from "flowbite-react";
 import { adjustQuantity as adjustInventoryQuantity, listProductItems, listProductItemsByGroup, listProductItemsWithName, listProductItemsWithNameAndGroup } from "../db/inventory";
 import { HiOutlineCash, HiX } from "react-icons/hi";
-import { formatMoneyAmount, formatVND } from "../Service/Utils";
+import { formatISOHourMinute, formatLocalTime, formatMoneyAmount, formatVND } from "../Service/Utils";
 import { DEFAULT_PAGE_SIZE } from "../App";
 import { Pagination } from "./ProfitReport";
 import { listAllPGroups } from "../db/pgroup";
@@ -76,11 +76,16 @@ export const Inventory = (props: InventoryProps) => {
   }
   const defaultEditingProduct = {
     origin: defaultEmptyProduct,
-    formattedUnitPrice: ''
+    formattedUnitPrice: '',
+    availableFromLocalTime: '',
+    availableToLocalTime: ''
   }
 
   const [showProductDetailModal, setShowProductDetailModal] = useState(false)
-  const [editingProduct, setEditingProduct] = useState<{ origin: Product, formattedUnitPrice: string }>(defaultEditingProduct)
+  const [editingProduct, setEditingProduct] = useState<{
+    origin: Product,
+    formattedUnitPrice: string
+  }>(defaultEditingProduct)
 
   const handlePaginationClick = (page: number) => {
     console.log("Pagination nav bar click to page %s", page)

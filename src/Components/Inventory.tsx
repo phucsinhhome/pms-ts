@@ -792,33 +792,51 @@ export const Inventory = (props: InventoryProps) => {
                 className="w-full"
               />
             </div>
-            <div className="flex flex-row w-full align-middle">
-              <div className="flex items-center w-2/5">
-                <Label
-                  htmlFor="featureImgUrl"
-                  value="Feature Image"
-                />
+            <div className="flex flex-col border rounded-md px-2">
+              <div className="flex flex-col w-full">
+                <Label value="Photos" />
+                <span className="text-[9px] font-mono italic text-gray-300">Choose the photo to change</span>
               </div>
-              <FileInput id="featureImgUrl" onChange={(e) => changeFeatureImage(e)} disabled={editingProduct.origin.name === undefined || editingProduct.origin.name === null || editingProduct.origin.name === ''} />
-              <img className="max-w-sm h-12"
-                src={editingProduct.origin.featureImgUrl}
-                alt="" />
-            </div>
-            {
-              editingProduct.origin.imageUrls ? editingProduct.origin.imageUrls.map((imgUrl, idx) => <div key={idx} className="flex flex-row w-full align-middle">
-                <div className="flex items-center w-2/5">
+              <div className="flex flex-row w-full space-x-2 py-1">
+                <div className="w-1/5">
                   <Label
-                    htmlFor={"imgUrl" + idx}
-                    value={"Img " + idx}
-                  />
+                    htmlFor="featureImgUrl"
+                  >
+                    <img className="max-w-sm h-12"
+                      src={editingProduct.origin.featureImgUrl}
+                      alt="" />
+                    <FileInput
+                      id="featureImgUrl"
+                      onChange={(e) => changeFeatureImage(e)}
+                      disabled={editingProduct.origin.name === undefined || editingProduct.origin.name === null || editingProduct.origin.name === ''}
+                      sizing="sm"
+                      className="hidden"
+                    />
+                  </Label>
                 </div>
-                <FileInput id={"imgUrl" + idx} onChange={(e) => changeContentImage(e, idx)} disabled={editingProduct.origin.name === undefined || editingProduct.origin.name === null || editingProduct.origin.name === ''} />
-                <img className="max-w-sm h-12"
-                  src={editingProduct.origin.imageUrls[idx]}
-                  alt="" />
-              </div>)
-                : <></>
-            }
+                {
+                  editingProduct.origin.imageUrls ? editingProduct.origin.imageUrls.map((imgUrl, idx) =>
+                    <div className="w-1/5">
+                      <Label
+                        htmlFor={"imgUrl" + idx}
+                      >
+                        <img className="max-w-sm h-12"
+                          src={editingProduct.origin.imageUrls[idx]}
+                          alt="" />
+                        <FileInput
+                          id={"imgUrl" + idx}
+                          onChange={(e) => changeContentImage(e, idx)}
+                          disabled={editingProduct.origin.name === undefined || editingProduct.origin.name === null || editingProduct.origin.name === ''}
+                          className="hidden"
+                        />
+                      </Label>
+                    </div>)
+                    : <></>
+                }
+
+              </div>
+            </div>
+
           </div>
         </Modal.Body>
         <Modal.Footer className="flex justify-center">

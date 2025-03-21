@@ -587,24 +587,14 @@ export const Inventory = (props: InventoryProps) => {
                     </div>
                   </div>
                 </div>
-                <div className="flex flex-row w-44 px-0 bg-slate-50 shadow-md absolute right-1 bottom-0 space-x-3 py-1">
+                <div className="flex flex-row w-44 px-0 bg-slate-50 shadow-md absolute right-1 bottom-0 space-x-1 py-1">
                   <div className="flex flex-row w-24 items-start">
-                    {/* <button
-                      type="button"
-                      id="decrement-button"
-                      data-input-counter-decrement="quantity-input"
-                      className={product.status === "ENABLED" ?"bg-red-100 hover:bg-red-200 border border-red-300 rounded-lg px-1 h-5 w-full text-sm text-center font-mono text-red-800 focus:ring-gray-100 focus:ring-2 focus:outline-none"
-                        : "bg-green-100 hover:bg-green-200 border border-green-300 rounded-lg px-1 h-5 w-full text-sm text-center font-mono text-green-800 focus:ring-gray-100 focus:ring-2 focus:outline-none"}
-                    >{product.status === "ENABLED" ? "Disable" : "Enable"}</button> */}
                     <ToggleSwitch
                       id="status"
-                      // label="Status"
                       checked={product.status === "ENABLED"}
                       onChange={() => changeProductStatus(product, product.status === "ENABLED" ? "DISABLED" : "ENABLED")}
-                      // className="h-5 w-full border"
                       color="green"
                       sizing="sm"
-
                     />
                   </div>
                   <div className="flex w-full items-center text-center">

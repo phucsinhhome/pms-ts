@@ -3,14 +3,13 @@ import { Link } from "react-router-dom";
 import { Avatar, Button, FileInput, Label, Modal, Textarea, TextInput, ToggleSwitch } from "flowbite-react";
 import { adjustQuantity as adjustInventoryQuantity, changeItemStatus, listProductItems, listProductItemsByGroup, listProductItemsWithName, listProductItemsWithNameAndGroup } from "../db/inventory";
 import { HiOutlineCash, HiX } from "react-icons/hi";
-import { formatISOHourMinute, formatLocalTime, formatMoneyAmount, formatVND } from "../Service/Utils";
+import { formatMoneyAmount, formatVND } from "../Service/Utils";
 import { DEFAULT_PAGE_SIZE } from "../App";
 import { Pagination } from "./ProfitReport";
 import { listAllPGroups } from "../db/pgroup";
 import { PGroup } from "./PGroupManager";
 import { putObject } from "../Service/FileMinio";
 import { saveProduct } from "../db/product";
-import { GiCheckMark, GiTick } from "react-icons/gi";
 
 export type Product = {
   id: string,

@@ -587,8 +587,8 @@ export const Inventory = (props: InventoryProps) => {
                     </div>
                   </div>
                 </div>
-                <div className="flex flex-row w-44 px-0 bg-slate-50 shadow-md absolute right-1 bottom-0 space-x-1 py-1">
-                  <div className="flex flex-row w-24 items-start">
+                <div className="flex flex-row w-36 px-0 bg-slate-50 shadow-md absolute right-1 bottom-0 space-x-2 py-1">
+                  <div className="flex flex-row items-start">
                     <ToggleSwitch
                       id="status"
                       checked={product.status === "ENABLED"}

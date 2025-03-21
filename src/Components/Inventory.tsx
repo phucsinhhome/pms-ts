@@ -53,7 +53,6 @@ export const Inventory = (props: InventoryProps) => {
 
   const [pGroups, setPGroups] = useState<PGroup[]>([])
   const [activeGroup, setActiveGroup] = useState('')
-  const [switch1, setSwitch1] = useState(false);
 
   const [pagination, setPagination] = useState<Pagination>({
     pageNumber: 0,
@@ -512,17 +511,6 @@ export const Inventory = (props: InventoryProps) => {
     };
     setEditingProduct(eI);
   };
-  const changeStatus = (status: string): void => {
-    let eI = {
-      ...editingProduct,
-      origin: {
-        ...editingProduct.origin,
-        status: status
-      }
-    };
-    console.info("Change status to %s", status)
-    setEditingProduct(eI);
-  }
 
   const changeProductStatus = (product: Product, status: string): void => {
     let statusChange: ItemStatusChange = {
@@ -594,9 +582,10 @@ export const Inventory = (props: InventoryProps) => {
                         {product.name}
                       </Link>
                     </div>
-                    <div className="flex flex-row text-sm space-x-1">
+                    <div className="flex flex-row text-sm space-x-2">
                       <span className="font font-mono text-gray-500 text-[10px]">{product.prepareTime}</span>
-                      <span className="font font-mono text-gray-500 text-[10px]">{formatVND(product.unitPrice)}</span>
+                      <span className="font font-mono text-gray-500 text-[10px]">{product.availableTo}</span>
+                      <span className="font font-mono text-red-700 text-[10px]">{formatVND(product.unitPrice)}</span>
                     </div>
                   </div>
                 </div>

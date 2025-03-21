@@ -1,4 +1,5 @@
-import { ItemAdjustment } from "../Components/Inventory"
+import { stat } from "fs"
+import { ItemAdjustment, ItemStatusChange } from "../Components/Inventory"
 
 export const listAllProductItems = () => {
   console.info("Fetching all products from the inventory")
@@ -24,6 +25,16 @@ export const adjustQuantity = (adjustment: ItemAdjustment) => {
     body: JSON.stringify(adjustment)
   }
   return fetch(`${process.env.REACT_APP_INVENTORY_ENDPOINT}/quantity/adjust`, opts)
+}
+
+export const changeItemStatus = (statusChange: ItemStatusChange) => {
+  console.info("Adjust the item status")
+  const opts = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(statusChange)
+  }
+  return fetch(`${process.env.REACT_APP_INVENTORY_ENDPOINT}/status`, opts)
 }
 
 export const listProductItemsWithName = (name: string) => {

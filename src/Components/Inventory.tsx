@@ -1,7 +1,7 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
 import { Link } from "react-router-dom";
 import { Avatar, Button, FileInput, Label, Modal, Textarea, TextInput, ToggleSwitch } from "flowbite-react";
-import { adjustQuantity as adjustInventoryQuantity, listProductItems, listProductItemsByGroup, listProductItemsWithName, listProductItemsWithNameAndGroup } from "../db/inventory";
+import { adjustQuantity as adjustInventoryQuantity, changeItemStatus, listProductItems, listProductItemsByGroup, listProductItemsWithName, listProductItemsWithNameAndGroup } from "../db/inventory";
 import { HiOutlineCash, HiX } from "react-icons/hi";
 import { formatISOHourMinute, formatLocalTime, formatMoneyAmount, formatVND } from "../Service/Utils";
 import { DEFAULT_PAGE_SIZE } from "../App";
@@ -33,6 +33,11 @@ export type ItemAdjustment = {
   quantity: number
 }
 
+export type ItemStatusChange = {
+  itemId: string,
+  status: string
+}
+
 const timeOpts = ['PT5M', 'PT15M', 'PT30M', 'PT45M', 'PT1H', 'PT1H15M', 'PT1H30M', 'PT2H']
 
 type InventoryProps = {
@@ -49,6 +54,7 @@ export const Inventory = (props: InventoryProps) => {
 
   const [pGroups, setPGroups] = useState<PGroup[]>([])
   const [activeGroup, setActiveGroup] = useState('')
+  const [switch1, setSwitch1] = useState(false);
 
   const [pagination, setPagination] = useState<Pagination>({
     pageNumber: 0,
@@ -501,7 +507,30 @@ export const Inventory = (props: InventoryProps) => {
         status: status
       }
     };
+    console.info("Change status to %s", status)
     setEditingProduct(eI);
+  }
+
+  const changeProductStatus = (product: Product, status: string): void => {
+    let statusChange: ItemStatusChange = {
+      itemId: product.id,
+      status: status
+    }
+    changeItemStatus(statusChange)
+      .then(rsp => {
+        if (rsp.ok) {
+          rsp.json()
+            .then((data) => {
+              console.info("Change status of product %s to %s successfully", product.id, status)
+              setProducts(products.map(p => {
+                if (p.id === data.itemId) {
+                  p.status = data.status
+                }
+                return p
+              }))
+            })
+        }
+      })
   }
 
   return (
@@ -571,8 +600,11 @@ export const Inventory = (props: InventoryProps) => {
                       id="status"
                       // label="Status"
                       checked={product.status === "ENABLED"}
-                      onChange={() => changeStatus(product.status === "ENABLED" ? "DISABLED" : "ENABLED")}
-                      className="w-full"
+                      onChange={() => changeProductStatus(product, product.status === "ENABLED" ? "DISABLED" : "ENABLED")}
+                      // className="h-5 w-full border"
+                      color="green"
+                      sizing="sm"
+
                     />
                   </div>
                   <div className="flex w-full items-center text-center">

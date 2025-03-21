@@ -77,7 +77,7 @@ export const Inventory = (props: InventoryProps) => {
     featureImgUrl: buildImageUrl(defaultImageKey),
     imageUrls: [buildImageUrl(defaultImageKey)],
     prepareTime: 'PT1H',
-    status: 'ENABLED',
+    status: 'DISABLED',
     availableFrom: '08:00',
     availableTo: '22:00'
   }
@@ -752,24 +752,6 @@ export const Inventory = (props: InventoryProps) => {
                     onClick={() => changePrepareTime(pT)}
                   >{pT.substring(2)}</div>)
                 }
-              </div>
-            </div>
-            <div className="flex flex-col w-full align-middle border rounded-md px-2 py-1">
-              <div className="flex items-center w-2/5">
-                <Label
-                  htmlFor="status"
-                  value="Status"
-                />
-              </div>
-              <div className="flex flex-row space-x-2 overflow-scroll">
-                <div
-                  className={editingProduct.origin.status === 'ENABLED' ? "border rounded-sm px-1 bg-slate-500" : "border rounded-sm px-1 bg-slate-200"}
-                  onClick={() => changeStatus('ENABLED')}
-                >ENABLED</div>
-                <div
-                  className={editingProduct.origin.status === 'DISABLED' ? "border rounded-sm px-1 bg-slate-500" : "border rounded-sm px-1 bg-slate-200"}
-                  onClick={() => changeStatus('DISABLED')}
-                >DISABLED</div>
               </div>
             </div>
             <div className="flex flex-col w-full align-middle border rounded-md px-2 py-1">

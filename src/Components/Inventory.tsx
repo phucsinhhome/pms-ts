@@ -321,7 +321,20 @@ export const Inventory = (props: InventoryProps) => {
             .then((data) => {
               console.info("Save product successfully with id %s and offset %d", data.id, data.displayOffset)
               setEditingProduct(defaultEditingProduct)
-              fetchAllProducts()
+              // fetchAllProducts()
+
+              setProducts(prevProducts => {
+                const existingProductIndex = prevProducts.findIndex(p => p.id === data.id);
+                if (existingProductIndex > -1) {
+                  // If product exists, update it
+                  const updatedProducts = [...prevProducts];
+                  updatedProducts[existingProductIndex] = data;
+                  return updatedProducts;
+                } else {
+                  // If product doesn't exist, add it
+                  return [...prevProducts, data];
+                }
+              })
             })
         }
       }).finally(() => {
@@ -445,6 +458,7 @@ export const Inventory = (props: InventoryProps) => {
           origin: {
             ...editingProduct.origin,
             imageUrls: [
+              ...editingProduct.origin.imageUrls,
               data.objectURL
             ]
           }

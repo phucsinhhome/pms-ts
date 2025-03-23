@@ -2,7 +2,7 @@ import React, { useState, useEffect, ChangeEvent } from "react";
 import { Link } from "react-router-dom";
 import { Avatar, Button, FileInput, Label, Modal, Textarea, TextInput, ToggleSwitch } from "flowbite-react";
 import { adjustQuantity as adjustInventoryQuantity, changeItemStatus, listProductItems, listProductItemsByGroup, listProductItemsWithName, listProductItemsWithNameAndGroup } from "../db/inventory";
-import { HiOutlineCash, HiX } from "react-icons/hi";
+import { HiArrowCircleUp, HiOutlineCash, HiX } from "react-icons/hi";
 import { formatMoneyAmount, formatVND } from "../Service/Utils";
 import { DEFAULT_PAGE_SIZE } from "../App";
 import { Pagination } from "./ProfitReport";
@@ -451,14 +451,14 @@ export const Inventory = (props: InventoryProps) => {
         if (data === null) {
           return
         }
+        const updatedImageUrls = [...editingProduct.origin.imageUrls];
+        updatedImageUrls[idx] = data.objectURL;
+
         setEditingProduct({
           ...editingProduct,
           origin: {
             ...editingProduct.origin,
-            imageUrls: [
-              ...editingProduct.origin.imageUrls,
-              data.objectURL
-            ]
+            imageUrls: updatedImageUrls
           }
         })
       })
@@ -481,7 +481,10 @@ export const Inventory = (props: InventoryProps) => {
     if (lastDotIndex !== -1) {
       extension = fullName.slice(lastDotIndex + 1);
     }
-    var imageName = editingProduct.origin.name.toLowerCase().replace(' ', '_') + '_' + nameSuffix + '.' + extension
+    let now = new Date()
+    const [year, month, day, hour, minute, second] = [now.getFullYear(), now.getMonth() + 1, now.getDate(), now.getHours(), now.getMinutes(), now.getSeconds()]
+    let namePrefix = editingProduct.origin.name.toLowerCase().replace(/\s+/g, '_')
+    var imageName = `${namePrefix}-${year}${month}${day}${hour}${minute}${second}-${nameSuffix}.${extension}`
 
     let imageKey = ['product/images', editingProduct.origin.group, imageName].join('/')
     console.info("The new image name has been generated %s", imageKey)
@@ -532,6 +535,19 @@ export const Inventory = (props: InventoryProps) => {
             })
         }
       })
+  }
+
+  function removeContentImage(idx: number): void {
+    const updatedImageUrls = [...editingProduct.origin.imageUrls];
+    updatedImageUrls.splice(idx, 1);
+
+    setEditingProduct({
+      ...editingProduct,
+      origin: {
+        ...editingProduct.origin,
+        imageUrls: updatedImageUrls
+      }
+    })
   }
 
   return (
@@ -804,7 +820,7 @@ export const Inventory = (props: InventoryProps) => {
                   <Label
                     htmlFor="featureImgUrl"
                   >
-                    <img className="max-w-sm h-12"
+                    <img className="max-w-14 h-12"
                       src={editingProduct.origin.featureImgUrl}
                       alt="" />
                     <FileInput
@@ -817,13 +833,13 @@ export const Inventory = (props: InventoryProps) => {
                   </Label>
                 </div>
                 {
-                  editingProduct.origin.imageUrls ? editingProduct.origin.imageUrls.map((imgUrl, idx) =>
-                    <div className="w-1/5">
+                  editingProduct.origin.imageUrls.map((imgUrl, idx) =>
+                    <div className="w-1/5 relative">
                       <Label
                         htmlFor={"imgUrl" + idx}
                       >
-                        <img className="max-w-sm h-12"
-                          src={editingProduct.origin.imageUrls[idx]}
+                        <img className="max-w-14 h-12"
+                          src={imgUrl}
                           alt="" />
                         <FileInput
                           id={"imgUrl" + idx}
@@ -832,13 +848,28 @@ export const Inventory = (props: InventoryProps) => {
                           className="hidden"
                         />
                       </Label>
+                      <div className="absolute top-0 right-0">
+                        <HiX className="font-bold text-red-700"
+                          onClick={() => removeContentImage(idx)} />
+                      </div>
                     </div>)
-                    : <></>
                 }
-
+                <div className="w-1/5 items-center">
+                  <Label
+                    htmlFor="imgUrl"
+                  >
+                    <HiArrowCircleUp className="w-6 h-12 font-bold text-green-700" />
+                    <FileInput
+                      id="imgUrl"
+                      onChange={(e) => changeContentImage(e, editingProduct.origin.imageUrls.length)}
+                      disabled={editingProduct.origin.name === undefined || editingProduct.origin.name === null || editingProduct.origin.name === ''}
+                      sizing="sm"
+                      className="hidden"
+                    />
+                  </Label>
+                </div>
               </div>
             </div>
-
           </div>
         </Modal.Body>
         <Modal.Footer className="flex justify-center">

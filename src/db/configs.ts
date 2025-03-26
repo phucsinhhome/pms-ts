@@ -28,7 +28,7 @@ export const defaultAppConfigs: AppConfig = {
         copyLink: {
             defaultGroup: 'food',
             defaultMenuApp: "REACT_APP_MENU_WEB_APP",
-            menuAppMappings: [{app: "REACT_APP_MENU_VI_WEB_APP", startWiths: "/vi[a-z]+/"}]
+            menuAppMappings: [{ app: "REACT_APP_MENU_VI_WEB_APP", startWiths: "/vi[a-z]+/" }]
         }
     }
 }
@@ -42,4 +42,20 @@ export const appConfigs = async (): Promise<AppConfig> => {
     const res = await fetch(configUrl, opts);
     const jsn = await res.json()
     return jsn as AppConfig
+}
+
+export const getConfigs = (config: string) => {
+    console.info(`Fetching ${config} configs`)
+    const opts = {
+        method: 'GET'
+    }
+    return fetch(`${process.env.REACT_APP_CONFIG_ENDPOINT}/${config}`, opts)
+}
+
+export const setAutoUpdateAvailability = (enabled: boolean) => {
+    console.info(`Change auto update availability to ${enabled}`)
+    const opts = {
+        method: 'POST'
+    }
+    return fetch(`${process.env.REACT_APP_CONFIG_ENDPOINT}/inventory/availability/${enabled}`, opts)
 }

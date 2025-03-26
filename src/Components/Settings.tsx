@@ -1,9 +1,10 @@
 import { formatDatePartition } from "../Service/Utils";
 import { syncStatusOfMonth } from "../Service/StatusSyncingService";
 import React, { ChangeEvent, useEffect, useState } from "react";
-import { Button, Label, Spinner, TextInput } from "flowbite-react";
+import { Button, Checkbox, Label, Spinner, TextInput } from "flowbite-react";
 import { collectRes } from "../db/reservation_extractor";
 import { Link } from "react-router-dom";
+import { getConfigs, setAutoUpdateAvailability } from "../db/configs";
 
 export type SettingProps = {
   syncing: boolean,
@@ -16,12 +17,40 @@ export type SettingProps = {
 export const Settings = (props: SettingProps) => {
 
   const [datePartition, setDatePartition] = useState(formatDatePartition(new Date()))
+  const [inventoryConfigs, setInventoryConfigs] = useState<any>()
+  const fetchInventoryConfigs = async () => {
+    getConfigs("inventory")
+      .then((rsp: Response) => {
+        if (rsp.ok) {
+          return rsp.json()
+        }
+        return null
+      }).then((data: any) => {
+        setInventoryConfigs(data)
+      }).catch((e: any) => {
+        console.error(e)
+      })
+  }
 
   useEffect(() => {
     props.activeMenu()
+    fetchInventoryConfigs()
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const changeAutoUpdateAvailability = (e: ChangeEvent<HTMLInputElement>) => {
+    setAutoUpdateAvailability(e.target.checked)
+      .then((rsp: Response) => {
+        if (rsp.ok) {
+          console.info("Change auto update availability to %s successfully", e.target.checked)
+        }
+      }
+      ).catch((e: any) => {
+        console.error(e)
+      }
+      )
+  }
 
   const syncStatus = () => {
     props.changeSyncing(true)
@@ -98,6 +127,13 @@ export const Settings = (props: SettingProps) => {
                 className="w-14 h-10"
               /> : <Button onClick={() => syncResStatus()}>Start</Button>
             }
+          </div>
+          <div className="flex flex-row items-center mb-2 border rounded-sm shadow-sm p-2 space-x-2">
+            <Checkbox id="updateAvailability"
+              checked={inventoryConfigs?.enabled}
+              onChange={changeAutoUpdateAvailability}
+            />
+            <Label>Auto update inventory availability</Label>
           </div>
           <div className="flex flex-row items-center mb-2 border rounded-sm shadow-sm p-2">
             <Link to="../product-group" className="w-32">Product Groups</Link>

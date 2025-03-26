@@ -1,4 +1,4 @@
-import { ManagedProduct, Product } from "../Components/Inventory"
+import { ManagedProduct } from "../Components/Inventory"
 
 export const listAllProducts = () => {
   console.info("Fetching all products")

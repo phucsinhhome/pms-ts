@@ -109,8 +109,6 @@ export const Inventory = (props: InventoryProps) => {
     formattedUnitPrice: string
   }>(defaultEditingProduct)
 
-  const [editingAvailableTime, setEditingAvailableTime] = useState<AvailableTime>()
-
   const handlePaginationClick = (page: number) => {
     console.log("Pagination nav bar click to page %s", page)
 

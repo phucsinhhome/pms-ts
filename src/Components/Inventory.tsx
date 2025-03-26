@@ -269,8 +269,8 @@ export const Inventory = (props: InventoryProps) => {
     setActiveGroup(activeGroup !== group ? group : '')
   }
 
-  const activeGroupStyle = (group: string) => {
-    return activeGroup === group ?
+  const activeGroupStyle = (focus: boolean) => {
+    return focus ?
       'font font-mono text-[9px] font-bold text-nowrap text-gray-500 border rounded-xl px-1 py-0.5 bg-slate-400'
       : 'font font-mono text-[9px] font-bold text-nowrap text-gray-500 border rounded-xl px-1 py-0.5 bg-slate-50'
   }
@@ -636,7 +636,7 @@ export const Inventory = (props: InventoryProps) => {
       <div className="flex flex-row items-center space-x-1 overflow-scroll pb-1">
         {
           pGroups.map((group) => <Label key={group.groupId} onClick={() => activateGroup(group.name)}
-            className={activeGroupStyle(group.name)}
+            className={activeGroupStyle(group.name === activeGroup)}
           >{group.displayName}</Label>)
         }
       </div>
@@ -809,13 +809,11 @@ export const Inventory = (props: InventoryProps) => {
                   value="Group"
                 />
               </div>
-              <div className="flex flex-row space-x-2 overflow-scroll">
+              <div className="flex flex-row space-x-1 overflow-scroll">
                 {
                   pGroups.map((group) => <div
                     key={group.groupId}
-                    className={editingProduct.origin.group === group.name ?
-                      "border rounded-sm px-1 text-nowrap bg-slate-500" :
-                      "border rounded-sm px-1 text-nowrap bg-slate-200"}
+                    className={activeGroupStyle(editingProduct.origin.group === group.name)}
                     onClick={() => changeProductGroup(group.name)}>
                     {group.displayName}
                   </div>)

@@ -2,7 +2,7 @@ import React, { useState, useEffect, ChangeEvent } from "react";
 import { Link } from "react-router-dom";
 import { Avatar, Button, FileInput, Label, Modal, Textarea, TextInput, ToggleSwitch } from "flowbite-react";
 import { adjustQuantity as adjustInventoryQuantity, changeItemStatus, listProductItems, listProductItemsByGroup, listProductItemsWithName, listProductItemsWithNameAndGroup, planAvailability } from "../db/inventory";
-import { HiDocumentAdd, HiOutlineCash, HiX } from "react-icons/hi";
+import { HiArrowCircleUp, HiDocumentAdd, HiOutlineCash, HiX } from "react-icons/hi";
 import { formatMoneyAmount, formatVND } from "../Service/Utils";
 import { DEFAULT_PAGE_SIZE } from "../App";
 import { Pagination } from "./ProfitReport";

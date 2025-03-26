@@ -40,10 +40,15 @@ export const Settings = (props: SettingProps) => {
   }, []);
 
   const changeAutoUpdateAvailability = (e: ChangeEvent<HTMLInputElement>) => {
-    setAutoUpdateAvailability(e.target.checked)
+    let enabled = !inventoryConfigs?.enabled
+    setAutoUpdateAvailability(enabled)
       .then((rsp: Response) => {
         if (rsp.ok) {
-          console.info("Change auto update availability to %s successfully", e.target.checked)
+          console.info("Change auto update availability to %s successfully", enabled)
+          rsp.json()
+            .then((data: any) => {
+              setInventoryConfigs(data)
+            })
         }
       }
       ).catch((e: any) => {

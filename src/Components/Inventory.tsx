@@ -2,14 +2,14 @@ import React, { useState, useEffect, ChangeEvent } from "react";
 import { Link } from "react-router-dom";
 import { Avatar, Button, FileInput, Label, Modal, Textarea, TextInput, ToggleSwitch } from "flowbite-react";
 import { adjustQuantity as adjustInventoryQuantity, changeItemStatus, listProductItems, listProductItemsByGroup, listProductItemsWithName, listProductItemsWithNameAndGroup } from "../db/inventory";
-import { HiOutlineCash, HiX } from "react-icons/hi";
+import { HiDocumentAdd, HiOutlineCash, HiX } from "react-icons/hi";
 import { formatMoneyAmount, formatVND } from "../Service/Utils";
 import { DEFAULT_PAGE_SIZE } from "../App";
 import { Pagination } from "./ProfitReport";
 import { listAllPGroups } from "../db/pgroup";
 import { PGroup } from "./PGroupManager";
 import { putObject } from "../Service/FileMinio";
-import { saveProduct } from "../db/product";
+import { getProduct, saveProduct } from "../db/product";
 
 export type Product = {
   id: string,
@@ -24,6 +24,26 @@ export type Product = {
   status: string,
   availableFrom: string,
   availableTo: string
+}
+
+export type AvailableTime = {
+  id: string,
+  from: string,
+  to: string
+}
+
+export type ManagedProduct = {
+  id: string,
+  name: string,
+  unitPrice: number,
+  quantity: number,
+  group: string,
+  description: string,
+  featureImgUrl: string,
+  imageUrls: string[],
+  prepareTime: string,
+  status: string,
+  availabilities: AvailableTime[]
 }
 
 export type ItemAdjustment = {
@@ -65,7 +85,7 @@ export const Inventory = (props: InventoryProps) => {
     return `https://${process.env.REACT_APP_FILE_SERVICE_ENDPOINT}/os/${bucket}/${objectKey}`
   }
 
-  const defaultEmptyProduct = {
+  const defaultEmptyProduct: ManagedProduct = {
     id: '',
     name: '',
     quantity: 0,
@@ -76,21 +96,20 @@ export const Inventory = (props: InventoryProps) => {
     imageUrls: [buildImageUrl(defaultImageKey)],
     prepareTime: 'PT1H',
     status: 'DISABLED',
-    availableFrom: '08:00',
-    availableTo: '22:00'
+    availabilities: [{ id: '', from: '05:00', to: '23:00' }]
   }
   const defaultEditingProduct = {
     origin: defaultEmptyProduct,
-    formattedUnitPrice: '',
-    availableFromLocalTime: '',
-    availableToLocalTime: ''
+    formattedUnitPrice: ''
   }
 
   const [showProductDetailModal, setShowProductDetailModal] = useState(false)
   const [editingProduct, setEditingProduct] = useState<{
-    origin: Product,
+    origin: ManagedProduct,
     formattedUnitPrice: string
   }>(defaultEditingProduct)
+
+  const [editingAvailableTime, setEditingAvailableTime] = useState<AvailableTime>()
 
   const handlePaginationClick = (page: number) => {
     console.log("Pagination nav bar click to page %s", page)
@@ -223,13 +242,20 @@ export const Inventory = (props: InventoryProps) => {
   }
 
   const viewProductDetail = (product: Product) => {
-    let uP = formatMoneyAmount(product.unitPrice + '')
-    let eP = {
-      origin: product,
-      formattedUnitPrice: uP.formattedAmount
-    }
-    setEditingProduct(eP)
-    setShowProductDetailModal(true)
+    getProduct(product.id)
+      .then(rsp => {
+        if (rsp.ok) {
+          rsp.json()
+            .then((data: ManagedProduct) => {
+              let eP = {
+                origin: data,
+                formattedUnitPrice: formatMoneyAmount(data.unitPrice + '').formattedAmount
+              }
+              setEditingProduct(eP)
+              setShowProductDetailModal(true)
+            })
+        }
+      })
   }
 
   const closeProductDetailModal = () => {
@@ -489,28 +515,59 @@ export const Inventory = (props: InventoryProps) => {
     return putObject(file, imageName, process.env.REACT_APP_PUBLIC_BUCKET!, imageKey)
   }
 
-  const changeAvailableFrom = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    let v = e.target.value;
+  const changeAvailableFrom = (e: React.ChangeEvent<HTMLInputElement>, idx: number): void => {
     let eI = {
       ...editingProduct,
       origin: {
         ...editingProduct.origin,
-        availableFrom: v
+        availabilities: editingProduct.origin.availabilities.map((a, i) => {
+          if (i === idx) {
+            return { ...a, from: e.target.value }
+          }
+          return a
+        })
       }
-    };
-    setEditingProduct(eI);
+    }
+    setEditingProduct(eI)
   };
-  const changeAvailableTo = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    let v = e.target.value;
+
+  const changeAvailableTo = (e: React.ChangeEvent<HTMLInputElement>, idx: number): void => {
     let eI = {
       ...editingProduct,
       origin: {
         ...editingProduct.origin,
-        availableTo: v
+        availabilities: editingProduct.origin.availabilities.map((a, i) => {
+          if (i === idx) {
+            return { ...a, to: e.target.value }
+          }
+          return a
+        })
       }
-    };
-    setEditingProduct(eI);
-  };
+    }
+    setEditingProduct(eI)
+  }
+
+  const removeAvailableTime = (idx: number): void => {
+    let eI = {
+      ...editingProduct,
+      origin: {
+        ...editingProduct.origin,
+        availabilities: editingProduct.origin.availabilities.filter((_, i) => i !== idx)
+      }
+    }
+    setEditingProduct(eI)
+  }
+
+  const addAvailableTime = (): void => {
+    let eI = {
+      ...editingProduct,
+      origin: {
+        ...editingProduct.origin,
+        availabilities: [...editingProduct.origin.availabilities, { id: crypto.randomUUID(), from: '05:00', to: '23:00' }]
+      }
+    }
+    setEditingProduct(eI)
+  }
 
   const changeProductStatus = (product: Product, status: string): void => {
     let statusChange: ItemStatusChange = {
@@ -750,32 +807,51 @@ export const Inventory = (props: InventoryProps) => {
               <div className="flex items-center w-2/5">
                 <Label
                   htmlFor="availbleTime"
-                  value="Available Time"
+                  value="Available Time:"
                 />
               </div>
-              <div className="flex flex-row space-x-1">
-                <div className="flex items-center w-1/2">
-                  <TextInput
-                    id="availbleFrom"
-                    placeholder="From"
-                    type="time"
-                    required={false}
-                    className="w-full"
-                    value={editingProduct.origin.availableFrom}
-                    onChange={changeAvailableFrom}
-                  />
-                </div>
-                <div className="flex items-center w-1/2">
-                  <TextInput
-                    id="availbleTo"
-                    placeholder="To"
-                    type="time"
-                    required={false}
-                    className="w-full"
-                    value={editingProduct.origin.availableTo}
-                    onChange={changeAvailableTo}
-                  />
-                </div>
+              <div className="flex flex-col space-y-1">
+                {
+
+                  editingProduct.origin.availabilities.map((av, idx) => {
+                    return (<div className="flex flex-row space-x-2" key={av.id}>
+                      <div className="flex items-center">
+                        <TextInput
+                          id="availbleFrom"
+                          placeholder="From"
+                          type="time"
+                          required={false}
+                          className="w-full"
+                          sizing="sm"
+                          value={av?.from}
+                          onChange={(e) => changeAvailableFrom(e, idx)}
+                        />
+                      </div>
+                      <div className="flex items-center">
+                        <TextInput
+                          id="availbleTo"
+                          placeholder="To"
+                          type="time"
+                          required={false}
+                          className="w-full"
+                          sizing="sm"
+                          value={av?.to}
+                          onChange={(e) => changeAvailableTo(e, idx)}
+                        />
+                      </div>
+                      <div className="flex items-center">
+                        <HiX className="font-bold text-red-700"
+                          onClick={() => removeAvailableTime(idx)} />
+                      </div>
+                    </div>)
+                  })
+
+                }
+              </div>
+              <div className="flex flex-row items-center pl-3 pt-2">
+                <HiDocumentAdd className="font-bold text-green-700" />
+                <span className="font font-mono text-gray-500 text-md"
+                  onClick={() => addAvailableTime()}>Add Time</span>
               </div>
             </div>
             <div className="flex flex-col w-full align-middle px-2 py-1">

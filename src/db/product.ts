@@ -1,4 +1,4 @@
-import { Product } from "../Components/Inventory"
+import { ManagedProduct, Product } from "../Components/Inventory"
 
 export const listAllProducts = () => {
   console.info("Fetching all products")
@@ -17,7 +17,15 @@ export const listProducts = (page: number, size: number) => {
   return fetch(`${process.env.REACT_APP_PRODUCT_SERVICE_ENDPOINT}/list?page=${page}&size=${size}`, opts)
 }
 
-export const saveProduct = (product: Product) => {
+export const getProduct = (productId: string) => {
+  console.info(`Fetching product with id ${productId}`)
+  const opts = {
+    method: 'GET'
+  }
+  return fetch(`${process.env.REACT_APP_PRODUCT_SERVICE_ENDPOINT}/${productId}`, opts)
+}
+
+export const saveProduct = (product: ManagedProduct) => {
   console.info("Save product details")
   const opts = {
     method: 'POST',

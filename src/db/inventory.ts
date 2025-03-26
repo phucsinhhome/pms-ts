@@ -1,4 +1,4 @@
-import { ItemAdjustment, ItemStatusChange } from "../Components/Inventory"
+import { AvailabilityChange, ItemAdjustment, ItemStatusChange } from "../Components/Inventory"
 
 export const listAllProductItems = () => {
   console.info("Fetching all products from the inventory")
@@ -34,6 +34,17 @@ export const changeItemStatus = (statusChange: ItemStatusChange) => {
     body: JSON.stringify(statusChange)
   }
   return fetch(`${process.env.REACT_APP_INVENTORY_ENDPOINT}/status`, opts)
+}
+
+
+export const planAvailability = (change: AvailabilityChange) => {
+  console.info("Plan availability for %s", change.requestId)
+  const opts = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(change)
+  }
+  return fetch(`${process.env.REACT_APP_INVENTORY_ENDPOINT}/availability`, opts)
 }
 
 export const listProductItemsWithName = (name: string) => {

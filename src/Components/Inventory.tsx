@@ -1,7 +1,7 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
 import { Link } from "react-router-dom";
 import { Avatar, Button, FileInput, Label, Modal, Textarea, TextInput, ToggleSwitch } from "flowbite-react";
-import { adjustQuantity as adjustInventoryQuantity, changeItemStatus, listProductItems, listProductItemsByGroup, listProductItemsWithName, listProductItemsWithNameAndGroup } from "../db/inventory";
+import { adjustQuantity as adjustInventoryQuantity, changeItemStatus, listProductItems, listProductItemsByGroup, listProductItemsWithName, listProductItemsWithNameAndGroup, planAvailability } from "../db/inventory";
 import { HiDocumentAdd, HiOutlineCash, HiX } from "react-icons/hi";
 import { formatMoneyAmount, formatVND } from "../Service/Utils";
 import { DEFAULT_PAGE_SIZE } from "../App";
@@ -10,6 +10,7 @@ import { listAllPGroups } from "../db/pgroup";
 import { PGroup } from "./PGroupManager";
 import { putObject } from "../Service/FileMinio";
 import { getProduct, saveProduct } from "../db/product";
+import exp from "constants";
 
 export type Product = {
   id: string,
@@ -55,6 +56,20 @@ export type ItemAdjustment = {
 export type ItemStatusChange = {
   itemId: string,
   status: string
+}
+
+export type AvailabilityResult = {
+  itemId: string,
+  itemName: string,
+  changeResult: boolean,
+  availableFrom: string,
+  availableTo: string
+}
+
+export type AvailabilityChange = {
+  requestId: string,
+  updateTime: string,
+  results: AvailabilityResult[]
 }
 
 const timeOpts = ['PT5M', 'PT15M', 'PT30M', 'PT45M', 'PT1H', 'PT1H15M', 'PT1H30M', 'PT2H']
@@ -223,6 +238,27 @@ export const Inventory = (props: InventoryProps) => {
     setShowProductDetailModal(true)
   }
 
+  const updateAvailability = () => {
+    let updateTime = new Date().toISOString()
+    let aC: AvailabilityChange = {
+      requestId: crypto.randomUUID(),
+      updateTime: updateTime,
+      results: []
+    }
+    planAvailability(aC)
+      .then(rsp => {
+        if (rsp.ok) {
+          rsp.json()
+            .then((data: AvailabilityChange) => {
+              console.info("Plan availability successfully for %s", updateTime)
+              aC.results = data.results
+              console.log(aC)
+              alert("Plan availability successfully for time " + updateTime)
+            })
+        }
+      })
+  }
+
   const activateGroup = (group: string) => {
     if (pagination.pageNumber !== 0) {
       setPagination({
@@ -235,8 +271,8 @@ export const Inventory = (props: InventoryProps) => {
 
   const activeGroupStyle = (group: string) => {
     return activeGroup === group ?
-      'font font-mono text-sm font-bold text-nowrap text-gray-500 border rounded-sm px-1 py-1 bg-slate-400'
-      : 'font font-mono text-sm font-bold text-nowrap text-gray-500 border rounded-sm px-1 py-1 bg-slate-50'
+      'font font-mono text-[9px] font-bold text-nowrap text-gray-500 border rounded-xl px-1 py-0.5 bg-slate-400'
+      : 'font font-mono text-[9px] font-bold text-nowrap text-gray-500 border rounded-xl px-1 py-0.5 bg-slate-50'
   }
 
   const viewProductDetail = (product: Product) => {
@@ -593,16 +629,16 @@ export const Inventory = (props: InventoryProps) => {
 
   return (
     <div className="px-2 h-full pt-3 relative">
-
       <div className="flex flex-row px-0.5 py-2 space-x-3">
-        <Button onClick={addProduct}>Add</Button>
-        <div className="flex flex-row items-center space-x-2 overflow-scroll">
-          {
-            pGroups.map((group) => <Label key={group.groupId} onClick={() => activateGroup(group.name)}
-              className={activeGroupStyle(group.name)}
-            >{group.displayName}</Label>)
-          }
-        </div>
+        <Button onClick={addProduct} size="sm">Add</Button>
+        <Button onClick={updateAvailability} size="sm">Update availability</Button>
+      </div>
+      <div className="flex flex-row items-center space-x-1 overflow-scroll pb-1">
+        {
+          pGroups.map((group) => <Label key={group.groupId} onClick={() => activateGroup(group.name)}
+            className={activeGroupStyle(group.name)}
+          >{group.displayName}</Label>)
+        }
       </div>
       <div className="pb-2">
         <TextInput

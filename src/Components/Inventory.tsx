@@ -357,10 +357,12 @@ export const Inventory = (props: InventoryProps) => {
                   return [...prevProducts, data];
                 }
               })
+              setShowProductDetailModal(false)
             })
+        } else {
+          console.error("Failed to save product")
+          alert("Failed to save product: " + rsp.statusText)
         }
-      }).finally(() => {
-        setShowProductDetailModal(false)
       })
   }
 

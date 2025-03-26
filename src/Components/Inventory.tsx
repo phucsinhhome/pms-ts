@@ -10,7 +10,6 @@ import { listAllPGroups } from "../db/pgroup";
 import { PGroup } from "./PGroupManager";
 import { putObject } from "../Service/FileMinio";
 import { getProduct, saveProduct } from "../db/product";
-import exp from "constants";
 
 export type Product = {
   id: string,

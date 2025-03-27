@@ -1,6 +1,6 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
 import { Link } from "react-router-dom";
-import { Button, Modal, Table, TextInput } from "flowbite-react";
+import { Button, Modal, TextInput } from "flowbite-react";
 import Moment from "react-moment";
 import { DEFAULT_PAGE_SIZE } from "../App";
 import { HiOutlineExclamationCircle, HiX } from "react-icons/hi";
@@ -8,6 +8,9 @@ import { formatISODate, formatVND } from "../Service/Utils";
 import { deleteInvoice, listInvoiceByGuestName, listStayingAndComingInvoices } from "../db/invoice";
 import { Pagination } from "./ProfitReport";
 import { GiHouse } from "react-icons/gi";
+import { IoMdPersonAdd, IoMdRemoveCircle } from "react-icons/io";
+import { CiEdit } from "react-icons/ci";
+
 
 export type InvoiceItem = {
   id: string,
@@ -85,28 +88,6 @@ export const InvoiceManager = (props: InvoiceManagerProps) => {
       pageNumber: pNum
     })
   }
-
-  // const isCurrentlyStaying = (invoice: Invoice) => {
-  //   const now = new Date();
-  //   const checkInDate = new Date(invoice.checkInDate);
-  //   const checkOutDate = new Date(invoice.checkOutDate);
-  //   return now >= checkInDate && now <= checkOutDate;
-  // };
-
-  // const sortInvoices = (invoices: Invoice[]): Invoice[] => {
-  //   return invoices.sort((a, b) => {
-  //     const aCurrentlyStaying = isCurrentlyStaying(a);
-  //     const bCurrentlyStaying = isCurrentlyStaying(b);
-
-  //     if (aCurrentlyStaying && !bCurrentlyStaying) return -1;
-  //     if (!aCurrentlyStaying && bCurrentlyStaying) return 1;
-
-  //     const aCheckOutDate = new Date(a.checkOutDate).getTime();
-  //     const bCheckOutDate = new Date(b.checkOutDate).getTime();
-
-  //     return aCheckOutDate - bCheckOutDate;
-  //   });
-  // }
 
   const fetchInvoices = () => {
 
@@ -251,28 +232,18 @@ export const InvoiceManager = (props: InvoiceManagerProps) => {
 
   return (
     <div className="h-full pt-3 relative">
-      <div className="flex flex-row pb-4 px-2 space-x-4 space-y-2">
-        <div className="flex flex-row items-center"
-        >
-          <svg
-            className="w-5 h-5 text-amber-700 dark:text-white"
-            aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h14m-7 7V5" />
-          </svg>
+      <div className="flex flex-row px-2 space-x-4 pb-2 items-center">
+        <Button size="xs" color="green">
+          <IoMdPersonAdd size="1.5em" className="mr-2" />
           <Link
             to="../invoice/new"
             relative="route"
-            className="font-bold text-amber-800"
           >
             Add
           </Link>
-        </div>
+        </Button>
         <TextInput
+          sizing="xs"
           id="filteredName"
           placeholder="John Smith"
           type="text"
@@ -297,75 +268,52 @@ export const InvoiceManager = (props: InvoiceManagerProps) => {
           </Link>)
         })}
       </div>
-      <div>
-        <Table hoverable={true}>
-          <Table.Head>
-            <Table.HeadCell className="pr-1">
-              ChOut
-            </Table.HeadCell>
-            <Table.HeadCell className="px-1">
-              Details
-            </Table.HeadCell>
-            <Table.HeadCell>
-              <span className="sr-only">
-                Delete
-              </span>
-            </Table.HeadCell>
-          </Table.Head>
-          <Table.Body className="divide-y">
-            {invoices.map((inv) => {
-              return (
-                <Table.Row
-                  className="bg-white"
-                  key={inv.id}
+      <div className="flex flex-col space-y-1.5 mt-2 divide-y">
+        {invoices.map((inv) => {
+          return (
+            <div
+              className="flex flex-col px-2 relative"
+              key={inv.id}
+            >
+              <div className="flex flex-row space-x-2">
+                <div
+                  className="font font-sans text-green-800"
                 >
-                  <Table.Cell className="sm:px-1 pr-1 py-0.5">
-                    <Moment format="DD.MM">{new Date(inv.checkOutDate)}</Moment>
-                  </Table.Cell>
-                  <Table.Cell className="sm:px-1 px-1 py-0.5">
-                    <div className="grid grid-cols-1">
-                      <div className="flex flex-row space-x-2 content-center">
-                        <Link
-                          to={inv.id}
-                          state={{ pageNumber: pagination.pageNumber, pageSize: pagination.pageSize }}
-                          className={isDeleteable(inv) ? "font-sans text-green-800 hover:underline dark:text-gray-100" : "font-sans text-gray-600 hover:underline dark:text-white-500"}
-                        >
-                          {inv.guestName}
-                        </Link>
-                        <div className="flex flex-row  items-center space-x-1 ">
-                          <GiHouse />
-                          <span className="font font-mono text-[12px]">{inv.rooms}</span>
-                        </div>
-                      </div>
-                      <div className="flex flex-row text-sm space-x-1">
-                        <div className="w-24">
-                          <span>{formatVND(inv.subTotal)}</span>
-                        </div>
-                        <span className="font font-mono font-black w-8">{inv.prepaied ? "TT" : "TS"}</span>
-                        <span className="font font-mono font-black">{inv.issuer}</span>
-                      </div>
-                    </div>
-                  </Table.Cell>
-
-
-                  <Table.Cell className="py-0.5">
-                    <svg
-                      className={isDeleteable(inv) ? "w-6 h-6 text-red-800 dark:text-white" : "w-6 h-6 text-gray-800 dark:text-white"}
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24" fill="none" viewBox="0 0 24 24"
+                  {inv.guestName}
+                </div>
+                <div className="flex flex-row  items-center space-x-1 ">
+                  <GiHouse />
+                  <span className="font font-mono text-[12px]">{inv.rooms}</span>
+                </div>
+              </div>
+              <div className="flex flex-row items-center text-[12px] space-x-1">
+                <Moment format="DD.MM">{new Date(inv.checkOutDate)}</Moment>
+                <div className="w-24 pl-2">
+                  <span>{formatVND(inv.subTotal)}</span>
+                </div>
+                <span className="font font-mono w-8">{inv.prepaied ? "TT" : "TS"}</span>
+                <span className="font font-mono">{inv.issuer}</span>
+              </div>
+              <div className="flex flex-row items-center space-x-2 absolute right-1 top-2">
+                {
+                  isDeleteable(inv) ?
+                    <IoMdRemoveCircle size="1.5em" className="mr-2 text-red-800"
                       onClick={() => handleDeleteInvoice(inv)}
-                    >
-                      <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
-                    </svg>
+                    />
+                    : <div></div>
+                }
+                <Link
+                  to={inv.id}
+                  state={{ pageNumber: pagination.pageNumber, pageSize: pagination.pageSize }}
+                >
+                  <CiEdit size="1.5em" className="mr-2 text-green-800" />
+                </Link>
+              </div>
 
-                  </Table.Cell>
-                </Table.Row>
-              )
-            })}
-          </Table.Body>
-        </Table>
+
+            </div>
+          )
+        })}
       </div>
       <nav className="flex items-center justify-between pt-4 absolute bottom-1" aria-label="Table navigation">
         <ul className="inline-flex items-center -space-x-px">

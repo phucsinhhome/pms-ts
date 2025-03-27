@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef, ChangeEvent } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
-import { exportInvoice, getInvoice, updateInvoice } from "../db/invoice";
+import { getInvoice, updateInvoice } from "../db/invoice";
 import { Table, TextInput, Label, Datepicker, Modal, Button } from 'flowbite-react';
-import { HiOutlineCash, HiOutlineClipboardCopy, HiUserCircle, HiX } from "react-icons/hi";
+import { HiOutlineCash, HiOutlineClipboardCopy, HiSave, HiUserCircle, HiX } from "react-icons/hi";
 import { classifyServiceByItemName } from "../Service/ItemClassificationService";
 import { addDays, formatISODate, formatMoneyAmount, formatShortDate, formatVND } from "../Service/Utils";
 import { Chat, DEFAULT_PAGE_SIZE } from "../App";
@@ -12,11 +12,13 @@ import { listLatestReservations } from "../db/reservation";
 import html2canvas from "html2canvas";
 import { Invoice, InvoiceItem, Issuer } from "./InvoiceManager";
 import { paymentMethods, rooms } from "../db/staticdata";
-import { ResultCallback } from "minio/dist/main/internal/type";
 import { Product } from "./Inventory";
 import { Reservation, ResRoom } from "./ReservationManager";
-import { getPresignedLink } from "../Service/FileMinio";
 import { listAllProductItems } from "../db/inventory";
+import { FaEye } from "react-icons/fa6";
+import { IoMdArrowBack, IoMdRemoveCircle } from "react-icons/io";
+import { CiEdit } from "react-icons/ci";
+import { MdAssignmentAdd } from "react-icons/md";
 
 
 const paymentIcons = [
@@ -103,9 +105,6 @@ const defaultEmptyItem = {
   formattedUnitPrice: ''
 }
 
-const getInvDownloadLink = (key: string, cbF: ResultCallback<string>) => {
-  getPresignedLink('invoices', key, 300, cbF)
-}
 
 export const internalRooms = (rooms: ResRoom[]) => {
   return rooms.map(r => r.internalRoomName)
@@ -158,7 +157,6 @@ type InvoiceProps = {
 export const InvoiceEditor = (props: InvoiceProps) => {
   const [invoice, setInvoice] = useState<Invoice>(defaultEmptyInvoice)
 
-  const [invoiceUrl, setInvoiceUrl] = useState({ filename: "", presignedUrl: "", hidden: true })
   const { invoiceId } = useParams()
 
   const [openGuestNameModal, setOpenGuestNameModal] = useState(false)
@@ -341,50 +339,6 @@ export const InvoiceEditor = (props: InvoiceProps) => {
     } catch (e) {
       console.error(e)
     }
-  }
-
-  const invoiceLink = useRef(null)
-  const exportable = props.authorizedUserId === null ? true : false
-
-
-  const exportInv = () => {
-    console.log("Export invoice %s with method [%s]...", invoiceId)
-
-    if (invoice === undefined) {
-      console.warn("Invalid invoice")
-      return
-    }
-    const inv = {
-      ...invoice
-    }
-
-    exportInvoice(inv)
-      .then((res) => {
-        if (res.ok) {
-          console.info("Invoice %s has been exported successfully", invoiceId);
-          setInvoice(inv);
-          res.json().then((json) => {
-            console.log(json)
-            var withoutBucketPath = json.url.substring(json.url.indexOf('/'));
-            console.info("Download invoice from url [%s]", withoutBucketPath);
-
-            getInvDownloadLink(withoutBucketPath, (err, url) => {
-              if (err) {
-                return console.log(err)
-              }
-              var invObject = {
-                ...invoiceUrl,
-                filename: json.filename,
-                presignedUrl: url
-              }
-              setInvoiceUrl(invObject)
-            })
-          });
-        } else {
-          console.info("Failed to export invoice %s", invoiceId);
-        }
-        console.info(res)
-      })
   }
 
   //============ ITEM DELETION ====================//
@@ -582,7 +536,7 @@ export const InvoiceEditor = (props: InvoiceProps) => {
   }
 
   //============ PREPAIED CHANGE ====================//
-  const changePrepaied = (e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
+  const changePrepaied = () => {
     try {
       let nInv = {
         ...invoice,
@@ -1078,150 +1032,49 @@ export const InvoiceEditor = (props: InvoiceProps) => {
           </div>
         </form>
 
-        <div className={exportable ?
-          "grid grid-cols-5 items-center w-full px-1 mb-1 space-x-1 ml-2"
-          : "grid grid-cols-4 items-center w-full px-1 mb-1 space-x-1 ml-2"}>
-          <div
-            className="flex flex-row items-center font-sans font-bold text-amber-800 px-1 py-1 hover:bg-slate-200"
-            onClick={() => editItem(defaultEmptyItem.origin)}
-          >
-            <svg
-              className="w-5 h-5 text-amber-800 dark:text-white"
-              aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h14m-7 7V5" />
-            </svg>
-            <span>Item</span>
-          </div>
-          <div
-            className="flex flex-row items-center font-sans font-bold text-amber-800 px-1 py-1 hover:bg-slate-200"
-            onClick={showViewInv}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              className="w-[18px] h-[18px] dark:text-white"
-            >
-              <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
-              <path fillRule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 0 1 0-1.113ZM17.25 12a5.25 5.25 0 1 1-10.5 0 5.25 5.25 0 0 1 10.5 0Z" clipRule="evenodd" />
-            </svg>
-            <span>View</span>
-          </div>
-          {
-            exportable ? <div
-              className="flex flex-row items-center font-sans font-bold text-amber-800 px-1 py-1"
-              onClick={exportInv}
-            >
-              <svg
-                className="w-[18px] h-[18px] dark:text-white"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                // width="24"
-                // height="24"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path fillRule="evenodd" d="M9 7V2.221a2 2 0 0 0-.5.365L4.586 6.5a2 2 0 0 0-.365.5H9Zm2 0V2h7a2 2 0 0 1 2 2v9.293l-2-2a1 1 0 0 0-1.414 1.414l.293.293h-6.586a1 1 0 1 0 0 2h6.586l-.293.293A1 1 0 0 0 18 16.707l2-2V20a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V9h5a2 2 0 0 0 2-2Z" clipRule="evenodd" />
-              </svg>
-              <span>Export</span>
-            </div> : null
-          }
-          <div
-            className="flex flex-row items-center font-sans font-bold text-amber-800 px-1 py-1 hover:bg-slate-200"
-            onClick={handleSaveInvoice}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              className="w-5 h-5  dark:text-white"
-            >
-              <path d="M12 1.5a.75.75 0 0 1 .75.75V7.5h-1.5V2.25A.75.75 0 0 1 12 1.5ZM11.25 7.5v5.69l-1.72-1.72a.75.75 0 0 0-1.06 1.06l3 3a.75.75 0 0 0 1.06 0l3-3a.75.75 0 1 0-1.06-1.06l-1.72 1.72V7.5h3.75a3 3 0 0 1 3 3v9a3 3 0 0 1-3 3h-9a3 3 0 0 1-3-3v-9a3 3 0 0 1 3-3h3.75Z" />
-            </svg>
-            <span>
-              Save
-            </span>
-          </div>
-          <div className="flex flex-row items-center  px-1 py-1 hover:bg-slate-200">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              className="w-5 h-5 text-amber-800 dark:text-white"
-            >
-              <path fillRule="evenodd" d="M16.5 3.75a1.5 1.5 0 0 1 1.5 1.5v13.5a1.5 1.5 0 0 1-1.5 1.5h-6a1.5 1.5 0 0 1-1.5-1.5V15a.75.75 0 0 0-1.5 0v3.75a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3V5.25a3 3 0 0 0-3-3h-6a3 3 0 0 0-3 3V9A.75.75 0 1 0 9 9V5.25a1.5 1.5 0 0 1 1.5-1.5h6ZM5.78 8.47a.75.75 0 0 0-1.06 0l-3 3a.75.75 0 0 0 0 1.06l3 3a.75.75 0 0 0 1.06-1.06l-1.72-1.72H15a.75.75 0 0 0 0-1.5H4.06l1.72-1.72a.75.75 0 0 0 0-1.06Z" clipRule="evenodd" />
-            </svg>
+        <div className="flex flex-row w-full px-1 space-x-2">
+          <Button size="xs" color="green" onClick={() => editItem(defaultEmptyItem.origin)}>
+            <MdAssignmentAdd size="1.5em" className="mr-2" /> Add
+          </Button>
+          <Button size="xs" color="green" onClick={showViewInv}>
+            <FaEye size="1.5em" className="mr-2" /> View
+          </Button>
+          <Button size="xs" color="green" onClick={handleSaveInvoice}>
+            <HiSave size="1.5em" className="mr-2" /> Save
+          </Button>
+          <Button size="xs" color="green">
+            <IoMdArrowBack size="1.5em" className="mr-2" />
             <Link to=".."
               relative="path"
-              state={{ pageNumber: loc.pageNumber, pageSize: loc.pageSize }}
-              className="px-1 font-sans font-bold text-amber-800">Back</Link>
-          </div>
-          <Link
-            to={invoiceUrl.presignedUrl}
-            className="pl-5 font-thin text-sm"
-            hidden={true}
-            ref={invoiceLink}
-          >
-            {invoiceUrl.filename}
-          </Link>
+              state={{ pageNumber: loc.pageNumber, pageSize: loc.pageSize }}>Back</Link>
+          </Button>
         </div>
 
-        <div className="h-2/3 max-h-fit overflow-scroll">
-          <Table hoverable>
-            <Table.Head className="my-1">
-              <Table.HeadCell className="sm:px-1 py-2">
-                Item Name
-              </Table.HeadCell>
-
-              <Table.HeadCell className="py-2">
-                <span className="sr-only">
-                  Delete
-                </span>
-              </Table.HeadCell>
-            </Table.Head>
-            <Table.Body className="divide-y" >
-              {invoice.items.map((item) => {
-                return (
-                  <Table.Row key={item.id} className="bg-white dark:border-gray-700 dark:bg-gray-800 text-sm my-1 py-1" >
-                    <Table.Cell className="sm:px-1 py-1">
-                      <div className="grid grid-cols-1 py-0 my-0">
-                        <div
-                          className="font text-sm text-blue-600 hover:underline dark:text-blue-500"
-                          onClick={() => editItem(item)}
-                        >
-                          {item.itemName}
-                        </div>
-                        <div className="flex flex-row text-[10px] space-x-1">
-                          <span className="w-6">{"x" + item.quantity}</span>
-                          <span className="w-24">{formatVND(item.amount)}</span>
-                          <span className="font font-mono font-black">{item.service}</span>
-                        </div>
-                      </div>
-                    </Table.Cell>
-                    <Table.Cell className="py-1">
-                      <svg className="w-6 h-6 text-red-800 dark:text-white"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        onClick={() => askForDelItemConfirmation(item)}
-                      >
-                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
-                      </svg>
-
-                    </Table.Cell>
-                  </Table.Row>
-                )
-              })}
-            </Table.Body>
-          </Table>
+        <div className="flex flex-col px-2 pt-2 space-y-1.5 divide-y">
+          {invoice.items.map((item) => {
+            return (
+              <div key={item.id} className="flex flex-col w-full px-1 space-y-1 relative">
+                <div
+                  className="font text-sm text-green-600"
+                >
+                  {item.itemName}
+                </div>
+                <div className="flex flex-row text-[10px] space-x-1">
+                  <span className="w-6">{"x" + item.quantity}</span>
+                  <span className="w-24">{formatVND(item.amount)}</span>
+                  <span className="font font-mono font-black">{item.service}</span>
+                </div>
+                <div className="flex flex-row space-x-2 absolute right-1 top-2">
+                  <IoMdRemoveCircle size="1.5em" className="mr-2 text-red-800"
+                    onClick={() => askForDelItemConfirmation(item)}
+                  />
+                  <CiEdit size="1.5em" className="mr-2 text-green-800"
+                    onClick={() => editItem(item)}
+                  />
+                </div>
+              </div>
+            )
+          })}
         </div>
 
         <Modal show={openGuestNameModal} onClose={cancelEditGuestName} initialFocus={guestNameTextInput}>

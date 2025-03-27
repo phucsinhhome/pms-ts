@@ -11,6 +11,8 @@ import { GiHouse, GiMeal } from "react-icons/gi";
 import { listAllPGroups } from "../db/pgroup";
 import { PGroup } from "./PGroupManager";
 import { AppConfig } from "../db/configs";
+import { activeGroupStyle } from "./Inventory";
+import { PiCalendarCheckThin } from "react-icons/pi";
 
 export const OrderStatus = {
   SENT: 'text-orange-400',
@@ -311,7 +313,7 @@ export const OrderManager = (props: OrderManagerProps) => {
   return (
     <div className="h-full pt-3 relative">
       <div className="flex flex-row items-center w-full pb-4 px-2 space-x-3">
-        <Button onClick={chooseCopyOpts}>Copy Link</Button>
+        <Button onClick={chooseCopyOpts} size="sm">Copy Link</Button>
         <div className="flex flex-row space-x-2">
           {
             filterables.map(sts => <div onClick={() => changeListOpt(sts)}
@@ -408,10 +410,7 @@ export const OrderManager = (props: OrderManagerProps) => {
                 return (
                   <div
                     key={pg.groupId}
-                    className={pg.groupId === activeGroup?.groupId ?
-                      "px-2 font-mono text-sm border rounded-sm shadow-sm bg-slate-400" :
-                      "px-2 font-mono text-sm border rounded-sm shadow-sm bg-slate-200"
-                    }
+                    className={activeGroupStyle(pg.groupId === activeGroup?.groupId)}
                     onClick={() => setActiveGroup(pg)}
                   >
                     {pg.displayName}
@@ -451,7 +450,14 @@ export const OrderManager = (props: OrderManagerProps) => {
                         </span>
                       </div>
                       <div className="flex flex-row text-sm space-x-1">
-                        <span className="font font-mono text-gray-500 text-[10px]">{invoice.checkInDate}</span>
+                        <div className="flex flex-row items-center">
+                          <PiCalendarCheckThin />
+                          <span className="font font-mono text-gray-500 text-[10px]">{invoice.checkInDate}</span>
+                        </div>
+                        <div className="flex flex-row items-center">
+                          <GiHouse />
+                          <span className="font font-mono text-[10px]">{invoice.rooms}</span>
+                        </div>
                       </div>
                     </div>
                   </div>

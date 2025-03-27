@@ -77,6 +77,12 @@ type InventoryProps = {
   activeMenu: any
 }
 
+export const activeGroupStyle = (focus: boolean) => {
+  return focus ?
+    'font font-mono text-[9px] font-bold text-nowrap text-gray-500 border rounded-xl px-1 py-0.5 bg-slate-400'
+    : 'font font-mono text-[9px] font-bold text-nowrap text-gray-500 border rounded-xl px-1 py-0.5 bg-slate-50'
+}
+
 export const Inventory = (props: InventoryProps) => {
 
 
@@ -266,12 +272,6 @@ export const Inventory = (props: InventoryProps) => {
       })
     }
     setActiveGroup(activeGroup !== group ? group : '')
-  }
-
-  const activeGroupStyle = (focus: boolean) => {
-    return focus ?
-      'font font-mono text-[9px] font-bold text-nowrap text-gray-500 border rounded-xl px-1 py-0.5 bg-slate-400'
-      : 'font font-mono text-[9px] font-bold text-nowrap text-gray-500 border rounded-xl px-1 py-0.5 bg-slate-50'
   }
 
   const viewProductDetail = (product: Product) => {

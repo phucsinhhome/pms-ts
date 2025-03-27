@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef, ChangeEvent, memo } from "react";
-import { Table, TextInput, Label, Spinner, Modal, Button } from "flowbite-react";
+import { TextInput, Label, Spinner, Modal, Button } from "flowbite-react";
 import { deleteExpense, generate, newExpId } from "../db/expense";
-import Moment from "react-moment";
 import { classifyServiceByItemName } from "../Service/ItemClassificationService";
 import { Chat, DEFAULT_PAGE_SIZE } from "../App";
 import { HiOutlineCash, HiX } from "react-icons/hi";
@@ -12,7 +11,10 @@ import { listExpenseByExpenserAndDate } from "../db/expense";
 import { Pagination } from "./ProfitReport";
 import { saveExpense } from "../db/expense";
 import { Link } from "react-router-dom";
-import { GiUmbrella } from "react-icons/gi";
+import { MdAssignmentAdd } from "react-icons/md";
+import { FaUmbrellaBeach } from "react-icons/fa";
+import { IoMdRemoveCircle } from "react-icons/io";
+import { CiEdit } from "react-icons/ci";
 
 export type Expense = {
   id: string,
@@ -406,92 +408,41 @@ export const ExpenseManager = memo((props: ExpenseProps) => {
   return (
     <div className="h-full pt-3 relative">
       <div className="flex flex-row px-2 space-x-2 align-middle">
-        <div className="flex flex-row items-center pl-4">
-          <svg
-            className="w-5 text-amber-700 dark:text-white"
-            aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h14m-7 7V5" />
-          </svg>
-          <span
-            onClick={() => editExpense(defaultEmptExpense)}
-            className="font-bold text-amber-800"
-          >
-            Add
-          </span>
-        </div>
-        <div className="flex flex-row items-center align-middle">
-          <GiUmbrella />
-          <Link to='../supplier' className="font-bold text-amber-800 pl-0.5">Tours</Link>
-        </div>
-
+        <Button size="xs" color="green" onClick={() => editExpense(defaultEmptExpense)}>
+          <MdAssignmentAdd size="1.5em" className="mr-2" /> Add
+        </Button>
+        <Button size="xs" color="green">
+          <FaUmbrellaBeach size="1.5em" className="mr-2" />
+          <Link to='../supplier' relative="path">Tour</Link>
+        </Button>
       </div>
-      <div>
-        <Table hoverable={true}>
-          <Table.Head>
-            <Table.HeadCell className="sm:px-1">
-              Date
-            </Table.HeadCell>
-            <Table.HeadCell className="sm:px-1">
-              Details
-            </Table.HeadCell>
-
-            <Table.HeadCell>
-              <span className="sr-only">
-                Delete
-              </span>
-            </Table.HeadCell>
-          </Table.Head>
-          <Table.Body className="divide-y" >
-            {expenses.map((exp) => {
-              return (
-                <Table.Row
-                  className="bg-white"
-                  key={exp.id}
-                >
-                  <Table.Cell className="sm:px-1 pr-1 py-0.5">
-                    <Moment format="DD.MM">{new Date(exp.expenseDate + 'Z')}</Moment>
-                  </Table.Cell>
-                  <Table.Cell className="sm:px-1 py-0.5">
-                    <div className="grid grid-cols-1">
-                      <Label
-                        onClick={() => editExpense(exp)}
-                        className="font-sans text-green-800 hover:underline dark:text-gray-100"
-                        value={exp.itemName}
-                      />
-                      <div className="flex flex-row text-sm space-x-1">
-                        <div className="w-24">
-                          <span>{formatVND(exp.amount)}</span>
-                        </div>
-
-                        <span className="font font-mono font-black w-20">{exp.service}</span>
-                        <span className="font font-mono font-thin text-gray-320 italic">{props.authorizedUserId !== null ? "" : exp.expenserId}</span>
-                      </div>
-                    </div>
-                  </Table.Cell>
-                  <Table.Cell className=" py-0.5">
-                    <svg
-                      className="w-6 h-6 text-red-800 dark:text-white"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24" fill="none" viewBox="0 0 24 24"
-                      onClick={() => askForDelExpenseConfirmation(exp)}
-                    >
-                      <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
-                    </svg>
-
-                  </Table.Cell>
-                </Table.Row>
-              )
-            })}
-          </Table.Body>
-        </Table>
+      <div className="flex flex-col px-2 pt-2 space-y-1.5 divide-y">
+        {expenses.map((item) => {
+          return (
+            <div key={item.id} className="flex flex-col w-full px-1 space-y-1 relative">
+              <div
+                className="font text-sm text-green-600"
+              >
+                {item.itemName}
+              </div>
+              <div className="flex flex-row text-[10px] space-x-1">
+                <span className="w-6">{"x" + item.quantity}</span>
+                <span className="w-24">{formatVND(item.amount)}</span>
+                <span className="font font-mono font-black">{item.service}</span>
+              </div>
+              <div className="flex flex-row space-x-2 absolute right-1 top-2">
+                <IoMdRemoveCircle size="1.5em" className="mr-2 text-red-800"
+                  onClick={() => askForDelExpenseConfirmation(item)}
+                />
+                <CiEdit size="1.5em" className="mr-2 text-green-800"
+                  onClick={() => editExpense(item)}
+                />
+              </div>
+            </div>
+          )
+        })}
       </div>
+      
       <nav className="flex items-center justify-between pt-4 absolute bottom-1" aria-label="Table navigation">
         <ul className="inline-flex items-center -space-x-px">
           <li onClick={() => handlePaginationClick(pagination.pageNumber - 1)} className="block px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">

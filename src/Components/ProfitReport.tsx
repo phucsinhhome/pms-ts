@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import { adjustMonths, beginOfMonth, lastDateOf as lastDayOfMonth, formatVND, formatISODate, formatDateMonthDate, lastDateOfMonth } from "../Service/Utils";
 import { fetchPReportThisMonth } from "../db/profit";
+import { Button } from "flowbite-react";
+import { MdOutlineBrowserUpdated } from "react-icons/md";
 
 type RAspect = {
   name: string,
@@ -76,6 +77,11 @@ const defaultPeriod: RPeriod = {
 
 type ProfitReportProps = {
   activeMenu: any
+}
+
+export const optionStyle = (focused: boolean) => {
+  return focused ? "px-1 font-mono text-[12px] text-nowrap border rounded-lg bg-slate-400"
+    : "px-1 font-mono text-[12px] text-nowrap border rounded-lg bg-slate-200";
 }
 
 export default function ProfitReport(props: ProfitReportProps) {
@@ -174,8 +180,7 @@ export default function ProfitReport(props: ProfitReportProps) {
   }, [params]);
 
   const filterClass = (reportKey: string, currentKey: string) => {
-    var classNamePattern = "font-bold text-sm text-amber-800 rounded px-2 py-0.5"
-    return classNamePattern + " " + (currentKey === reportKey ? "bg-slate-400" : "bg-slate-200");
+    return optionStyle(currentKey === reportKey)
   }
 
   const changeReportType = (type: RAspect) => {
@@ -192,26 +197,12 @@ export default function ProfitReport(props: ProfitReportProps) {
 
   return (
     <div className="bg-slate-50 px-2">
-      <div className="flex flex-wrap py-2 px-2 space-x-4 pl-4">
-        <div className="flex flex-row items-center mb-2">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            className="w-5 h-5 text-amber-700 dark:text-white"
-          >
-            <path fillRule="evenodd" d="M4.755 10.059a7.5 7.5 0 0 1 12.548-3.364l1.903 1.903h-3.183a.75.75 0 1 0 0 1.5h4.992a.75.75 0 0 0 .75-.75V4.356a.75.75 0 0 0-1.5 0v3.18l-1.9-1.9A9 9 0 0 0 3.306 9.67a.75.75 0 1 0 1.45.388Zm15.408 3.352a.75.75 0 0 0-.919.53 7.5 7.5 0 0 1-12.548 3.364l-1.902-1.903h3.183a.75.75 0 0 0 0-1.5H2.984a.75.75 0 0 0-.75.75v4.992a.75.75 0 0 0 1.5 0v-3.18l1.9 1.9a9 9 0 0 0 15.059-4.035.75.75 0 0 0-.53-.918Z" clipRule="evenodd" />
-          </svg>
-          <Link
-            to={""}
-            onClick={fetchReport}
-            className="font-bold text-amber-800"
-          >
-            Update
-          </Link>
-        </div>
+      <div className="flex flex-wrap py-2 px-2 space-x-2">
+        <Button size="xs" color="green" onClick={fetchReport}>
+          <MdOutlineBrowserUpdated size="1.5em" className="mr-2" /> Update
+        </Button>
       </div>
-      <div className="flex flex-row items-center space-x-2 pl-4 mb-2">
+      <div className="flex flex-row items-center space-x-2 px-2">
         {aspects.map((rp) => {
           return (<span
             key={rp.key}
@@ -223,8 +214,8 @@ export default function ProfitReport(props: ProfitReportProps) {
         })}
       </div>
 
-      <div className="flex flex-row py-2 space-x-4">
-        <div className="space-x-2 pl-4">
+      <div className="flex flex-row space-x-2">
+        <div className="space-x-2 px-2">
           {timeFilters.map((per) => {
             return (<span
               key={per.id}

@@ -6,7 +6,7 @@ import { DEFAULT_PAGE_SIZE } from "../App";
 import { HiOutlineExclamationCircle, HiX } from "react-icons/hi";
 import { formatISODate, formatVND } from "../Service/Utils";
 import { deleteInvoice, listInvoiceByGuestName, listStayingAndComingInvoices } from "../db/invoice";
-import { Pagination } from "./ProfitReport";
+import { optionStyle, Pagination } from "./ProfitReport";
 import { GiHouse } from "react-icons/gi";
 import { IoMdPersonAdd, IoMdRemoveCircle } from "react-icons/io";
 import { CiEdit } from "react-icons/ci";
@@ -260,9 +260,7 @@ export const InvoiceManager = (props: InvoiceManagerProps) => {
             to=""
             onClick={() => filterDay(opt.days)}
             relative="route"
-            className={deltaDays === opt.days ?
-              "font-mono rounded px-2 py-0.5 bg-slate-400"
-              : "font-mono rounded px-2 py-0.5 bg-slate-200"}
+            className={optionStyle(deltaDays === opt.days)}
           >
             {opt.label}
           </Link>)

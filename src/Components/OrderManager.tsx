@@ -13,6 +13,7 @@ import { PGroup } from "./PGroupManager";
 import { AppConfig } from "../db/configs";
 import { activeGroupStyle } from "./Inventory";
 import { PiCalendarCheckThin } from "react-icons/pi";
+import { IoMdArrowBack } from "react-icons/io";
 
 export const OrderStatus = {
   SENT: 'text-orange-400',
@@ -312,14 +313,16 @@ export const OrderManager = (props: OrderManagerProps) => {
 
   return (
     <div className="h-full pt-3 relative">
-      <div className="flex flex-row items-center w-full pb-4 px-2 space-x-3">
-        <Button onClick={chooseCopyOpts} size="sm">Copy Link</Button>
-        <div className="flex flex-row space-x-2">
+      <div className="flex flex-row items-center w-full pb-4 px-1 space-x-3">
+        <Button size="xs" color="green" onClick={chooseCopyOpts}>
+          <HiClipboardCopy size="1.5em" className="mr-2" /> Copy Link
+        </Button>
+        <div className="flex flex-row space-x-1">
           {
             filterables.map(sts => <div onClick={() => changeListOpt(sts)}
               className={activeStatuses.includes(sts) ?
-                "px-2 font-mono text-sm border rounded-sm shadow-sm bg-slate-400" :
-                "px-2 font-mono text-sm border rounded-sm shadow-sm bg-slate-200"
+                "px-2 font-mono text-[12px] border rounded-lg bg-slate-400" :
+                "px-2 font-mono text-[12px] border rounded-lg bg-slate-200"
               }>
               {sts}
             </div>)
@@ -444,7 +447,7 @@ export const OrderManager = (props: OrderManagerProps) => {
                     <div className="grid grid-cols-1">
                       <div className="flex flex-row">
                         <span
-                          className="font-medium text-blue-600 dark:text-blue-500 overflow-hidden"
+                          className="font-medium text-green-800 overflow-hidden"
                         >
                           {invoice.guestName}
                         </span>
@@ -472,8 +475,8 @@ export const OrderManager = (props: OrderManagerProps) => {
           </div>
         </Modal.Body>
         <Modal.Footer className="flex justify-center">
-          <Button onClick={hideInvoices}>
-            Cancel
+          <Button size="xs" color="green" onClick={hideInvoices}>
+            <IoMdArrowBack size="1.5em" className="mr-2" /> Cancel
           </Button>
         </Modal.Footer>
       </Modal>

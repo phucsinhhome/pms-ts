@@ -6,7 +6,7 @@ import Moment from "react-moment";
 import { Configs, internalRooms } from "./InvoiceEditor";
 import { addDays, formatISODate } from "../Service/Utils";
 import { DEFAULT_PAGE_SIZE } from "../App";
-import { Pagination } from "./ProfitReport";
+import { optionStyle, Pagination } from "./ProfitReport";
 
 export type Reservation = {
   id: string,
@@ -140,9 +140,7 @@ export function ReservationManager(props: ReservationManagerProps) {
             key={opt.days}
             onClick={() => filterDay(opt.days)}
             relative="route"
-            className={deltaDays === opt.days ?
-              "font-mono rounded px-2 py-0.5 bg-slate-400"
-              : "font-mono rounded px-2 py-0.5 bg-slate-200"}
+            className={optionStyle(deltaDays === opt.days)}
           >
             {opt.label}
           </Link>)

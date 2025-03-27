@@ -2,14 +2,16 @@ import React, { useState, useEffect, ChangeEvent } from "react";
 import { Link } from "react-router-dom";
 import { Avatar, Button, FileInput, Label, Modal, Textarea, TextInput, ToggleSwitch } from "flowbite-react";
 import { adjustQuantity as adjustInventoryQuantity, changeItemStatus, listProductItems, listProductItemsByGroup, listProductItemsWithName, listProductItemsWithNameAndGroup, planAvailability } from "../db/inventory";
-import { HiArrowCircleUp, HiDocumentAdd, HiOutlineCash, HiX } from "react-icons/hi";
+import { HiArrowCircleUp, HiDocumentAdd, HiOutlineCash, HiSave, HiX } from "react-icons/hi";
 import { formatMoneyAmount, formatVND } from "../Service/Utils";
 import { DEFAULT_PAGE_SIZE } from "../App";
-import { Pagination } from "./ProfitReport";
+import { optionStyle, Pagination } from "./ProfitReport";
 import { listAllPGroups } from "../db/pgroup";
 import { PGroup } from "./PGroupManager";
 import { putObject } from "../Service/FileMinio";
 import { getProduct, saveProduct } from "../db/product";
+import { MdAssignmentAdd, MdOutlineBrowserUpdated } from "react-icons/md";
+import { IoMdArrowBack } from "react-icons/io";
 
 export type Product = {
   id: string,
@@ -646,13 +648,17 @@ export const Inventory = (props: InventoryProps) => {
   return (
     <div className="px-2 h-full pt-3 relative">
       <div className="flex flex-row px-0.5 py-2 space-x-3">
-        <Button onClick={addProduct} size="sm">Add</Button>
-        <Button onClick={updateAvailability} size="sm">Update availability</Button>
+        <Button size="xs" color="green" onClick={addProduct}>
+          <MdAssignmentAdd size="1.5em" className="mr-2" /> Add
+        </Button>
+        <Button size="xs" color="green" onClick={updateAvailability}>
+          <MdOutlineBrowserUpdated size="1.5em" className="mr-2" /> Update availability
+        </Button>
       </div>
       <div className="flex flex-row items-center space-x-1 overflow-scroll pb-1">
         {
           pGroups.map((group) => <Label key={group.groupId} onClick={() => activateGroup(group.name)}
-            className={activeGroupStyle(group.name === activeGroup)}
+            className={optionStyle(group.name === activeGroup)}
           >{group.displayName}</Label>)
         }
       </div>
@@ -983,11 +989,12 @@ export const Inventory = (props: InventoryProps) => {
           </div>
         </Modal.Body>
         <Modal.Footer className="flex justify-center">
-          <Button onClick={createOrUpdateProduct} className="mx-2" disabled={editingProduct.origin.name === ''}>
-            Save
+          <Button size="xs" color="green" onClick={createOrUpdateProduct}
+            disabled={editingProduct.origin.name === ''}>
+            <HiSave size="1.5em" className="mr-2" /> Save
           </Button>
-          <Button onClick={cancelEditingProduct} className="mx-2">
-            Cancel
+          <Button size="xs" color="green" onClick={cancelEditingProduct}>
+            <IoMdArrowBack size="1.5em" className="mr-2" /> Cancel
           </Button>
         </Modal.Footer>
       </Modal>

@@ -8,6 +8,9 @@ import { GiCoinflip, GiMeal } from "react-icons/gi";
 import { SERVICE_NAMES } from "../Service/ItemClassificationService";
 import { generateSInvoice, listSupplierInvoices, listSupplierInvoicesByTimeAndStatus, paidSInvoice, rejectSInvoice, saveSInvoice, takenPlaceSInvoice } from "../db/supplier";
 import { PiBrainThin } from "react-icons/pi";
+import { MdAssignmentAdd } from "react-icons/md";
+import { IoMdRemoveCircle } from "react-icons/io";
+import { CiEdit } from "react-icons/ci";
 
 export const SInvoiceStatus = {
   CREATED: 'text-orange-400',
@@ -337,9 +340,9 @@ export const SupplierManager = (props: SupplierManagerProps) => {
       })
   }
 
-  const rejectInvoice = () => {
+  const rejectInvoice = (invoice: SupplierInvoice) => {
     let inv: SupplierInvoice = {
-      ...eInvoice,
+      ...invoice,
       status: 'REJECTED'
     }
 
@@ -500,8 +503,10 @@ export const SupplierManager = (props: SupplierManagerProps) => {
 
   return (
     <div className="h-full pt-3 space-y-3 relative">
-      <div className="flex flex-row px-2 space-x-3">
-        <Button onClick={createInvoice}>Add</Button>
+      <div className="flex flex-row items-center px-2 space-x-3">
+        <Button size="xs" color="green" onClick={createInvoice}>
+          <MdAssignmentAdd size="1.5em" className="mr-2" /> Add
+        </Button>
         <div className="flex flex-row space-x-2">
           {
             filterStatuses.map((status) => <Label
@@ -520,39 +525,40 @@ export const SupplierManager = (props: SupplierManagerProps) => {
         </div> : <></>
         }
       </div>
-      <div className="flex flex-col px-2 overflow-hidden space-y-1.5">
+      <div className="flex flex-col px-2 overflow-hidden space-y-1.5 divide-y">
         {invoices.map((invoice) => {
           return (
             <div
-              className="flex flex-row items-center border border-gray-300 shadow-2xl rounded-md px-2 bg-white dark:bg-slate-500 "
+              className="flex flex-col py-1 relative"
               key={invoice.id}
             >
-              <div className="w-full">
-                <div className="grid grid-cols-1">
-                  <div className="flex flex-row text-sm">
-                    <span
-                      className="font-sans text-green-800 hover:underline overflow-hidden"
-                      onClick={() => editInvoice(invoice)}
-                    >
-                      {invoice.description}
-                    </span>
-                  </div>
-                  <div className="flex flex-row text-sm space-x-3">
-                    <div className="flex flex-row items-center rounded-sm w-16">
-                      <GiCoinflip />
-                      <span className="font font-mono text-gray-500 text-[12px]">{formatVND(invoice.subTotal)}</span>
-                    </div>
-                    <div className="flex flex-row items-center rounded-sm">
-                      <HiMail />
-                      <span className="font font-mono text-gray-500 text-[12px]">{utcToDate(invoice.createdTime)}</span>
-                    </div>
-                  </div>
+              <div className="flex flex-row text-sm">
+                <span
+                  className="font-sans text-green-800 hover:underline overflow-hidden"
+                >
+                  {invoice.description}
+                </span>
+              </div>
+              <div className="flex flex-row text-sm space-x-3">
+                <div className="flex flex-row items-center rounded-sm w-16">
+                  <GiCoinflip />
+                  <span className="font font-mono text-gray-500 text-[12px]">{formatVND(invoice.subTotal)}</span>
+                </div>
+                <div className="flex flex-row items-center rounded-sm">
+                  <HiMail />
+                  <span className="font font-mono text-gray-500 text-[12px]">{utcToDate(invoice.createdTime)}</span>
+                </div>
+                <div className="flex flex-row items-center rounded-sm">
+                  <span className={`font font-mono text-gray-500 text-[12px] ${SInvoiceStatus[invoice.status]}`}>{invoice.status}</span>
                 </div>
               </div>
-              <div className="pl-0.2 pr-1">
-                <div className="bg-zinc-200 rounded-sm w-24 text-center">
-                  <span className={`font font-mono min-w-fit ${SInvoiceStatus[invoice.status]}`}>{invoice.status}</span>
-                </div>
+              <div className="flex flex-row space-x-2 absolute right-1 top-2">
+                <IoMdRemoveCircle size="1.5em" className="mr-2 text-red-800"
+                  onClick={() => rejectInvoice(invoice)}
+                />
+                <CiEdit size="1.5em" className="mr-2 text-green-800"
+                  onClick={() => editInvoice(invoice)}
+                />
               </div>
             </div>
           )
@@ -703,7 +709,7 @@ export const SupplierManager = (props: SupplierManagerProps) => {
             eInvoice.status === 'TAKEN_PLACE' ? <Button onClick={paidInvoice}>Paid</Button> : <></>
           }
           {
-            eInvoice.id !== '' && eInvoice.status !== 'REJECTED' ? <Button onClick={rejectInvoice} color='red'>Reject</Button> : <></>
+            eInvoice.id !== '' && eInvoice.status !== 'REJECTED' ? <Button onClick={() => rejectInvoice(eInvoice)} color='red'>Reject</Button> : <></>
           }
         </Modal.Footer>
       </Modal>

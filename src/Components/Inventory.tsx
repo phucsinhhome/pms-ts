@@ -393,6 +393,7 @@ export const Inventory = (props: InventoryProps) => {
                 }
               })
               setShowProductDetailModal(false)
+              filterProducts()
             })
         } else {
           console.error("Failed to save product")

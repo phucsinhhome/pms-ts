@@ -6,6 +6,7 @@ import { MdAssignmentAdd } from "react-icons/md";
 import { IoMdRemoveCircle } from "react-icons/io";
 import { CiEdit } from "react-icons/ci";
 import { listTour } from "../db/tour";
+import { Link } from "react-router-dom";
 
 export const TourStatus = {
   CREATED: 'text-orange-400',
@@ -144,9 +145,10 @@ export const TourManager = (props: TourManagerProps) => {
                 <IoMdRemoveCircle size="1.5em" className="mr-2 text-red-800"
                   onClick={() => removeTour(tour)}
                 />
-                <CiEdit size="1.5em" className="mr-2 text-green-800"
-                  onClick={() => editTour(tour)}
-                />
+                <Link
+                  to={`/tour/${tour.tourId}`} >
+                  <CiEdit size="1.5em" className="mr-2 text-green-800" />
+                </Link>
               </div>
             </div>
           )

@@ -185,7 +185,7 @@ export const App = () => {
           chat={getChat()}
           displayName={fullName()}
           authorizedUserId={authorizedUserId}
-          activeMenu={() => setActiveMenu({ path: 'supplier', displayName: 'Supplier' })}
+          activeMenu={() => setActiveMenu({ path: 'tour', displayName: 'Tour' })}
         />} />
         <Route path="login"
           element={<Login

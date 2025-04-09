@@ -16,6 +16,7 @@ import { SupplierManager } from "./Components/SupplierManager";
 import { AppConfig, appConfigs } from "./db/configs";
 import { Login } from "./Components/Login";
 import { TourManager } from "./Components/TourManager";
+import { TourEditor } from "./Components/TourEditor";
 
 export const DEFAULT_PAGE_SIZE = Number(process.env.REACT_APP_DEFAULT_PAGE_SIZE)
 
@@ -187,6 +188,13 @@ export const App = () => {
           authorizedUserId={authorizedUserId}
           activeMenu={() => setActiveMenu({ path: 'tour', displayName: 'Tour' })}
         />} />
+        <Route path="tour/:tourId"
+          element={<TourEditor
+            chat={getChat()}
+            displayName={fullName()}
+            authorizedUserId={authorizedUserId}
+            activeMenu={() => setActiveMenu({ path: 'tour', displayName: 'Tour' })}
+          />} />
         <Route path="login"
           element={<Login
             chat={getChat()}

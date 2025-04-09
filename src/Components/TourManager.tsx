@@ -1,9 +1,7 @@
-import React, { useState, useEffect, ChangeEvent } from "react";
-import { formatVND } from "../Service/Utils";
+import React, { useState, useEffect } from "react";
 import { Chat, DEFAULT_PAGE_SIZE } from "../App";
-import { Button, Label, Modal, TextInput } from "flowbite-react";
-import { HiMail, HiX } from "react-icons/hi";
-import { GiCoinflip, GiMeal } from "react-icons/gi";
+import { Button } from "flowbite-react";
+import { GiCoinflip } from "react-icons/gi";
 import { MdAssignmentAdd } from "react-icons/md";
 import { IoMdRemoveCircle } from "react-icons/io";
 import { CiEdit } from "react-icons/ci";
@@ -55,9 +53,6 @@ type TourManagerProps = {
 export const TourManager = (props: TourManagerProps) => {
   const [tours, setTours] = useState<Tour[]>([])
 
-  const [eTour, setETour] = useState<Tour>()
-  const [showTourDetail, setShowTourDetail] = useState(false)
-
   const [pagination, setPagination] = useState({
     pageNumber: 0,
     pageSize: DEFAULT_PAGE_SIZE,
@@ -86,14 +81,6 @@ export const TourManager = (props: TourManagerProps) => {
     props.activeMenu()
     // eslint-disable-next-line
   }, [pagination.pageNumber]);
-
-  useEffect(() => {
-    if (showTourDetail) {
-      return
-    }
-    fetchTours()
-    // eslint-disable-next-line
-  }, [showTourDetail]);
 
 
   const fetchTours = () => {
@@ -124,29 +111,6 @@ export const TourManager = (props: TourManagerProps) => {
 
   const editTour = (tour: Tour) => {
     console.log(`Edit tour ${tour.tourId}`)
-  }
-
-  function hideTourDetail(): void {
-    setShowTourDetail(false);
-    setETour(undefined);
-  }
-
-  function changeLocaleName(event: ChangeEvent<HTMLInputElement>): void {
-    if (eTour) {
-      setETour({
-        ...eTour,
-        localeName: event.target.value
-      });
-    }
-  }
-
-  function emptyLocaleName(event: React.MouseEvent<SVGElement>): void {
-    if (eTour) {
-      setETour({
-        ...eTour,
-        localeName: ""
-      });
-    }
   }
 
   return (
@@ -207,96 +171,6 @@ export const TourManager = (props: TourManagerProps) => {
           </li>
         </ul>
       </nav>
-
-
-      <Modal
-        show={showTourDetail}
-        popup={true}
-        onClose={hideTourDetail}
-      >
-        <Modal.Header />
-        <Modal.Body>
-          <div className="flex flex-col space-y-2 pb-2">
-            <div className="flex flex-row w-full align-middle space-x-4">
-              <Label
-                value={eTour?.name}
-              />
-              <Label className="font font-mono text-sm text-amber-800"
-                value={eTour ? formatVND(eTour.subTotal) : ''} />
-            </div>
-
-            <div className="flex flex-col w-full align-middle">
-              <div className="flex items-center">
-                <Label
-                  htmlFor="localeName"
-                  value="Locale Name"
-                />
-              </div>
-              <TextInput
-                id="localeName"
-                placeholder="Locale name of the invoice"
-                type="text"
-                required={true}
-                value={eTour?.localeName}
-                onChange={changeLocaleName}
-                rightIcon={() => <HiX onClick={emptyLocaleName} />}
-                className="w-full"
-              />
-            </div>
-          </div>
-          <div className="flex flex-col overflow-hidden space-y-1.5">
-            {eTour?.slots.map((slot) => {
-              return (
-                <div
-                  className="flex flex-row items-center border border-gray-300 shadow-xl pl-2 rounded-md bg-white dark:bg-slate-500 "
-                  key={slot?.id}
-                >
-                  <div className="w-full">
-                    <div className="grid grid-cols-1">
-                      <div className="flex flex-row">
-                        <span
-                          className="font-medium text-green-800 hover:underline dark:text-blue-500 overflow-hidden"
-                        >
-                          {slot?.startTime}
-                        </span>
-                      </div>
-                      <div className="flex flex-row text-sm space-x-3">
-                        <div className="flex flex-row items-center rounded-sm">
-                          <HiMail />
-                          <span className="font font-mono text-gray-500 text-[12px]">{slot?.startTime}</span>
-                        </div>
-                        <div className="flex flex-row items-center rounded-sm">
-                          <GiMeal />
-                          <span className="font font-mono text-gray-500 text-[12px]">{slot?.endTime}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="pl-0.2 pr-1">
-                    <svg
-                      className="w-[16px] h-[16px] text-gray-800 dark:text-white"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    // onClick={() => editItem(slot as EInvoiceItem)}
-                    >
-                      <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z" />
-                    </svg>
-                  </div>
-                </div>
-              )
-            })}
-          </div>
-          <div className="pt-3 text-center">
-            <span className="font italic text-green-800">{ }</span>
-          </div>
-        </Modal.Body>
-        <Modal.Footer className="flex justify-center">
-        </Modal.Footer>
-      </Modal>
     </div >
   );
 }

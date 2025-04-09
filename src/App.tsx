@@ -15,6 +15,7 @@ import { PGroupManager } from "./Components/PGroupManager";
 import { SupplierManager } from "./Components/SupplierManager";
 import { AppConfig, appConfigs } from "./db/configs";
 import { Login } from "./Components/Login";
+import { TourManager } from "./Components/TourManager";
 
 export const DEFAULT_PAGE_SIZE = Number(process.env.REACT_APP_DEFAULT_PAGE_SIZE)
 
@@ -180,6 +181,12 @@ export const App = () => {
         <Route path="inventory" element={<Inventory activeMenu={() => setActiveMenu(menus[5])} />} />
         <Route path="product-group" element={<PGroupManager activeMenu={() => setActiveMenu({ path: 'product-group', displayName: 'Group' })} />} />
         <Route path="supplier" element={<SupplierManager chat={getChat()} displayName={fullName()} authorizedUserId={authorizedUserId} activeMenu={() => setActiveMenu({ path: 'supplier', displayName: 'Supplier' })} />} />
+        <Route path="tour" element={<TourManager
+          chat={getChat()}
+          displayName={fullName()}
+          authorizedUserId={authorizedUserId}
+          activeMenu={() => setActiveMenu({ path: 'supplier', displayName: 'Supplier' })}
+        />} />
         <Route path="login"
           element={<Login
             chat={getChat()}

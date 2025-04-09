@@ -1,13 +1,9 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
-import { formatISODateTime, formatISOHourMinute, formatMoneyAmount, formatVND, randomId, utcToDate } from "../Service/Utils";
+import { formatVND } from "../Service/Utils";
 import { Chat, DEFAULT_PAGE_SIZE } from "../App";
-import { Button, Label, Modal, Spinner, TextInput } from "flowbite-react";
-import { InvoiceItem } from "./InvoiceManager";
-import { HiMail, HiOutlineCash, HiX } from "react-icons/hi";
+import { Button, Label, Modal, TextInput } from "flowbite-react";
+import { HiMail, HiX } from "react-icons/hi";
 import { GiCoinflip, GiMeal } from "react-icons/gi";
-import { SERVICE_NAMES } from "../Service/ItemClassificationService";
-import { generateSInvoice, listSupplierInvoices, listSupplierInvoicesByTimeAndStatus, paidSInvoice, rejectSInvoice, saveSInvoice, takenPlaceSInvoice } from "../db/supplier";
-import { PiBrainThin } from "react-icons/pi";
 import { MdAssignmentAdd } from "react-icons/md";
 import { IoMdRemoveCircle } from "react-icons/io";
 import { CiEdit } from "react-icons/ci";
@@ -267,11 +263,11 @@ export const TourManager = (props: TourManagerProps) => {
                       <div className="flex flex-row text-sm space-x-3">
                         <div className="flex flex-row items-center rounded-sm">
                           <HiMail />
-                          <span className="font font-mono text-gray-500 text-[12px]">{formatVND(slot.amount)}</span>
+                          <span className="font font-mono text-gray-500 text-[12px]">{slot?.startTime}</span>
                         </div>
                         <div className="flex flex-row items-center rounded-sm">
                           <GiMeal />
-                          <span className="font font-mono text-gray-500 text-[12px]">{slot.service}</span>
+                          <span className="font font-mono text-gray-500 text-[12px]">{slot?.endTime}</span>
                         </div>
                       </div>
                     </div>
@@ -285,7 +281,7 @@ export const TourManager = (props: TourManagerProps) => {
                       height="24"
                       fill="none"
                       viewBox="0 0 24 24"
-                      onClick={() => editItem(slot as EInvoiceItem)}
+                    // onClick={() => editItem(slot as EInvoiceItem)}
                     >
                       <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z" />
                     </svg>
@@ -295,162 +291,10 @@ export const TourManager = (props: TourManagerProps) => {
             })}
           </div>
           <div className="pt-3 text-center">
-            <span className="font italic text-green-800">{resultMessage}</span>
+            <span className="font italic text-green-800">{ }</span>
           </div>
         </Modal.Body>
         <Modal.Footer className="flex justify-center">
-          {
-            eTour.status !== 'PAID' && eTour.status !== 'REJECTED' ? <Button onClick={saveInvoice}>Save</Button> : <></>
-          }
-          {
-            eTour.status === 'CREATED' && eTour.id !== '' ? <Button onClick={confirmInvoice}>Confirm</Button> : <></>
-          }
-          {
-            eTour.status === 'CONFIRMED' ? <Button onClick={takenPlaceInvoice}>Taken place</Button> : <></>
-          }
-          {
-            eTour.status === 'TAKEN_PLACE' ? <Button onClick={paidInvoice}>Paid</Button> : <></>
-          }
-          {
-            eTour.id !== '' && eTour.status !== 'REJECTED' ? <Button onClick={() => rejectInvoice(eTour)} color='red'>Reject</Button> : <></>
-          }
-        </Modal.Footer>
-      </Modal>
-
-      <Modal
-        show={showItemDetail}
-        popup={true}
-        onClose={hideItemDetail}
-      >
-        <Modal.Header />
-        <Modal.Body>
-          <div className="flex flex-col space-y-6 pb-4">
-            <div className="flex flex-row w-full align-middle">
-              <div className="flex items-center w-2/5">
-                <Label
-                  htmlFor="name"
-                  value="Name"
-                />
-              </div>
-              <TextInput
-                id="name"
-                placeholder="Name of the invoice item"
-                type="text"
-                required={true}
-                value={eItem?.itemName}
-                onChange={changeItemName}
-                rightIcon={() => <HiX onClick={emptyItemName} />}
-                className="w-full"
-                color={eItem.itemName ? 'gray' : 'failure'}
-                disabled={eTour.status === 'PAID'}
-              />
-            </div>
-            <div className="flex flex-row w-full align-middle">
-              <div className="flex items-center w-2/5">
-                <Label
-                  htmlFor="unitPrice"
-                  value="Unit Price"
-                />
-              </div>
-              <TextInput
-                id="unitPrice"
-                placeholder="Unit price of the item"
-                type="currency"
-                step={5000}
-                required={true}
-                value={eItem.formattedUnitPrice}
-                onChange={changeUnitPrice}
-                rightIcon={HiOutlineCash}
-                className="w-full"
-                disabled={eTour.status === 'PAID'}
-              />
-            </div>
-            <div className="flex flex-row w-full align-middle">
-              <div className="flex items-center w-2/5">
-                <Label
-                  htmlFor="quantity"
-                  value="Quantity"
-                />
-              </div>
-              <div className="flex w-full h-9 items-center text-center">
-                <button
-                  type="button"
-                  id="decrement-button"
-                  data-input-counter-decrement="quantity-input"
-                  className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-s-lg px-2 h-full focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
-                  onClick={() => changeQuantity(-1)}
-                  disabled={eTour.status === 'PAID'}
-                >
-                  <svg className="w-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
-                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h16" />
-                  </svg>
-                </button>
-                <input
-                  type="number"
-                  id="quantity"
-                  data-input-counter aria-describedby="helper-text-explanation"
-                  className="bg-gray-50 border-x-0 border-gray-300 w-full min-w-min h-full text-center text-gray-900 block"
-                  placeholder="9"
-                  required
-                  value={eItem?.quantity}
-                  readOnly
-                />
-                <button
-                  type="button"
-                  id="increment-button"
-                  data-input-counter-increment="quantity-input"
-                  className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-e-lg px-2 h-full focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
-                  onClick={() => changeQuantity(1)}
-                  disabled={eTour.status === 'PAID'}
-                >
-                  <svg className="w-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 1v16M1 9h16" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-            <div className="flex flex-col w-full align-middle border rounded-md px-2 py-1">
-              <div className="flex items-center w-2/5">
-                <Label
-                  htmlFor="group"
-                  value="Group"
-                />
-              </div>
-              <div className="flex flex-row space-x-2">
-                {
-                  services.map((group) => <div
-                    key={group}
-                    className={eItem?.service === group ? "border rounded-sm px-1 bg-slate-500" : "border rounded-sm px-1 bg-slate-200"}
-                    onClick={() => changeService(group)}>
-                    {group.toUpperCase()}
-                  </div>)
-                }
-              </div>
-            </div>
-            <div className="flex flex-row w-full align-middle px-2 py-1">
-              <div className="flex items-center w-2/5">
-                <Label
-                  htmlFor="amount"
-                  value="Amount"
-                />
-              </div>
-              <TextInput
-                id="amount"
-                required={false}
-                disabled
-                value={eItem?.amount ? formatVND(eItem?.amount) : ''}
-                className="w-full"
-              />
-            </div>
-          </div>
-        </Modal.Body>
-        <Modal.Footer className="flex justify-center">
-          <Button onClick={saveItem} disabled={eItem.itemName === '' || eTour.status === 'PAID'}>
-            Save
-          </Button>
-          <Button onClick={hideItemDetail} color='gray'>
-            Cancel
-          </Button>
         </Modal.Footer>
       </Modal>
     </div >

@@ -8,7 +8,7 @@ export const listTourRequest = () => {
   return fetch(`${process.env.REACT_APP_TOUR_REQUEST_ENDPOINT}/list?page=0&size=100`, opts)
 }
 
-export const saveTour = (tour: Tour) => {
+export const saveTourRequest = (tour: Tour) => {
   console.info("Saving the tour request %s", tour.name)
   const opts = {
     method: 'POST',

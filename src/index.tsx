@@ -8,7 +8,6 @@ ReactDOM
   .createRoot(document.getElementById('root')!)
   .render(
     <BrowserRouter>
-      <script src="https://telegram.org/js/telegram-web-app.js"></script>
       <App />
     </BrowserRouter>
   );

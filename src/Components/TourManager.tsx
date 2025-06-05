@@ -110,9 +110,6 @@ export const TourManager = (props: TourManagerProps) => {
     console.log(`Remove tour ${tour.tourId}`)
   }
 
-  const editTour = (tour: Tour) => {
-    console.log(`Edit tour ${tour.tourId}`)
-  }
 
   return (
     <div className="h-full pt-3 space-y-3 relative">

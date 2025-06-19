@@ -14,15 +14,15 @@ import { Inventory } from "./Components/Inventory";
 import { PGroupManager } from "./Components/PGroupManager";
 import { SupplierManager } from "./Components/SupplierManager";
 import { AppConfig, appConfigs } from "./db/configs";
-import { Login } from "./Components/Login";
 import { TourManager } from "./Components/TourManager";
 import { TourEditor } from "./Components/TourEditor";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "./db/configs";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, User } from "firebase/auth";
+import CreateAccountForm from "./Components/CreateAccountForm";
+import LoginForm from "./Components/LoginForm";
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+export const firebaseApp = initializeApp(firebaseConfig);
 
 export const DEFAULT_PAGE_SIZE = Number(process.env.REACT_APP_DEFAULT_PAGE_SIZE)
 
@@ -73,8 +73,11 @@ export const App = () => {
   const [syncingRes, setSyncingRes] = useState(false)
   const [activeMenu, setActiveMenu] = useState(menus[0])
   const [configs, setConfigs] = useState<AppConfig>()
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
   const foredLogin = process.env.REACT_APP_FORCED_LOGIN === 'true'
   const LOCAL_STATORAGE_SIGNED_IN = 'PS-SIGNED-IN'
+  const [showCreateAccount, setShowCreateAccount] = useState(false);
 
   const navigate = useNavigate()
 
@@ -96,7 +99,7 @@ export const App = () => {
       console.info("The user is already signed in.")
       return
     }
-    navigate('login', { replace: true })
+    // navigate('login', { replace: true })
     console.warn("No authorized user login. So, use the default user and chat.")
   }
 
@@ -129,6 +132,15 @@ export const App = () => {
     setAuthorizedUserId(chat.id)
   }, [chat]);
 
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      setUser(firebaseUser);
+      setLoading(false);
+    });
+    return () => unsubscribe();
+  }, []);
+
   const isSignedIn = () => {
     console.info(`The chat id is ${chat.id}`)
     return chat.id !== defaultChatId
@@ -149,6 +161,18 @@ export const App = () => {
   }
 
   const getChat = () => chat ? chat : defaultChat
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!user) {
+    return showCreateAccount ? (
+      <CreateAccountForm onAccountCreated={() => setShowCreateAccount(false)} />
+    ) : (
+      <LoginForm onCreateAccountClick={() => setShowCreateAccount(true)} />
+    );
+  }
 
   return (
     <div className="flex flex-col relative h-[100dvh] min-h-0 bg-slate-50">
@@ -201,12 +225,12 @@ export const App = () => {
             authorizedUserId={authorizedUserId}
             activeMenu={() => setActiveMenu({ path: 'tour', displayName: 'Tour' })}
           />} />
-        <Route path="login"
+        {/* <Route path="login"
           element={<Login
             chat={getChat()}
             setChat={(chat: Chat) => setChat(chat)}
             users={configs?.users} />}
-        />
+        /> */}
         <Route path="settings" element={<Settings
           syncing={syncing}
           changeSyncing={(n: boolean) => setSyncing(n)}
@@ -220,7 +244,7 @@ export const App = () => {
           className="absolute top-0 right-0 flex flex-col mt-10 mr-2 bg-neutral-200 p-1 opacity-90 rounded-md shadow-lg"
           onClick={() => {
             setChat(defaultChat)
-            navigate('login', { replace: true })
+            // navigate('login', { replace: true })
           }}
         >
           <span className="font text-[10px] font-bold text-gray-800 dark:text-white">{fullName()}</span>

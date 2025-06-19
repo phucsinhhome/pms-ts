@@ -59,3 +59,12 @@ export const setAutoUpdateAvailability = (enabled: boolean) => {
     }
     return fetch(`${process.env.REACT_APP_CONFIG_ENDPOINT}/inventory/availability/${enabled}`, opts)
 }
+
+export const firebaseConfig = {
+  apiKey: "AIzaSyBKvyANzUnHjRnV5rkdAoWSwBdO1twrWzY",
+  authDomain: "splendid-sonar-174914.firebaseapp.com",
+  projectId: "splendid-sonar-174914",
+  storageBucket: "splendid-sonar-174914.firebasestorage.app",
+  messagingSenderId: "523563262000",
+  appId: "1:523563262000:web:93f803b191f7a62acbcdf5"
+};

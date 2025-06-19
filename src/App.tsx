@@ -17,6 +17,12 @@ import { AppConfig, appConfigs } from "./db/configs";
 import { Login } from "./Components/Login";
 import { TourManager } from "./Components/TourManager";
 import { TourEditor } from "./Components/TourEditor";
+import { initializeApp } from "firebase/app";
+import { firebaseConfig } from "./db/configs";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
 export const DEFAULT_PAGE_SIZE = Number(process.env.REACT_APP_DEFAULT_PAGE_SIZE)
 

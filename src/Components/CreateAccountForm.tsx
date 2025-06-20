@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 
 const CreateAccountForm: React.FC<{ onAccountCreated?: () => void }> = ({ onAccountCreated }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -11,7 +13,12 @@ const CreateAccountForm: React.FC<{ onAccountCreated?: () => void }> = ({ onAcco
     setError(null);
     const auth = getAuth();
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      if (auth.currentUser) {
+        await updateProfile(auth.currentUser, {
+          displayName: `${firstName} ${lastName}`.trim()
+        });
+      }
       if (onAccountCreated) onAccountCreated();
       // Optionally redirect or show a success message here
     } catch (err: any) {
@@ -25,13 +32,35 @@ const CreateAccountForm: React.FC<{ onAccountCreated?: () => void }> = ({ onAcco
         <h2>Create Account</h2>
         <div>
           <label>
+            First Name:
+            <input
+              type="text"
+              value={firstName}
+              onChange={e => setFirstName(e.target.value)}
+              required
+              autoFocus
+            />
+          </label>
+        </div>
+        <div style={{ marginTop: 12 }}>
+          <label>
+            Last Name:
+            <input
+              type="text"
+              value={lastName}
+              onChange={e => setLastName(e.target.value)}
+              required
+            />
+          </label>
+        </div>
+        <div style={{ marginTop: 12 }}>
+          <label>
             Email:
             <input
               type="email"
               value={email}
               onChange={e => setEmail(e.target.value)}
               required
-              autoFocus
             />
           </label>
         </div>

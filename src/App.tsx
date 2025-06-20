@@ -21,6 +21,7 @@ import { firebaseConfig } from "./db/configs";
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, User } from "firebase/auth";
 import CreateAccountForm from "./Components/CreateAccountForm";
 import LoginForm from "./Components/LoginForm";
+import UserProfile from "./Components/UserProfile";
 
 export const firebaseApp = initializeApp(firebaseConfig);
 
@@ -74,12 +75,11 @@ export const App = () => {
   const [activeMenu, setActiveMenu] = useState(menus[0])
   const [configs, setConfigs] = useState<AppConfig>()
   const [user, setUser] = useState<User | null>(null);
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const foredLogin = process.env.REACT_APP_FORCED_LOGIN === 'true'
   const LOCAL_STATORAGE_SIGNED_IN = 'PS-SIGNED-IN'
   const [showCreateAccount, setShowCreateAccount] = useState(false);
-
-  const navigate = useNavigate()
 
   function loadLauchParams() {
 
@@ -143,7 +143,7 @@ export const App = () => {
 
   const isSignedIn = () => {
     console.info(`The chat id is ${chat.id}`)
-    return chat.id !== defaultChatId
+    return user !== null 
   }
 
   const fullName = () => {
@@ -238,17 +238,19 @@ export const App = () => {
           changeResSyncing={(n: boolean) => setSyncingRes(n)}
           activeMenu={() => setActiveMenu({ path: 'settings', displayName: 'Settings' })}
         />} />
+        <Route path="profile" element={<UserProfile />} />
       </Routes>
-      {configs?.app.showProfile ?
+      {configs?.app.showProfile && user ?
         <div
-          className="absolute top-0 right-0 flex flex-col mt-10 mr-2 bg-neutral-200 p-1 opacity-90 rounded-md shadow-lg"
+          className="absolute top-0 right-0 flex flex-col mt-10 mr-2 bg-neutral-200 p-1 opacity-90 rounded-md shadow-lg cursor-pointer"
           onClick={() => {
-            setChat(defaultChat)
-            // navigate('login', { replace: true })
+            navigate('/profile');
           }}
         >
-          <span className="font text-[10px] font-bold text-gray-800 dark:text-white">{fullName()}</span>
-        </div> : <></>}
+          <span className="font text-[10px] font-bold text-gray-800 dark:text-white">
+            {user.displayName || user.email}
+          </span>
+        </div> : null}
     </div>
   );
 }

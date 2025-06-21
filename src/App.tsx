@@ -31,7 +31,8 @@ export type Chat = {
   id: string,
   firstName: string,
   lastName: string | undefined,
-  username: string | undefined
+  username: string | undefined,
+  email?: string
 }
 const defaultChatId = '0000000000'
 export const defaultChat: Chat = {
@@ -81,27 +82,27 @@ export const App = () => {
   const LOCAL_STATORAGE_SIGNED_IN = 'PS-SIGNED-IN'
   const [showCreateAccount, setShowCreateAccount] = useState(false);
 
-  function loadLauchParams() {
+  // function loadLauchParams() {
 
-    if (chat.id !== defaultChatId) {
-      console.info(`Find the user with id ${chat.id}`)
-      var user = configs?.users.find(u => u.id === chat.id)
-      if (user) {
-        setChat(user)
-      }
-      return
-    }
-    if (!foredLogin) {
-      console.error("Forced login disabled.")
-      return
-    }
-    if (isSignedIn()) {
-      console.info("The user is already signed in.")
-      return
-    }
-    // navigate('login', { replace: true })
-    console.warn("No authorized user login. So, use the default user and chat.")
-  }
+  //   if (chat.id !== defaultChatId) {
+  //     console.info(`Find the user with id ${chat.id}`)
+  //     var user = configs?.users.find(u => u.id === chat.id)
+  //     if (user) {
+  //       setChat(user)
+  //     }
+  //     return
+  //   }
+  //   if (!foredLogin) {
+  //     console.error("Forced login disabled.")
+  //     return
+  //   }
+  //   if (isSignedIn()) {
+  //     console.info("The user is already signed in.")
+  //     return
+  //   }
+  //   // navigate('login', { replace: true })
+  //   console.warn("No authorized user login. So, use the default user and chat.")
+  // }
 
   useEffect(() => {
     document.title = "PMS"
@@ -113,14 +114,14 @@ export const App = () => {
     fetchConfig()
   }, []);
 
-  useEffect(() => {
-    if (configs === undefined) {
-      return
-    }
-    loadLauchParams()
+  // useEffect(() => {
+  //   if (configs === undefined) {
+  //     return
+  //   }
+  //   loadLauchParams()
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [configs]);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [configs]);
 
   useEffect(() => {
     localStorage.setItem(LOCAL_STATORAGE_SIGNED_IN, chat?.id)
@@ -137,9 +138,37 @@ export const App = () => {
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       setUser(firebaseUser);
       setLoading(false);
+      mapUserToChat(firebaseUser);
     });
     return () => unsubscribe();
   }, []);
+
+
+  const mapUserToChat = (firebaseUser: User | null) => {
+    if (!firebaseUser) {
+      console.info("No user signed in.")
+      setChat(defaultChat);
+      setAuthorizedUserId(null);
+      return;
+    }
+    console.info(`User signed in: ${firebaseUser.email}`);
+    
+    const userChat = configs?.users.find(u => u.email === firebaseUser.email) || defaultChat;
+    setChat(userChat);
+    setAuthorizedUserId(firebaseUser.uid);
+    console.info(`Chat updated: ${JSON.stringify(userChat)}`);
+    // If the user is signed in, navigate to the profit report page
+    if (firebaseUser.email) {
+      localStorage.setItem(LOCAL_STATORAGE_SIGNED_IN, firebaseUser.uid);
+      console.info(`User signed in with email: ${firebaseUser.email}`);
+      navigate('/profit', { replace: true });
+    } else {
+      console.warn("User signed in without email. Using default chat.");
+      setChat(defaultChat);
+      setAuthorizedUserId(null);
+      localStorage.setItem(LOCAL_STATORAGE_SIGNED_IN, defaultChatId);
+    }
+  };
 
   const isSignedIn = () => {
     console.info(`The chat id is ${chat.id}`)

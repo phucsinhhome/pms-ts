@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { getAuth, updateProfile } from 'firebase/auth';
+import { getAuth, updateProfile, sendPasswordResetEmail, signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 
 const UserProfile: React.FC = () => {
@@ -30,19 +30,50 @@ const UserProfile: React.FC = () => {
     }
   };
 
+  const handleResetPassword = async () => {
+    if (!user?.email) return;
+    try {
+      await sendPasswordResetEmail(auth, user.email);
+      setStatus('Password reset email sent.');
+    } catch (err: any) {
+      setStatus('Failed to send password reset email.');
+    }
+  };
+
+  const handleSignOut = async () => {
+    await signOut(auth);
+    navigate('/login');
+  };
+
   return (
     <div className="max-w-md mx-auto mt-10 bg-white rounded shadow p-6">
-      <button
-        className="mb-4 bg-gray-300 text-gray-800 px-3 py-1 rounded hover:bg-gray-400"
-        onClick={() => navigate(-1)}
-        type="button"
-      >
-        &larr; Back
-      </button>
+      <div className="flex justify-between items-center mb-4">
+        <button
+          className="bg-gray-300 text-gray-800 px-3 py-1 rounded hover:bg-gray-400"
+          onClick={() => navigate(-1)}
+          type="button"
+        >
+          &larr; Back
+        </button>
+        <button
+          className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+          onClick={handleSignOut}
+          type="button"
+        >
+          Sign Out
+        </button>
+      </div>
       <h2 className="text-xl font-bold mb-4">My Profile</h2>
       <div className="mb-4">
         <label className="block text-gray-700">Email:</label>
         <div className="text-gray-900">{user.email}</div>
+        <button
+          type="button"
+          className="mt-2 text-blue-600 underline text-sm"
+          onClick={handleResetPassword}
+        >
+          Reset Password
+        </button>
       </div>
       <form onSubmit={handleSave}>
         <div className="mb-4">

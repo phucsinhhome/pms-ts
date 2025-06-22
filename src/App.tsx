@@ -16,14 +16,8 @@ import { SupplierManager } from "./Components/SupplierManager";
 import { AppConfig, appConfigs } from "./db/configs";
 import { TourManager } from "./Components/TourManager";
 import { TourEditor } from "./Components/TourEditor";
-import { initializeApp } from "firebase/app";
-import { firebaseConfig } from "./db/configs";
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, User } from "firebase/auth";
-import CreateAccountForm from "./Components/CreateAccountForm";
-import LoginForm from "./Components/LoginForm";
+import { UserManager, WebStorageStateStore, User } from "oidc-client-ts";
 import UserProfile from "./Components/UserProfile";
-
-export const firebaseApp = initializeApp(firebaseConfig);
 
 export const DEFAULT_PAGE_SIZE = Number(process.env.REACT_APP_DEFAULT_PAGE_SIZE)
 
@@ -67,158 +61,151 @@ const menus: MenuItem[] = [{
   displayName: 'Inventory'
 }]
 
-export const App = () => {
+// OIDC client config for Keycloak
+const oidcConfig = {
+  authority: "https://phucsinhhcm.hopto.org/iam/realms/ps_dev",
+  client_id: "ps_assistant",
+  redirect_uri: window.location.origin + "/",
+  post_logout_redirect_uri: window.location.origin,
+  response_type: "code",
+  scope: "openid profile email",
+  userStore: new WebStorageStateStore({ store: window.localStorage }),
+};
 
-  const [chat, setChat] = useState<Chat>(defaultChat)
+const userManager = new UserManager(oidcConfig);
+
+export const App = () => {
+  const [chat, setChat] = useState<Chat>(defaultChat);
   const [authorizedUserId, setAuthorizedUserId] = useState<string | null>(null)
   const [syncing, setSyncing] = useState(false)
   const [syncingRes, setSyncingRes] = useState(false)
   const [activeMenu, setActiveMenu] = useState(menus[0])
   const [configs, setConfigs] = useState<AppConfig>()
-  const [user, setUser] = useState<User | null>(null);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const foredLogin = process.env.REACT_APP_FORCED_LOGIN === 'true'
   const LOCAL_STATORAGE_SIGNED_IN = 'PS-SIGNED-IN'
-  const [showCreateAccount, setShowCreateAccount] = useState(false);
-
-  // function loadLauchParams() {
-
-  //   if (chat.id !== defaultChatId) {
-  //     console.info(`Find the user with id ${chat.id}`)
-  //     var user = configs?.users.find(u => u.id === chat.id)
-  //     if (user) {
-  //       setChat(user)
-  //     }
-  //     return
-  //   }
-  //   if (!foredLogin) {
-  //     console.error("Forced login disabled.")
-  //     return
-  //   }
-  //   if (isSignedIn()) {
-  //     console.info("The user is already signed in.")
-  //     return
-  //   }
-  //   // navigate('login', { replace: true })
-  //   console.warn("No authorized user login. So, use the default user and chat.")
-  // }
+  const [oidcUser, setOidcUser] = useState<User | null>(null);
 
   useEffect(() => {
-    document.title = "PMS"
-    let signedInChatId = localStorage.getItem(LOCAL_STATORAGE_SIGNED_IN)
-    if (signedInChatId) {
-      console.info(`The signed in chat id is ${signedInChatId}`)
-      setChat(chat => ({ ...chat, id: signedInChatId }))
-    }
-    fetchConfig()
+    document.title = "PMS";
+    fetchConfig();
   }, []);
 
-  // useEffect(() => {
-  //   if (configs === undefined) {
-  //     return
-  //   }
-  //   loadLauchParams()
-
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [configs]);
-
   useEffect(() => {
-    localStorage.setItem(LOCAL_STATORAGE_SIGNED_IN, chat?.id)
-    if (chat?.id === defaultChatId) {
-      setAuthorizedUserId(null)
-      return
-    }
-    console.log(chat)
-    setAuthorizedUserId(chat.id)
-  }, [chat]);
-
-  useEffect(() => {
-    const auth = getAuth();
-    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-      setUser(firebaseUser);
+    userManager.getUser().then(user => {
+      if (user && !user.expired) {
+        setOidcUser(user);
+        // Map OIDC user to your Chat type
+        setChat({
+          id: user.profile.sub,
+          firstName: user.profile.given_name || "",
+          lastName: user.profile.family_name || "",
+          username: user.profile.preferred_username || user.profile.email || "",
+          email: user.profile.email
+        });
+        setAuthorizedUserId(user.profile.sub);
+      } else {
+        setOidcUser(null);
+        setChat(defaultChat);
+        setAuthorizedUserId(null);
+      }
       setLoading(false);
-      mapUserToChat(firebaseUser);
     });
-    return () => unsubscribe();
+
+    // Listen for user loaded/unloaded events
+    userManager.events.addUserLoaded(user => {
+      setOidcUser(user);
+      setChat({
+        id: user.profile.sub,
+        firstName: user.profile.given_name || "",
+        lastName: user.profile.family_name || "",
+        username: user.profile.preferred_username || user.profile.email || "",
+        email: user.profile.email
+      });
+      setAuthorizedUserId(user.profile.sub);
+    });
+    userManager.events.addUserUnloaded(() => {
+      setOidcUser(null);
+      setChat(defaultChat);
+      setAuthorizedUserId(null);
+    });
+
+    // Handle OIDC redirect callback
+    if (window.location.search.includes("code=")) {
+      userManager.signinRedirectCallback().then(user => {
+        setOidcUser(user);
+        setChat({
+          id: user.profile.sub,
+          firstName: user.profile.given_name || "",
+          lastName: user.profile.family_name || "",
+          username: user.profile.preferred_username || user.profile.email || "",
+          email: user.profile.email
+        });
+        setAuthorizedUserId(user.profile.sub);
+        navigate("/", { replace: true });
+      });
+    }
+
+    // Cleanup
+    return () => {
+      userManager.events.removeUserLoaded(() => { });
+      userManager.events.removeUserUnloaded(() => { });
+    };
+    // eslint-disable-next-line
   }, []);
-
-
-  const mapUserToChat = (firebaseUser: User | null) => {
-    if (!firebaseUser) {
-      console.info("No user signed in.")
-      setChat(defaultChat);
-      setAuthorizedUserId(null);
-      return;
-    }
-    console.info(`User signed in: ${firebaseUser.email}`);
-    
-    const userChat = configs?.users.find(u => u.email === firebaseUser.email) || defaultChat;
-    setChat(userChat);
-    setAuthorizedUserId(firebaseUser.uid);
-    console.info(`Chat updated: ${JSON.stringify(userChat)}`);
-    // If the user is signed in, navigate to the profit report page
-    if (firebaseUser.email) {
-      localStorage.setItem(LOCAL_STATORAGE_SIGNED_IN, firebaseUser.uid);
-      console.info(`User signed in with email: ${firebaseUser.email}`);
-      navigate('/profit', { replace: true });
-    } else {
-      console.warn("User signed in without email. Using default chat.");
-      setChat(defaultChat);
-      setAuthorizedUserId(null);
-      localStorage.setItem(LOCAL_STATORAGE_SIGNED_IN, defaultChatId);
-    }
-  };
-
-  const isSignedIn = () => {
-    console.info(`The chat id is ${chat.id}`)
-    return user !== null 
-  }
-
-  const fullName = () => {
-    return [chat?.firstName, chat?.lastName].join(' ')
-  }
-  const menuStyle = (m: string) => {
-    return m === activeMenu.path ? "px-1 py-1 bg-gray-500 text-center text-amber-900 text-sm font-sans rounded-sm shadow-sm"
-      : "px-1 py-1 bg-gray-200 text-center text-amber-900 text-sm font-sans rounded-sm shadow-sm"
-  }
 
   const fetchConfig = async () => {
-    console.info("Fetch the configuration...")
     let cfg = await appConfigs()
     setConfigs(cfg)
   }
 
   const getChat = () => chat ? chat : defaultChat
 
+  const fullName = () => {
+    return [chat?.firstName, chat?.lastName].filter(Boolean).join(' ')
+  }
+  const menuStyle = (m: string) => {
+    return m === activeMenu.path ? "px-1 py-1 bg-gray-500 text-center text-amber-900 text-sm font-sans rounded-sm shadow-sm"
+      : "px-1 py-1 bg-gray-200 text-center text-amber-900 text-sm font-sans rounded-sm shadow-sm"
+  }
+
   if (loading) {
     return <div>Loading...</div>;
   }
 
-  if (!user) {
-    return showCreateAccount ? (
-      <CreateAccountForm onAccountCreated={() => setShowCreateAccount(false)} />
-    ) : (
-      <LoginForm onCreateAccountClick={() => setShowCreateAccount(true)} />
-    );
+  // If not authenticated, redirect to Keycloak login
+  if (!oidcUser) {
+    userManager.signinRedirect();
+    return <div>Redirecting to login...</div>;
   }
+
+  // Handler to clear chat state and sign out
+  const handleSignOut = () => {
+
+    console.log("Signing out...");
+    userManager.signoutRedirect().then(() => {
+      setChat(defaultChat);
+      setAuthorizedUserId(null);
+      localStorage.removeItem(LOCAL_STATORAGE_SIGNED_IN);
+      setOidcUser(null);
+      navigate("/", { replace: true });
+    })
+  };
 
   return (
     <div className="flex flex-col relative h-[100dvh] min-h-0 bg-slate-50">
-      {
-        isSignedIn() ? <div className="mt-2 ml-2 pr-1 w-full flex flex-row items-center space-x-0.5">
-          {
-            menus.map((menu: MenuItem) => <Link key={menu.path} to={menu.path} className={menuStyle(menu.path)}>
-              {menu.displayName}
-            </Link>)
-          }
-          <Link to="settings" className="absolute right-2">
-            <IoMdSettings
-              className="pointer-events-auto cursor-pointer w-14 h-7"
-            />
-          </Link>
-        </div> : <></>
-      }
+      <div className="mt-2 ml-2 pr-1 w-full flex flex-row items-center space-x-0.5">
+        {
+          menus.map((menu: MenuItem) => <Link key={menu.path} to={menu.path} className={menuStyle(menu.path)}>
+            {menu.displayName}
+          </Link>)
+        }
+        <Link to="settings" className="absolute right-2">
+          <IoMdSettings
+            className="pointer-events-auto cursor-pointer w-14 h-7"
+          />
+        </Link>
+      </div>
       <Routes>
         <Route path="/" element={<Navigate to={"profit"} />} />
         <Route path="profit" element={<ProfitReport activeMenu={() => setActiveMenu(menus[0])} />} />
@@ -254,12 +241,6 @@ export const App = () => {
             authorizedUserId={authorizedUserId}
             activeMenu={() => setActiveMenu({ path: 'tour', displayName: 'Tour' })}
           />} />
-        {/* <Route path="login"
-          element={<Login
-            chat={getChat()}
-            setChat={(chat: Chat) => setChat(chat)}
-            users={configs?.users} />}
-        /> */}
         <Route path="settings" element={<Settings
           syncing={syncing}
           changeSyncing={(n: boolean) => setSyncing(n)}
@@ -267,9 +248,17 @@ export const App = () => {
           changeResSyncing={(n: boolean) => setSyncingRes(n)}
           activeMenu={() => setActiveMenu({ path: 'settings', displayName: 'Settings' })}
         />} />
-        <Route path="profile" element={<UserProfile />} />
+        <Route
+          path="profile"
+          element={
+            <UserProfile
+              userProfile={oidcUser?.profile}
+              onSignOut={handleSignOut}
+            />
+          }
+        />
       </Routes>
-      {configs?.app.showProfile && user ?
+      {configs?.app.showProfile ?
         <div
           className="absolute top-0 right-0 flex flex-col mt-10 mr-2 bg-neutral-200 p-1 opacity-90 rounded-md shadow-lg cursor-pointer"
           onClick={() => {
@@ -277,7 +266,7 @@ export const App = () => {
           }}
         >
           <span className="font text-[10px] font-bold text-gray-800 dark:text-white">
-            {user.displayName || user.email}
+            {fullName()}
           </span>
         </div> : null}
     </div>

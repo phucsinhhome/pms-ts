@@ -1,48 +1,26 @@
-import React, { useState } from 'react';
-import { getAuth, updateProfile, sendPasswordResetEmail, signOut } from 'firebase/auth';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
 
-const UserProfile: React.FC = () => {
-  const auth = getAuth();
-  const user = auth.currentUser;
-  const navigate = useNavigate();
+type UserProfileProps = {
+  userProfile: any;
+  onSignOut: () => void;
+};
 
+const UserProfile: React.FC<UserProfileProps> = ({ userProfile, onSignOut }) => {
   const [editing, setEditing] = useState(false);
-  const [firstName, setFirstName] = useState(() => user?.displayName?.split(' ')[0] || '');
-  const [lastName, setLastName] = useState(() => user?.displayName?.split(' ').slice(1).join(' ') || '');
+  const [firstName, setFirstName] = useState(userProfile.given_name || "");
+  const [lastName, setLastName] = useState(userProfile.family_name || "");
+  const [displayName, setDisplayName] = useState(userProfile.name || "");
   const [status, setStatus] = useState<string | null>(null);
 
-  if (!user) {
-    return <div className="p-4">No user profile found.</div>;
-  }
+  if (!userProfile) return <div className="p-4">No user profile found.</div>;
 
-  const handleSave = async (e: React.FormEvent) => {
+  // Placeholder for update logic: In most OIDC/Keycloak setups, profile updates are done via Keycloak UI or API.
+  // Here, we just simulate a successful update.
+  const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
-    setStatus(null);
-    try {
-      await updateProfile(user, {
-        displayName: `${firstName} ${lastName}`.trim()
-      });
-      setStatus('Profile updated successfully.');
-      setEditing(false);
-    } catch (err: any) {
-      setStatus('Failed to update profile.');
-    }
-  };
-
-  const handleResetPassword = async () => {
-    if (!user?.email) return;
-    try {
-      await sendPasswordResetEmail(auth, user.email);
-      setStatus('Password reset email sent.');
-    } catch (err: any) {
-      setStatus('Failed to send password reset email.');
-    }
-  };
-
-  const handleSignOut = async () => {
-    await signOut(auth);
-    navigate('/login');
+    // In a real app, call your backend or Keycloak REST API to update profile.
+    setStatus("Profile updated (simulation).");
+    setEditing(false);
   };
 
   return (
@@ -50,32 +28,43 @@ const UserProfile: React.FC = () => {
       <div className="flex justify-between items-center mb-4">
         <button
           className="bg-gray-300 text-gray-800 px-3 py-1 rounded hover:bg-gray-400"
-          onClick={() => navigate(-1)}
+          onClick={() => window.history.back()}
           type="button"
         >
           &larr; Back
         </button>
         <button
           className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
-          onClick={handleSignOut}
+          onClick={onSignOut}
           type="button"
         >
           Sign Out
         </button>
       </div>
       <h2 className="text-xl font-bold mb-4">My Profile</h2>
-      <div className="mb-4">
-        <label className="block text-gray-700">Email:</label>
-        <div className="text-gray-900">{user.email}</div>
-        <button
-          type="button"
-          className="mt-2 text-blue-600 underline text-sm"
-          onClick={handleResetPassword}
-        >
-          Reset Password
-        </button>
-      </div>
       <form onSubmit={handleSave}>
+        <div className="mb-4">
+          <label className="block text-gray-700">Username:</label>
+          <div className="text-gray-900">{userProfile.preferred_username || userProfile.email}</div>
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700">Email:</label>
+          <div className="text-gray-900">{userProfile.email}</div>
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700">Display Name:</label>
+          {editing ? (
+            <input
+              className="border rounded px-2 py-1 w-full"
+              type="text"
+              value={displayName}
+              onChange={e => setDisplayName(e.target.value)}
+              required
+            />
+          ) : (
+            <div className="text-gray-900">{displayName}</div>
+          )}
+        </div>
         <div className="mb-4">
           <label className="block text-gray-700">First Name:</label>
           {editing ? (
@@ -85,7 +74,6 @@ const UserProfile: React.FC = () => {
               value={firstName}
               onChange={e => setFirstName(e.target.value)}
               required
-              autoFocus
             />
           ) : (
             <div className="text-gray-900">{firstName}</div>

@@ -18,6 +18,7 @@ import { TourManager } from "./Components/TourManager";
 import { TourEditor } from "./Components/TourEditor";
 import { UserManager, WebStorageStateStore, User } from "oidc-client-ts";
 import UserProfile from "./Components/UserProfile";
+import { jwtDecode } from "jwt-decode";
 
 export const DEFAULT_PAGE_SIZE = Number(process.env.REACT_APP_DEFAULT_PAGE_SIZE)
 
@@ -68,7 +69,7 @@ const oidcConfig = {
   redirect_uri: window.location.origin + "/",
   post_logout_redirect_uri: window.location.origin,
   response_type: "code",
-  scope: "openid profile email",
+  scope: "openid profile email roles",
   userStore: new WebStorageStateStore({ store: window.localStorage }),
 };
 
@@ -85,6 +86,7 @@ export const App = () => {
   const [loading, setLoading] = useState(true);
   const LOCAL_STATORAGE_SIGNED_IN = 'PS-SIGNED-IN'
   const [oidcUser, setOidcUser] = useState<User | null>(null);
+  const [scopes, setScopes] = useState<string[]>([]);
 
   useEffect(() => {
     document.title = "PMS";
@@ -95,7 +97,6 @@ export const App = () => {
     userManager.getUser().then(user => {
       if (user && !user.expired) {
         setOidcUser(user);
-        // Map OIDC user to your Chat type
         setChat({
           id: user.profile.sub,
           firstName: user.profile.given_name || "",
@@ -104,10 +105,19 @@ export const App = () => {
           email: user.profile.email
         });
         setAuthorizedUserId(user.profile.sub);
+
+        // Decode id_token and extract scopes
+        if (user.access_token) {
+          console.log(user);
+          const decoded: any = jwtDecode(user.access_token);
+          console.log("Decoded ID Token:", decoded.resource_access[oidcConfig.client_id]?.roles || []);
+          setScopes(decoded.resource_access[oidcConfig.client_id]?.roles || []);
+        }
       } else {
         setOidcUser(null);
         setChat(defaultChat);
         setAuthorizedUserId(null);
+        setScopes([]);
       }
       setLoading(false);
     });
@@ -192,13 +202,20 @@ export const App = () => {
     })
   };
 
+  // Filter menus based on user scopes
+  const filteredMenus = menus.filter(menu =>
+    scopes.length === 0 || scopes.includes(menu.path)
+  );
+
   return (
     <div className="flex flex-col relative h-[100dvh] min-h-0 bg-slate-50">
       <div className="mt-2 ml-2 pr-1 w-full flex flex-row items-center space-x-0.5">
         {
-          menus.map((menu: MenuItem) => <Link key={menu.path} to={menu.path} className={menuStyle(menu.path)}>
-            {menu.displayName}
-          </Link>)
+          filteredMenus.map((menu: MenuItem) => (
+            <Link key={menu.path} to={menu.path} className={menuStyle(menu.path)}>
+              {menu.displayName}
+            </Link>
+          ))
         }
         <Link to="settings" className="absolute right-2">
           <IoMdSettings

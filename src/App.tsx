@@ -69,7 +69,7 @@ const oidcConfig = {
   redirect_uri: window.location.origin + "/",
   post_logout_redirect_uri: window.location.origin,
   response_type: "code",
-  scope: "openid profile email roles",
+  scope: "openid profile email organization roles",
   userStore: new WebStorageStateStore({ store: window.localStorage }),
 };
 

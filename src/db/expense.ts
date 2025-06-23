@@ -1,33 +1,47 @@
 import { Expense } from "../Components/ExpenseManager"
-
-const requestOptions = {
-  method: 'GET'
-}
+import { getAccessToken } from "../App";
 
 export const newExpId = () => {
   return '' + (Date.now() % 10000000)
 }
 
-const listLatestExpenses = (pageNumber: number, pageSize: number) => {
+const listLatestExpenses = async (pageNumber: number, pageSize: number) => {
   console.info("Fetching recent expenses")
-  return fetch(`${process.env.REACT_APP_EXPENSE_SERVICE_ENDPOINT}/list/recent?page=${pageNumber}&size=${pageSize}`, requestOptions)
+  const accessToken = await getAccessToken();
+  const opts: RequestInit = {
+    method: 'GET',
+    headers: accessToken ? { 'Authorization': `Bearer ${accessToken}` } : undefined
+  };
+  return fetch(`${process.env.REACT_APP_EXPENSE_SERVICE_ENDPOINT}/list/recent?page=${pageNumber}&size=${pageSize}`, opts)
     .then(response => response.json())
 }
 
-export const listExpenseByDate = (byDate: string, pageNumber: number, pageSize: number) => {
+export const listExpenseByDate = async (byDate: string, pageNumber: number, pageSize: number) => {
   console.info("Fetching expenses by date %s", byDate)
-  return fetch(`${process.env.REACT_APP_EXPENSE_SERVICE_ENDPOINT}/list/bydate?byDate=${byDate}&page=${pageNumber}&size=${pageSize}`, requestOptions)
+  const accessToken = await getAccessToken();
+  const opts: RequestInit = {
+    method: 'GET',
+    headers: accessToken ? { 'Authorization': `Bearer ${accessToken}` } : undefined
+  };
+  return fetch(`${process.env.REACT_APP_EXPENSE_SERVICE_ENDPOINT}/list/bydate?byDate=${byDate}&page=${pageNumber}&size=${pageSize}`, opts)
     .then(response => response.json())
 }
 
-export const listExpenseByExpenserAndDate = (expenserId: string | null, byDate: string, pageNumber: number, pageSize: number): Promise<any> => {
+export const listExpenseByExpenserAndDate = async (
+  expenserId: string | null,
+  byDate: string,
+  pageNumber: number,
+  pageSize: number
+): Promise<any> => {
   console.info("Fetching %s expenses by date %s", expenserId, byDate)
   let url = `${process.env.REACT_APP_EXPENSE_SERVICE_ENDPOINT}/list/bydate?byDate=${byDate}&page=${pageNumber}&size=${pageSize}`
   if (expenserId !== null && expenserId !== undefined && expenserId !== "") {
     url = `${process.env.REACT_APP_EXPENSE_SERVICE_ENDPOINT}/list/bydate?expenserId=${expenserId}&byDate=${byDate}&page=${pageNumber}&size=${pageSize}`
   }
-  const opts = {
-    method: 'GET'
+  const accessToken = await getAccessToken();
+  const opts: RequestInit = {
+    method: 'GET',
+    headers: accessToken ? { 'Authorization': `Bearer ${accessToken}` } : undefined
   }
   return fetch(url, opts)
     .then(rsp => {
@@ -40,39 +54,56 @@ export const listExpenseByExpenserAndDate = (expenserId: string | null, byDate: 
 
 export default listLatestExpenses;
 
-export function getExpense(expenseId: string) {
+export async function getExpense(expenseId: string) {
   console.info("Fetching expense [%s] from backend with", expenseId)
-  return fetch(`${process.env.REACT_APP_EXPENSE_SERVICE_ENDPOINT}/${expenseId}`, requestOptions)
+  const accessToken = await getAccessToken();
+  const opts: RequestInit = {
+    method: 'GET',
+    headers: accessToken ? { 'Authorization': `Bearer ${accessToken}` } : undefined
+  };
+  return fetch(`${process.env.REACT_APP_EXPENSE_SERVICE_ENDPOINT}/${expenseId}`, opts)
     .then(response => response.json())
 }
 
-export const saveExpense = (expense: Expense) => {
+export const saveExpense = async (expense: Expense) => {
   console.info("Saving expense %s...", expense.id)
-  var opts = {
+  const accessToken = await getAccessToken();
+  const opts = {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 
+      'Content-Type': 'application/json',
+      ...(accessToken ? { 'Authorization': `Bearer ${accessToken}` } : {})
+    },
     body: JSON.stringify(expense)
   }
 
   return fetch(`${process.env.REACT_APP_EXPENSE_SERVICE_ENDPOINT}/update`, opts)
 }
 
-export const deleteExpense = (expense: Expense) => {
+export const deleteExpense = async (expense: Expense) => {
   console.info("Delete expense %s", expense.id)
+  const accessToken = await getAccessToken();
   return fetch(`${process.env.REACT_APP_EXPENSE_SERVICE_ENDPOINT}/delete`,
     {
       method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json',
+        ...(accessToken ? { 'Authorization': `Bearer ${accessToken}` } : {})
+      },
       body: JSON.stringify(expense)
     })
     .then(response => response.json())
 }
 
-export const generate = (expenseTxt: string) => {
+export const generate = async (expenseTxt: string) => {
   console.info(`Generate expense ${expenseTxt}...`)
-  var opts = {
+  const accessToken = await getAccessToken();
+  const opts = {
     method: 'POST',
-    headers: { 'Content-Type': 'text/plain' },
+    headers: { 
+      'Content-Type': 'text/plain',
+      ...(accessToken ? { 'Authorization': `Bearer ${accessToken}` } : {})
+    },
     body: JSON.stringify(expenseTxt)
   }
 

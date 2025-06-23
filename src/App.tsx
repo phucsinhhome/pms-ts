@@ -75,6 +75,11 @@ const oidcConfig = {
 
 const userManager = new UserManager(oidcConfig);
 
+export const getAccessToken = async (): Promise<string | undefined> => {
+  const user = await userManager.getUser();
+  return user && !user.expired ? user.access_token : undefined;
+};
+
 export const App = () => {
   const [chat, setChat] = useState<Chat>(defaultChat);
   const [authorizedUserId, setAuthorizedUserId] = useState<string | null>(null)

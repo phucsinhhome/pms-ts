@@ -1,108 +1,55 @@
 import { SupplierInvoice } from "../Components/SupplierManager";
-import { getAccessToken } from "../App";
+import { supplierApi } from "./apis";
 
 export const listSupplierInvoices = async (createdTime: string, page: number, size: number) => {
   console.info("Fetching supplier invoices from backend")
-  const accessToken = await getAccessToken();
-  const opts: RequestInit = {
-    method: 'GET',
-    headers: accessToken ? { 'Authorization': `Bearer ${accessToken}` } : undefined
-  }
-  return fetch(`${process.env.REACT_APP_SUPPLIER_ENDPOINT}/invoice/list?createdTime=${createdTime}&page=${page}&size=${size}`, opts);
+  return supplierApi.get(`/invoice/list`, { params: { createdTime, page, size } });
 }
 
 export const listAllSupplierInvoices = async (page: number, size: number) => {
   console.info("Fetching all supplier invoices from backend")
-  const accessToken = await getAccessToken();
-  const opts: RequestInit = {
-    method: 'GET',
-    headers: accessToken ? { 'Authorization': `Bearer ${accessToken}` } : undefined
-  }
-  return fetch(`${process.env.REACT_APP_SUPPLIER_ENDPOINT}/invoice/list?page=${page}&size=${size}`, opts);
+  return supplierApi.get(`/invoice/list`, { params: { page, size } });
 }
 
 export const listSupplierInvoicesByStatus = async (statuses: string[], page: number, size: number) => {
   console.info("Fetching supplier invoices from backend by statuses")
-  const accessToken = await getAccessToken();
-  const opts: RequestInit = {
-    method: 'GET',
-    headers: accessToken ? { 'Authorization': `Bearer ${accessToken}` } : undefined
-  }
-  return fetch(`${process.env.REACT_APP_SUPPLIER_ENDPOINT}/invoice/list?statuses=${statuses}&page=${page}&size=${size}`, opts);
+  return supplierApi.get(`/invoice/list`, { params: { statuses, page, size } });
 }
 
 export const listSupplierInvoicesByTimeAndStatus = async (createdTime: string, statuses: string[], page: number, size: number) => {
   console.info("Fetching supplier invoices by time and status")
-  const accessToken = await getAccessToken();
-  const opts: RequestInit = {
-    method: 'GET',
-    headers: accessToken ? { 'Authorization': `Bearer ${accessToken}` } : undefined
-  }
-  return fetch(`${process.env.REACT_APP_SUPPLIER_ENDPOINT}/invoice/list?createdTime=${createdTime}&statuses=${statuses}&page=${page}&size=${size}`, opts);
+  return supplierApi.get(`/invoice/list`, { params: { createdTime, statuses, page, size } });
 }
 
 export const generateSInvoice = async (text: string) => {
   console.info("Generate supplier invoice")
-  const accessToken = await getAccessToken();
-  const opts: RequestInit = {
-    method: 'POST',
-    headers: { 
-      'Content-Type': 'text/plain',
-      ...(accessToken ? { 'Authorization': `Bearer ${accessToken}` } : {})
-    },
-    body: JSON.stringify(text)
-  }
-  return fetch(`${process.env.REACT_APP_SUPPLIER_ENDPOINT}/invoice/generate`, opts);
+  return supplierApi.post(`/invoice/generate`, text, {
+    headers: { 'Content-Type': 'text/plain' }
+  });
 }
 
 export const saveSInvoice = async (invoice: SupplierInvoice) => {
   console.info("Save supplier invoice")
-  const accessToken = await getAccessToken();
-  const opts: RequestInit = {
-    method: 'POST',
-    headers: { 
-      'Content-Type': 'application/json',
-      ...(accessToken ? { 'Authorization': `Bearer ${accessToken}` } : {})
-    },
-    body: JSON.stringify(invoice)
-  }
-  return fetch(`${process.env.REACT_APP_SUPPLIER_ENDPOINT}/invoice/save`, opts);
+  return supplierApi.post(`/invoice/save`, invoice, {
+    headers: { 'Content-Type': 'application/json' }
+  });
 }
 
 export const takenPlaceSInvoice = async (invoice: SupplierInvoice) => {
   console.info("Taken place supplier invoice")
-  const accessToken = await getAccessToken();
-  const opts: RequestInit = {
-    method: 'POST',
-    headers: { 
-      'Content-Type': 'application/json',
-      ...(accessToken ? { 'Authorization': `Bearer ${accessToken}` } : {})
-    },
-    body: JSON.stringify(invoice)
-  }
-  return fetch(`${process.env.REACT_APP_SUPPLIER_ENDPOINT}/invoice/take-place`, opts);
+  return supplierApi.post(`/invoice/take-place`, invoice, {
+    headers: { 'Content-Type': 'application/json' }
+  });
 }
 
 export const paidSInvoice = async (invoice: SupplierInvoice) => {
   console.info("Paid supplier invoice")
-  const accessToken = await getAccessToken();
-  const opts: RequestInit = {
-    method: 'POST',
-    headers: { 
-      'Content-Type': 'application/json',
-      ...(accessToken ? { 'Authorization': `Bearer ${accessToken}` } : {})
-    },
-    body: JSON.stringify(invoice)
-  }
-  return fetch(`${process.env.REACT_APP_SUPPLIER_ENDPOINT}/invoice/paid`, opts);
+  return supplierApi.post(`/invoice/paid`, invoice, {
+    headers: { 'Content-Type': 'application/json' }
+  });
 }
 
 export const rejectSInvoice = async (invoiceId: string, staffId: string) => {
   console.info("Reject supplier invoice")
-  const accessToken = await getAccessToken();
-  const opts: RequestInit = {
-    method: 'POST',
-    headers: accessToken ? { 'Authorization': `Bearer ${accessToken}` } : undefined
-  }
-  return fetch(`${process.env.REACT_APP_SUPPLIER_ENDPOINT}/invoice/reject?invoiceId=${invoiceId}&staffId=${staffId}`, opts);
+  return supplierApi.post(`/invoice/reject`, null, { params: { invoiceId, staffId } });
 }

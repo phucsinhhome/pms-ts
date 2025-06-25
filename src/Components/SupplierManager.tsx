@@ -182,36 +182,38 @@ export const SupplierManager = (props: SupplierManagerProps) => {
     if (statuses.length > 0) {
       listSupplierInvoicesByTimeAndStatus(fromTime, statuses, pagination.pageNumber, pagination.pageSize)
         .then(rsp => {
-          if (rsp.ok) {
-            rsp.json()
-              .then(data => {
-                setInvoices(data.content)
-                if (data.totalPages !== pagination.totalPages) {
-                  setPagination({
-                    ...pagination,
-                    totalPages: data.totalPages
-                  })
-                }
+          if (rsp.status === 200) {
+            const data = rsp.data;
+            setInvoices(data.content)
+            if (data.totalPages !== pagination.totalPages) {
+              setPagination({
+                ...pagination,
+                totalPages: data.totalPages
               })
+            }
+          } else {
+            setInvoices([]);
           }
         })
+        .catch(() => setInvoices([]))
       return
     }
     listSupplierInvoices(fromTime, pagination.pageNumber, pagination.pageSize)
       .then(rsp => {
-        if (rsp.ok) {
-          rsp.json()
-            .then(data => {
-              setInvoices(data.content)
-              if (data.totalPages !== pagination.totalPages) {
-                setPagination({
-                  ...pagination,
-                  totalPages: data.totalPages
-                })
-              }
+        if (rsp.status === 200) {
+          const data = rsp.data;
+          setInvoices(data.content)
+          if (data.totalPages !== pagination.totalPages) {
+            setPagination({
+              ...pagination,
+              totalPages: data.totalPages
             })
+          }
+        } else {
+          setInvoices([]);
         }
       })
+      .catch(() => setInvoices([]))
   }
 
   const pageClass = (pageNum: number) => {
@@ -237,27 +239,31 @@ export const SupplierManager = (props: SupplierManagerProps) => {
     setGenerating(true)
     generateSInvoice(invoiceTxt)
       .then(rsp => {
-        if (rsp.ok) {
-          rsp.json()
-            .then((data: SupplierInvoice) => {
-              console.info("Generate invoice successfully")
-              let nItems = data.items.map((item: InvoiceItem) => {
-                return {
-                  ...item,
-                  id: randomId()
-                }
-              })
+        if (rsp.status === 200) {
+          const data: SupplierInvoice = rsp.data;
+          console.info("Generate invoice successfully")
+          let nItems = data.items.map((item: InvoiceItem) => {
+            return {
+              ...item,
+              id: randomId()
+            }
+          })
 
-              setEInvoice({
-                ...eInvoice,
-                description: data.description,
-                subTotal: data.subTotal,
-                createdTime: formatISODateTime(new Date(data.createdTime)),
-                items: nItems
-              })
-            })
+          setEInvoice({
+            ...eInvoice,
+            description: data.description,
+            subTotal: data.subTotal,
+            createdTime: formatISODateTime(new Date(data.createdTime)),
+            items: nItems
+          })
+        } else {
+          console.error("Failed to generate invoice: ", rsp.statusText)
         }
-      }).finally(() => {
+      })
+      .catch((err) => {
+        console.error("Failed to generate invoice", err)
+      })
+      .finally(() => {
         setGenerating(false)
       })
   }
@@ -290,15 +296,24 @@ export const SupplierManager = (props: SupplierManagerProps) => {
 
     saveSInvoice(inv)
       .then(rsp => {
-        if (rsp.ok) {
-          rsp.json()
-            .then((data: SupplierInvoice) => {
-              console.info(`Confirm invoice ${data.id} successfully`)
-              setEInvoice(data)
-            })
+        if (rsp.status === 200) {
+          const data: SupplierInvoice = rsp.data;
+          console.info(`Confirm invoice ${data.id} successfully`)
+          setEInvoice(data)
+          setResultMessage("Invoice confirmed successfully")
+          setShowInvoiceDetail(false)
+          fetchInvoices()
+        } else {
+          console.error("Failed to confirm invoice: ", rsp.statusText)
+          setResultMessage("Failed to confirm invoice")
         }
       })
+      .catch((err) => {
+        console.error("Failed to confirm invoice", err)
+        setResultMessage("Failed to confirm invoice")
+      });
   }
+
   const takenPlaceInvoice = () => {
     let inv: SupplierInvoice = {
       ...eInvoice,
@@ -307,15 +322,23 @@ export const SupplierManager = (props: SupplierManagerProps) => {
 
     takenPlaceSInvoice(inv)
       .then(rsp => {
-        if (rsp.ok) {
-          rsp.json()
-            .then((data: SupplierInvoice) => {
-              console.info(`Taken place invoice ${data.id} successfully`)
-              setEInvoice(data)
-              setResultMessage(`Taken place successfully`)
-            })
+        if (rsp.status === 200) {
+          const data: SupplierInvoice = rsp.data;
+          console.info(`Taken place invoice ${data.id} successfully`)
+          setEInvoice(data)
+          setResultMessage(`Taken place successfully`)
+          setShowInvoiceDetail(false)
+          fetchInvoices()
+        } else {
+          console.error("Failed to mark invoice as taken place: ", rsp.statusText)
+          setResultMessage("Failed to mark invoice as taken place")
         }
-      }).finally(() => {
+      })
+      .catch((err) => {
+        console.error("Failed to mark invoice as taken place", err)
+        setResultMessage("Failed to mark invoice as taken place")
+      })
+      .finally(() => {
         setShowInvoiceDetail(true)
       })
   }
@@ -329,15 +352,22 @@ export const SupplierManager = (props: SupplierManagerProps) => {
 
     paidSInvoice(inv)
       .then(rsp => {
-        if (rsp.ok) {
-          rsp.json()
-            .then((data: SupplierInvoice) => {
-              console.info(`Paid invoice ${data.id} successfully`)
-              setEInvoice(data)
-              setResultMessage(`Paid successfully`)
-            })
+        if (rsp.status === 200) {
+          const data: SupplierInvoice = rsp.data;
+          console.info(`Paid invoice ${data.id} successfully`)
+          setEInvoice(data)
+          setResultMessage(`Paid successfully`)
+          setShowInvoiceDetail(false)
+          fetchInvoices()
+        } else {
+          console.error("Failed to mark invoice as paid: ", rsp.statusText)
+          setResultMessage("Failed to mark invoice as paid")
         }
       })
+      .catch((err) => {
+        console.error("Failed to mark invoice as paid", err)
+        setResultMessage("Failed to mark invoice as paid")
+      });
   }
 
   const rejectInvoice = (invoice: SupplierInvoice) => {
@@ -348,14 +378,21 @@ export const SupplierManager = (props: SupplierManagerProps) => {
 
     rejectSInvoice(inv.id, props.chat.id)
       .then(rsp => {
-        if (rsp.ok) {
-          rsp.json()
-            .then((data: string) => {
-              console.info(`Reject invoice ${inv.id} successfully`)
-              setEInvoice(inv)
-            })
+        if (rsp.status === 200) {
+          console.info(`Reject invoice ${inv.id} successfully`)
+          setEInvoice(inv)
+          setResultMessage("Invoice rejected successfully")
+          setShowInvoiceDetail(false)
+          fetchInvoices()
+        } else {
+          console.error("Failed to reject invoice: ", rsp.statusText)
+          setResultMessage("Failed to reject invoice")
         }
       })
+      .catch((err) => {
+        console.error("Failed to reject invoice", err)
+        setResultMessage("Failed to reject invoice")
+      });
   }
 
   const saveInvoice = () => {
@@ -377,21 +414,26 @@ export const SupplierManager = (props: SupplierManagerProps) => {
       console.info(`New supplier invoice has been created at ${createdTime}`)
     }
 
-
     saveSInvoice(inv)
       .then(rsp => {
-        if (rsp.ok) {
-          rsp.json()
-            .then((data: SupplierInvoice) => {
-              console.info(`Save invoice ${data.id} successfully`)
-            })
+        if (rsp.status === 200) {
+          const data: SupplierInvoice = rsp.data;
+          console.info(`Save invoice ${data.id} successfully`)
+          setEInvoice(data)
+          setResultMessage("Invoice saved successfully")
+          setShowInvoiceDetail(false)
+          setEInvoice(emptySInvoice)
+          fetchInvoices()
+        } else {
+          console.error("Failed to save invoice: ", rsp.statusText)
+          setResultMessage("Failed to save invoice")
         }
-      }).finally(() => {
-        setShowInvoiceDetail(false)
-        setEInvoice(emptySInvoice)
       })
+      .catch((err) => {
+        console.error("Failed to save invoice", err)
+        setResultMessage("Failed to save invoice")
+      });
   }
-
 
 
   const changeInvoiceTxt = (e: ChangeEvent<HTMLInputElement>) => {

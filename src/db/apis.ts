@@ -115,6 +115,14 @@ tourApi
     .interceptors
     .request
     .use(configureAccessToken, (error) => Promise.reject(error));
+// tourRequestApi
+const tourRequestApi: AxiosInstance = axios.create({
+    baseURL: `${process.env.REACT_APP_TOUR_REQUEST_ENDPOINT}`
+});
+tourRequestApi
+    .interceptors
+    .request
+    .use(configureAccessToken, (error) => Promise.reject(error));
 
 // configApi
 const configApi: AxiosInstance = axios.create({
@@ -137,5 +145,6 @@ export {
     reservationExtractApi,
     supplierApi,
     tourApi,
+    tourRequestApi,
     configApi
 }

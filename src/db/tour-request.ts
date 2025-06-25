@@ -1,19 +1,14 @@
-import { Tour } from "../Components/TourManager"
+import { Tour } from "../Components/TourManager";
+import { tourRequestApi } from "./apis";
 
 export const listTourRequest = () => {
-  console.info("Fetching all tour requests from the inventory")
-  const opts = {
-    method: 'GET'
-  }
-  return fetch(`${process.env.REACT_APP_TOUR_REQUEST_ENDPOINT}/list?page=0&size=100`, opts)
+  console.info("Fetching all tour requests from the inventory");
+  return tourRequestApi.get(`/list`, { params: { page: 0, size: 100 } });
 }
 
 export const saveTourRequest = (tour: Tour) => {
-  console.info("Saving the tour request %s", tour.name)
-  const opts = {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(tour)
-  }
-  return fetch(`${process.env.REACT_APP_TOUR_REQUEST_ENDPOINT}/quantity/adjust`, opts)
+  console.info("Saving the tour request %s", tour.name);
+  return tourRequestApi.post(`/quantity/adjust`, tour, {
+    headers: { 'Content-Type': 'application/json' }
+  });
 }

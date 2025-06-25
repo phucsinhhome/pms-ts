@@ -1,29 +1,38 @@
-import { PGroup } from "../Components/PGroupManager"
+import { PGroup } from "../Components/PGroupManager";
+import { getAccessToken } from "../App";
 
-export const listAllPGroups = () => {
+export const listAllPGroups = async () => {
   console.info("Fetching all product groups")
+
+  const accessToken = await getAccessToken();
   const opts = {
-    method: 'GET'
+    method: 'GET',
+    headers: accessToken ? { 'Authorization': `Bearer ${accessToken}` } : undefined
   }
   return fetch(`${process.env.REACT_APP_PRODUCT_GROUP_ENDPOINT}?page=0&size=10`, opts)
 }
 
 
-export const deletePGroup = (pgroup: PGroup) => {
+export const deletePGroup = async (pgroup: PGroup) => {
   console.info("Delet product group %s", pgroup.groupId)
+  const accessToken = await getAccessToken();
   const opts = {
-    method: 'DELETE'
+    method: 'DELETE',
+    headers: accessToken ? { 'Authorization': `Bearer ${accessToken}` } : undefined
   }
   return fetch(`${process.env.REACT_APP_PRODUCT_GROUP_ENDPOINT}/${pgroup.groupId}`, opts)
 }
 
 // Ensure that savePGroup is exported from this module
-export const savePGroup = (group: PGroup) => {
+export const savePGroup = async (group: PGroup) => {
   console.info("Saving product group %s", group.groupId)
+
+  const accessToken = await getAccessToken();
   const opts = {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${accessToken}`
     },
     body: JSON.stringify(group)
   }

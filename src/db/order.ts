@@ -1,133 +1,89 @@
 import { Order, OrderItem } from "../Components/OrderManager";
+import { orderApi } from "./apis";
 
 export const listOrders = (fromTime: string, page: number, size: number) => {
   console.info(`Fetch orders from backend from ${fromTime}`)
-  var opts = {
-    method: 'GET'
-  }
-  return fetch(`${process.env.REACT_APP_ORDER_ENDPOINT}/list?fromTime=${fromTime}&page=${page}&size=${size}`, opts);
+  return orderApi.get(`/list`, { params: { fromTime, page, size } });
 }
 
 export const listOrderByStatuses = (fromTime: string, statuses: string[], page: number, size: number) => {
   console.info(`Fetch orders from backend from ${fromTime} with statuses ${statuses}`)
-  var opts = {
-    method: 'GET'
-  }
-  return fetch(`${process.env.REACT_APP_ORDER_ENDPOINT}/list?fromTime=${fromTime}&statuses=${statuses}&page=${page}&size=${size}`, opts);
+  return orderApi.get(`/list`, { params: { fromTime, statuses, page, size } });
 }
 
 export const fetchUpcomingOrders = (fromTime: string, filter: string, page: number, size: number) => {
   console.info("Fetch orders from backend")
-  var opts = {
-    method: 'GET'
-  }
-  return fetch(`${process.env.REACT_APP_ORDER_ENDPOINT}/list/${filter}?fromTime=${fromTime}&page=${page}&size=${size}`, opts);
+  return orderApi.get(`/list/${filter}`, { params: { fromTime, page, size } });
 }
 
 export const startOrder = (resolverId: string, startTime: string) => {
   console.info("Start an order")
-  var opts = {
-    method: 'GET'
-  }
-  return fetch(`${process.env.REACT_APP_ORDER_ENDPOINT}/start?resolverId=${resolverId}&startTime=${startTime}`, opts);
+  return orderApi.get(`/start`, { params: { resolverId, startTime } });
 }
 
 export const adjustOrderItem = (orderId: string, item: OrderItem) => {
   console.info("Add item into order")
-  var opts = {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(item)
-  }
-  return fetch(`${process.env.REACT_APP_ORDER_ENDPOINT}/${orderId}/product/adjust`, opts);
+  return orderApi.post(`/${orderId}/product/adjust`, item, {
+    headers: { 'Content-Type': 'application/json' }
+  });
 }
 
 export const saveOrder = (order: Order) => {
   console.info("Save order %s", order.id)
-  var opts = {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(order)
-  }
-  return fetch(`${process.env.REACT_APP_ORDER_ENDPOINT}/save`, opts);
+  return orderApi.post(`/save`, order, {
+    headers: { 'Content-Type': 'application/json' }
+  });
 }
 
 export const fetchAvailability = (itemIds: string[]) => {
   console.info("Commit the order")
-  var opts = {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(itemIds)
-  }
-  return fetch(`${process.env.REACT_APP_ORDER_ENDPOINT}/availability`, opts);
+  return orderApi.post(`/availability`, itemIds, {
+    headers: { 'Content-Type': 'application/json' }
+  });
 }
 
 export const fetchItems = (group: string, page: number, size: number) => {
   console.info("Fetch all the available items of group %s", group)
-  var opts = {
-    method: 'GET'
-  }
-  return fetch(`${process.env.REACT_APP_ORDER_ENDPOINT}/items?group=${group}&page=${page}&size=${size}`, opts);
+  return orderApi.get(`/items`, { params: { group, page, size } });
 }
 
 export const commitOrder = (order: Order) => {
   console.info("Commit the order")
-  var opts = {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(order)
-  }
-  return fetch(`${process.env.REACT_APP_ORDER_ENDPOINT}/commit`, opts);
+  return orderApi.post(`/commit`, order, {
+    headers: { 'Content-Type': 'application/json' }
+  });
 }
 
 export const getPotentialInvoices = (orderId: string) => {
   console.info("Fetch the potential invoices of the order")
-  var opts = {
-    method: 'GET'
-  }
-  return fetch(`${process.env.REACT_APP_ORDER_ENDPOINT}/${orderId}/guests`, opts);
+  return orderApi.get(`/${orderId}/guests`);
 }
 
 export const resolveInvoiceId = (resolverId: string) => {
   console.info("Resolve the invoice id from the id %s", resolverId)
-  var opts = {
-    method: 'GET'
-  }
-  return fetch(`${process.env.REACT_APP_ORDER_ENDPOINT}/resolve?resolverId=${resolverId}`, opts);
+  return orderApi.get(`/resolve`, { params: { resolverId } });
 }
 
 export const fetchOrder = (orderId: string) => {
   console.info("Fetch the order")
-  var opts = {
-    method: 'GET'
-  }
-  return fetch(`${process.env.REACT_APP_ORDER_ENDPOINT}/${orderId}`, opts);
+  return orderApi.get(`/${orderId}`);
 }
 
 export const confirmOrder = (order: Order) => {
   console.info("Confirm the order")
-  var opts = {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(order)
-  }
-  return fetch(`${process.env.REACT_APP_ORDER_ENDPOINT}/confirm`, opts);
+  return orderApi.post(`/confirm`, order, {
+    headers: { 'Content-Type': 'application/json' }
+  });
 }
 
 export const serveOrder = (order: Order) => {
   console.info("Serve the order")
-  var opts = {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(order)
-  }
-  return fetch(`${process.env.REACT_APP_ORDER_ENDPOINT}/serve`, opts);
+  return orderApi.post(`/serve`, order, {
+    headers: { 'Content-Type': 'application/json' }
+  });
 }
 
 export const rejectOrder = (orderId: string, staffId: string) => {
   console.info("Reject the order")
-  var opts = {
-    method: 'POST'
-  }
-  return fetch(`${process.env.REACT_APP_ORDER_ENDPOINT}/reject?orderId=${orderId}&staffId=${staffId}`, opts);
+  return orderApi.post(`/reject`, null, { params: { orderId, staffId } });
 }

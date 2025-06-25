@@ -39,20 +39,22 @@ export const OrderEditor = (props: OrderEditorProps) => {
     console.info("Loading the order")
 
     fetchOrder(orderId)
-      .then((rsp: Response) => {
-        if (rsp.ok) {
-          rsp.json()
-            .then(data => {
-              setOrder(data)
-              let invoiceId = data.invoiceId
-              if (invoiceId !== undefined && invoiceId !== null && invoiceId !== '') {
-                getInvoice(invoiceId)
-                  .then(inv => {
-                    console.info('Set the linked invoice')
-                    setChoosenInvoice(inv)
-                  })
-              }
-            })
+      .then((rsp) => {
+        if (rsp.status === 200) {
+          const data: Order = rsp.data
+          console.info("Order %s has been loaded", data.orderId)
+          setOrder(data)
+          let invoiceId = data.invoiceId
+          if (invoiceId !== undefined && invoiceId !== null && invoiceId !== '') {
+            getInvoice(invoiceId)
+              .then(rsp => {
+                if (rsp.status === 200) {
+                  const inv: Invoice = rsp.data
+                  console.info("Linked invoice %s has been loaded", inv.id)
+                  setChoosenInvoice(inv)
+                }
+              })
+          }
         }
       })
   }
@@ -98,13 +100,11 @@ export const OrderEditor = (props: OrderEditorProps) => {
     }
 
     confirmOrder(confirmedOrder)
-      .then((rsp: Response) => {
-        if (rsp.ok) {
-          rsp.json()
-            .then(data => {
-              console.info("Send oder to preparation %s successfully", data.orderId)
-              setOrder(data)
-            })
+      .then((rsp) => {
+        if (rsp.status === 200) {
+          const data: Order = rsp.data
+          console.info("Send oder to preparation %s successfully", data.orderId)
+          setOrder(data)
         }
       })
   }
@@ -118,12 +118,10 @@ export const OrderEditor = (props: OrderEditorProps) => {
       ...order,
       servedAt: formatISODateTime(new Date())
     }).then(rsp => {
-      if (rsp.ok) {
-        rsp.json()
-          .then(data => {
-            setOrder(data)
-            console.info(`Serve order ${order.id} successfully`)
-          })
+      if (rsp.status === 200) {
+        const data: Order = rsp.data
+        setOrder(data)
+        console.info("Order %s has been served successfully", data.orderId)
       }
     })
   }
@@ -138,13 +136,11 @@ export const OrderEditor = (props: OrderEditorProps) => {
       return
     }
     rejectOrder(orderId, staffId)
-      .then((rsp: Response) => {
-        if (rsp.ok) {
-          rsp.json()
-            .then(data => {
-              console.info("Order %s has been rejected", data.orderId)
-              setOrder(data)
-            })
+      .then((rsp) => {
+        if (rsp.status === 200) {
+          const data: Order = rsp.data
+          console.info("Order %s has been rejected", data.orderId)
+          setOrder(data)
         }
       })
   }
@@ -209,11 +205,10 @@ export const OrderEditor = (props: OrderEditorProps) => {
 
     listInvoiceByGuestName(fromDate, fN, 0, Number(DEFAULT_PAGE_SIZE))
       .then(rsp => {
-        if (rsp.ok) {
-          rsp.json()
-            .then(data => {
-              setInvoices(data.content)
-            })
+        if (rsp.status === 200 ) {
+          const data: Invoice[] = rsp.data.content
+          console.info("Found %d invoices for guest name %s", data.length, fN)
+          setInvoices(data)
         }
       })
   }

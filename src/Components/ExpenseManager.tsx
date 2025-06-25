@@ -310,7 +310,7 @@ export const ExpenseManager = memo((props: ExpenseProps) => {
   const generateExpense = (msg: string) => {
     return generate(msg)
       .then(rsp => {
-        if (!rsp.ok) {
+        if (!(rsp.status === 200 || rsp.status === 201)) {
           return {
             ...defaultEmptExpense,
             expenseDate: formatISODateTime(new Date()),
@@ -318,7 +318,7 @@ export const ExpenseManager = memo((props: ExpenseProps) => {
             expenserId: props.chat.id
           }
         }
-        return rsp.json()
+        return rsp.data.json()
           .then((data: Expense) => {
             console.info(`Complete extracting expense from message ${msg}`);
             console.info(`Name: ${data.itemName}, Quantity: ${data.quantity}, Unit Price: ${data.unitPrice}`)
@@ -375,7 +375,7 @@ export const ExpenseManager = memo((props: ExpenseProps) => {
     }
     console.info("Save expense %s...", exp.id)
     return saveExpense(exp)
-      .then((rsp: Response) => rsp.ok)
+      .then((rsp) => rsp.status === 200)
   }
 
   const handleSaveAndCompleteExpense = () => {
@@ -442,7 +442,7 @@ export const ExpenseManager = memo((props: ExpenseProps) => {
           )
         })}
       </div>
-      
+
       <nav className="flex items-center justify-between pt-4 absolute bottom-1" aria-label="Table navigation">
         <ul className="inline-flex items-center -space-x-px">
           <li onClick={() => handlePaginationClick(pagination.pageNumber - 1)} className="block px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">

@@ -217,7 +217,12 @@ export const InvoiceEditor = (props: InvoiceProps) => {
     }
     if (invoiceId !== "new") {
       getInvoice(invoiceId)
-        .then(data => {
+        .then(rsp => {
+          if (!(rsp.status === 200)) {
+            console.error("Failed to fetch invoice %s", invoiceId)
+            return
+          }
+          const data: Invoice = rsp.data
           if (data.paymentMethod !== null && data.paymentMethod !== undefined && data.paymentMethod !== "") {
             const pM = paymentMethods.find(m => m.id === data.paymentMethod)
             setSelectedPaymentMethod(pM || paymentMethods[0])
@@ -282,7 +287,7 @@ export const InvoiceEditor = (props: InvoiceProps) => {
 
     updateInvoice(inv)
       .then((res) => {
-        if (res.ok) {
+        if (res.status === 200) {
           console.info("Invoice %s has been saved successfully", invoiceId);
           setInvoice(inv);
           setDirty(false)

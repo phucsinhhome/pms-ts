@@ -1,105 +1,74 @@
 import { Invoice } from "../Components/InvoiceManager";
-import { getAccessToken } from "../App";
+import { invoiceApi } from "./apis";
 
 export const Configs = {
   logo: process.env.REACT_APP_PS_LOGO
 }
 
-const getAuthHeaders = async () => {
-  const accessToken = await getAccessToken();
-  return accessToken ? { 'Authorization': `Bearer ${accessToken}` } : undefined;
-}
-
 export const exportInvoice = async (invoice: Invoice) => {
   console.info("Call API to export invoice");
-  const headers = await getAuthHeaders();
-  const opts = {
-    method: 'POST',
-    headers: { 
-      'Content-Type': 'application/json',
-      ...headers
-    },
-    body: new Blob([JSON.stringify(invoice)])
-  }
-
-  return fetch(`${process.env.REACT_APP_INVOICE_SERVICE_ENDPOINT}/export`, opts);
+  return invoiceApi.post(
+    `/export`,
+    invoice,
+    { headers: { 'Content-Type': 'application/json' } }
+  );
 }
 
 export const updateInvoice = async (invoice: Invoice) => {
   console.info("Call API to update invoice");
-  const headers = await getAuthHeaders();
-  const opts = {
-    method: 'POST',
-    headers: { 
-      'Content-Type': 'application/json',
-      ...headers
-    },
-    body: new Blob([JSON.stringify(invoice)])
-  }
-
-  return fetch(`${process.env.REACT_APP_INVOICE_SERVICE_ENDPOINT}/update`, opts);
+  return invoiceApi.post(
+    `/update`,
+    invoice,
+    { headers: { 'Content-Type': 'application/json' } }
+  );
 }
 
 export const deleteInvoice = async (invoice: Invoice) => {
   console.info("Call API to delete invoice");
-  const headers = await getAuthHeaders();
-  const opts = {
-    method: 'DELETE',
-    headers: { 
-      'Content-Type': 'application/json',
-      ...headers
-    },
-    body: new Blob([JSON.stringify(invoice)])
-  }
-
-  return fetch(`${process.env.REACT_APP_INVOICE_SERVICE_ENDPOINT}/delete`, opts);
+  return invoiceApi.delete(
+    `/delete`,
+    {
+      headers: { 'Content-Type': 'application/json' },
+      data: invoice
+    }
+  );
 }
 
 export const listLatestInvoices = async (pageNumber: number, pageSize: number) => {
   console.info("Fetching invoices from backend")
-  const headers = await getAuthHeaders();
-  const opts = {
-    method: 'GET',
-    headers
-  }
-  return fetch(`${process.env.REACT_APP_INVOICE_SERVICE_ENDPOINT}/list/recent?page=${pageNumber}&size=${pageSize}`, opts)
-    .then(response => response.json())
+  
+  return await invoiceApi.get(
+    `/list/recent`,
+    { params: { page: pageNumber, size: pageSize } }
+  );
 }
 
-export const listStayingAndComingInvoices = async (fromDate: string, pageNumber: number, pageSize: number): Promise<Response> => {
+export const listStayingAndComingInvoices = async (fromDate: string, pageNumber: number, pageSize: number) => {
   console.info("Fetching invoices from backend include prepaid")
   return listStayingAndComingInvoicesAndPrepaid(fromDate, true, pageNumber, pageSize)
 }
 
-export async function listStayingAndComingInvoicesAndPrepaid(fromDate: string, includePrepaid: boolean, pageNumber: number, pageSize: number): Promise<Response> {
+export async function listStayingAndComingInvoicesAndPrepaid(fromDate: string, includePrepaid: boolean, pageNumber: number, pageSize: number) {
   console.info("Fetching invoices from backend")
-  const headers = await getAuthHeaders();
-  const opts = {
-    method: 'GET',
-    headers
-  }
-  return fetch(`${process.env.REACT_APP_INVOICE_SERVICE_ENDPOINT}/list/upcoming?fromDate=${fromDate}&includePrepaid=${includePrepaid}&page=${pageNumber}&size=${pageSize}`, opts)
+  return await invoiceApi.get(
+    `/list/upcoming`,
+    { params: { fromDate, includePrepaid, page: pageNumber, size: pageSize } }
+  );
 }
 
 export const listInvoiceByGuestName = async (fromDate: string, guestName: string, pageNumber: number, pageSize: number) => {
   console.info("Fetching invoices by guest name")
-  const headers = await getAuthHeaders();
-  const opts = {
-    method: 'GET',
-    headers
-  }
-  return fetch(`${process.env.REACT_APP_INVOICE_SERVICE_ENDPOINT}/search/name?fromDate=${fromDate}&guestName=${guestName}&page=${pageNumber}&size=${pageSize}`, opts)
+  
+  return await invoiceApi.get(
+    `/search/name`,
+    { params: { fromDate, guestName, page: pageNumber, size: pageSize } }
+  );
 }
 
 export const getInvoice = async (invoiceId: string) => {
   console.info("Fetching invoice from backend")
-  const headers = await getAuthHeaders();
-  const opts = {
-    method: 'GET',
-    headers
-  }
-  return fetch(`${process.env.REACT_APP_INVOICE_SERVICE_ENDPOINT}/${invoiceId}`, opts)
-    .then(response => response.json())
+  
+  return await invoiceApi.get(`/${invoiceId}`);
 }
 
 export function getItemList() {

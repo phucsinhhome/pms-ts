@@ -111,11 +111,14 @@ export const App = () => {
         });
         setAuthorizedUserId(user.profile.sub);
 
+        // Store access token in sessionStorage
+        if (user.access_token) {
+          sessionStorage.setItem('accessToken', user.access_token);
+        }
+
         // Decode id_token and extract scopes
         if (user.access_token) {
-          console.log(user);
           const decoded: any = jwtDecode(user.access_token);
-          console.log("Decoded ID Token:", decoded.resource_access[oidcConfig.client_id]?.roles || []);
           setScopes(decoded.resource_access[oidcConfig.client_id]?.roles || []);
         }
       } else {
@@ -123,6 +126,8 @@ export const App = () => {
         setChat(defaultChat);
         setAuthorizedUserId(null);
         setScopes([]);
+        // Remove access token from sessionStorage
+        sessionStorage.removeItem('accessToken');
       }
       setLoading(false);
     });
@@ -196,13 +201,14 @@ export const App = () => {
 
   // Handler to clear chat state and sign out
   const handleSignOut = () => {
-
     console.log("Signing out...");
     userManager.signoutRedirect().then(() => {
       setChat(defaultChat);
       setAuthorizedUserId(null);
       localStorage.removeItem(LOCAL_STATORAGE_SIGNED_IN);
       setOidcUser(null);
+      // Remove access token from sessionStorage on logout
+      sessionStorage.removeItem('accessToken');
       navigate("/", { replace: true });
     })
   };

@@ -90,28 +90,33 @@ export const InvoiceManager = (props: InvoiceManagerProps) => {
   }
 
   const fetchInvoices = () => {
-
-    var fd = formatISODate(fromDate)
-    console.info("Loading invoices from date %s...", fd)
+    const fd = formatISODate(fromDate);
+    console.info("Loading invoices from date %s...", fd);
 
     listStayingAndComingInvoices(fd, pagination.pageNumber, pagination.pageSize)
-      .then(rsp => {
-        if (rsp.ok) {
-          rsp.json()
-            .then(data => {
-              setInvoices(data.content)
-              if (data.totalPages !== pagination.totalPages) {
-                var page = {
-                  pageNumber: data.number,
-                  pageSize: data.size,
-                  totalElements: data.totalElements,
-                  totalPages: data.totalPages
-                }
-                setPagination(page)
-              }
-            })
+      .then(response => {
+        // Axios response: data is in response.data, status is response.status
+        if (response.status === 200) {
+          const data = response.data;
+          setInvoices(data.content);
+          if (data.totalPages !== pagination.totalPages) {
+            var page = {
+              pageNumber: data.number,
+              pageSize: data.size,
+              totalElements: data.totalElements,
+              totalPages: data.totalPages
+            }
+            setPagination(page);
+          }
+        } else {
+          // Optionally handle non-200 status
+          setInvoices([]);
         }
       })
+      .catch(error => {
+        console.error("Failed to fetch invoices:", error);
+        setInvoices([]);
+      });
   }
 
   useEffect(() => {
@@ -169,9 +174,12 @@ export const InvoiceManager = (props: InvoiceManagerProps) => {
       console.warn("Delete invoice %s...", deletingInv.id)
       deleteInvoice(deletingInv)
         .then(rsp => {
-          if (rsp.ok) {
+          // Axios: check status code
+          if (rsp.status === 200) {
             console.info("Delete invoice %s successfully", deletingInv.id)
             fetchInvoices()
+          } else {
+            console.error("Failed to delete invoice %s: status %s", deletingInv.id, rsp.status)
           }
         })
         .catch(err => {
@@ -207,22 +215,26 @@ export const InvoiceManager = (props: InvoiceManagerProps) => {
 
     listInvoiceByGuestName(fromDate, fN, 0, DEFAULT_PAGE_SIZE)
       .then(rsp => {
-        if (rsp.ok) {
-          rsp.json()
-            .then(data => {
-              setInvoices(data.content)
-              if (data.totalPages !== pagination.totalPages) {
-                var page = {
-                  pageNumber: data.number,
-                  pageSize: data.size,
-                  totalElements: data.totalElements,
-                  totalPages: data.totalPages
-                }
-                setPagination(page)
-              }
-            })
+        // Axios: check status code and update state
+        if (rsp.status === 200) {
+          const data = rsp.data;
+          setInvoices(data.content)
+          if (data.totalPages !== pagination.totalPages) {
+            var page = {
+              pageNumber: data.number,
+              pageSize: data.size,
+              totalElements: data.totalElements,
+              totalPages: data.totalPages
+            }
+            setPagination(page)
+          }
+        } else {
+          setInvoices([]);
         }
       })
+      .catch(() =>
+        setInvoices([])
+      )
   }
 
   const emptyFilteredName = () => {

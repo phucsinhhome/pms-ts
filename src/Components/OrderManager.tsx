@@ -109,38 +109,26 @@ export const OrderManager = (props: OrderManagerProps) => {
     let ordersData = { content: [], totalPages: 0, number: 0, size: 0, totalElements: 0 }
     if (activeStatuses.length === 0) {
       ordersData = await listOrders(fromTime, pagination.pageNumber, pagination.pageSize)
-        .then((rsp: Response) => {
-          if (rsp.ok) {
-            return rsp.json()
-          }
-        })
+        .then(rsp => rsp.data)
     }
     if (activeStatuses.length > 0) {
       ordersData = await listOrderByStatuses(fromTime, activeStatuses, pagination.pageNumber, pagination.pageSize)
-        .then((rsp: Response) => {
-          if (rsp.ok) {
-            return rsp.json()
-          }
-        })
+        .then(rsp => rsp.data)
     }
 
-    var orders: Order[] = ordersData.content
+    var orders: Order[] = ordersData.content || []
     if (orders.length <= 0) {
       setOrders([])
       return
     }
     Promise.all(orders.map(async (order: Order): Promise<Order> => {
-      if (order.orderId === undefined
-        || order.orderId === ''
-        || order.invoiceId === undefined
-        || order.invoiceId === null
-        || order.invoiceId === '') {
+      if (!order.orderId || !order.invoiceId) {
         return transf(order)
       }
       const data = await getInvoice(order.invoiceId);
       return {
         ...order,
-        rooms: data.rooms
+        rooms: data.data.rooms
       };
     }))
       .then(ords => {
@@ -225,11 +213,9 @@ export const OrderManager = (props: OrderManagerProps) => {
     let fromDate = formatISODate(new Date())
     listStayingAndComingInvoicesAndPrepaid(fromDate, false, 0, 7)
       .then(rsp => {
-        if (rsp.ok) {
-          rsp.json()
-            .then(data => {
-              setFilteredInvoices(data.content)
-            })
+        if (rsp.status === 200) {
+          const data = rsp.data
+          setFilteredInvoices(data.content)
         }
       }).finally(() => {
         setShowInvoices(true)
@@ -251,11 +237,12 @@ export const OrderManager = (props: OrderManagerProps) => {
 
     listInvoiceByGuestName(fromDate, fN, 0, DEFAULT_PAGE_SIZE)
       .then(rsp => {
-        if (rsp.ok) {
-          rsp.json()
-            .then(data => {
-              setFilteredInvoices(data.content)
-            })
+        if (rsp.status === 200) {
+          const data = rsp.data
+          setFilteredInvoices(data.content)
+          if (data.content.length <= 0) {
+            console.warn("No invoice found for guest name %s", fN)
+          }
         }
       })
   }

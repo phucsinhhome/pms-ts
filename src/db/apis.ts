@@ -89,6 +89,15 @@ reservationApi
     .request
     .use(configureAccessToken, (error) => Promise.reject(error));
 
+// reservationExtractApi
+const reservationExtractApi: AxiosInstance = axios.create({
+    baseURL: `${process.env.REACT_APP_RESERVATION_EXTRACT_ENDPOINT}`
+});
+reservationExtractApi
+    .interceptors
+    .request
+    .use(configureAccessToken, (error) => Promise.reject(error));
+
 // supplierApi
 const supplierApi: AxiosInstance = axios.create({
     baseURL: `${process.env.REACT_APP_SUPPLIER_ENDPOINT}`
@@ -107,5 +116,6 @@ export {
     productGroupApi,
     orderApi,
     reservationApi,
+    reservationExtractApi,
     supplierApi
 }

@@ -86,7 +86,7 @@ export const Settings = (props: SettingProps) => {
     let toDate = formattedDate
     collectRes(fromDate, toDate)
       .then(rsp => {
-        if (rsp.ok) {
+        if (rsp.status === 200) {
           console.info("Collect reservations from %s to %s successfully", fromDate, toDate)
         }
         console.log(rsp)

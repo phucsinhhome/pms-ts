@@ -49,7 +49,7 @@ const menus: MenuItem[] = [{
   path: 'invoice',
   displayName: 'Invoice'
 }, {
-  path: 'expenses',
+  path: 'expense',
   displayName: 'Expense'
 }, {
   path: 'reservation',
@@ -233,7 +233,7 @@ export const App = () => {
         <Route path="profit" element={<ProfitReport activeMenu={() => setActiveMenu(menus[0])} />} />
         <Route path="invoice" element={<InvoiceManager activeMenu={() => setActiveMenu(menus[1])} />} />
         <Route path="invoice/:invoiceId" element={<InvoiceEditor chat={getChat()} displayName={fullName()} authorizedUserId={authorizedUserId} activeMenu={() => setActiveMenu(menus[1])} />} />
-        <Route path="expenses" element={<ExpenseManager chat={getChat()} displayName={fullName()} authorizedUserId={authorizedUserId} activeMenu={() => setActiveMenu(menus[2])} />} />
+        <Route path="expense" element={<ExpenseManager chat={getChat()} displayName={fullName()} authorizedUserId={authorizedUserId} activeMenu={() => setActiveMenu(menus[2])} />} />
         <Route path="reservation" element={<ReservationManager activeMenu={() => setActiveMenu(menus[3])} />} />
         <Route path="order" element={<OrderManager
           chat={getChat()}

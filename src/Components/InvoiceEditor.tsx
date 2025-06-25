@@ -246,9 +246,10 @@ export const InvoiceEditor = (props: InvoiceProps) => {
       console.info("Fetch the products")
       listAllProductItems()
         .then(rsp => {
-          if (rsp.ok) {
-            rsp.json()
-              .then((data) => setProducts(data.content))
+          if (rsp.status === 200) {
+            let data = rsp.data.content
+            console.info("Fetched %d products", data.length)
+            setProducts(data)
           }
         })
 

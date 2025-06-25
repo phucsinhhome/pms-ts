@@ -44,8 +44,25 @@ invoiceApi
     .request
     .use(configureAccessToken, (error) => Promise.reject(error));
 
+// inventoryApi
+const inventoryApi: AxiosInstance = axios.create({
+    baseURL: `${process.env.REACT_APP_INVENTORY_ENDPOINT}`
+});
+inventoryApi
+    .interceptors
+    .request
+    .use(configureAccessToken, (error) => Promise.reject(error));
 
-// orderApi
+// productApi
+const productApi: AxiosInstance = axios.create({
+    baseURL: `${process.env.REACT_APP_PRODUCT_SERVICE_ENDPOINT}`
+});
+productApi
+    .interceptors
+    .request
+    .use(configureAccessToken, (error) => Promise.reject(error));
+
+    // orderApi
 const orderApi: AxiosInstance = axios.create({
     baseURL: `${process.env.REACT_APP_ORDER_ENDPOINT}`
 });
@@ -59,5 +76,7 @@ export {
     reportApi,
     expenseApi,
     invoiceApi,
+    inventoryApi,
+    productApi,
     orderApi
 }

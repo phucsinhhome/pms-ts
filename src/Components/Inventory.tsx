@@ -146,19 +146,21 @@ export const Inventory = (props: InventoryProps) => {
 
     listProductItems(pagination.pageNumber, pagination.pageSize)
       .then(rsp => {
-        if (rsp.ok) {
-          rsp.json()
-            .then(data => {
-              indexProduct(data.content)
-              if (data.totalPages !== pagination.totalPages) {
-                setPagination({
-                  ...pagination,
-                  totalPages: data.totalPages
-                })
-              }
+        // Axios response: data is in rsp.data, status is rsp.status
+        if (rsp.status === 200) {
+          const data = rsp.data;
+          indexProduct(data.content)
+          if (data.totalPages !== pagination.totalPages) {
+            setPagination({
+              ...pagination,
+              totalPages: data.totalPages
             })
+          }
+        } else {
+          setProducts([]);
         }
       })
+      .catch(() => setProducts([]));
   }
 
   useEffect(() => {
@@ -206,7 +208,6 @@ export const Inventory = (props: InventoryProps) => {
   //================ ORDER ==========================//
 
   const changeQuantity = (product: Product, delta: number) => {
-
     if (delta <= 0 && product.quantity <= 0) {
       return
     }
@@ -218,21 +219,24 @@ export const Inventory = (props: InventoryProps) => {
     }
     adjustInventoryQuantity(item)
       .then(rsp => {
-        if (rsp.ok) {
-          rsp.json()
-            .then((data: ItemAdjustment) => {
-              setProducts(products.map(p => {
-                if (p.id === data.itemId) { p.quantity = data.quantity }
-                return p
-              }))
-              console.info("Change item %s with quantity %s order successfully", item.itemId, item.quantity)
-            })
+        // Axios response: data is in rsp.data, status is rsp.status
+        if (rsp.status === 200) {
+          const data: ItemAdjustment = rsp.data;
+          setProducts(products.map(p => {
+            if (p.id === data.itemId) { p.quantity = data.quantity }
+            return p
+          }))
+          console.info("Change item %s with quantity %s order successfully", item.itemId, item.quantity)
         } else if (rsp.status === 400) {
           console.warn('The item %s does not exist', item.itemId)
         } else if (rsp.status === 304) {
           console.warn('The item %s ran out', item.itemId)
         }
       })
+      .catch(() => {
+        // Optionally handle network or unexpected errors
+        console.error("Failed to adjust quantity for item", item.itemId)
+      });
   }
 
   const indexProduct = (products: Product[]) => {
@@ -254,16 +258,17 @@ export const Inventory = (props: InventoryProps) => {
     }
     planAvailability(aC)
       .then(rsp => {
-        if (rsp.ok) {
-          rsp.json()
-            .then((data: AvailabilityChange) => {
-              console.info("Plan availability successfully for %s", updateTime)
-              aC.results = data.results
-              console.log(aC)
-              alert("Plan availability successfully for time " + updateTime)
-            })
+        if (rsp.status === 200) {
+          const data: AvailabilityChange = rsp.data;
+          console.info("Plan availability successfully for %s", updateTime)
+          aC.results = data.results
+          console.log(aC)
+          alert("Plan availability successfully for time " + updateTime)
         }
       })
+      .catch(() => {
+        console.error("Failed to update availability")
+      });
   }
 
   const activateGroup = (group: string) => {
@@ -279,18 +284,19 @@ export const Inventory = (props: InventoryProps) => {
   const viewProductDetail = (product: Product) => {
     getProduct(product.id)
       .then(rsp => {
-        if (rsp.ok) {
-          rsp.json()
-            .then((data: ManagedProduct) => {
-              let eP = {
-                origin: data,
-                formattedUnitPrice: formatMoneyAmount(data.unitPrice + '').formattedAmount
-              }
-              setEditingProduct(eP)
-              setShowProductDetailModal(true)
-            })
+        if (rsp.status === 200) {
+          const data: ManagedProduct = rsp.data;
+          let eP = {
+            origin: data,
+            formattedUnitPrice: formatMoneyAmount(data.unitPrice + '').formattedAmount
+          }
+          setEditingProduct(eP)
+          setShowProductDetailModal(true)
         }
       })
+      .catch(() => {
+        console.error("Failed to fetch product detail")
+      });
   }
 
   const closeProductDetailModal = () => {
@@ -375,33 +381,31 @@ export const Inventory = (props: InventoryProps) => {
     }
     saveProduct(editingProduct.origin)
       .then(rsp => {
-        if (rsp.ok) {
-          rsp.json()
-            .then((data) => {
-              console.info("Save product successfully with id %s and offset %d", data.id, data.displayOffset)
-              setEditingProduct(defaultEditingProduct)
-              // fetchAllProducts()
-
-              setProducts(prevProducts => {
-                const existingProductIndex = prevProducts.findIndex(p => p.id === data.id);
-                if (existingProductIndex > -1) {
-                  // If product exists, update it
-                  const updatedProducts = [...prevProducts];
-                  updatedProducts[existingProductIndex] = data;
-                  return updatedProducts;
-                } else {
-                  // If product doesn't exist, add it
-                  return [...prevProducts, data];
-                }
-              })
-              setShowProductDetailModal(false)
-              filterProducts()
-            })
+        if (rsp.status === 200) {
+          const data = rsp.data;
+          console.info("Save product successfully with id %s and offset %d", data.id, data.displayOffset)
+          setEditingProduct(defaultEditingProduct)
+          setProducts(prevProducts => {
+            const existingProductIndex = prevProducts.findIndex(p => p.id === data.id);
+            if (existingProductIndex > -1) {
+              const updatedProducts = [...prevProducts];
+              updatedProducts[existingProductIndex] = data;
+              return updatedProducts;
+            } else {
+              return [...prevProducts, data];
+            }
+          })
+          setShowProductDetailModal(false)
+          filterProducts()
         } else {
           console.error("Failed to save product")
           alert("Failed to save product: " + rsp.statusText)
         }
       })
+      .catch(() => {
+        console.error("Failed to save product")
+        alert("Failed to save product")
+      });
   }
 
   const cancelEditingProduct = () => {
@@ -428,64 +432,60 @@ export const Inventory = (props: InventoryProps) => {
     if (filteredName === '' && activeGroup !== '') {
       listProductItemsByGroup(activeGroup, pagination.pageNumber, pagination.pageSize)
         .then(rsp => {
-          if (rsp.ok) {
-            rsp.json()
-              .then(data => {
-                indexProduct(data.content)
-                if (pagination.totalPages !== data.totalPages) {
-                  setPagination({
-                    ...pagination,
-                    totalPages: data.totalPages
-                  })
-                }
+          if (rsp.status === 200) {
+            const data = rsp.data;
+            indexProduct(data.content)
+            if (pagination.totalPages !== data.totalPages) {
+              setPagination({
+                ...pagination,
+                totalPages: data.totalPages
               })
-              .catch(() => setProducts([]))
+            }
+          } else {
+            setProducts([]);
           }
-        }).catch(() => {
-          setProducts([])
         })
+        .catch(() => setProducts([]))
       return
     }
 
     if (filteredName !== '' && activeGroup === '') {
       listProductItemsWithName(filteredName)
         .then(rsp => {
-          if (rsp.ok) {
-            rsp.json()
-              .then((data) => {
-                indexProduct(data.content)
-                if (pagination.totalPages > 1) {
-                  setPagination({
-                    ...pagination,
-                    totalPages: 1
-                  })
-                }
-              }).catch(() => setProducts([]))
+          if (rsp.status === 200) {
+            const data = rsp.data;
+            indexProduct(data.content)
+            // When searching by name only, set totalPages to 1
+            if (pagination.totalPages > 1) {
+              setPagination({
+                ...pagination,
+                totalPages: 1
+              })
+            }
+          } else {
+            setProducts([]);
           }
-        }).catch(() => {
-          setProducts([])
         })
+        .catch(() => setProducts([]))
       return
     }
 
     listProductItemsWithNameAndGroup(filteredName, activeGroup, pagination.pageNumber, pagination.pageSize)
       .then(rsp => {
-        if (rsp.ok) {
-          rsp.json()
-            .then(data => {
-              indexProduct(data.content)
-              if (pagination.totalPages !== data.totalPages) {
-                setPagination({
-                  ...pagination,
-                  totalPages: data.totalPages
-                })
-              }
+        if (rsp.status === 200) {
+          const data = rsp.data;
+          indexProduct(data.content)
+          if (pagination.totalPages !== data.totalPages) {
+            setPagination({
+              ...pagination,
+              totalPages: data.totalPages
             })
-            .catch(() => setProducts([]))
+          }
+        } else {
+          setProducts([]);
         }
-      }).catch(() => {
-        setProducts([])
       })
+      .catch(() => setProducts([]))
   }
 
   const emptyFilterText = () => {
@@ -617,19 +617,20 @@ export const Inventory = (props: InventoryProps) => {
     }
     changeItemStatus(statusChange)
       .then(rsp => {
-        if (rsp.ok) {
-          rsp.json()
-            .then((data) => {
-              console.info("Change status of product %s to %s successfully", product.id, status)
-              setProducts(products.map(p => {
-                if (p.id === data.itemId) {
-                  p.status = data.status
-                }
-                return p
-              }))
-            })
+        if (rsp.status === 200) {
+          const data = rsp.data;
+          console.info("Change status of product %s to %s successfully", product.id, status)
+          setProducts(products.map(p => {
+            if (p.id === data.itemId) {
+              p.status = data.status
+            }
+            return p
+          }))
         }
       })
+      .catch(() => {
+        console.error("Failed to change product status")
+      });
   }
 
   function removeContentImage(idx: number): void {

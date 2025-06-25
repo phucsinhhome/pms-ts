@@ -85,21 +85,21 @@ export const TourManager = (props: TourManagerProps) => {
 
 
   const fetchTours = () => {
-
     listTour()
       .then(rsp => {
-        if (rsp.ok) {
-          rsp.json()
-            .then(data => {
-              setTours(data.content)
-              if (data.totalPages !== pagination.totalPages) {
-                setPagination({
-                  ...pagination,
-                  totalPages: data.totalPages
-                })
-              }
+        if (rsp.status === 200) {
+          const data = rsp.data;
+          setTours(data.content)
+          if (data.totalPages !== pagination.totalPages) {
+            setPagination({
+              ...pagination,
+              totalPages: data.totalPages
             })
+          }
         }
+      })
+      .catch(() => {
+        console.error("Failed to fetch tours")
       })
   }
 

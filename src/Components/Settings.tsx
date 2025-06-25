@@ -20,11 +20,11 @@ export const Settings = (props: SettingProps) => {
   const [inventoryConfigs, setInventoryConfigs] = useState<any>()
   const fetchInventoryConfigs = async () => {
     getConfigs("inventory")
-      .then((rsp: Response) => {
-        if (rsp.ok) {
-          return rsp.json()
+      .then((rsp) => {
+        if (rsp.status === 200) {
+          return rsp.data;
         }
-        return null
+        return null;
       }).then((data: any) => {
         setInventoryConfigs(data)
       }).catch((e: any) => {
@@ -42,16 +42,13 @@ export const Settings = (props: SettingProps) => {
   const changeAutoUpdateAvailability = (e: ChangeEvent<HTMLInputElement>) => {
     let enabled = !inventoryConfigs?.enabled
     setAutoUpdateAvailability(enabled)
-      .then((rsp: Response) => {
-        if (rsp.ok) {
+      .then((rsp) => {
+        if (rsp.status === 200) {
           console.info("Change auto update availability to %s successfully", enabled)
-          rsp.json()
-            .then((data: any) => {
-              setInventoryConfigs(data)
-            })
+          setInventoryConfigs(rsp.data)
         }
-      }
-      ).catch((e: any) => {
+      })
+      .catch((e: any) => {
         console.error(e)
       }
       )

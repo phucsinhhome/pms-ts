@@ -1,4 +1,5 @@
 import { Chat } from "../App"
+import { configApi } from "./apis";
 
 export type AppConfig = {
     app: {
@@ -46,18 +47,12 @@ export const appConfigs = async (): Promise<AppConfig> => {
 
 export const getConfigs = (config: string) => {
     console.info(`Fetching ${config} configs`)
-    const opts = {
-        method: 'GET'
-    }
-    return fetch(`${process.env.REACT_APP_CONFIG_ENDPOINT}/${config}`, opts)
+    return configApi.get(`/${config}`);
 }
 
 export const setAutoUpdateAvailability = (enabled: boolean) => {
     console.info(`Change auto update availability to ${enabled}`)
-    const opts = {
-        method: 'POST'
-    }
-    return fetch(`${process.env.REACT_APP_CONFIG_ENDPOINT}/inventory/availability/${enabled}`, opts)
+    return configApi.post(`/inventory/availability/${enabled}`);
 }
 
 export const firebaseConfig = {

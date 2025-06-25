@@ -120,8 +120,8 @@ export const TourEditor = (props: TourEditorProps) => {
   const fetchTour = async () => {
     try {
       const rsp = await getTour(tourId as string);
-      if (rsp.ok) {
-        const data = await rsp.json();
+      if (rsp.status === 200) {
+        const data = rsp.data;
         setTour(data);
         setFeatureImage(data.featureImgUrl);
         setSlots(data.slots || []);

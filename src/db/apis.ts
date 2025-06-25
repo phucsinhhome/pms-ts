@@ -107,6 +107,24 @@ supplierApi
     .request
     .use(configureAccessToken, (error) => Promise.reject(error));
 
+// tourApi
+const tourApi: AxiosInstance = axios.create({
+    baseURL: `${process.env.REACT_APP_TOUR_ENDPOINT}`
+});
+tourApi
+    .interceptors
+    .request
+    .use(configureAccessToken, (error) => Promise.reject(error));
+
+// configApi
+const configApi: AxiosInstance = axios.create({
+    baseURL: `${process.env.REACT_APP_CONFIG_ENDPOINT}`
+});
+configApi
+    .interceptors
+    .request
+    .use(configureAccessToken, (error) => Promise.reject(error));
+
 export {
     reportApi,
     expenseApi,
@@ -117,5 +135,7 @@ export {
     orderApi,
     reservationApi,
     reservationExtractApi,
-    supplierApi
+    supplierApi,
+    tourApi,
+    configApi
 }

@@ -20,6 +20,22 @@ import { UserManager, WebStorageStateStore, User } from "oidc-client-ts";
 import UserProfile from "./Components/UserProfile";
 import { jwtDecode } from "jwt-decode";
 
+// Add a lotus image to your public folder or assets and use its path here
+const LOTUS_IMAGE_URL = "/lotus.png"; // Place lotus.png in your public folder
+
+const WelcomePage = () => (
+  <div className="flex flex-col items-center justify-center h-[100dvh] bg-white">
+    <img
+      src={LOTUS_IMAGE_URL}
+      alt="Lotus"
+      className="w-48 h-48 object-contain mb-6"
+      style={{ maxWidth: "90vw" }}
+    />
+    <h1 className="text-3xl font-bold text-gray-700 mb-2">Welcome to PMS</h1>
+    <p className="text-lg text-gray-500">Your hospitality management assistant</p>
+  </div>
+);
+
 export const DEFAULT_PAGE_SIZE = Number(process.env.REACT_APP_DEFAULT_PAGE_SIZE)
 
 export type Chat = {
@@ -43,6 +59,9 @@ type MenuItem = {
 }
 
 const menus: MenuItem[] = [{
+  path: 'home',
+  displayName: 'Home'
+},{
   path: 'profit',
   displayName: 'Profit'
 }, {
@@ -91,7 +110,7 @@ export const App = () => {
   const [loading, setLoading] = useState(true);
   const LOCAL_STATORAGE_SIGNED_IN = 'PS-SIGNED-IN'
   const [oidcUser, setOidcUser] = useState<User | null>(null);
-  const [scopes, setScopes] = useState<string[]>([]);
+  const [roles, setRoles] = useState<string[]>([]);
 
   useEffect(() => {
     document.title = "PMS";
@@ -119,13 +138,13 @@ export const App = () => {
         // Decode id_token and extract scopes
         if (user.access_token) {
           const decoded: any = jwtDecode(user.access_token);
-          setScopes(decoded.resource_access[oidcConfig.client_id]?.roles || []);
+          setRoles(decoded.resource_access[oidcConfig.client_id]?.roles || []);
         }
       } else {
         setOidcUser(null);
         setChat(defaultChat);
         setAuthorizedUserId(null);
-        setScopes([]);
+        setRoles([]);
         // Remove access token from sessionStorage
         sessionStorage.removeItem('accessToken');
       }
@@ -214,13 +233,16 @@ export const App = () => {
   };
 
   // Filter menus based on user scopes
-  const filteredMenus = menus.filter(menu =>
-    scopes.length === 0 || scopes.includes(menu.path)
-  );
+  const filteredMenus = roles.length === 0
+    ? [menus[0]] // Default to home if no roles
+    : menus.filter(menu => roles.includes(menu.path));
 
   return (
     <div className="flex flex-col relative h-[100dvh] min-h-0 bg-slate-50">
       <div className="mt-2 ml-2 pr-1 w-full flex flex-row items-center space-x-0.5">
+        <Link to="/" className="px-1 py-1 bg-gray-200 text-center text-amber-900 text-sm font-sans rounded-sm shadow-sm">
+          Home
+        </Link>
         {
           filteredMenus.map((menu: MenuItem) => (
             <Link key={menu.path} to={menu.path} className={menuStyle(menu.path)}>
@@ -235,7 +257,7 @@ export const App = () => {
         </Link>
       </div>
       <Routes>
-        <Route path="/" element={<Navigate to={"profit"} />} />
+        <Route path="/" element={<WelcomePage/>} />
         <Route path="profit" element={<ProfitReport activeMenu={() => setActiveMenu(menus[0])} />} />
         <Route path="invoice" element={<InvoiceManager activeMenu={() => setActiveMenu(menus[1])} />} />
         <Route path="invoice/:invoiceId" element={<InvoiceEditor chat={getChat()} displayName={fullName()} authorizedUserId={authorizedUserId} activeMenu={() => setActiveMenu(menus[1])} />} />

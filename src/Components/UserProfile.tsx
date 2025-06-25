@@ -24,7 +24,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ userProfile, onSignOut }) => 
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 bg-white rounded shadow p-6">
+    <div className="w-[90vw] max-w-2xl mx-auto mt-10 bg-white rounded shadow p-6">
       <div className="flex justify-between items-center mb-4">
         <button
           className="bg-gray-300 text-gray-800 px-3 py-1 rounded hover:bg-gray-400"

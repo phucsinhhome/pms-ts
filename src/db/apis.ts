@@ -62,7 +62,16 @@ productApi
     .request
     .use(configureAccessToken, (error) => Promise.reject(error));
 
-    // orderApi
+// productGroupApi
+const productGroupApi: AxiosInstance = axios.create({
+    baseURL: `${process.env.REACT_APP_PRODUCT_GROUP_ENDPOINT}`
+});
+productGroupApi
+    .interceptors
+    .request
+    .use(configureAccessToken, (error) => Promise.reject(error));
+
+// orderApi
 const orderApi: AxiosInstance = axios.create({
     baseURL: `${process.env.REACT_APP_ORDER_ENDPOINT}`
 });
@@ -78,5 +87,6 @@ export {
     invoiceApi,
     inventoryApi,
     productApi,
+    productGroupApi,
     orderApi
 }

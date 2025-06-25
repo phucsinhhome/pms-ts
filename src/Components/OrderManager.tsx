@@ -192,13 +192,14 @@ export const OrderManager = (props: OrderManagerProps) => {
   const fetchPGroups = () => {
     listAllPGroups()
       .then(rsp => {
-        if (rsp.ok) {
-          rsp.json()
-            .then(data => {
-              setPGroups(data.content)
-            })
+        // Axios response: data is in rsp.data, status is rsp.status
+        if (rsp.status === 200) {
+          setPGroups(rsp.data.content)
         }
       })
+      .catch(() => {
+        setPGroups([])
+      });
   }
 
   const chooseCopyOpts = () => {

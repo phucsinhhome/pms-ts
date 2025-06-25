@@ -52,9 +52,9 @@ export const PGroupManager = (props: PGroupProps) => {
   const fetchPGroups = () => {
     return listAllPGroups()
       .then((rsp) => {
-        if (rsp.ok) {
-          rsp.json()
-            .then(data => { setPGroups(data.content) })
+        // Axios response: data is in rsp.data, status is rsp.status
+        if (rsp.status === 200) {
+          setPGroups(rsp.data.content)
         }
       })
   }
@@ -70,13 +70,12 @@ export const PGroupManager = (props: PGroupProps) => {
     console.warn("Deleting group [%s]...", group.groupId)
     deletePGroup(group)
       .then((rsp) => {
-        if (rsp.ok) {
-          console.log("Delete group %s successully", group.groupId)
+        if (rsp.status === 200) {
+          console.log("Delete group %s successfully", group.groupId)
           fetchPGroups()
           setDelResult("Delete group successfully")
           setShowDelResult(true)
-        }
-        if (rsp.status === 500) {
+        } else if (rsp.status === 500) {
           console.error("Failed to delete the product group", rsp.statusText)
           setDelResult(`Failed to delete the product group ${group.displayName}. Please check if the group is containing some products.`)
           setShowDelResult(true)
@@ -170,9 +169,6 @@ export const PGroupManager = (props: PGroupProps) => {
   }
 
   const saveAndClose = () => {
-    // Add your save logic here
-    // Assuming you have a function to save the product group to the back-end API
-
     let grpId = editingPGroup.groupId
     if (grpId === null || grpId === undefined) {
       console.error("Invalid group id")
@@ -184,7 +180,7 @@ export const PGroupManager = (props: PGroupProps) => {
 
     savePGroup(savingGroup)
       .then((rsp) => {
-        if (rsp.ok) {
+        if (rsp.status === 200) {
           setOpenEditingModal(false);
           fetchPGroups();
         } else {

@@ -79,11 +79,14 @@ export const OrderEditor = (props: OrderEditorProps) => {
   const fetchProductGroups = () => {
     listAllPGroups()
       .then(rsp => {
-        if (rsp.ok) {
-          rsp.json()
-            .then(data => setPGroups(data.content))
+        // Axios response: data is in rsp.data, status is rsp.status
+        if (rsp.status === 200) {
+          setPGroups(rsp.data.content)
         }
       })
+      .catch(() => {
+        setPGroups([])
+      });
   }
 
   const sendToPreparation = () => {
@@ -205,7 +208,7 @@ export const OrderEditor = (props: OrderEditorProps) => {
 
     listInvoiceByGuestName(fromDate, fN, 0, Number(DEFAULT_PAGE_SIZE))
       .then(rsp => {
-        if (rsp.status === 200 ) {
+        if (rsp.status === 200) {
           const data: Invoice[] = rsp.data.content
           console.info("Found %d invoices for guest name %s", data.length, fN)
           setInvoices(data)

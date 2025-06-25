@@ -80,6 +80,14 @@ orderApi
     .request
     .use(configureAccessToken, (error) => Promise.reject(error));
 
+// reservationApi
+const reservationApi: AxiosInstance = axios.create({
+    baseURL: `${process.env.REACT_APP_RESERVATION_SERVICE_ENDPOINT}`
+});
+reservationApi
+    .interceptors
+    .request
+    .use(configureAccessToken, (error) => Promise.reject(error));
 
 export {
     reportApi,
@@ -88,5 +96,6 @@ export {
     inventoryApi,
     productApi,
     productGroupApi,
-    orderApi
+    orderApi,
+    reservationApi
 }

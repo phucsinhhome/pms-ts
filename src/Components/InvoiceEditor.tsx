@@ -235,9 +235,22 @@ export const InvoiceEditor = (props: InvoiceProps) => {
         })
     } else {
       fetchReservations()
-        .then(data => {
-          setReservations(data.content)
-          setFilteredReservations(data.content)
+        .then(rsp => {
+          if (rsp.status === 200) {
+            setReservations(rsp.data.content)
+            setFilteredReservations(rsp.data.content)
+            setResFilteredText('')
+            setOpenChooseResModal(true)
+          } else {
+            setReservations([])
+            setFilteredReservations([])
+            setResFilteredText('')
+            setOpenChooseResModal(true)
+          }
+        })
+        .catch(() => {
+          setReservations([])
+          setFilteredReservations([])
           setResFilteredText('')
           setOpenChooseResModal(true)
         })

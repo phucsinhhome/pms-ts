@@ -62,23 +62,29 @@ export function ReservationManager(props: ReservationManagerProps) {
   }
 
   const fetchReservations = (fromDate: Date, pageNumber: number, pageSize: number) => {
-
     var toDate = addDays(fromDate, Configs.reservation.fetchDays)
     var fd = formatISODate(fromDate)
     var td = formatISODate(toDate)
     console.info("Loading reservations from date [%s] to [%s]...", fd, td)
 
     listLatestReservations(fd, td, pageNumber, pageSize)
-      .then(data => {
-        setReservations(data.content)
-        var page = {
-          pageNumber: data.number,
-          pageSize: data.size,
-          totalElements: data.totalElements,
-          totalPages: data.totalPages
+      .then(rsp => {
+        // Axios response: data is in rsp.data, status is rsp.status
+        if (rsp.status === 200) {
+          const data = rsp.data;
+          setReservations(data.content)
+          var page = {
+            pageNumber: data.number,
+            pageSize: data.size,
+            totalElements: data.totalElements,
+            totalPages: data.totalPages
+          }
+          setPagination(page)
+        } else {
+          setReservations([])
         }
-        setPagination(page)
       })
+      .catch(() => setReservations([]));
   }
 
   useEffect(() => {

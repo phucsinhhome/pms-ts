@@ -80,18 +80,20 @@ const oidcConfig = {
   userStore: new WebStorageStateStore({ store: window.localStorage }),
 };
 
-const userManager = new UserManager(oidcConfig);
 
-export const getAccessToken = async (): Promise<string | undefined> => {
-  const user = await userManager.getUser();
-  return user && !user.expired ? user.access_token : undefined;
-};
+
+// const getAccessToken = async (): Promise<string | undefined> => {
+//   const user = await userManager.getUser();
+//   return user && !user.expired ? user.access_token : undefined;
+// };
 
 export const App = () => {
   const [chat, setChat] = useState<Chat>(defaultChat);
   const [authorizedUserId, setAuthorizedUserId] = useState<string | null>(null)
   const [syncing, setSyncing] = useState(false)
   const [syncingRes, setSyncingRes] = useState(false)
+
+  const [filteredMenus, setFilteredMenus] = useState<MenuItem[]>([menus[0]]); // Default to home menu
   const [activeMenu, setActiveMenu] = useState(menus[0])
   const [configs, setConfigs] = useState<AppConfig>()
   const navigate = useNavigate();
@@ -99,6 +101,11 @@ export const App = () => {
   const LOCAL_STATORAGE_SIGNED_IN = 'PS-SIGNED-IN'
   const [oidcUser, setOidcUser] = useState<User | null>(null);
   const [roles, setRoles] = useState<string[]>([]);
+
+  const userManager = new UserManager(oidcConfig);
+  userManager.events.addUserSignedIn(() => {
+    console.log("User signed in");
+  });
 
   useEffect(() => {
     document.title = "PMS";
@@ -108,6 +115,7 @@ export const App = () => {
   useEffect(() => {
     userManager.getUser().then(user => {
       if (user && !user.expired) {
+        console.log("User loaded: userManager.getUser()");
         setOidcUser(user);
         setChat({
           id: user.profile.sub,
@@ -118,16 +126,13 @@ export const App = () => {
         });
         setAuthorizedUserId(user.profile.sub);
 
+        console.log("User loaded");
         // Store access token in sessionStorage
-        if (user.access_token) {
-          sessionStorage.setItem('accessToken', user.access_token);
-        }
-
-        // Decode id_token and extract scopes
-        if (user.access_token) {
-          const decoded: any = jwtDecode(user.access_token);
-          setRoles(decoded.resource_access[oidcConfig.client_id]?.roles || []);
-        }
+        // if (user.access_token) {
+        //   sessionStorage.setItem('accessToken', user.access_token);
+        //   const decoded: any = jwtDecode(user.access_token);
+        //   setRoles(decoded.resource_access[oidcConfig.client_id]?.roles || []);
+        // }
       } else {
         setOidcUser(null);
         setChat(defaultChat);
@@ -141,6 +146,7 @@ export const App = () => {
 
     // Listen for user loaded/unloaded events
     userManager.events.addUserLoaded(user => {
+      console.log("User loaded: userManager.events.addUserLoaded");
       setOidcUser(user);
       setChat({
         id: user.profile.sub,
@@ -161,6 +167,7 @@ export const App = () => {
     // Handle OIDC redirect callback
     if (window.location.search.includes("code=")) {
       userManager.signinRedirectCallback().then(user => {
+        console.log("User loaded after redirect: userManager.signinRedirectCallback");
         setOidcUser(user);
         setChat({
           id: user.profile.sub,
@@ -181,6 +188,32 @@ export const App = () => {
     };
     // eslint-disable-next-line
   }, []);
+
+  useEffect(() => {
+    if (!oidcUser) {
+      return;
+    }
+    if (oidcUser.access_token) {
+      sessionStorage.setItem('accessToken', oidcUser.access_token);
+      const decoded: any = jwtDecode(oidcUser.access_token);
+      setRoles(decoded.resource_access[oidcConfig.client_id]?.roles || []);
+    }
+  }, [oidcUser]);
+
+  useEffect(() => {
+    filterMenus();
+  }, [roles]);
+
+  const filterMenus = () => {
+    setFilteredMenus(
+      roles.length === 0
+        ? [menus[0]] // Default to home if no roles
+        : [menus[0], menus.filter(menu => {
+          // Check if the menu path matches any of the roles
+          return roles.some(role => role.toLowerCase() === menu.path.toLowerCase());
+        })].flat()
+    );
+  }
 
   const fetchConfig = async () => {
     let cfg = await appConfigs()
@@ -233,9 +266,7 @@ export const App = () => {
   };
 
   // Filter menus based on user scopes
-  const filteredMenus = roles.length === 0
-    ? [menus[0]] // Default to home if no roles
-    : [menus[0], menus.filter(menu => roles.includes(menu.path))].flat();
+
 
   return (
     <div className="flex flex-col relative h-[100dvh] min-h-0 bg-slate-50">

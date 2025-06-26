@@ -417,7 +417,7 @@ export const ExpenseManager = memo((props: ExpenseProps) => {
         </Button>
       </div>
       <div className="flex flex-col px-2 pt-2 space-y-1.5 divide-y">
-        {expenses.map((item) => {
+        {expenses?.map((item) => {
           return (
             <div key={item.id} className="flex flex-col w-full px-1 space-y-1 relative">
               <div

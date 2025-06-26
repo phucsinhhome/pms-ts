@@ -19,22 +19,10 @@ import { TourEditor } from "./Components/TourEditor";
 import { UserManager, WebStorageStateStore, User } from "oidc-client-ts";
 import UserProfile from "./Components/UserProfile";
 import { jwtDecode } from "jwt-decode";
+import { Welcome } from "./Components/Welcome";
 
 // Add a lotus image to your public folder or assets and use its path here
-const LOTUS_IMAGE_URL = "https://www.harpercrown.com/cdn/shop/articles/everything-you-should-know-about-the-lotus-flower-450435.jpg"; // Place lotus.png in your public folder
 
-const WelcomePage = () => (
-  <div className="flex flex-col items-center justify-center h-[100dvh] bg-white">
-    <img
-      src={LOTUS_IMAGE_URL}
-      alt="Lotus"
-      className="w-1/2 h-auto mb-6 rounded-lg shadow-lg"
-      style={{ aspectRatio: "1.8/1" }}
-    />
-    <h1 className="text-3xl font-bold text-gray-700 mb-2">Welcome to PMS</h1>
-    <p className="text-lg text-gray-500">Your hospitality management assistant</p>
-  </div>
-);
 
 export const DEFAULT_PAGE_SIZE = Number(process.env.REACT_APP_DEFAULT_PAGE_SIZE)
 
@@ -61,7 +49,7 @@ type MenuItem = {
 const menus: MenuItem[] = [{
   path: 'home',
   displayName: 'Home'
-},{
+}, {
   path: 'profit',
   displayName: 'Profit'
 }, {
@@ -181,7 +169,7 @@ export const App = () => {
           email: user.profile.email
         });
         setAuthorizedUserId(user.profile.sub);
-        navigate("/", { replace: true });
+        navigate("home", { replace: true });
       });
     }
 
@@ -228,21 +216,21 @@ export const App = () => {
       setOidcUser(null);
       // Remove access token from sessionStorage on logout
       sessionStorage.removeItem('accessToken');
-      navigate("/", { replace: true });
+      navigate("home", { replace: true });
     })
   };
 
   // Filter menus based on user scopes
   const filteredMenus = roles.length === 0
     ? [menus[0]] // Default to home if no roles
-    : menus.filter(menu => roles.includes(menu.path));
+    : [menus[0], menus.filter(menu => roles.includes(menu.path))].flat();
 
   return (
     <div className="flex flex-col relative h-[100dvh] min-h-0 bg-slate-50">
       <div className="mt-2 ml-2 pr-1 w-full flex flex-row items-center space-x-0.5">
-        <Link to="/" className="px-1 py-1 bg-gray-200 text-center text-amber-900 text-sm font-sans rounded-sm shadow-sm">
+        {/* <Link to="/" className="px-1 py-1 bg-gray-200 text-center text-amber-900 text-sm font-sans rounded-sm shadow-sm">
           Home
-        </Link>
+        </Link> */}
         {
           filteredMenus.map((menu: MenuItem) => (
             <Link key={menu.path} to={menu.path} className={menuStyle(menu.path)}>
@@ -257,25 +245,25 @@ export const App = () => {
         </Link>
       </div>
       <Routes>
-        <Route path="/" element={<WelcomePage/>} />
-        <Route path="profit" element={<ProfitReport activeMenu={() => setActiveMenu(menus[0])} />} />
-        <Route path="invoice" element={<InvoiceManager activeMenu={() => setActiveMenu(menus[1])} />} />
-        <Route path="invoice/:invoiceId" element={<InvoiceEditor chat={getChat()} displayName={fullName()} authorizedUserId={authorizedUserId} activeMenu={() => setActiveMenu(menus[1])} />} />
-        <Route path="expense" element={<ExpenseManager chat={getChat()} displayName={fullName()} authorizedUserId={authorizedUserId} activeMenu={() => setActiveMenu(menus[2])} />} />
-        <Route path="reservation" element={<ReservationManager activeMenu={() => setActiveMenu(menus[3])} />} />
+        <Route path="home" element={<Welcome activeMenu={() => setActiveMenu(menus[0])} />} />
+        <Route path="profit" element={<ProfitReport activeMenu={() => setActiveMenu(menus[1])} />} />
+        <Route path="invoice" element={<InvoiceManager activeMenu={() => setActiveMenu(menus[2])} />} />
+        <Route path="invoice/:invoiceId" element={<InvoiceEditor chat={getChat()} displayName={fullName()} authorizedUserId={authorizedUserId} activeMenu={() => setActiveMenu(menus[2])} />} />
+        <Route path="expense" element={<ExpenseManager chat={getChat()} displayName={fullName()} authorizedUserId={authorizedUserId} activeMenu={() => setActiveMenu(menus[3])} />} />
+        <Route path="reservation" element={<ReservationManager activeMenu={() => setActiveMenu(menus[4])} />} />
         <Route path="order" element={<OrderManager
           chat={getChat()}
           displayName={fullName()}
           authorizedUserId={authorizedUserId}
-          activeMenu={() => setActiveMenu(menus[4])}
+          activeMenu={() => setActiveMenu(menus[5])}
           configs={configs}
         />} />
         <Route path="order/:orderId/:staffId"
           element={<OrderEditor
             setChat={(chat: Chat) => setChat(chat)}
-            activeMenu={() => setActiveMenu(menus[4])} />}
+            activeMenu={() => setActiveMenu(menus[5])} />}
         />
-        <Route path="inventory" element={<Inventory activeMenu={() => setActiveMenu(menus[5])} />} />
+        <Route path="inventory" element={<Inventory activeMenu={() => setActiveMenu(menus[6])} />} />
         <Route path="product-group" element={<PGroupManager activeMenu={() => setActiveMenu({ path: 'product-group', displayName: 'Group' })} />} />
         <Route path="supplier" element={<SupplierManager chat={getChat()} displayName={fullName()} authorizedUserId={authorizedUserId} activeMenu={() => setActiveMenu({ path: 'supplier', displayName: 'Supplier' })} />} />
         <Route path="tour" element={<TourManager

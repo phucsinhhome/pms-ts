@@ -155,6 +155,7 @@ export const App = () => {
       setOidcUser(null);
       setChat(defaultChat);
       setAuthorizedUserId(null);
+      console.log("User unloaded, resetting chat state");
     });
 
     // Handle OIDC redirect callback
@@ -189,8 +190,18 @@ export const App = () => {
   const getChat = () => chat ? chat : defaultChat
 
   const fullName = () => {
-    return [chat?.firstName, chat?.lastName].filter(Boolean).join(' ')
+    if (oidcUser && oidcUser.profile) {
+      return (
+        oidcUser.profile.name ||
+        [oidcUser.profile.given_name, oidcUser.profile.family_name].filter(Boolean).join(' ') ||
+        oidcUser.profile.preferred_username ||
+        oidcUser.profile.email ||
+        ''
+      );
+    }
+    return '';
   }
+
   const menuStyle = (m: string) => {
     return m === activeMenu.path ? "px-1 py-1 bg-gray-500 text-center text-amber-900 text-sm font-sans rounded-sm shadow-sm"
       : "px-1 py-1 bg-gray-200 text-center text-amber-900 text-sm font-sans rounded-sm shadow-sm"
@@ -202,8 +213,9 @@ export const App = () => {
 
   // If not authenticated, redirect to Keycloak login
   if (!oidcUser) {
-    userManager.signinRedirect();
-    return <div>Redirecting to login...</div>;
+    // userManager.signinRedirect();
+    // navigate("/home", { replace: true });
+    // return <div>Redirecting to login...</div>;
   }
 
   // Handler to clear chat state and sign out
@@ -216,7 +228,7 @@ export const App = () => {
       setOidcUser(null);
       // Remove access token from sessionStorage on logout
       sessionStorage.removeItem('accessToken');
-      navigate("home", { replace: true });
+      navigate("/home", { replace: true });
     })
   };
 
@@ -245,6 +257,7 @@ export const App = () => {
         </Link>
       </div>
       <Routes>
+        <Route path="" element={<Welcome activeMenu={() => setActiveMenu(menus[0])} />} />
         <Route path="home" element={<Welcome activeMenu={() => setActiveMenu(menus[0])} />} />
         <Route path="profit" element={<ProfitReport activeMenu={() => setActiveMenu(menus[1])} />} />
         <Route path="invoice" element={<InvoiceManager activeMenu={() => setActiveMenu(menus[2])} />} />
@@ -296,17 +309,25 @@ export const App = () => {
           }
         />
       </Routes>
-      {configs?.app.showProfile ?
-        <div
-          className="absolute top-0 right-0 flex flex-col mt-10 mr-2 bg-neutral-200 p-1 opacity-90 rounded-md shadow-lg cursor-pointer"
-          onClick={() => {
-            navigate('/profile');
-          }}
-        >
-          <span className="font text-[10px] font-bold text-gray-800 dark:text-white">
+
+      <div
+        className="absolute top-0 right-0 flex flex-col mt-10 mr-2 bg-neutral-200 p-1 opacity-90 rounded-md shadow-lg cursor-pointer"
+
+      >
+        {
+          oidcUser ? <span className="font text-[10px] font-bold text-gray-800 dark:text-white"
+            onClick={() => {
+              navigate('/profile');
+            }}>
             {fullName()}
           </span>
-        </div> : null}
+            : <span className="font text-[10px] font-bold text-gray-800 dark:text-white"
+              onClick={() => userManager.signinRedirect()}>
+              Login
+            </span>
+        }
+
+      </div>
     </div>
   );
 }

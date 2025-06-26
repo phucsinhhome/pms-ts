@@ -7,9 +7,9 @@ type UserProfileProps = {
 
 const UserProfile: React.FC<UserProfileProps> = ({ userProfile, onSignOut }) => {
   const [editing, setEditing] = useState(false);
-  const [firstName, setFirstName] = useState(userProfile.given_name || "");
-  const [lastName, setLastName] = useState(userProfile.family_name || "");
-  const [displayName, setDisplayName] = useState(userProfile.name || "");
+  const [firstName, setFirstName] = useState(userProfile?.given_name || "");
+  const [lastName, setLastName] = useState(userProfile?.family_name || "");
+  const [displayName, setDisplayName] = useState(userProfile?.name || "");
   const [status, setStatus] = useState<string | null>(null);
 
   if (!userProfile) return <div className="p-4">No user profile found.</div>;

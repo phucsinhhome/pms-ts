@@ -3,7 +3,7 @@ import "./App.css";
 import ProfitReport from "./Components/ProfitReport";
 import { InvoiceManager } from "./Components/InvoiceManager"
 import { InvoiceEditor } from "./Components/InvoiceEditor"
-import { Link, Route, Routes, Navigate, useNavigate } from "react-router-dom"
+import { Link, Route, Routes, useNavigate } from "react-router-dom"
 import { ExpenseManager } from "./Components/ExpenseManager";
 import { ReservationManager } from "./Components/ReservationManager";
 import { Settings } from "./Components/Settings";
@@ -21,15 +21,15 @@ import UserProfile from "./Components/UserProfile";
 import { jwtDecode } from "jwt-decode";
 
 // Add a lotus image to your public folder or assets and use its path here
-const LOTUS_IMAGE_URL = "/lotus.png"; // Place lotus.png in your public folder
+const LOTUS_IMAGE_URL = "https://www.harpercrown.com/cdn/shop/articles/everything-you-should-know-about-the-lotus-flower-450435.jpg"; // Place lotus.png in your public folder
 
 const WelcomePage = () => (
   <div className="flex flex-col items-center justify-center h-[100dvh] bg-white">
     <img
       src={LOTUS_IMAGE_URL}
       alt="Lotus"
-      className="w-48 h-48 object-contain mb-6"
-      style={{ maxWidth: "90vw" }}
+      className="w-1/2 h-auto mb-6 rounded-lg shadow-lg"
+      style={{ aspectRatio: "1.8/1" }}
     />
     <h1 className="text-3xl font-bold text-gray-700 mb-2">Welcome to PMS</h1>
     <p className="text-lg text-gray-500">Your hospitality management assistant</p>

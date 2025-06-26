@@ -5,22 +5,22 @@ export const newExpId = () => {
   return '' + (Date.now() % 10000000)
 }
 
-const listLatestExpenses = async (pageNumber: number, pageSize: number) => {
+export const listLatestExpenses = async (pageNumber: number, pageSize: number) => {
   console.info("Fetching recent expenses")
-  const response = await expenseApi.get(
+
+  return await expenseApi.get(
     `/list/recent`,
     { params: { page: pageNumber, size: pageSize } }
   );
-  return response.data;
 }
 
 export const listExpenseByDate = async (byDate: string, pageNumber: number, pageSize: number) => {
   console.info("Fetching expenses by date %s", byDate)
-  const response = await expenseApi.get(
+
+  return await expenseApi.get(
     `/list/bydate`,
     { params: { byDate, page: pageNumber, size: pageSize } }
   );
-  return response.data;
 }
 
 export const listExpenseByExpenserAndDate = async (
@@ -34,19 +34,17 @@ export const listExpenseByExpenserAndDate = async (
   if (expenserId !== null && expenserId !== undefined && expenserId !== "") {
     params.expenserId = expenserId;
   }
-  const response = await expenseApi.get(
+
+  return await expenseApi.get(
     `/list/bydate`,
     { params }
   );
-  return response.data;
 }
-
-export default listLatestExpenses;
 
 export async function getExpense(expenseId: string) {
   console.info("Fetching expense [%s] from backend with", expenseId)
-  const response = await expenseApi.get(`/${expenseId}`);
-  return response.data;
+
+  return await expenseApi.get(`/${expenseId}`);
 }
 
 export const saveExpense = async (expense: Expense) => {

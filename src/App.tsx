@@ -81,12 +81,6 @@ const oidcConfig = {
 };
 
 
-
-// const getAccessToken = async (): Promise<string | undefined> => {
-//   const user = await userManager.getUser();
-//   return user && !user.expired ? user.access_token : undefined;
-// };
-
 export const App = () => {
   const [chat, setChat] = useState<Chat>(defaultChat);
   const [authorizedUserId, setAuthorizedUserId] = useState<string | null>(null)
@@ -103,9 +97,6 @@ export const App = () => {
   const [roles, setRoles] = useState<string[]>([]);
 
   const userManager = new UserManager(oidcConfig);
-  userManager.events.addUserSignedIn(() => {
-    console.log("User signed in");
-  });
 
   useEffect(() => {
     document.title = "PMS";
@@ -125,14 +116,6 @@ export const App = () => {
           email: user.profile.email
         });
         setAuthorizedUserId(user.profile.sub);
-
-        console.log("User loaded");
-        // Store access token in sessionStorage
-        // if (user.access_token) {
-        //   sessionStorage.setItem('accessToken', user.access_token);
-        //   const decoded: any = jwtDecode(user.access_token);
-        //   setRoles(decoded.resource_access[oidcConfig.client_id]?.roles || []);
-        // }
       } else {
         setOidcUser(null);
         setChat(defaultChat);
@@ -242,13 +225,6 @@ export const App = () => {
 
   if (loading) {
     return <div>Loading...</div>;
-  }
-
-  // If not authenticated, redirect to Keycloak login
-  if (!oidcUser) {
-    // userManager.signinRedirect();
-    // navigate("/home", { replace: true });
-    // return <div>Redirecting to login...</div>;
   }
 
   // Handler to clear chat state and sign out

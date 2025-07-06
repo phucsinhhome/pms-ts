@@ -93,7 +93,7 @@ export const App = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const LOCAL_STATORAGE_SIGNED_IN = 'PS-SIGNED-IN'
-  const [oidcUser, setOidcUser] = useState<User | null>(null);
+  // const [oidcUser, setOidcUser] = useState<User | null>(null);
   const [roles, setRoles] = useState<string[]>([]);
   const [userProfile, setUserProfile] = useState<any>(null);
 
@@ -101,7 +101,12 @@ export const App = () => {
 
   const fetchUserProfile = async () => {
     try {
-      const rsp = await fetch("https://localhost:8443/assistant/me", { credentials: "include" });
+      const rsp = await fetch("https://localhost:8443/assistant/user/profile", {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include'
+      });
       if (rsp.status === 200) {
         const data = await rsp.json();
         setUserProfile(data);
@@ -234,7 +239,7 @@ export const App = () => {
 
   const getChat = () => chat ? chat : defaultChat
 
-    const handleLogin = () => {
+  const handleLogin = () => {
     window.location.href = "https://localhost:8443/assistant/login";
   };
 
@@ -242,15 +247,18 @@ export const App = () => {
     window.location.href = "https://localhost:8443/assistant/logout";
   };
 
+  // In your React app (e.g., UserProfile component)
+  const handleEditProfileClick = () => {
+    // Option 1: Redirect via Spring Boot backend (recommended for dynamic URLs or pre-checks)
+    window.location.href = 'https://localhost:8443/assistant/account/settings'; 
+
+    // Option 2: Direct redirect (if you know the Keycloak URL)
+    // window.location.href = 'https://phucsinhhcm.hopto.org/iam/realms/ps_dev/account';
+  };
+
   const fullName = () => {
-    if (oidcUser && oidcUser.profile) {
-      return (
-        oidcUser.profile.name ||
-        [oidcUser.profile.given_name, oidcUser.profile.family_name].filter(Boolean).join(' ') ||
-        oidcUser.profile.preferred_username ||
-        oidcUser.profile.email ||
-        ''
-      );
+    if (userProfile) {
+      return userProfile.name;
     }
     return '';
   }
@@ -344,7 +352,7 @@ export const App = () => {
           path="profile"
           element={
             <UserProfile
-              userProfile={oidcUser?.profile}
+              userProfile={userProfile}
               onSignOut={handleSignOut}
             />
           }
@@ -356,10 +364,8 @@ export const App = () => {
 
       >
         {
-          oidcUser ? <span className="font text-[10px] font-bold text-gray-800 dark:text-white"
-            onClick={() => {
-              navigate('/profile');
-            }}>
+          userProfile ? <span className="font text-[10px] font-bold text-gray-800 dark:text-white"
+            onClick={()=> navigate('/profile')}>
             {fullName()}
           </span>
             : <span className="font text-[10px] font-bold text-gray-800 dark:text-white"

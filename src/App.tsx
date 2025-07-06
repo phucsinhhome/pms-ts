@@ -70,15 +70,15 @@ const menus: MenuItem[] = [{
 }]
 
 // OIDC client config for Keycloak
-const oidcConfig = {
-  authority: "https://phucsinhhcm.hopto.org/iam/realms/ps_dev",
-  client_id: "ps_assistant",
-  redirect_uri: window.location.origin + "/",
-  post_logout_redirect_uri: window.location.origin,
-  response_type: "code",
-  scope: "openid profile email organization roles",
-  userStore: new WebStorageStateStore({ store: window.localStorage }),
-};
+// const oidcConfig = {
+//   authority: "https://phucsinhhcm.hopto.org/iam/realms/ps_dev",
+//   client_id: "ps_assistant",
+//   redirect_uri: window.location.origin + "/",
+//   post_logout_redirect_uri: window.location.origin,
+//   response_type: "code",
+//   scope: "openid profile email organization roles",
+//   userStore: new WebStorageStateStore({ store: window.localStorage }),
+// };
 
 
 export const App = () => {
@@ -95,93 +95,122 @@ export const App = () => {
   const LOCAL_STATORAGE_SIGNED_IN = 'PS-SIGNED-IN'
   const [oidcUser, setOidcUser] = useState<User | null>(null);
   const [roles, setRoles] = useState<string[]>([]);
+  const [userProfile, setUserProfile] = useState<any>(null);
 
-  const userManager = new UserManager(oidcConfig);
+  // const userManager = new UserManager(oidcConfig);
+
+  const fetchUserProfile = async () => {
+    try {
+      const rsp = await fetch("https://localhost:8443/assistant/me", { credentials: "include" });
+      if (rsp.status === 200) {
+        const data = await rsp.json();
+        setUserProfile(data);
+        setChat({
+          id: data.sub,
+          firstName: data.given_name || "",
+          lastName: data.family_name || "",
+          username: data.preferred_username || data.email || "",
+          email: data.email
+        });
+        setAuthorizedUserId(data.sub);
+        setRoles(data.roles || []);
+      } else {
+        setUserProfile(null);
+        setChat(defaultChat);
+        setAuthorizedUserId(null);
+        setRoles([]);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
   useEffect(() => {
     document.title = "PMS";
     fetchConfig();
+    fetchUserProfile();
   }, []);
 
-  useEffect(() => {
-    userManager.getUser().then(user => {
-      if (user && !user.expired) {
-        console.log("User loaded: userManager.getUser()");
-        setOidcUser(user);
-        setChat({
-          id: user.profile.sub,
-          firstName: user.profile.given_name || "",
-          lastName: user.profile.family_name || "",
-          username: user.profile.preferred_username || user.profile.email || "",
-          email: user.profile.email
-        });
-        setAuthorizedUserId(user.profile.sub);
-      } else {
-        setOidcUser(null);
-        setChat(defaultChat);
-        setAuthorizedUserId(null);
-        setRoles([]);
-        // Remove access token from sessionStorage
-        sessionStorage.removeItem('accessToken');
-      }
-      setLoading(false);
-    });
+  // useEffect(() => {
+  //   userManager.getUser().then(user => {
+  //     if (user && !user.expired) {
+  //       console.log("User loaded: userManager.getUser()");
+  //       setOidcUser(user);
+  //       setChat({
+  //         id: user.profile.sub,
+  //         firstName: user.profile.given_name || "",
+  //         lastName: user.profile.family_name || "",
+  //         username: user.profile.preferred_username || user.profile.email || "",
+  //         email: user.profile.email
+  //       });
+  //       setAuthorizedUserId(user.profile.sub);
+  //     } else {
+  //       setOidcUser(null);
+  //       setChat(defaultChat);
+  //       setAuthorizedUserId(null);
+  //       setRoles([]);
+  //       // Remove access token from sessionStorage
+  //       sessionStorage.removeItem('accessToken');
+  //     }
+  //     setLoading(false);
+  //   });
 
-    // Listen for user loaded/unloaded events
-    userManager.events.addUserLoaded(user => {
-      console.log("User loaded: userManager.events.addUserLoaded");
-      setOidcUser(user);
-      setChat({
-        id: user.profile.sub,
-        firstName: user.profile.given_name || "",
-        lastName: user.profile.family_name || "",
-        username: user.profile.preferred_username || user.profile.email || "",
-        email: user.profile.email
-      });
-      setAuthorizedUserId(user.profile.sub);
-    });
-    userManager.events.addUserUnloaded(() => {
-      setOidcUser(null);
-      setChat(defaultChat);
-      setAuthorizedUserId(null);
-      console.log("User unloaded, resetting chat state");
-    });
+  //   // Listen for user loaded/unloaded events
+  //   userManager.events.addUserLoaded(user => {
+  //     console.log("User loaded: userManager.events.addUserLoaded");
+  //     setOidcUser(user);
+  //     setChat({
+  //       id: user.profile.sub,
+  //       firstName: user.profile.given_name || "",
+  //       lastName: user.profile.family_name || "",
+  //       username: user.profile.preferred_username || user.profile.email || "",
+  //       email: user.profile.email
+  //     });
+  //     setAuthorizedUserId(user.profile.sub);
+  //   });
+  //   userManager.events.addUserUnloaded(() => {
+  //     setOidcUser(null);
+  //     setChat(defaultChat);
+  //     setAuthorizedUserId(null);
+  //     console.log("User unloaded, resetting chat state");
+  //   });
 
-    // Handle OIDC redirect callback
-    if (window.location.search.includes("code=")) {
-      userManager.signinRedirectCallback().then(user => {
-        console.log("User loaded after redirect: userManager.signinRedirectCallback");
-        setOidcUser(user);
-        setChat({
-          id: user.profile.sub,
-          firstName: user.profile.given_name || "",
-          lastName: user.profile.family_name || "",
-          username: user.profile.preferred_username || user.profile.email || "",
-          email: user.profile.email
-        });
-        setAuthorizedUserId(user.profile.sub);
-        navigate("home", { replace: true });
-      });
-    }
+  //   // Handle OIDC redirect callback
+  //   if (window.location.search.includes("code=")) {
+  //     userManager.signinRedirectCallback().then(user => {
+  //       console.log("User loaded after redirect: userManager.signinRedirectCallback");
+  //       setOidcUser(user);
+  //       setChat({
+  //         id: user.profile.sub,
+  //         firstName: user.profile.given_name || "",
+  //         lastName: user.profile.family_name || "",
+  //         username: user.profile.preferred_username || user.profile.email || "",
+  //         email: user.profile.email
+  //       });
+  //       setAuthorizedUserId(user.profile.sub);
+  //       navigate("home", { replace: true });
+  //     });
+  //   }
 
-    // Cleanup
-    return () => {
-      userManager.events.removeUserLoaded(() => { });
-      userManager.events.removeUserUnloaded(() => { });
-    };
-    // eslint-disable-next-line
-  }, []);
+  //   // Cleanup
+  //   return () => {
+  //     userManager.events.removeUserLoaded(() => { });
+  //     userManager.events.removeUserUnloaded(() => { });
+  //   };
+  //   // eslint-disable-next-line
+  // }, []);
 
-  useEffect(() => {
-    if (!oidcUser) {
-      return;
-    }
-    if (oidcUser.access_token) {
-      sessionStorage.setItem('accessToken', oidcUser.access_token);
-      const decoded: any = jwtDecode(oidcUser.access_token);
-      setRoles(decoded.resource_access[oidcConfig.client_id]?.roles || []);
-    }
-  }, [oidcUser]);
+  // useEffect(() => {
+  //   if (!oidcUser) {
+  //     return;
+  //   }
+  //   if (oidcUser.access_token) {
+  //     sessionStorage.setItem('accessToken', oidcUser.access_token);
+  //     const decoded: any = jwtDecode(oidcUser.access_token);
+  //     setRoles(decoded.resource_access[oidcConfig.client_id]?.roles || []);
+  //   }
+  // }, [oidcUser]);
 
   useEffect(() => {
     filterMenus();
@@ -204,6 +233,14 @@ export const App = () => {
   }
 
   const getChat = () => chat ? chat : defaultChat
+
+    const handleLogin = () => {
+    window.location.href = "https://localhost:8443/assistant/login";
+  };
+
+  const handleSignOut = () => {
+    window.location.href = "https://localhost:8443/assistant/logout";
+  };
 
   const fullName = () => {
     if (oidcUser && oidcUser.profile) {
@@ -228,18 +265,18 @@ export const App = () => {
   }
 
   // Handler to clear chat state and sign out
-  const handleSignOut = () => {
-    console.log("Signing out...");
-    userManager.signoutRedirect().then(() => {
-      setChat(defaultChat);
-      setAuthorizedUserId(null);
-      localStorage.removeItem(LOCAL_STATORAGE_SIGNED_IN);
-      setOidcUser(null);
-      // Remove access token from sessionStorage on logout
-      sessionStorage.removeItem('accessToken');
-      navigate("/home", { replace: true });
-    })
-  };
+  // const handleSignOut = () => {
+  //   console.log("Signing out...");
+  //   userManager.signoutRedirect().then(() => {
+  //     setChat(defaultChat);
+  //     setAuthorizedUserId(null);
+  //     localStorage.removeItem(LOCAL_STATORAGE_SIGNED_IN);
+  //     setOidcUser(null);
+  //     // Remove access token from sessionStorage on logout
+  //     sessionStorage.removeItem('accessToken');
+  //     navigate("/home", { replace: true });
+  //   })
+  // };
 
   // Filter menus based on user scopes
 
@@ -326,7 +363,7 @@ export const App = () => {
             {fullName()}
           </span>
             : <span className="font text-[10px] font-bold text-gray-800 dark:text-white"
-              onClick={() => userManager.signinRedirect()}>
+              onClick={handleLogin}>
               Login
             </span>
         }

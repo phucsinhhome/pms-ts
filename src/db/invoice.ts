@@ -14,7 +14,7 @@ export const exportInvoice = async (invoice: Invoice) => {
   );
 }
 
-export const updateInvoice = async (invoice: Invoice) => {
+export const updateInvoice = (invoice: Invoice) => {
   console.info("Call API to update invoice");
   return invoiceApi.post(
     `/update`,

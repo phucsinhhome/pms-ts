@@ -36,12 +36,13 @@ export type Invoice = {
   prepaied: boolean,
   paymentMethod: string,
   reservationCode: string,
-  creatorId: string,
+  creatorId: string | null,  
   sheetName: string,
   country: string,
   signed: boolean,
   items: InvoiceItem[],
-  rooms: string[]
+  rooms: string[],
+  createdBy: string,
 }
 
 export type Issuer = {

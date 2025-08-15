@@ -144,7 +144,8 @@ const defaultEmptyInvoice = {
   rooms: [],
   sheetName: '',
   signed: false,
-  country: ''
+  country: '',
+  createdBy: '',
 }
 
 type InvoiceProps = {
@@ -231,7 +232,10 @@ export const InvoiceEditor = (props: InvoiceProps) => {
             const issuer = issuers.find(usr => usr.id === data.issuerId)
             setSelectedIssuer(issuer || issuers[0])
           }
-          setInvoice(data)
+          setInvoice({
+            ...data,
+            createdBy: props.chat.username,
+          })
         })
     } else {
       fetchReservations()
@@ -270,7 +274,7 @@ export const InvoiceEditor = (props: InvoiceProps) => {
   }, [invoiceId, products.length, props])
 
 
-  const handleSaveInvoice = () => {
+  const handleSaveInvoice = async () => {
     console.info("Prepare to save invoice")
     if (invoice === undefined) {
       return
@@ -287,7 +291,9 @@ export const InvoiceEditor = (props: InvoiceProps) => {
     console.log(invoice)
 
     var inv = {
-      ...invoice
+      ...invoice,
+      creatorId: null,
+      createdBy: props.chat.username,
     }
 
     if (invoice.id === "new") {
@@ -299,17 +305,14 @@ export const InvoiceEditor = (props: InvoiceProps) => {
       console.info("Generated invoice id %s", newId)
     }
 
-    updateInvoice(inv)
-      .then((res) => {
-        if (res.status === 200) {
-          console.info("Invoice %s has been saved successfully", invoiceId);
-          setInvoice(inv);
-          setDirty(false)
-        } else {
-          console.info("Failed to save invoice %s", invoiceId);
-        }
-        console.info(res)
-      })
+    const res = await updateInvoice(inv);
+    if (res.status !== 200) {
+      console.error("Failed to save invoice %s", invoiceId);
+      return
+    }
+    console.info("Invoice %s has been saved successfully", invoiceId);
+    setInvoice(inv);
+    setDirty(false);
   }
 
   const createOrUpdateItem = () => {
@@ -729,7 +732,8 @@ export const InvoiceEditor = (props: InvoiceProps) => {
         paymentPhotos: [],
         reservationCode: res.code,
         rooms: internalRooms(res.rooms),
-        creatorId: props.chat.id,
+        creatorId: null,
+        createdBy: props.chat.username,
         sheetName: '',
         signed: false,
         country: '',
@@ -766,7 +770,8 @@ export const InvoiceEditor = (props: InvoiceProps) => {
         paymentPhotos: [],
         reservationCode: '',
         rooms: ["R1"],
-        creatorId: props.chat.id,
+        creatorId: null,
+        createdBy: props.chat.username,
         sheetName: '',
         signed: false,
         country: '',
@@ -889,7 +894,7 @@ export const InvoiceEditor = (props: InvoiceProps) => {
                   />
                   <Label
                     id="creatorId"
-                    value={"Created by: " + (invoice.creatorId)}
+                    value={"Created by: " + (invoice.createdBy)}
                     className="outline-none font-mono text-[10px] italic text-gray-700"
                   />
                 </div>

@@ -227,7 +227,7 @@ export const Inventory = (props: InventoryProps) => {
             if (p.id === data.itemId) { p.quantity = data.quantity }
             return p
           }))
-          console.info("Change item %s with quantity %s order successfully", item.itemId, item.quantity)
+          console.info("Update item %s with quantity %s successfully", item.itemId, data.quantity)
         } else if (rsp.status === 400) {
           console.warn('The item %s does not exist', item.itemId)
         } else if (rsp.status === 304) {

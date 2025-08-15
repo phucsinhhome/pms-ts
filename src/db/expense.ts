@@ -23,7 +23,7 @@ export const listExpenseByDate = async (byDate: string, pageNumber: number, page
   );
 }
 
-export const listExpenseByExpenserAndDate = async (
+export const listExpenseByExpenserAndDate = (
   expenserId: string | null,
   byDate: string,
   pageNumber: number,
@@ -35,7 +35,7 @@ export const listExpenseByExpenserAndDate = async (
     params.expenserId = expenserId;
   }
 
-  return await expenseApi.get(
+  return expenseApi.get(
     `/list/bydate`,
     { params }
   );

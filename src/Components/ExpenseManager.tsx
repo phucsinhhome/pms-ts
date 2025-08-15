@@ -15,6 +15,7 @@ import { MdAssignmentAdd } from "react-icons/md";
 import { FaUmbrellaBeach } from "react-icons/fa";
 import { IoMdRemoveCircle } from "react-icons/io";
 import { CiEdit } from "react-icons/ci";
+import Moment from "react-moment";
 
 export type Expense = {
   id: string,
@@ -42,8 +43,8 @@ const defaultEmptExpense: Expense = {
   quantity: 1,
   unitPrice: 0,
   amount: 0,
-  expenserName: 'Minh Tran',
-  expenserId: '1351151927',
+  expenserName: 'Manager User',
+  expenserId: 'manager',
   service: ""
 }
 
@@ -90,24 +91,24 @@ export const ExpenseManager = memo((props: ExpenseProps) => {
     })
   }
 
-  const fetchExpenses = () => {
+  const fetchExpenses = async () => {
     let byDate = formatISODate(new Date())
-    return listExpenseByExpenserAndDate(props.chat.username, byDate, pagination.pageNumber, pagination.pageSize)
-      .then((data: any) => {
-        if (data === undefined) {
-          console.warn("Invalid expense response")
-          return
-        }
-        let sortedExps = data.content
-        setExpenses(sortedExps)
-        setPagination({
-          pageNumber: data.number,
-          pageSize: data.size,
-          totalElements: data.totalElements,
-          totalPages: data.totalPages
-        })
-        return true
-      })
+
+    const res = await listExpenseByExpenserAndDate(props.chat.username, byDate, pagination.pageNumber, pagination.pageSize);
+    if (res === undefined || res.status !== 200) {
+      console.warn("Invalid expense response")
+      return
+    }
+    const data = res.data;
+    console.info("Fetched %s expenses by date %s", data.size, byDate)
+    let sortedExps = data.content
+    setExpenses(sortedExps)
+    setPagination({
+      pageNumber: data.number,
+      pageSize: data.size,
+      totalElements: data.totalElements,
+      totalPages: data.totalPages
+    })
   }
 
   useEffect(() => {
@@ -429,6 +430,7 @@ export const ExpenseManager = memo((props: ExpenseProps) => {
                 {item.itemName}
               </div>
               <div className="flex flex-row text-[10px] space-x-1">
+                <Moment format="DD.MM" className="w-10">{new Date(item.expenseDate)}</Moment>
                 <span className="w-6">{"x" + item.quantity}</span>
                 <span className="w-24">{formatVND(item.amount)}</span>
                 <span className="font font-mono font-black">{item.service}</span>
@@ -454,10 +456,14 @@ export const ExpenseManager = memo((props: ExpenseProps) => {
           <li onClick={() => handlePaginationClick(0)} className={pageClass(0)}>
             1
           </li>
-          <li hidden={pagination.pageNumber + 1 <= 1 || pagination.pageNumber + 1 >= pagination.totalPages} aria-current="page" className={pageClass(pagination.pageNumber)}>
+          <li hidden={pagination.pageNumber + 1 <= 1 || pagination.pageNumber + 1 >= pagination.totalPages}
+            aria-current="page"
+            className={pageClass(pagination.pageNumber)}>
             {pagination.pageNumber + 1}
           </li>
-          <li hidden={pagination.totalPages <= 1} onClick={() => handlePaginationClick(pagination.totalPages - 1)} className={pageClass(pagination.totalPages - 1)}>
+          <li hidden={pagination.totalPages <= 1}
+            onClick={() => handlePaginationClick(pagination.totalPages - 1)}
+            className={pageClass(pagination.totalPages - 1)}>
             {pagination.totalPages}
           </li>
           <li onClick={() => handlePaginationClick(pagination.pageNumber + 1)} className="block px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">

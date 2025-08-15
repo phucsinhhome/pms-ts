@@ -92,7 +92,7 @@ export const ExpenseManager = memo((props: ExpenseProps) => {
 
   const fetchExpenses = () => {
     let byDate = formatISODate(new Date())
-    return listExpenseByExpenserAndDate(props.authorizedUserId, byDate, pagination.pageNumber, pagination.pageSize)
+    return listExpenseByExpenserAndDate(props.chat.username, byDate, pagination.pageNumber, pagination.pageSize)
       .then((data: any) => {
         if (data === undefined) {
           console.warn("Invalid expense response")
@@ -230,25 +230,28 @@ export const ExpenseManager = memo((props: ExpenseProps) => {
     setEditingExpense(eI)
   }
 
-  const blurItemName = () => {
+  const blurItemName = async () => {
     let nItemName = editingExpense.origin.itemName
     if (nItemName === null || nItemName === undefined || nItemName === "") {
       return;
     }
     setClassifyingExp(true)
     console.log("Classify the service by expense name [%s]", nItemName)
-    classifyServiceByItemName(nItemName)
-      .then((srv: string) => {
-        let eI = {
-          ...editingExpense,
-          origin: {
-            ...editingExpense.origin,
-            service: srv
-          }
-        }
-        setEditingExpense(eI)
-        setClassifyingExp(false)
-      })
+    let rsp = await classifyServiceByItemName(nItemName);
+    if (rsp.status !== 200) {
+      console.error("Failed to classify service by item name %s", nItemName)
+      setClassifyingExp(false)
+      return;
+    }
+    let eI = {
+      ...editingExpense,
+      origin: {
+        ...editingExpense.origin,
+        service: rsp.data.service
+      }
+    }
+    setEditingExpense(eI)
+    setClassifyingExp(false)
   }
 
   const changeUnitPrice = (e: ChangeEvent<HTMLInputElement>) => {
@@ -315,7 +318,7 @@ export const ExpenseManager = memo((props: ExpenseProps) => {
             ...defaultEmptExpense,
             expenseDate: formatISODateTime(new Date()),
             expenserName: props.displayName,
-            expenserId: props.chat.id
+            expenserId: props.chat.username
           }
         }
         return rsp.data.json()
@@ -328,7 +331,7 @@ export const ExpenseManager = memo((props: ExpenseProps) => {
               amount: data.unitPrice * data.quantity,
               expenseDate: formatISODateTime(new Date()),
               expenserName: props.displayName,
-              expenserId: props.chat.id
+              expenserId: props.chat.username
             }
           })
       })
@@ -337,7 +340,7 @@ export const ExpenseManager = memo((props: ExpenseProps) => {
           ...defaultEmptExpense,
           expenseDate: formatISODateTime(new Date()),
           expenserName: props.displayName,
-          expenserId: props.chat.id
+          expenserId: props.chat.username
         }
       })
   }
@@ -353,7 +356,7 @@ export const ExpenseManager = memo((props: ExpenseProps) => {
       itemName: editingExpense.origin.itemName,
       quantity: editingExpense.origin.quantity,
       unitPrice: editingExpense.origin.unitPrice,
-      expenserId: props.chat.id,
+      expenserId: props.chat.username,
       expenserName: props.displayName,
       service: editingExpense.origin.service,
       id: editingExpense.origin.id,
@@ -369,9 +372,9 @@ export const ExpenseManager = memo((props: ExpenseProps) => {
       console.info("Updated expense date to %s", expDate)
     }
     if (exp.expenserId === null) {
-      exp.expenserId = props.chat.id
+      exp.expenserId = props.chat.username
       exp.expenserName = props.displayName
-      console.info("Updated expenser to %s", props.chat.id)
+      console.info("Updated expenser to %s", props.chat.username)
     }
     console.info("Save expense %s...", exp.id)
     return saveExpense(exp)

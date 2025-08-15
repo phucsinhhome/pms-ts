@@ -30,7 +30,7 @@ export type Chat = {
   id: string,
   firstName: string,
   lastName: string | undefined,
-  username: string | undefined,
+  username: string,
   email?: string
 }
 const defaultChatId = '0000000000'
@@ -118,7 +118,7 @@ export const App = () => {
           email: data.email
         });
         setAuthorizedUserId(data.sub);
-        setRoles(data.roles || []);
+        setRoles(data.authorities || []);
       } else {
         setUserProfile(null);
         setChat(defaultChat);

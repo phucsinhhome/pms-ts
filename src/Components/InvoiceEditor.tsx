@@ -617,26 +617,27 @@ export const InvoiceEditor = (props: InvoiceProps) => {
     }
   }
 
-  const blurItemName = () => {
+  const blurItemName = async () => {
     let nItemName = editingItem.origin.itemName
     if (nItemName === null || nItemName === undefined || nItemName === "") {
       return Promise.resolve(false);
     }
     console.log("Classify the service by service name [%s]", nItemName)
-    return classifyServiceByItemName(nItemName)
-      .then((srv) => {
-        let eI = {
-          ...editingItem,
-          origin: {
-            ...editingItem.origin,
-            service: srv
-          }
-        }
-        setEditingItem(eI)
-        setDirty(true)
-        console.info("How is it")
-        return true
-      })
+    let rsp = await classifyServiceByItemName(nItemName);
+    if (rsp.status !== 200) {
+      console.error("Failed to classify service by item name %s", nItemName)
+      return Promise.resolve(false);
+    }
+    let eI = {
+      ...editingItem,
+      origin: {
+        ...editingItem.origin,
+        service: rsp.data.service
+      }
+    }
+    setEditingItem(eI)
+    setDirty(true)
+    return Promise.resolve(true);
   }
 
   const confirmSelectItem = (product: Product) => {

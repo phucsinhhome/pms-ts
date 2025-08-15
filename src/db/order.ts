@@ -8,7 +8,7 @@ export const listOrders = (fromTime: string, page: number, size: number) => {
 
 export const listOrderByStatuses = (fromTime: string, statuses: string[], page: number, size: number) => {
   console.info(`Fetch orders from backend from ${fromTime} with statuses ${statuses}`)
-  return orderApi.get(`/list`, { params: { fromTime, statuses, page, size } });
+  return orderApi.get(`/list`, { params: { fromTime, statuses: statuses.join(','), page, size } });
 }
 
 export const fetchUpcomingOrders = (fromTime: string, filter: string, page: number, size: number) => {

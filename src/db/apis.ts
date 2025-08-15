@@ -146,6 +146,13 @@ const configApi: AxiosInstance = axios.create({
 //     .request
 //     .use(configureAccessToken, (error) => Promise.reject(error));
 
+// classificationApi
+const classificationApi: AxiosInstance = axios.create({
+    baseURL: `${process.env.REACT_APP_SERVICE_CLASSIFICATION_ENDPOINT}`,
+    withCredentials: true
+});
+
+
 export {
     reportApi,
     expenseApi,
@@ -159,5 +166,6 @@ export {
     supplierApi,
     tourApi,
     tourRequestApi,
-    configApi
+    configApi,
+    classificationApi
 }

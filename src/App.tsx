@@ -250,7 +250,7 @@ export const App = () => {
   // In your React app (e.g., UserProfile component)
   const handleEditProfileClick = () => {
     // Option 1: Redirect via Spring Boot backend (recommended for dynamic URLs or pre-checks)
-    window.location.href = 'https://localhost:8443/assistant/account/settings'; 
+    window.location.href = 'https://localhost:8443/assistant/account/settings';
 
     // Option 2: Direct redirect (if you know the Keycloak URL)
     // window.location.href = 'https://phucsinhhcm.hopto.org/iam/realms/ps_dev/account';
@@ -299,11 +299,16 @@ export const App = () => {
             </Link>
           ))
         }
-        <Link to="settings" className="absolute right-2">
-          <IoMdSettings
-            className="pointer-events-auto cursor-pointer w-14 h-7"
-          />
-        </Link>
+        {
+          roles.includes('setting') ? (
+            <Link to="settings" className="absolute right-2">
+              <IoMdSettings
+                className="pointer-events-auto cursor-pointer w-14 h-7"
+              />
+            </Link>
+          ) : <></>
+        }
+
       </div>
       <Routes>
         <Route path="" element={<Welcome activeMenu={() => setActiveMenu(menus[0])} />} />
@@ -365,7 +370,7 @@ export const App = () => {
       >
         {
           userProfile ? <span className="font text-[10px] font-bold text-gray-800 dark:text-white"
-            onClick={()=> navigate('/profile')}>
+            onClick={() => navigate('/profile')}>
             {fullName()}
           </span>
             : <span className="font text-[10px] font-bold text-gray-800 dark:text-white"

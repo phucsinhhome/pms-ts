@@ -131,6 +131,9 @@ export const TourEditor = (props: TourEditorProps) => {
       }
     } catch (error) {
       console.error("Error fetching tour:", error);
+      if (error instanceof Error) {
+        alert(error.message);
+      }
     }
   };
 

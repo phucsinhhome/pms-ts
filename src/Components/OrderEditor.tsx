@@ -54,6 +54,12 @@ export const OrderEditor = (props: OrderEditorProps) => {
                   setChoosenInvoice(inv)
                 }
               })
+              .catch((e) => {
+                console.error("Error while fetching the linked invoice", e)
+                if (e instanceof Error) {
+                  alert(e.message)
+                }
+              });
           }
         }
       })
@@ -84,12 +90,17 @@ export const OrderEditor = (props: OrderEditorProps) => {
           setPGroups(rsp.data.content)
         }
       })
-      .catch(() => {
+      .catch((e) => {
         setPGroups([])
+        console.error("Error while fetching product groups", e)
+        if (e instanceof Error) {
+          alert(e.message)
+        }
       });
   }
 
   const sendToPreparation = () => {
+
     if (order === undefined) {
       console.warn("Invalid order")
       return
@@ -108,6 +119,12 @@ export const OrderEditor = (props: OrderEditorProps) => {
           const data: Order = rsp.data
           console.info("Send oder to preparation %s successfully", data.orderId)
           setOrder(data)
+        }
+      })
+      .catch((e) => {
+        console.error("Error while sending order to preparation", e)
+        if (e instanceof Error) {
+          alert(e.message)
         }
       })
   }
@@ -129,23 +146,28 @@ export const OrderEditor = (props: OrderEditorProps) => {
     })
   }
 
-  const stopPreparation = () => {
-    if (orderId === undefined) {
-      console.warn("Invalid order id")
-      return
+  const stopPreparation = async () => {
+    try {
+      if (orderId === undefined) {
+        console.warn("Invalid order id")
+        return
+      }
+      if (staffId === undefined) {
+        console.warn("Invalid staff id")
+        return
+      }
+      const rsp = await rejectOrder(orderId, staffId);
+      if (rsp.status === 200) {
+        const data: Order = rsp.data
+        console.info("Order %s has been rejected", data.orderId)
+        setOrder(data)
+      }
+    } catch (e) {
+      console.error("Error while rejecting the order", e)
+      if (e instanceof Error) {
+        alert(e.message)
+      }
     }
-    if (staffId === undefined) {
-      console.warn("Invalid staff id")
-      return
-    }
-    rejectOrder(orderId, staffId)
-      .then((rsp) => {
-        if (rsp.status === 200) {
-          const data: Order = rsp.data
-          console.info("Order %s has been rejected", data.orderId)
-          setOrder(data)
-        }
-      })
   }
 
   const cancelLinkInvoice = () => {

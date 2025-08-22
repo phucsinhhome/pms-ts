@@ -92,23 +92,30 @@ export const ExpenseManager = memo((props: ExpenseProps) => {
   }
 
   const fetchExpenses = async () => {
-    let byDate = formatISODate(new Date())
+    try {
+      let byDate = formatISODate(new Date())
 
-    const res = await listExpenseByExpenserAndDate(props.chat.username, byDate, pagination.pageNumber, pagination.pageSize);
-    if (res === undefined || res.status !== 200) {
-      console.warn("Invalid expense response")
-      return
+      const res = await listExpenseByExpenserAndDate(props.chat.username, byDate, pagination.pageNumber, pagination.pageSize);
+      if (res === undefined || res.status !== 200) {
+        console.warn("Invalid expense response")
+        return
+      }
+      const data = res.data;
+      console.info("Fetched %s expenses by date %s", data.size, byDate)
+      let sortedExps = data.content
+      setExpenses(sortedExps)
+      setPagination({
+        pageNumber: data.number,
+        pageSize: data.size,
+        totalElements: data.totalElements,
+        totalPages: data.totalPages
+      })
+    } catch (e) {
+      console.error("Error while fetching expenses", e)
+      if (e instanceof Error) {
+        alert(e.message)
+      }
     }
-    const data = res.data;
-    console.info("Fetched %s expenses by date %s", data.size, byDate)
-    let sortedExps = data.content
-    setExpenses(sortedExps)
-    setPagination({
-      pageNumber: data.number,
-      pageSize: data.size,
-      totalElements: data.totalElements,
-      totalPages: data.totalPages
-    })
   }
 
   useEffect(() => {
@@ -132,14 +139,21 @@ export const ExpenseManager = memo((props: ExpenseProps) => {
   }
 
   const handleDeleteExpense = (exp: Expense) => {
-    console.warn("Deleting expense [%s]...", exp.id)
-    deleteExpense(exp)
-      .then((rsp: any) => {
-        if (rsp !== null) {
-          console.log("Delete expense %s successully", exp.id)
-          fetchExpenses()
-        }
-      })
+    try {
+      console.warn("Deleting expense [%s]...", exp.id)
+      deleteExpense(exp)
+        .then((rsp: any) => {
+          if (rsp !== null) {
+            console.log("Delete expense %s successully", exp.id)
+            fetchExpenses()
+          }
+        })
+    } catch (e) {
+      console.error("Error while deleting expense", e)
+      if (e instanceof Error) {
+        alert(e.message)
+      }
+    }
   }
 
   //============ EXPENSE DELETION ====================//

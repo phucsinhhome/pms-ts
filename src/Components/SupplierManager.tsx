@@ -174,13 +174,32 @@ export const SupplierManager = (props: SupplierManagerProps) => {
 
 
   const fetchInvoices = () => {
-    let createdTime = new Date()
-    createdTime.setDate(createdTime.getDate() - 5)
-    createdTime.setHours(0, 0, 0, 0)
-    let fromTime = formatISODateTime(createdTime)
+    try {
+      let createdTime = new Date()
+      createdTime.setDate(createdTime.getDate() - 5)
+      createdTime.setHours(0, 0, 0, 0)
+      let fromTime = formatISODateTime(createdTime)
 
-    if (statuses.length > 0) {
-      listSupplierInvoicesByTimeAndStatus(fromTime, statuses, pagination.pageNumber, pagination.pageSize)
+      if (statuses.length > 0) {
+        listSupplierInvoicesByTimeAndStatus(fromTime, statuses, pagination.pageNumber, pagination.pageSize)
+          .then(rsp => {
+            if (rsp.status === 200) {
+              const data = rsp.data;
+              setInvoices(data.content)
+              if (data.totalPages !== pagination.totalPages) {
+                setPagination({
+                  ...pagination,
+                  totalPages: data.totalPages
+                })
+              }
+            } else {
+              setInvoices([]);
+            }
+          })
+          .catch(() => setInvoices([]))
+        return
+      }
+      listSupplierInvoices(fromTime, pagination.pageNumber, pagination.pageSize)
         .then(rsp => {
           if (rsp.status === 200) {
             const data = rsp.data;
@@ -196,24 +215,12 @@ export const SupplierManager = (props: SupplierManagerProps) => {
           }
         })
         .catch(() => setInvoices([]))
-      return
+    } catch (e) {
+      console.error("Error while fetching invoices", e)
+      if (e instanceof Error) {
+        alert(e.message)
+      }
     }
-    listSupplierInvoices(fromTime, pagination.pageNumber, pagination.pageSize)
-      .then(rsp => {
-        if (rsp.status === 200) {
-          const data = rsp.data;
-          setInvoices(data.content)
-          if (data.totalPages !== pagination.totalPages) {
-            setPagination({
-              ...pagination,
-              totalPages: data.totalPages
-            })
-          }
-        } else {
-          setInvoices([]);
-        }
-      })
-      .catch(() => setInvoices([]))
   }
 
   const pageClass = (pageNum: number) => {

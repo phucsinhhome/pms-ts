@@ -197,8 +197,12 @@ export const OrderManager = (props: OrderManagerProps) => {
           setPGroups(rsp.data.content)
         }
       })
-      .catch(() => {
+      .catch((e) => {
         setPGroups([])
+        console.error("Error while fetching product groups", e)
+        if (e instanceof Error) {
+          alert(e.message)
+        }
       });
   }
 

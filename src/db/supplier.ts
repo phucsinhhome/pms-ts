@@ -1,7 +1,7 @@
 import { SupplierInvoice } from "../Components/SupplierManager";
 import { supplierApi } from "./apis";
 
-export const listSupplierInvoices = async (createdTime: string, page: number, size: number) => {
+export const listSupplierInvoices = (createdTime: string, page: number, size: number) => {
   console.info("Fetching supplier invoices from backend")
   return supplierApi.get(`/invoice/list`, { params: { createdTime, page, size } });
 }
@@ -16,7 +16,7 @@ export const listSupplierInvoicesByStatus = async (statuses: string[], page: num
   return supplierApi.get(`/invoice/list`, { params: { statuses, page, size } });
 }
 
-export const listSupplierInvoicesByTimeAndStatus = async (createdTime: string, statuses: string[], page: number, size: number) => {
+export const listSupplierInvoicesByTimeAndStatus = (createdTime: string, statuses: string[], page: number, size: number) => {
   console.info("Fetching supplier invoices by time and status")
   return supplierApi.get(`/invoice/list`, { params: { createdTime, statuses, page, size } });
 }

@@ -217,47 +217,61 @@ export const InvoiceEditor = (props: InvoiceProps) => {
       return
     }
     if (invoiceId !== "new") {
-      getInvoice(invoiceId)
-        .then(rsp => {
-          if (!(rsp.status === 200)) {
-            console.error("Failed to fetch invoice %s", invoiceId)
-            return
-          }
-          const data: Invoice = rsp.data
-          if (data.paymentMethod !== null && data.paymentMethod !== undefined && data.paymentMethod !== "") {
-            const pM = paymentMethods.find(m => m.id === data.paymentMethod)
-            setSelectedPaymentMethod(pM || paymentMethods[0])
-          }
-          if (data.issuerId !== null && data.issuerId !== undefined && data.issuerId !== "") {
-            const issuer = issuers.find(usr => usr.id === data.issuerId)
-            setSelectedIssuer(issuer || issuers[0])
-          }
-          setInvoice({
-            ...data,
-            createdBy: props.chat.username,
+      try {
+        getInvoice(invoiceId)
+          .then(rsp => {
+            if (!(rsp.status === 200)) {
+              console.error("Failed to fetch invoice %s", invoiceId)
+              return
+            }
+            const data: Invoice = rsp.data
+            if (data.paymentMethod !== null && data.paymentMethod !== undefined && data.paymentMethod !== "") {
+              const pM = paymentMethods.find(m => m.id === data.paymentMethod)
+              setSelectedPaymentMethod(pM || paymentMethods[0])
+            }
+            if (data.issuerId !== null && data.issuerId !== undefined && data.issuerId !== "") {
+              const issuer = issuers.find(usr => usr.id === data.issuerId)
+              setSelectedIssuer(issuer || issuers[0])
+            }
+            setInvoice({
+              ...data,
+              createdBy: props.chat.username,
+            })
           })
-        })
+      } catch (e) {
+        console.error("Error while fetching invoice", e);
+        if (e instanceof Error) {
+          alert(e.message);
+        }
+      }
     } else {
-      fetchReservations()
-        .then(rsp => {
-          if (rsp.status === 200) {
-            setReservations(rsp.data.content)
-            setFilteredReservations(rsp.data.content)
-            setResFilteredText('')
-            setOpenChooseResModal(true)
-          } else {
+      try {
+        fetchReservations()
+          .then(rsp => {
+            if (rsp.status === 200) {
+              setReservations(rsp.data.content)
+              setFilteredReservations(rsp.data.content)
+              setResFilteredText('')
+              setOpenChooseResModal(true)
+            } else {
+              setReservations([])
+              setFilteredReservations([])
+              setResFilteredText('')
+              setOpenChooseResModal(true)
+            }
+          })
+          .catch(() => {
             setReservations([])
             setFilteredReservations([])
             setResFilteredText('')
             setOpenChooseResModal(true)
-          }
-        })
-        .catch(() => {
-          setReservations([])
-          setFilteredReservations([])
-          setResFilteredText('')
-          setOpenChooseResModal(true)
-        })
+          })
+      } catch (e) {
+        console.error("Error while fetching reservations", e);
+        if (e instanceof Error) {
+          alert(e.message);
+        }
+      }
     }
     if (products.length <= 0) {
       console.info("Fetch the products")
@@ -268,8 +282,12 @@ export const InvoiceEditor = (props: InvoiceProps) => {
             console.info("Fetched %d products", data.length)
             setProducts(data)
           }
-        })
-
+        }).catch((e) => {
+          console.error("Error while fetching products", e)
+          if (e instanceof Error) {
+            alert(e.message)
+          }
+        });
     }
   }, [invoiceId, products.length, props])
 

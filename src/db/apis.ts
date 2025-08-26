@@ -152,6 +152,12 @@ const classificationApi: AxiosInstance = axios.create({
     withCredentials: true
 });
 
+// statusApi
+const statusApi: AxiosInstance = axios.create({
+    baseURL: `${process.env.REACT_APP_STATUS_ENDPOINT}`,
+    withCredentials: true
+});
+
 
 export {
     reportApi,
@@ -167,5 +173,6 @@ export {
     tourApi,
     tourRequestApi,
     configApi,
-    classificationApi
+    classificationApi,
+    statusApi
 }

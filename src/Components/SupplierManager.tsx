@@ -5,7 +5,7 @@ import { Button, Label, Modal, Spinner, TextInput } from "flowbite-react";
 import { InvoiceItem } from "./InvoiceManager";
 import { HiMail, HiOutlineCash, HiX } from "react-icons/hi";
 import { GiCoinflip, GiMeal } from "react-icons/gi";
-import { SERVICE_NAMES } from "../Service/ItemClassificationService";
+import { SERVICE_NAMES } from "../db/classification";
 import { generateSInvoice, listSupplierInvoices, listSupplierInvoicesByTimeAndStatus, paidSInvoice, rejectSInvoice, saveSInvoice, takenPlaceSInvoice } from "../db/supplier";
 import { PiBrainThin } from "react-icons/pi";
 import { MdAssignmentAdd } from "react-icons/md";

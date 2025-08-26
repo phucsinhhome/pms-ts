@@ -1,5 +1,5 @@
 import { formatDatePartition } from "../Service/Utils";
-import { syncStatusOfMonth } from "../Service/StatusSyncingService";
+import { syncStatusOfMonth } from "../db/status";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { Button, Checkbox, Label, Spinner, TextInput } from "flowbite-react";
 import { collectRes } from "../db/reservation_extractor";
@@ -58,8 +58,8 @@ export const Settings = (props: SettingProps) => {
     props.changeSyncing(true)
     console.info("Sync status")
     syncStatusOfMonth(datePartition)
-      .then((rsp: Response) => {
-        if (rsp.ok) {
+      .then((rsp) => {
+        if (rsp.status === 200) {
           console.info("Sync status of %s successfully", datePartition)
         }
         console.log(rsp)

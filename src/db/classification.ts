@@ -1,4 +1,4 @@
-import { classificationApi } from "../db/apis"
+import { classificationApi } from "./apis"
 
 export const SERVICE_NAMES = ["STAY", "FOOD", "TOUR"]
 export const classifyServiceByItemName = (itemName: string) => {

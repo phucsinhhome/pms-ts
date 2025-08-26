@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, ChangeEvent, memo } from "react";
 import { TextInput, Label, Spinner, Modal, Button } from "flowbite-react";
 import { deleteExpense, generate, newExpId } from "../db/expense";
-import { classifyServiceByItemName } from "../Service/ItemClassificationService";
+import { classifyServiceByItemName } from "../db/classification";
 import { Chat, DEFAULT_PAGE_SIZE } from "../App";
 import { HiOutlineCash, HiX } from "react-icons/hi";
 import { formatISODate, formatISODateTime, formatMoneyAmount, formatVND } from "../Service/Utils";
@@ -246,27 +246,36 @@ export const ExpenseManager = memo((props: ExpenseProps) => {
   }
 
   const blurItemName = async () => {
-    let nItemName = editingExpense.origin.itemName
-    if (nItemName === null || nItemName === undefined || nItemName === "") {
-      return;
-    }
-    setClassifyingExp(true)
-    console.log("Classify the service by expense name [%s]", nItemName)
-    let rsp = await classifyServiceByItemName(nItemName);
-    if (rsp.status !== 200) {
-      console.error("Failed to classify service by item name %s", nItemName)
-      setClassifyingExp(false)
-      return;
-    }
-    let eI = {
-      ...editingExpense,
-      origin: {
-        ...editingExpense.origin,
-        service: rsp.data.service
+    try {
+      let nItemName = editingExpense.origin.itemName
+      if (nItemName === null || nItemName === undefined || nItemName === "") {
+        return;
       }
+      setClassifyingExp(true)
+      console.log("Classify the service by expense name [%s]", nItemName)
+      let rsp = await classifyServiceByItemName(nItemName);
+      if (rsp.status !== 200) {
+        console.error("Failed to classify service by item name %s", nItemName)
+        setClassifyingExp(false)
+        return;
+      }
+      let eI = {
+        ...editingExpense,
+        origin: {
+          ...editingExpense.origin,
+          service: rsp.data.service
+        }
+      }
+      setEditingExpense(eI)
+      setClassifyingExp(false)
+    } catch (e) {
+      console.error(e)
+      if (e instanceof Error) {
+        alert(e.message)
+      }
+    } finally {
+      setClassifyingExp(false)
     }
-    setEditingExpense(eI)
-    setClassifyingExp(false)
   }
 
   const changeUnitPrice = (e: ChangeEvent<HTMLInputElement>) => {
@@ -361,39 +370,46 @@ export const ExpenseManager = memo((props: ExpenseProps) => {
   }
 
   const processSaveExpense = () => {
-
-    if (editingExpense.origin.itemName === '') {
-      console.warn("Invalid expense. Expense name must not be empty")
+    try {
+      if (editingExpense.origin.itemName === '') {
+        console.warn("Invalid expense. Expense name must not be empty")
+        return Promise.resolve(false)
+      }
+      let exp = {
+        expenseDate: editingExpense.origin.expenseDate,
+        itemName: editingExpense.origin.itemName,
+        quantity: editingExpense.origin.quantity,
+        unitPrice: editingExpense.origin.unitPrice,
+        expenserId: props.chat.username,
+        expenserName: props.displayName,
+        service: editingExpense.origin.service,
+        id: editingExpense.origin.id,
+        amount: editingExpense.origin.amount
+      }
+      if (exp.id === null || exp.id === "" || exp.id === "new") {
+        exp.id = newExpId()
+        console.info("Generated the expense id %s", exp.id)
+      }
+      if (exp.expenseDate === null) {
+        let expDate = formatISODateTime(new Date())
+        exp.expenseDate = expDate
+        console.info("Updated expense date to %s", expDate)
+      }
+      if (exp.expenserId === null) {
+        exp.expenserId = props.chat.username
+        exp.expenserName = props.displayName
+        console.info("Updated expenser to %s", props.chat.username)
+      }
+      console.info("Save expense %s...", exp.id)
+      return saveExpense(exp)
+        .then((rsp) => rsp.status === 200)
+    } catch (e) {
+      console.error("Error while saving expense", e)
+      if (e instanceof Error) {
+        alert(e.message)
+      }
       return Promise.resolve(false)
     }
-    let exp = {
-      expenseDate: editingExpense.origin.expenseDate,
-      itemName: editingExpense.origin.itemName,
-      quantity: editingExpense.origin.quantity,
-      unitPrice: editingExpense.origin.unitPrice,
-      expenserId: props.chat.username,
-      expenserName: props.displayName,
-      service: editingExpense.origin.service,
-      id: editingExpense.origin.id,
-      amount: editingExpense.origin.amount
-    }
-    if (exp.id === null || exp.id === "" || exp.id === "new") {
-      exp.id = newExpId()
-      console.info("Generated the expense id %s", exp.id)
-    }
-    if (exp.expenseDate === null) {
-      let expDate = formatISODateTime(new Date())
-      exp.expenseDate = expDate
-      console.info("Updated expense date to %s", expDate)
-    }
-    if (exp.expenserId === null) {
-      exp.expenserId = props.chat.username
-      exp.expenserName = props.displayName
-      console.info("Updated expenser to %s", props.chat.username)
-    }
-    console.info("Save expense %s...", exp.id)
-    return saveExpense(exp)
-      .then((rsp) => rsp.status === 200)
   }
 
   const handleSaveAndCompleteExpense = () => {

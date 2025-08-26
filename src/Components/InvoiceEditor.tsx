@@ -3,7 +3,7 @@ import { Link, useLocation, useParams } from "react-router-dom";
 import { getInvoice, updateInvoice } from "../db/invoice";
 import { Table, TextInput, Label, Datepicker, Modal, Button } from 'flowbite-react';
 import { HiOutlineCash, HiOutlineClipboardCopy, HiSave, HiUserCircle, HiX } from "react-icons/hi";
-import { classifyServiceByItemName } from "../Service/ItemClassificationService";
+import { classifyServiceByItemName } from "../db/classification";
 import { addDays, formatISODate, formatMoneyAmount, formatShortDate, formatVND } from "../Service/Utils";
 import { Chat, DEFAULT_PAGE_SIZE } from "../App";
 import { getUsers as issuers } from "../db/users";

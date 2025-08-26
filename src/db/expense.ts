@@ -47,7 +47,7 @@ export async function getExpense(expenseId: string) {
   return await expenseApi.get(`/${expenseId}`);
 }
 
-export const saveExpense = async (expense: Expense) => {
+export const saveExpense = (expense: Expense) => {
   console.info("Saving expense %s...", expense.id)
   return expenseApi.post(
     `/update`,
@@ -56,7 +56,7 @@ export const saveExpense = async (expense: Expense) => {
   );
 }
 
-export const deleteExpense = async (expense: Expense) => {
+export const deleteExpense = (expense: Expense) => {
   console.info("Delete expense %s", expense.id)
   return expenseApi.delete(
     `/delete`,
@@ -67,7 +67,7 @@ export const deleteExpense = async (expense: Expense) => {
   );
 }
 
-export const generate = async (expenseTxt: string) => {
+export const generate = (expenseTxt: string) => {
   console.info(`Generate expense ${expenseTxt}...`)
   return expenseApi.post(
     `/generate`,

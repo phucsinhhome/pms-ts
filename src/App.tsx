@@ -20,6 +20,7 @@ import { UserManager, WebStorageStateStore, User } from "oidc-client-ts";
 import UserProfile from "./Components/UserProfile";
 import { jwtDecode } from "jwt-decode";
 import { Welcome } from "./Components/Welcome";
+import { getProfile } from "./db/users";
 
 // Add a lotus image to your public folder or assets and use its path here
 
@@ -69,17 +70,6 @@ const menus: MenuItem[] = [{
   displayName: 'Inventory'
 }]
 
-// OIDC client config for Keycloak
-// const oidcConfig = {
-//   authority: "https://phucsinhhcm.hopto.org/iam/realms/ps_dev",
-//   client_id: "ps_assistant",
-//   redirect_uri: window.location.origin + "/",
-//   post_logout_redirect_uri: window.location.origin,
-//   response_type: "code",
-//   scope: "openid profile email organization roles",
-//   userStore: new WebStorageStateStore({ store: window.localStorage }),
-// };
-
 
 export const App = () => {
   const [chat, setChat] = useState<Chat>(defaultChat);
@@ -101,14 +91,15 @@ export const App = () => {
 
   const fetchUserProfile = async () => {
     try {
-      const rsp = await fetch("https://localhost:8443/assistant/user/profile", {
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        credentials: 'include'
-      });
-      if (rsp.status === 200) {
-        const data = await rsp.json();
+      const rsp = await getProfile();
+      if (rsp.ok) {
+        const json = await rsp.json();
+        if (!json) {
+          console.warn("No user profile found in the response");
+          return;
+        }
+        const data: any = json;
+        console.info("User profile fetched:", data);
         setUserProfile(data);
         setChat({
           id: data.sub,
@@ -125,7 +116,14 @@ export const App = () => {
         setAuthorizedUserId(null);
         setRoles([]);
       }
-    } finally {
+    } catch (error) {
+      console.error("Failed to fetch user profile:", error);
+      setUserProfile(null);
+      setChat(defaultChat);
+      setAuthorizedUserId(null);
+      setRoles([]);
+    }
+    finally {
       setLoading(false);
     }
   };
@@ -136,86 +134,6 @@ export const App = () => {
     fetchConfig();
     fetchUserProfile();
   }, []);
-
-  // useEffect(() => {
-  //   userManager.getUser().then(user => {
-  //     if (user && !user.expired) {
-  //       console.log("User loaded: userManager.getUser()");
-  //       setOidcUser(user);
-  //       setChat({
-  //         id: user.profile.sub,
-  //         firstName: user.profile.given_name || "",
-  //         lastName: user.profile.family_name || "",
-  //         username: user.profile.preferred_username || user.profile.email || "",
-  //         email: user.profile.email
-  //       });
-  //       setAuthorizedUserId(user.profile.sub);
-  //     } else {
-  //       setOidcUser(null);
-  //       setChat(defaultChat);
-  //       setAuthorizedUserId(null);
-  //       setRoles([]);
-  //       // Remove access token from sessionStorage
-  //       sessionStorage.removeItem('accessToken');
-  //     }
-  //     setLoading(false);
-  //   });
-
-  //   // Listen for user loaded/unloaded events
-  //   userManager.events.addUserLoaded(user => {
-  //     console.log("User loaded: userManager.events.addUserLoaded");
-  //     setOidcUser(user);
-  //     setChat({
-  //       id: user.profile.sub,
-  //       firstName: user.profile.given_name || "",
-  //       lastName: user.profile.family_name || "",
-  //       username: user.profile.preferred_username || user.profile.email || "",
-  //       email: user.profile.email
-  //     });
-  //     setAuthorizedUserId(user.profile.sub);
-  //   });
-  //   userManager.events.addUserUnloaded(() => {
-  //     setOidcUser(null);
-  //     setChat(defaultChat);
-  //     setAuthorizedUserId(null);
-  //     console.log("User unloaded, resetting chat state");
-  //   });
-
-  //   // Handle OIDC redirect callback
-  //   if (window.location.search.includes("code=")) {
-  //     userManager.signinRedirectCallback().then(user => {
-  //       console.log("User loaded after redirect: userManager.signinRedirectCallback");
-  //       setOidcUser(user);
-  //       setChat({
-  //         id: user.profile.sub,
-  //         firstName: user.profile.given_name || "",
-  //         lastName: user.profile.family_name || "",
-  //         username: user.profile.preferred_username || user.profile.email || "",
-  //         email: user.profile.email
-  //       });
-  //       setAuthorizedUserId(user.profile.sub);
-  //       navigate("home", { replace: true });
-  //     });
-  //   }
-
-  //   // Cleanup
-  //   return () => {
-  //     userManager.events.removeUserLoaded(() => { });
-  //     userManager.events.removeUserUnloaded(() => { });
-  //   };
-  //   // eslint-disable-next-line
-  // }, []);
-
-  // useEffect(() => {
-  //   if (!oidcUser) {
-  //     return;
-  //   }
-  //   if (oidcUser.access_token) {
-  //     sessionStorage.setItem('accessToken', oidcUser.access_token);
-  //     const decoded: any = jwtDecode(oidcUser.access_token);
-  //     setRoles(decoded.resource_access[oidcConfig.client_id]?.roles || []);
-  //   }
-  // }, [oidcUser]);
 
   useEffect(() => {
     filterMenus();
@@ -240,20 +158,17 @@ export const App = () => {
   const getChat = () => chat ? chat : defaultChat
 
   const handleLogin = () => {
-    window.location.href = "https://localhost:8443/assistant/login";
+    window.location.href = `${process.env.REACT_APP_PS_BASE_URL}/oauth2login.html`;
   };
 
   const handleSignOut = () => {
-    window.location.href = "https://localhost:8443/assistant/logout";
+    window.location.href = `${process.env.REACT_APP_PS_BASE_URL}/logout`;
   };
 
   // In your React app (e.g., UserProfile component)
   const handleEditProfileClick = () => {
     // Option 1: Redirect via Spring Boot backend (recommended for dynamic URLs or pre-checks)
-    window.location.href = 'https://localhost:8443/assistant/account/settings';
-
-    // Option 2: Direct redirect (if you know the Keycloak URL)
-    // window.location.href = 'https://phucsinhhcm.hopto.org/iam/realms/ps_dev/account';
+    window.location.href = `${process.env.REACT_APP_PS_BASE_URL}/account/settings`;
   };
 
   const fullName = () => {
@@ -271,22 +186,6 @@ export const App = () => {
   if (loading) {
     return <div>Loading...</div>;
   }
-
-  // Handler to clear chat state and sign out
-  // const handleSignOut = () => {
-  //   console.log("Signing out...");
-  //   userManager.signoutRedirect().then(() => {
-  //     setChat(defaultChat);
-  //     setAuthorizedUserId(null);
-  //     localStorage.removeItem(LOCAL_STATORAGE_SIGNED_IN);
-  //     setOidcUser(null);
-  //     // Remove access token from sessionStorage on logout
-  //     sessionStorage.removeItem('accessToken');
-  //     navigate("/home", { replace: true });
-  //   })
-  // };
-
-  // Filter menus based on user scopes
 
 
   return (

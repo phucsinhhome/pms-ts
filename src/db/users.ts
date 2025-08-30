@@ -16,3 +16,13 @@ export const getUsers: Issuer[] = [{
     id: "6456500785",
     displayName: "Kha Trần"
 }]
+
+export const getProfile = () => {
+    console.info("Get user profile");
+    return fetch(`${process.env.REACT_APP_USER_ENDPOINT}/profile`, {
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        credentials: 'include'
+    });
+}

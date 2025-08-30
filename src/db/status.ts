@@ -1,8 +1,5 @@
 import { statusApi } from "./apis"
 
-const requestOptions = {
-    method: 'POST'
-}
 
 export const syncStatusOfMonth = (partition: string) => {
     console.info("Trigger assistant service to sync the status of " + partition)

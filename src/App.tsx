@@ -16,9 +16,7 @@ import { SupplierManager } from "./Components/SupplierManager";
 import { AppConfig, appConfigs } from "./db/configs";
 import { TourManager } from "./Components/TourManager";
 import { TourEditor } from "./Components/TourEditor";
-import { UserManager, WebStorageStateStore, User } from "oidc-client-ts";
 import UserProfile from "./Components/UserProfile";
-import { jwtDecode } from "jwt-decode";
 import { Welcome } from "./Components/Welcome";
 import { getProfile } from "./db/users";
 
@@ -82,7 +80,6 @@ export const App = () => {
   const [configs, setConfigs] = useState<AppConfig>()
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const LOCAL_STATORAGE_SIGNED_IN = 'PS-SIGNED-IN'
   // const [oidcUser, setOidcUser] = useState<User | null>(null);
   const [roles, setRoles] = useState<string[]>([]);
   const [userProfile, setUserProfile] = useState<any>(null);
@@ -137,6 +134,7 @@ export const App = () => {
 
   useEffect(() => {
     filterMenus();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [roles]);
 
   const filterMenus = () => {
@@ -166,10 +164,6 @@ export const App = () => {
   };
 
   // In your React app (e.g., UserProfile component)
-  const handleEditProfileClick = () => {
-    // Option 1: Redirect via Spring Boot backend (recommended for dynamic URLs or pre-checks)
-    window.location.href = `${process.env.REACT_APP_PS_BASE_URL}/account/settings`;
-  };
 
   const fullName = () => {
     if (userProfile) {

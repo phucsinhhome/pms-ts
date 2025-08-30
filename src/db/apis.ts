@@ -1,22 +1,4 @@
 import axios, { AxiosInstance } from 'axios';
-import type { InternalAxiosRequestConfig } from 'axios';
-
-// Function to get the access token from sessionStorage
-const getAccessToken = (): string | null => {
-    // Retrieve from sessionStorage instead of localStorage
-    return sessionStorage.getItem('accessToken');
-};
-
-const configureAccessToken = (config: InternalAxiosRequestConfig) => {
-    const accessToken = getAccessToken();
-    if (accessToken) {
-        config.headers?.set?.('Authorization', `Bearer ${accessToken}`);
-    }
-    return config;
-}
-
-
-
 // reportApi
 const reportApi: AxiosInstance = axios.create({
     baseURL: `${process.env.REACT_APP_PROFIT_SERVICE_ENDPOINT}`,

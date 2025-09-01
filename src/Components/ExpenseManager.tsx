@@ -316,7 +316,7 @@ export const ExpenseManager = memo((props: ExpenseProps) => {
     setGeneratingExp(true)
     try {
       let exp = await generateExpense(expMsg)
-      if (exp === undefined) {
+      if (exp === null) {
         console.warn(`Invalid generated expense. Failed to generate expense from ${expMsg}!`)
         return
       }
@@ -334,39 +334,39 @@ export const ExpenseManager = memo((props: ExpenseProps) => {
     }
   }
 
-  const generateExpense = (msg: string) => {
-    return generate(msg)
-      .then(rsp => {
-        if (!(rsp.status === 200 || rsp.status === 201)) {
-          return {
-            ...defaultEmptExpense,
-            expenseDate: formatISODateTime(new Date()),
-            expenserName: props.displayName,
-            expenserId: props.chat.username
-          }
-        }
-        return rsp.data.json()
-          .then((data: Expense) => {
-            console.info(`Complete extracting expense from message ${msg}`);
-            console.info(`Name: ${data.itemName}, Quantity: ${data.quantity}, Unit Price: ${data.unitPrice}`)
-            return {
-              ...data,
-              id: '',
-              amount: data.unitPrice * data.quantity,
-              expenseDate: formatISODateTime(new Date()),
-              expenserName: props.displayName,
-              expenserId: props.chat.username
-            }
-          })
-      })
-      .catch((e) => {
+  const generateExpense = async (msg: string) => {
+    try {
+      const rsp = await generate(msg);
+      if (rsp === undefined || rsp.status !== 200) {
+        console.warn("Invalid response from expense generation")
         return {
           ...defaultEmptExpense,
           expenseDate: formatISODateTime(new Date()),
           expenserName: props.displayName,
           expenserId: props.chat.username
         }
-      })
+      }
+      let data = rsp.data
+      return {
+        ...data,
+        id: '',
+        amount: data.unitPrice * data.quantity,
+        expenseDate: formatISODateTime(new Date()),
+        expenserName: props.displayName,
+        expenserId: props.chat.username
+      }
+    } catch (e) {
+      console.error("Error while generating expense from message", e)
+      if (e instanceof Error) {
+        alert(e.message)
+      }
+      return {
+        ...defaultEmptExpense,
+        expenseDate: formatISODateTime(new Date()),
+        expenserName: props.displayName,
+        expenserId: props.chat.username
+      }
+    }
   }
 
   const processSaveExpense = () => {

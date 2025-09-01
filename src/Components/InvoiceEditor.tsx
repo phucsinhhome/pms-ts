@@ -64,16 +64,10 @@ const roomIcons = [
 
 const userIcons = [
   {
-    id: '1351151927',
+    id: 'minhtran',
     src: <HiUserCircle />
   }, {
-    id: '5114683375',
-    src: <HiUserCircle />
-  }, {
-    id: '6159537383',
-    src: <HiUserCircle />
-  }, {
-    id: '6456500785',
+    id: 'khatran',
     src: <HiUserCircle />
   }
 ]
@@ -744,7 +738,7 @@ export const InvoiceEditor = (props: InvoiceProps) => {
         id: props.chat.id + new Date().getTime(),
         guestName: res.guestName,
         issuer: props.displayName,
-        issuerId: props.chat.id,
+        issuerId: props.chat.username,
         checkInDate: formatISODate(new Date(res.checkInDate)),
         checkOutDate: formatISODate(new Date(res.checkOutDate)),
         prepaied: false,
@@ -782,7 +776,7 @@ export const InvoiceEditor = (props: InvoiceProps) => {
         id: props.chat.id + new Date().getTime(),
         guestName: Configs.invoice.initialInvoice.guestName,
         issuer: props.displayName,
-        issuerId: props.chat.id,
+        issuerId: props.chat.username,
         checkInDate: formatISODate(new Date()),
         checkOutDate: formatISODate(addDays(new Date(), 1)),
         prepaied: false,

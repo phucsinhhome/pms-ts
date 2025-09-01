@@ -8,7 +8,7 @@ export const paymentMethods: PaymentMethod[] = [
         template: "invoice_without_transfer_fee",
         srcLargeImg: "/cash.svg",
         paymentInfo: "/payment/cash.jpeg",
-        defaultIssuerId: "6456500785"
+        defaultIssuerId: "khatran"
     },
     {
         id: "creditCard",
@@ -17,7 +17,7 @@ export const paymentMethods: PaymentMethod[] = [
         template: "invoice_with_transfer_fee",
         srcLargeImg: "/mastercard.svg",
         paymentInfo: "/payment/creditcard.jpeg",
-        defaultIssuerId: "1351151927"
+        defaultIssuerId: "minhtran"
     },
     {
         id: "momo",
@@ -26,7 +26,7 @@ export const paymentMethods: PaymentMethod[] = [
         template: "invoice_without_transfer_fee",
         srcLargeImg: "/momo-square.png",
         paymentInfo: "/payment/mono.jpg",
-        defaultIssuerId: "1351151927"
+        defaultIssuerId: "minhtran"
     }, {
         id: "paypal",
         name: "Paypal",
@@ -34,7 +34,7 @@ export const paymentMethods: PaymentMethod[] = [
         template: "invoice_without_transfer_fee",
         srcLargeImg: "/paypal.svg",
         paymentInfo: "/payment/paypal.png",
-        defaultIssuerId: "1351151927"
+        defaultIssuerId: "minhtran"
     }, {
         id: "bankTransfer",
         name: "Bank Transfer",
@@ -42,7 +42,7 @@ export const paymentMethods: PaymentMethod[] = [
         template: "invoice_without_transfer_fee",
         srcLargeImg: "/bank.svg",
         paymentInfo: "/payment/bankTransfer.jpg",
-        defaultIssuerId: "1351151927"
+        defaultIssuerId: "minhtran"
     }
 ]
 

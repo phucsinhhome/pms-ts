@@ -649,11 +649,13 @@ export const InvoiceEditor = (props: InvoiceProps) => {
       console.error("Failed to classify service by item name %s", nItemName)
       return Promise.resolve(false);
     }
+    let data = rsp.data
+    console.log("The service was classified as %s", data.service)
     let eI = {
       ...editingItem,
       origin: {
         ...editingItem.origin,
-        service: rsp.data.service
+        service: data.service
       }
     }
     setEditingItem(eI)

@@ -308,7 +308,7 @@ export const InvoiceManager = (props: InvoiceManagerProps) => {
               <div className="flex flex-row items-center space-x-2 absolute right-1 top-2">
                 {
                   isDeleteable(inv) ?
-                    <IoMdRemoveCircle size="1.5em" className="mr-2 text-red-800"
+                    <IoMdRemoveCircle size="1.5em" className="mr-2 text-red-800 cursor-pointer"
                       onClick={() => handleDeleteInvoice(inv)}
                     />
                     : <div></div>
@@ -316,8 +316,9 @@ export const InvoiceManager = (props: InvoiceManagerProps) => {
                 <Link
                   to={inv.id}
                   state={{ pageNumber: pagination.pageNumber, pageSize: pagination.pageSize }}
+                  className="hove"
                 >
-                  <CiEdit size="1.5em" className="mr-2 text-green-800" />
+                  <CiEdit size="1.5em" className="mr-2 text-green-800"/>
                 </Link>
               </div>
 

@@ -80,8 +80,8 @@ type ProfitReportProps = {
 }
 
 export const optionStyle = (focused: boolean) => {
-  return focused ? "px-1 font-mono text-[12px] text-nowrap border rounded-lg bg-slate-400"
-    : "px-1 font-mono text-[12px] text-nowrap border rounded-lg bg-slate-200";
+  return focused ? "px-1 font-mono text-[12px] text-nowrap border rounded-lg bg-slate-400 cursor-pointer"
+    : "px-1 font-mono text-[12px] text-nowrap border rounded-lg bg-slate-200 cursor-pointer";
 }
 
 export default function ProfitReport(props: ProfitReportProps) {

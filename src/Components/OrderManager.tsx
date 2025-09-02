@@ -313,8 +313,8 @@ export const OrderManager = (props: OrderManagerProps) => {
           {
             filterables.map(sts => <div onClick={() => changeListOpt(sts)}
               className={activeStatuses.includes(sts) ?
-                "px-2 font-mono text-[12px] border rounded-lg bg-slate-400" :
-                "px-2 font-mono text-[12px] border rounded-lg bg-slate-200"
+                "px-2 font-mono text-[12px] border rounded-lg bg-slate-400 cursor-pointer" :
+                "px-2 font-mono text-[12px] border rounded-lg bg-slate-200 cursor-pointer"
               }>
               {sts}
             </div>)

@@ -466,10 +466,10 @@ export const ExpenseManager = memo((props: ExpenseProps) => {
                 <span className="font font-mono font-black">{item.service}</span>
               </div>
               <div className="flex flex-row space-x-2 absolute right-1 top-2">
-                <IoMdRemoveCircle size="1.5em" className="mr-2 text-red-800"
+                <IoMdRemoveCircle size="1.5em" className="mr-2 text-red-800 cursor-pointer"
                   onClick={() => askForDelExpenseConfirmation(item)}
                 />
-                <CiEdit size="1.5em" className="mr-2 text-green-800"
+                <CiEdit size="1.5em" className="mr-2 text-green-800 cursor-pointer"
                   onClick={() => editExpense(item)}
                 />
               </div>

@@ -8,6 +8,7 @@ import { ExpenseManager } from "./Components/ExpenseManager";
 import { ReservationManager } from "./Components/ReservationManager";
 import { Settings } from "./Components/Settings";
 import { IoMdSettings } from "react-icons/io";
+import { FaHome, FaChartLine, FaFileInvoiceDollar, FaMoneyCheckAlt, FaCalendarAlt, FaClipboardList, FaBoxes } from "react-icons/fa";
 import { OrderManager } from "./Components/OrderManager";
 import { OrderEditor } from "./Components/OrderEditor";
 import { Inventory } from "./Components/Inventory";
@@ -42,31 +43,57 @@ export const defaultChat: Chat = {
 
 type MenuItem = {
   path: string,
-  displayName: string
+  displayName: string,
+  icon: React.ReactNode
 }
-
-const menus: MenuItem[] = [{
-  path: 'home',
-  displayName: 'Home'
-}, {
-  path: 'profit',
-  displayName: 'Profit'
-}, {
-  path: 'invoice',
-  displayName: 'Invoice'
-}, {
-  path: 'expense',
-  displayName: 'Expense'
-}, {
-  path: 'reservation',
-  displayName: 'Res'
-}, {
-  path: 'order',
-  displayName: 'Order'
-}, {
-  path: 'inventory',
-  displayName: 'Inventory'
-}]
+const menuOrder = ['home', 'expense', 'invoice', 'inventory', 'reservation', 'order', 'profit', 'tour', 'setting']
+const menus = {
+  home: {
+    path: 'home',
+    displayName: 'Home',
+    icon: <FaHome size={28} />
+  },
+  expense: {
+    path: 'expense',
+    displayName: 'Expense',
+    icon: <FaMoneyCheckAlt size={28} />
+  },
+  invoice: {
+    path: 'invoice',
+    displayName: 'Invoice',
+    icon: <FaFileInvoiceDollar size={28} />
+  },
+  inventory: {
+    path: 'inventory',
+    displayName: 'Inventory',
+    icon: <FaBoxes size={28} />
+  },
+  reservation: {
+    path: 'reservation',
+    displayName: 'Reservation',
+    icon: <FaCalendarAlt size={28} />
+  },
+  order: {
+    path: 'order',
+    displayName: 'Order',
+    icon: <FaClipboardList size={28} />
+  },
+  profit: {
+    path: 'profit',
+    displayName: 'Profit',
+    icon: <FaChartLine size={28} />
+  },
+  tour: {
+    path: 'tour',
+    displayName: 'Tour',
+    icon: <FaClipboardList size={28} />
+  },
+  setting: {
+    path: 'setting',
+    displayName: 'Setting',
+    icon: <IoMdSettings size={28} />
+  }
+}
 
 
 export const App = () => {
@@ -75,8 +102,8 @@ export const App = () => {
   const [syncing, setSyncing] = useState(false)
   const [syncingRes, setSyncingRes] = useState(false)
 
-  const [filteredMenus, setFilteredMenus] = useState<MenuItem[]>([menus[0]]); // Default to home menu
-  const [activeMenu, setActiveMenu] = useState(menus[0])
+  const [filteredMenus, setFilteredMenus] = useState<MenuItem[]>([menus.home]); // Default to home menu
+  const [activeMenu, setActiveMenu] = useState(menus.home)
   const [configs, setConfigs] = useState<AppConfig>()
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
@@ -140,11 +167,10 @@ export const App = () => {
   const filterMenus = () => {
     setFilteredMenus(
       roles.length === 0
-        ? [menus[0]] // Default to home if no roles
-        : [menus[0], menus.filter(menu => {
-          // Check if the menu path matches any of the roles
-          return roles.some(role => role.toLowerCase() === menu.path.toLowerCase());
-        })].flat()
+        ? [menus.home] // Default to home if no roles
+        : menuOrder
+          .filter(menuKey => roles.some(role => role.toLowerCase() === menuKey.toLowerCase()))
+          .map(menuKey => menus[menuKey as keyof typeof menus]) // Type guard to remove undefined values
     );
   }
 
@@ -173,78 +199,104 @@ export const App = () => {
   }
 
   const menuStyle = (m: string) => {
-    return m === activeMenu.path ? "px-1 py-1 bg-gray-500 text-center text-amber-900 text-sm font-sans rounded-sm shadow-sm"
-      : "px-1 py-1 bg-gray-200 text-center text-amber-900 text-sm font-sans rounded-sm shadow-sm"
+    return m === activeMenu.path
+      // ? "px-1 py-1 bg-green-200 text-center text-green-900 text-sm font-sans rounded-sm shadow-sm border-2 border-green-700"
+      ? "px-1 py-1 bg-green-50 text-center text-green-800 text-sm font-sans rounded-sm shadow-sm"
+      : "px-1 py-1 bg-green-50 text-center text-green-800 text-sm font-sans rounded-sm shadow-sm";
   }
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex flex-col items-center justify-center h-[100dvh] bg-white">
+        <div className="w-32 h-32 rounded-full bg-gray-100 flex items-center justify-center shadow-lg mb-6">
+          <img
+            src="/lotus.png"
+            alt="Lotus"
+            className="w-24 h-24 object-contain"
+          />
+        </div>
+        <div className="text-lg text-gray-600 font-semibold">Loading...</div>
+      </div>
+    );
   }
 
 
   return (
     <div className="flex flex-col relative h-[100dvh] min-h-0 bg-slate-50">
-      <div className="mt-2 ml-2 pr-1 w-full flex flex-row items-center space-x-0.5">
+      <div className="mt-2">
         {
-          filteredMenus.map((menu: MenuItem) => (
-            <Link key={menu.path} to={menu.path} className={menuStyle(menu.path)}>
-              {menu.displayName}
-            </Link>
-          ))
+          activeMenu === menus.home ? (
+            <div className="mt-36 grid grid-cols-3 gap-5 p-2 grid-rows-2">
+              {
+                filteredMenus.map((menu: MenuItem) => (
+                  <Link key={menu.path} to={menu.path} className={menuStyle(menu.path)}>
+                    <div className="flex flex-col items-center">
+                      <span className="mb-1 text-green-800">{menu.icon}</span>
+                      <span className="text-green-900 font-semibold">{menu.displayName}</span>
+                    </div>
+                  </Link>
+                ))
+              }
+            </div>
+          ) : (
+            <div className="pl-2 flex items-center space-x-2">
+              <button
+                className="bg-green-100 text-green-900 px-2 py-1 rounded hover:bg-green-200 mr-2 border border-green-700"
+                onClick={() => {
+                  setActiveMenu(menus.home);
+                  navigate('/home');
+                }}
+                type="button"
+              >
+                &larr; Back
+              </button>
+              <span className="text-2xl font-semibold text-green-900">{activeMenu.displayName}</span>
+            </div>
+          )
         }
-        {
-          roles.includes('setting') ? (
-            <Link to="settings" className="absolute right-2">
-              <IoMdSettings
-                className="pointer-events-auto cursor-pointer w-14 h-7"
-              />
-            </Link>
-          ) : <></>
-        }
-
       </div>
       <Routes>
-        <Route path="" element={<Welcome activeMenu={() => setActiveMenu(menus[0])} />} />
-        <Route path="home" element={<Welcome activeMenu={() => setActiveMenu(menus[0])} />} />
-        <Route path="profit" element={<ProfitReport activeMenu={() => setActiveMenu(menus[1])} />} />
-        <Route path="invoice" element={<InvoiceManager activeMenu={() => setActiveMenu(menus[2])} />} />
-        <Route path="invoice/:invoiceId" element={<InvoiceEditor chat={getChat()} displayName={fullName()} authorizedUserId={authorizedUserId} activeMenu={() => setActiveMenu(menus[2])} />} />
-        <Route path="expense" element={<ExpenseManager chat={getChat()} displayName={fullName()} authorizedUserId={authorizedUserId} activeMenu={() => setActiveMenu(menus[3])} />} />
-        <Route path="reservation" element={<ReservationManager activeMenu={() => setActiveMenu(menus[4])} />} />
+        <Route path="" element={<Welcome activeMenu={() => setActiveMenu(menus.home)} />} />
+        <Route path="home" element={<Welcome activeMenu={() => setActiveMenu(menus.home)} />} />
+        <Route path="profit" element={<ProfitReport activeMenu={() => setActiveMenu(menus.profit)} />} />
+        <Route path="invoice" element={<InvoiceManager activeMenu={() => setActiveMenu(menus.invoice)} />} />
+        <Route path="invoice/:invoiceId" element={<InvoiceEditor chat={getChat()} displayName={fullName()} authorizedUserId={authorizedUserId} activeMenu={() => setActiveMenu(menus.invoice)} />} />
+        <Route path="expense" element={<ExpenseManager chat={getChat()} displayName={fullName()} authorizedUserId={authorizedUserId} activeMenu={() => setActiveMenu(menus.expense)} />} />
+        <Route path="reservation" element={<ReservationManager activeMenu={() => setActiveMenu(menus.reservation)} />} />
         <Route path="order" element={<OrderManager
           chat={getChat()}
           displayName={fullName()}
           authorizedUserId={authorizedUserId}
-          activeMenu={() => setActiveMenu(menus[5])}
+          activeMenu={() => setActiveMenu(menus.order)}
           configs={configs}
         />} />
         <Route path="order/:orderId/:staffId"
           element={<OrderEditor
             setChat={(chat: Chat) => setChat(chat)}
-            activeMenu={() => setActiveMenu(menus[5])} />}
+            activeMenu={() => setActiveMenu(menus.order)} />}
         />
-        <Route path="inventory" element={<Inventory activeMenu={() => setActiveMenu(menus[6])} />} />
-        <Route path="product-group" element={<PGroupManager activeMenu={() => setActiveMenu({ path: 'product-group', displayName: 'Group' })} />} />
-        <Route path="supplier" element={<SupplierManager chat={getChat()} displayName={fullName()} authorizedUserId={authorizedUserId} activeMenu={() => setActiveMenu({ path: 'supplier', displayName: 'Supplier' })} />} />
+        <Route path="inventory" element={<Inventory activeMenu={() => setActiveMenu(menus.inventory)} />} />
+        <Route path="product-group" element={<PGroupManager activeMenu={() => setActiveMenu({ path: 'product-group', displayName: 'Group', icon: <FaBoxes size={28} /> })} />} />
+        <Route path="supplier" element={<SupplierManager chat={getChat()} displayName={fullName()} authorizedUserId={authorizedUserId} activeMenu={() => setActiveMenu({ path: 'supplier', displayName: 'Supplier', icon: <FaBoxes size={28} /> })} />} />
         <Route path="tour" element={<TourManager
           chat={getChat()}
           displayName={fullName()}
           authorizedUserId={authorizedUserId}
-          activeMenu={() => setActiveMenu({ path: 'tour', displayName: 'Tour' })}
+          activeMenu={() => setActiveMenu({ path: 'tour', displayName: 'Tour', icon: <FaClipboardList size={28} /> })}
         />} />
         <Route path="tour/:tourId"
           element={<TourEditor
             chat={getChat()}
             displayName={fullName()}
             authorizedUserId={authorizedUserId}
-            activeMenu={() => setActiveMenu({ path: 'tour', displayName: 'Tour' })}
+            activeMenu={() => setActiveMenu({ path: 'tour', displayName: 'Tour', icon: <FaClipboardList size={28} /> })}
           />} />
         <Route path="settings" element={<Settings
           syncing={syncing}
           changeSyncing={(n: boolean) => setSyncing(n)}
           syncingRes={syncingRes}
           changeResSyncing={(n: boolean) => setSyncingRes(n)}
-          activeMenu={() => setActiveMenu({ path: 'settings', displayName: 'Settings' })}
+          activeMenu={() => setActiveMenu({ path: 'settings', displayName: 'Settings', icon: <IoMdSettings size={28} /> })}
         />} />
         <Route
           path="profile"
@@ -258,20 +310,20 @@ export const App = () => {
       </Routes>
 
       <div
-        className="absolute top-0 right-0 flex flex-col mt-10 mr-2 bg-neutral-200 p-1 opacity-90 rounded-md shadow-lg cursor-pointer"
-
+        className="absolute top-0 right-0 mt-2 mr-2 bg-green-50 p-1 opacity-90 rounded-md shadow-lg cursor-pointer border border-green-700"
       >
-        {
-          userProfile ? <span className="font text-[10px] font-bold text-gray-800 dark:text-white"
-            onClick={() => navigate('/profile')}>
-            {fullName()}
-          </span>
-            : <span className="font text-[10px] font-bold text-gray-800 dark:text-white"
-              onClick={handleLogin}>
-              Login
+        <div className="flex flex-col items-center space-y-1">
+          {
+            userProfile ? <span className="font text-[10px] font-bold text-green-900 dark:text-green-200"
+              onClick={() => navigate('/profile')}>
+              {fullName()}
             </span>
-        }
-
+              : <span className="font text-[10px] font-bold text-green-900 dark:text-green-200"
+                onClick={handleLogin}>
+                Login
+              </span>
+          }
+        </div>
       </div>
     </div>
   );

@@ -20,6 +20,7 @@ import { TourEditor } from "./Components/TourEditor";
 import UserProfile from "./Components/UserProfile";
 import { Welcome } from "./Components/Welcome";
 import { getProfile } from "./db/users";
+import { Button } from "flowbite-react";
 
 // Add a lotus image to your public folder or assets and use its path here
 
@@ -41,11 +42,6 @@ export const defaultChat: Chat = {
   username: 'no-user'
 }
 
-type MenuItem = {
-  path: string,
-  displayName: string,
-  icon: React.ReactNode
-}
 const menuOrder = ['home', 'expense', 'invoice', 'inventory', 'reservation', 'order', 'profit', 'tour', 'setting']
 const menus = {
   home: {
@@ -102,7 +98,7 @@ export const App = () => {
   const [syncing, setSyncing] = useState(false)
   const [syncingRes, setSyncingRes] = useState(false)
 
-  const [filteredMenus, setFilteredMenus] = useState<MenuItem[]>([menus.home]); // Default to home menu
+  const [filteredMenus, setFilteredMenus] = useState([menus.home]); // Default to home menu
   const [activeMenu, setActiveMenu] = useState(menus.home)
   const [configs, setConfigs] = useState<AppConfig>()
   const navigate = useNavigate();
@@ -110,6 +106,7 @@ export const App = () => {
   // const [oidcUser, setOidcUser] = useState<User | null>(null);
   const [roles, setRoles] = useState<string[]>([]);
   const [userProfile, setUserProfile] = useState<any>(null);
+  const [clickedMenu, setClickedMenu] = useState<string | null>(null);
 
   // const userManager = new UserManager(oidcConfig);
 
@@ -200,9 +197,8 @@ export const App = () => {
 
   const menuStyle = (m: string) => {
     return m === activeMenu.path
-      // ? "px-1 py-1 bg-green-200 text-center text-green-900 text-sm font-sans rounded-sm shadow-sm border-2 border-green-700"
-      ? "px-1 py-1 bg-green-50 text-center text-green-800 text-sm font-sans rounded-sm shadow-sm"
-      : "px-1 py-1 bg-green-50 text-center text-green-800 text-sm font-sans rounded-sm shadow-sm";
+      ? "px-1 py-1 bg-green-50 text-center text-green-800 text-sm font-sans rounded-sm shadow-sm transition-transform duration-150 scale-95 ring-2 ring-green-700"
+      : "px-1 py-1 bg-green-50 text-center text-green-800 text-sm font-sans rounded-sm shadow-sm transition-transform duration-150";
   }
 
   if (loading) {
@@ -228,8 +224,17 @@ export const App = () => {
           activeMenu === menus.home ? (
             <div className="mt-36 grid grid-cols-3 gap-5 p-2 grid-rows-2">
               {
-                filteredMenus.map((menu: MenuItem) => (
-                  <Link key={menu.path} to={menu.path} className={menuStyle(menu.path)}>
+                filteredMenus.map((menu) => (
+                  <Link
+                    key={menu.path}
+                    to={menu.path}
+                    className={menuStyle(menu.path)}
+                    style={{ outline: "none" }}
+                    onMouseDown={() => setClickedMenu(menu.path)}
+                    onMouseUp={() => setClickedMenu(null)}
+                    onMouseLeave={() => setClickedMenu(null)}
+                    onClick={() => setActiveMenu(menu)}
+                  >
                     <div className="flex flex-col items-center">
                       <span className="mb-1 text-green-800">{menu.icon}</span>
                       <span className="text-green-900 font-semibold">{menu.displayName}</span>
@@ -291,7 +296,7 @@ export const App = () => {
             authorizedUserId={authorizedUserId}
             activeMenu={() => setActiveMenu({ path: 'tour', displayName: 'Tour', icon: <FaClipboardList size={28} /> })}
           />} />
-        <Route path="settings" element={<Settings
+        <Route path="setting" element={<Settings
           syncing={syncing}
           changeSyncing={(n: boolean) => setSyncing(n)}
           syncingRes={syncingRes}
@@ -310,19 +315,24 @@ export const App = () => {
       </Routes>
 
       <div
-        className="absolute top-0 right-0 mt-2 mr-2 bg-green-50 p-1 opacity-90 rounded-md shadow-lg cursor-pointer border border-green-700"
+        className="absolute top-0 right-0 mt-2 mr-2 bg-green-50 p-1"
       >
-        <div className="flex flex-col items-center space-y-1">
-          {
-            userProfile ? <span className="font text-[10px] font-bold text-green-900 dark:text-green-200"
-              onClick={() => navigate('/profile')}>
+        <div className="items-center">
+          {userProfile ? (
+            <span
+              className="font text-sm font-bold text-green-900 dark:text-green-200"
+              onClick={() => navigate('/profile')}
+            >
               {fullName()}
             </span>
-              : <span className="font text-[10px] font-bold text-green-900 dark:text-green-200"
-                onClick={handleLogin}>
-                Login
-              </span>
-          }
+          ) : (
+            <Button
+              className="bg-green-700 text-white px-3 py-1 rounded hover:bg-green-800 text-xs font-bold"
+              onClick={handleLogin}
+            >
+              Login
+            </Button>
+          )}
         </div>
       </div>
     </div>

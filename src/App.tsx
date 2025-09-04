@@ -8,7 +8,7 @@ import { ExpenseManager } from "./Components/ExpenseManager";
 import { ReservationManager } from "./Components/ReservationManager";
 import { Settings } from "./Components/Settings";
 import { IoMdSettings } from "react-icons/io";
-import { FaHome, FaChartLine, FaFileInvoiceDollar, FaMoneyCheckAlt, FaCalendarAlt, FaClipboardList, FaBoxes } from "react-icons/fa";
+import { FaHome, FaChartLine, FaFileInvoiceDollar, FaMoneyCheckAlt, FaCalendarAlt, FaClipboardList, FaBoxes, FaUserCircle } from "react-icons/fa";
 import { OrderManager } from "./Components/OrderManager";
 import { OrderEditor } from "./Components/OrderEditor";
 import { Inventory } from "./Components/Inventory";
@@ -42,52 +42,79 @@ export const defaultChat: Chat = {
   username: 'no-user'
 }
 
-const menuOrder = ['home', 'expense', 'invoice', 'inventory', 'reservation', 'order', 'profit', 'tour', 'setting']
+const menuOrder = ['home', 'expense', 'invoice', 'inventory', 'reservation', 'order', 'profit', 'tour', 'supplier', 'setting']
 const menus = {
   home: {
     path: 'home',
     displayName: 'Home',
+    title: 'Welcome Home',
     icon: <FaHome size={28} />
   },
   expense: {
     path: 'expense',
     displayName: 'Expense',
+    title: 'Expense Management',
     icon: <FaMoneyCheckAlt size={28} />
   },
   invoice: {
     path: 'invoice',
     displayName: 'Invoice',
+    title: 'Invoice Management',
     icon: <FaFileInvoiceDollar size={28} />
   },
   inventory: {
     path: 'inventory',
     displayName: 'Inventory',
+    title: 'Product Inventory',
     icon: <FaBoxes size={28} />
   },
   reservation: {
     path: 'reservation',
     displayName: 'Reservation',
+    title: 'Reservation Management',
     icon: <FaCalendarAlt size={28} />
   },
   order: {
     path: 'order',
     displayName: 'Order',
+    title: 'Order Management',
     icon: <FaClipboardList size={28} />
   },
   profit: {
     path: 'profit',
     displayName: 'Profit',
+    title: 'Profit Report',
     icon: <FaChartLine size={28} />
   },
   tour: {
     path: 'tour',
     displayName: 'Tour',
+    title: 'Tour Management',
     icon: <FaClipboardList size={28} />
+  },
+  supplier: {
+    path: 'supplier',
+    displayName: 'Tour',
+    title: 'Supplier Invoices',
+    icon: <FaFileInvoiceDollar size={28} /> // Use invoice icon for supplier invoice
   },
   setting: {
     path: 'setting',
     displayName: 'Setting',
+    title: 'System Settings',
     icon: <IoMdSettings size={28} />
+  },
+  profile: {
+    path: 'profile',
+    displayName: 'Profile',
+    title: 'User Profile',
+    icon: <FaUserCircle size={28} />
+  },
+  productGroup: {
+    path: 'product-group',
+    displayName: 'Group',
+    title: 'Product Groups',
+    icon: <FaBoxes size={28} />
   }
 }
 
@@ -103,12 +130,9 @@ export const App = () => {
   const [configs, setConfigs] = useState<AppConfig>()
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  // const [oidcUser, setOidcUser] = useState<User | null>(null);
   const [roles, setRoles] = useState<string[]>([]);
+  const [authorities, setAuthorities] = useState<string[]>([]);
   const [userProfile, setUserProfile] = useState<any>(null);
-  const [clickedMenu, setClickedMenu] = useState<string | null>(null);
-
-  // const userManager = new UserManager(oidcConfig);
 
   const fetchUserProfile = async () => {
     try {
@@ -130,11 +154,13 @@ export const App = () => {
           email: data.email
         });
         setAuthorizedUserId(data.sub);
-        setRoles(data.authorities || []);
+        setAuthorities(data.authorities || []);
+        setRoles(data.roles || []);
       } else {
         setUserProfile(null);
         setChat(defaultChat);
         setAuthorizedUserId(null);
+        setAuthorities([]);
         setRoles([]);
       }
     } catch (error) {
@@ -142,6 +168,7 @@ export const App = () => {
       setUserProfile(null);
       setChat(defaultChat);
       setAuthorizedUserId(null);
+      setAuthorities([]);
       setRoles([]);
     }
     finally {
@@ -159,14 +186,14 @@ export const App = () => {
   useEffect(() => {
     filterMenus();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [roles]);
+  }, [authorities]);
 
   const filterMenus = () => {
     setFilteredMenus(
-      roles.length === 0
+      authorities.length === 0
         ? [menus.home] // Default to home if no roles
         : menuOrder
-          .filter(menuKey => roles.some(role => role.toLowerCase() === menuKey.toLowerCase()))
+          .filter(menuKey => authorities.some(role => role.toLowerCase() === menuKey.toLowerCase()))
           .map(menuKey => menus[menuKey as keyof typeof menus]) // Type guard to remove undefined values
     );
   }
@@ -230,9 +257,6 @@ export const App = () => {
                     to={menu.path}
                     className={menuStyle(menu.path)}
                     style={{ outline: "none" }}
-                    onMouseDown={() => setClickedMenu(menu.path)}
-                    onMouseUp={() => setClickedMenu(null)}
-                    onMouseLeave={() => setClickedMenu(null)}
                     onClick={() => setActiveMenu(menu)}
                   >
                     <div className="flex flex-col items-center">
@@ -255,7 +279,7 @@ export const App = () => {
               >
                 &larr; Back
               </button>
-              <span className="text-2xl font-semibold text-green-900">{activeMenu.displayName}</span>
+              <span className="text-2xl font-semibold text-green-900">{activeMenu.title}</span>
             </div>
           )
         }
@@ -281,27 +305,27 @@ export const App = () => {
             activeMenu={() => setActiveMenu(menus.order)} />}
         />
         <Route path="inventory" element={<Inventory activeMenu={() => setActiveMenu(menus.inventory)} />} />
-        <Route path="product-group" element={<PGroupManager activeMenu={() => setActiveMenu({ path: 'product-group', displayName: 'Group', icon: <FaBoxes size={28} /> })} />} />
-        <Route path="supplier" element={<SupplierManager chat={getChat()} displayName={fullName()} authorizedUserId={authorizedUserId} activeMenu={() => setActiveMenu({ path: 'supplier', displayName: 'Supplier', icon: <FaBoxes size={28} /> })} />} />
+        <Route path="product-group" element={<PGroupManager activeMenu={() => setActiveMenu(menus.productGroup)} />} />
+        <Route path="supplier" element={<SupplierManager chat={getChat()} displayName={fullName()} authorizedUserId={authorizedUserId} activeMenu={() => setActiveMenu(menus.supplier)} />} />
         <Route path="tour" element={<TourManager
           chat={getChat()}
           displayName={fullName()}
           authorizedUserId={authorizedUserId}
-          activeMenu={() => setActiveMenu({ path: 'tour', displayName: 'Tour', icon: <FaClipboardList size={28} /> })}
+          activeMenu={() => setActiveMenu(menus.tour)}
         />} />
         <Route path="tour/:tourId"
           element={<TourEditor
             chat={getChat()}
             displayName={fullName()}
             authorizedUserId={authorizedUserId}
-            activeMenu={() => setActiveMenu({ path: 'tour', displayName: 'Tour', icon: <FaClipboardList size={28} /> })}
+            activeMenu={() => setActiveMenu(menus.tour)}
           />} />
         <Route path="setting" element={<Settings
           syncing={syncing}
           changeSyncing={(n: boolean) => setSyncing(n)}
           syncingRes={syncingRes}
           changeResSyncing={(n: boolean) => setSyncingRes(n)}
-          activeMenu={() => setActiveMenu({ path: 'settings', displayName: 'Settings', icon: <IoMdSettings size={28} /> })}
+          activeMenu={() => setActiveMenu(menus.setting)}
         />} />
         <Route
           path="profile"
@@ -315,25 +339,28 @@ export const App = () => {
       </Routes>
 
       <div
-        className="absolute top-0 right-0 mt-2 mr-2 bg-green-50 p-1"
+        className="absolute top-0 right-0 mt-2 mr-2 items-center"
       >
-        <div className="items-center">
-          {userProfile ? (
-            <span
-              className="font text-sm font-bold text-green-900 dark:text-green-200"
-              onClick={() => navigate('/profile')}
-            >
+        {userProfile ? (
+          <div className="flex flex-col cursor-pointer" onClick={() => {
+            setActiveMenu(menus.profile);
+            navigate('/profile');
+          }}>
+            <span className="font text-sm font-bold text-green-900 dark:text-green-200">
               {fullName()}
             </span>
-          ) : (
-            <Button
-              className="bg-green-700 text-white px-3 py-1 rounded hover:bg-green-800 text-xs font-bold"
-              onClick={handleLogin}
-            >
-              Login
-            </Button>
-          )}
-        </div>
+            <span className="text-xs text-green-700 font-medium">
+              {roles.length > 0 ? roles[0] : ""}
+            </span>
+          </div>
+        ) : (
+          <Button
+            className="bg-green-700 text-white px-3 py-1 rounded hover:bg-green-800 text-xs font-bold"
+            onClick={handleLogin}
+          >
+            Login
+          </Button>
+        )}
       </div>
     </div>
   );

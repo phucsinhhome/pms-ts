@@ -43,14 +43,14 @@ export const listLatestInvoices = async (pageNumber: number, pageSize: number) =
   );
 }
 
-export const listStayingAndComingInvoices = async (fromDate: string, pageNumber: number, pageSize: number) => {
+export const listStayingAndComingInvoices = (fromDate: string, pageNumber: number, pageSize: number) => {
   console.info("Fetching invoices from backend include prepaid")
   return listStayingAndComingInvoicesAndPrepaid(fromDate, true, pageNumber, pageSize)
 }
 
-export async function listStayingAndComingInvoicesAndPrepaid(fromDate: string, includePrepaid: boolean, pageNumber: number, pageSize: number) {
+export function listStayingAndComingInvoicesAndPrepaid(fromDate: string, includePrepaid: boolean, pageNumber: number, pageSize: number) {
   console.info("Fetching invoices from backend")
-  return await invoiceApi.get(
+  return invoiceApi.get(
     `/list/upcoming`,
     { params: { fromDate, includePrepaid, page: pageNumber, size: pageSize } }
   );

@@ -36,7 +36,7 @@ export type Invoice = {
   prepaied: boolean,
   paymentMethod: string,
   reservationCode: string,
-  creatorId: string | null,  
+  creatorId: string | null,
   sheetName: string,
   country: string,
   signed: boolean,
@@ -90,34 +90,27 @@ export const InvoiceManager = (props: InvoiceManagerProps) => {
     })
   }
 
-  const fetchInvoices = () => {
+  const fetchInvoices = async () => {
     const fd = formatISODate(fromDate);
     console.info("Loading invoices from date %s...", fd);
 
-    listStayingAndComingInvoices(fd, pagination.pageNumber, pagination.pageSize)
-      .then(response => {
-        // Axios response: data is in response.data, status is response.status
-        if (response.status === 200) {
-          const data = response.data;
-          setInvoices(data.content);
-          if (data.totalPages !== pagination.totalPages) {
-            var page = {
-              pageNumber: data.number,
-              pageSize: data.size,
-              totalElements: data.totalElements,
-              totalPages: data.totalPages
-            }
-            setPagination(page);
-          }
-        } else {
-          // Optionally handle non-200 status
-          setInvoices([]);
+    const rsp = await listStayingAndComingInvoices(fd, pagination.pageNumber, pagination.pageSize);
+    if (rsp.status === 200) {
+      const data = rsp.data;
+      setInvoices(data.content);
+      if (data.totalPages !== pagination.totalPages) {
+        var page = {
+          pageNumber: data.number,
+          pageSize: data.size,
+          totalElements: data.totalElements,
+          totalPages: data.totalPages
         }
-      })
-      .catch(error => {
-        console.error("Failed to fetch invoices:", error);
-        setInvoices([]);
-      });
+        setPagination(page);
+      }
+    } else {
+      // Optionally handle non-200 status
+      setInvoices([]);
+    }
   }
 
   useEffect(() => {
@@ -318,7 +311,7 @@ export const InvoiceManager = (props: InvoiceManagerProps) => {
                   state={{ pageNumber: pagination.pageNumber, pageSize: pagination.pageSize }}
                   className="hove"
                 >
-                  <CiEdit size="1.5em" className="mr-2 text-green-800"/>
+                  <CiEdit size="1.5em" className="mr-2 text-green-800" />
                 </Link>
               </div>
 

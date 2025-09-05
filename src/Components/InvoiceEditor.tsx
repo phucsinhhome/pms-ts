@@ -106,7 +106,7 @@ export const internalRooms = (rooms: ResRoom[]) => {
 
 export const Configs = {
   reservation: {
-    fetchDays: 300
+    fetchDays: 30
   },
   invoice: {
     initialInvoice: {

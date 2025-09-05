@@ -81,8 +81,8 @@ const reservationApi: AxiosInstance = axios.create({
 
 // reservationExtractApi
 const reservationExtractApi: AxiosInstance = axios.create({
-    baseURL: `${process.env.REACT_APP_RESERVATION_EXTRACT_ENDPOINT}`,
-    withCredentials: true
+    baseURL: `${process.env.REACT_APP_RESERVATION_EXTRACT_SERVICE_ENDPOINT}`,
+    withCredentials: false
 });
 // reservationExtractApi
 //     .interceptors

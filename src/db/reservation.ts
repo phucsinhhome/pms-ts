@@ -32,3 +32,8 @@ export const getReservation = async (reservationId: string) => {
     `/${reservationId}`
   );
 }
+
+export const syncReservationFromMailbox = () => {
+  console.info("Sync reservation from backend")
+  return reservationApi.put(`/sync`)
+}

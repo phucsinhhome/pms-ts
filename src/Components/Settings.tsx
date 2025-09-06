@@ -5,6 +5,7 @@ import { Button, Checkbox, Label, Spinner, TextInput } from "flowbite-react";
 import { collectRes } from "../db/reservation_extractor";
 import { Link } from "react-router-dom";
 import { getConfigs, setAutoUpdateAvailability } from "../db/configs";
+import { syncReservationFromMailbox } from "../db/reservation";
 
 export type SettingProps = {
   syncing: boolean,
@@ -94,6 +95,21 @@ export const Settings = (props: SettingProps) => {
       })
   }
 
+  const syncReservation = async () => {
+    try {
+      props.changeResSyncing(true)
+      console.info("Sync reservation...")
+      const res = await syncReservationFromMailbox()
+      if (res.status === 200) {
+        console.info("Sync reservation successfully")
+      }
+    } catch (e) {
+      console.error(e)
+    } finally {
+      props.changeResSyncing(false)
+    }
+  }
+
   const changePartition = (e: ChangeEvent<HTMLInputElement>) => {
     let iMsg = e.target.value
     setDatePartition(iMsg)
@@ -127,7 +143,7 @@ export const Settings = (props: SettingProps) => {
             {
               props.syncingRes ? <Spinner aria-label="Default status example"
                 className="w-14 h-10"
-              /> : <Button onClick={() => syncResStatus()}>Start</Button>
+              /> : <Button onClick={() => syncReservation()}>Start</Button>
             }
           </div>
           <div className="flex flex-row items-center mb-2 border rounded-sm shadow-sm p-2 space-x-2">

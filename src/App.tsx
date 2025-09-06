@@ -156,6 +156,13 @@ export const App = () => {
         setAuthorizedUserId(data.sub);
         setAuthorities(data.authorities || []);
         setRoles(data.roles || []);
+      } else if (rsp.status === 401) {
+        setUserProfile(null);
+        setChat(defaultChat);
+        setAuthorizedUserId(null);
+        setAuthorities([]);
+        setRoles([]);
+        handleLogin();
       } else {
         setUserProfile(null);
         setChat(defaultChat);

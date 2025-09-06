@@ -176,7 +176,7 @@ export function ReservationManager(props: ReservationManagerProps) {
             </Table.HeadCell>
           </Table.Head>
           <Table.Body className="divide-y">
-            {reservations.map((res) => {
+            {reservations?.map((res) => {
               return (
                 <Table.Row
                   className="bg-white"

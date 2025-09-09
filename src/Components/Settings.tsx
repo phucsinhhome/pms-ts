@@ -2,23 +2,25 @@ import { formatDatePartition } from "../Service/Utils";
 import { syncStatusOfMonth } from "../db/status";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { Button, Checkbox, Label, Spinner, TextInput } from "flowbite-react";
-import { collectRes } from "../db/reservation_extractor";
 import { Link } from "react-router-dom";
 import { getConfigs, setAutoUpdateAvailability } from "../db/configs";
 import { syncReservationFromMailbox } from "../db/reservation";
+import { Chat } from "../App";
 
 export type SettingProps = {
   syncing: boolean,
   changeSyncing: any,
   syncingRes: boolean,
   changeResSyncing: any,
-  activeMenu: any
+  activeMenu: any,
+  chat: Chat
 }
 
 export const Settings = (props: SettingProps) => {
 
   const [datePartition, setDatePartition] = useState(formatDatePartition(new Date()))
   const [inventoryConfigs, setInventoryConfigs] = useState<any>()
+
   const fetchInventoryConfigs = async () => {
     getConfigs("inventory")
       .then((rsp) => {
@@ -40,7 +42,7 @@ export const Settings = (props: SettingProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const changeAutoUpdateAvailability = (e: ChangeEvent<HTMLInputElement>) => {
+  const changeAutoUpdateAvailability = () => {
     let enabled = !inventoryConfigs?.enabled
     setAutoUpdateAvailability(enabled)
       .then((rsp) => {
@@ -71,35 +73,18 @@ export const Settings = (props: SettingProps) => {
       })
   }
 
-  const syncResStatus = () => {
-    props.changeResSyncing(true)
-    console.info("Sync reservation...")
-    const currentDate = new Date();
-    var year = currentDate.getFullYear();
-    var month = String(currentDate.getMonth() + 1).padStart(2, '0');
-    var day = String(currentDate.getDate()).padStart(2, '0');
-    const formattedDate = `${year}-${month}-${day}`;
-    console.info("Current date in ISO format: ", formattedDate);
-    let fromDate = formattedDate
-    let toDate = formattedDate
-    collectRes(fromDate, toDate)
-      .then(rsp => {
-        if (rsp.status === 200) {
-          console.info("Collect reservations from %s to %s successfully", fromDate, toDate)
-        }
-        console.log(rsp)
-      }).catch(e => {
-        console.error(e)
-      }).finally(() => {
-        props.changeResSyncing(false)
-      })
-  }
+  const handleGoogleLogin = () => {
+    console.info("Redirecting to Google OAuth2 login...")
+    const authUrl = `${process.env.REACT_APP_PS_BASE_URL}/oauth2/authorization/google`;
+    window.location.href = authUrl;
+  };
 
-  const syncReservation = async () => {
+
+  const syncReservation = async (code: string) => {
     try {
       props.changeResSyncing(true)
       console.info("Sync reservation...")
-      const res = await syncReservationFromMailbox()
+      const res = await syncReservationFromMailbox(code)
       if (res.status === 200) {
         console.info("Sync reservation successfully")
       }
@@ -131,30 +116,38 @@ export const Settings = (props: SettingProps) => {
               onChange={changePartition}
             />
             {
-              props.syncing ? <Spinner aria-label="Default status example"
-                className="w-14 h-10"
-              /> : <Button onClick={() => syncStatus()}>Start</Button>
+              props.chat?.iss !== 'https://accounts.google.com' ? (
+                props.syncing ? <Spinner aria-label="Default status example"
+                  className="w-14 h-10"
+                /> : <Button onClick={() => syncStatus()}>Start</Button>) : <></>
             }
           </div>
-          <div className="flex flex-row items-center mb-2 border rounded-sm shadow-sm p-2">
+          <div className="flex flex-row items-center mb-2 border rounded-sm shadow-sm p-2 space-x-2">
             <Label
               className="w-32"
             >Sync today reservation</Label>
             {
-              props.syncingRes ? <Spinner aria-label="Default status example"
+              props.chat?.iss === 'https://accounts.google.com' ? (props.syncingRes ? <Spinner aria-label="Default status example"
                 className="w-14 h-10"
-              /> : <Button onClick={() => syncReservation()}>Start</Button>
+              /> : <Button onClick={() => syncReservation('435345')}>Start</Button>)
+                : <Button onClick={handleGoogleLogin}>Login with Google</Button>
             }
+
           </div>
+
           <div className="flex flex-row items-center mb-2 border rounded-sm shadow-sm p-2 space-x-2">
             <Checkbox id="updateAvailability"
               checked={inventoryConfigs?.enabled}
               onChange={changeAutoUpdateAvailability}
+              disabled={props.chat?.iss === 'https://accounts.google.com'}
             />
             <Label>Auto update inventory availability</Label>
           </div>
           <div className="flex flex-row items-center mb-2 border rounded-sm shadow-sm p-2">
-            <Link to="../product-group" className="w-32">Product Groups</Link>
+            {
+              props.chat?.iss === 'https://accounts.google.com' ? <></> :
+                <Link to="../product-group" className="w-32">Product Groups</Link>
+            }
           </div>
         </div>
       </div >

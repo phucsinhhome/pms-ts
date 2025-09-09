@@ -32,14 +32,16 @@ export type Chat = {
   firstName: string,
   lastName: string | undefined,
   username: string,
-  email?: string
+  email?: string,
+  iss: string
 }
 const defaultChatId = '0000000000'
 export const defaultChat: Chat = {
   id: defaultChatId,
   firstName: "Login",
   lastName: "",
-  username: 'no-user'
+  username: 'no-user',
+  iss: 'https://phucsinhhcm.hopto.org/iam/realm/ps'
 }
 
 const menuOrder = ['home', 'expense', 'invoice', 'inventory', 'reservation', 'order', 'profit', 'tour', 'supplier', 'setting']
@@ -151,7 +153,8 @@ export const App = () => {
           firstName: data.given_name || "",
           lastName: data.family_name || "",
           username: data.preferred_username || data.email || "",
-          email: data.email
+          email: data.email,
+          iss: data.iss
         });
         setAuthorizedUserId(data.sub);
         setAuthorities(data.authorities || []);
@@ -188,6 +191,8 @@ export const App = () => {
     document.title = "PMS";
     fetchConfig();
     fetchUserProfile();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -333,6 +338,7 @@ export const App = () => {
           syncingRes={syncingRes}
           changeResSyncing={(n: boolean) => setSyncingRes(n)}
           activeMenu={() => setActiveMenu(menus.setting)}
+          chat={getChat()}
         />} />
         <Route
           path="profile"

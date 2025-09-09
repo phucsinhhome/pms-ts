@@ -23,7 +23,8 @@ export const defaultAppConfigs: AppConfig = {
         id: '1351151927',
         firstName: "Minh",
         lastName: "Tran",
-        username: 'minhtranes'
+        username: 'minhtran',
+        iss: 'https://phucsinhhcm.hopto.org/iam/realm/ps'
     }],
     orderManagement: {
         copyLink: {

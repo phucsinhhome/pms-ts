@@ -33,7 +33,7 @@ export const getReservation = async (reservationId: string) => {
   );
 }
 
-export const syncReservationFromMailbox = () => {
+export const syncReservationFromMailbox = (code: string) => {
   console.info("Sync reservation from backend")
-  return reservationApi.put(`/sync`)
+  return reservationApi.put(`/sync`, JSON.stringify({ code }), { headers: { 'Content-Type': 'application/json' } });
 }

@@ -9,7 +9,6 @@ import { DEFAULT_PAGE_SIZE } from "../App";
 import { optionStyle, Pagination } from "./ProfitReport";
 import { collectRes } from "../db/reservation_extractor";
 import { Spinner } from 'flowbite-react';
-import { PiBrainThin } from "react-icons/pi";
 import { MdAssignmentAdd } from "react-icons/md";
 
 export type Reservation = {

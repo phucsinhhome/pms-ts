@@ -1,10 +1,10 @@
 import { PGroup } from "../Components/PGroupManager";
 import { productGroupApi } from "./apis";
 
-export const listAllPGroups = async () => {
+export const listAllPGroups = () => {
   console.info("Fetching all product groups")
 
-  return await productGroupApi.get(
+  return productGroupApi.get(
     ``,
     { params: { page: 0, size: 10 } }
   );

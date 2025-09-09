@@ -31,38 +31,45 @@ export const OrderEditor = (props: OrderEditorProps) => {
   const [filteredName, setFilteredName] = useState('')
 
   const { orderId, staffId } = useParams<OrderParams>()
-  const readOrder = () => {
-    if (orderId === undefined) {
-      console.warn("Invalid order id")
-      return
-    }
-    console.info("Loading the order")
+  const readOrder = async () => {
+    try {
+      if (orderId === undefined) {
+        console.warn("Invalid order id")
+        return
+      }
+      console.info("Loading the order")
 
-    fetchOrder(orderId)
-      .then((rsp) => {
-        if (rsp.status === 200) {
-          const data: Order = rsp.data
-          console.info("Order %s has been loaded", data.orderId)
-          setOrder(data)
-          let invoiceId = data.invoiceId
-          if (invoiceId !== undefined && invoiceId !== null && invoiceId !== '') {
-            getInvoice(invoiceId)
-              .then(rsp => {
-                if (rsp.status === 200) {
-                  const inv: Invoice = rsp.data
-                  console.info("Linked invoice %s has been loaded", inv.id)
-                  setChoosenInvoice(inv)
-                }
-              })
-              .catch((e) => {
-                console.error("Error while fetching the linked invoice", e)
-                if (e instanceof Error) {
-                  alert(e.message)
-                }
-              });
-          }
-        }
-      })
+      const rsp = await fetchOrder(orderId)
+      if (rsp.status !== 200) {
+        console.error("Cannot load the order %s", orderId)
+        return
+      }
+      const data: Order = rsp.data
+      console.info("Order %s has been loaded", data.orderId)
+      setOrder(data)
+      let invoiceId = data.invoiceId
+      if (invoiceId !== undefined && invoiceId !== null && invoiceId !== '') {
+        getInvoice(invoiceId)
+          .then(rsp => {
+            if (rsp.status === 200) {
+              const inv: Invoice = rsp.data
+              console.info("Linked invoice %s has been loaded", inv.id)
+              setChoosenInvoice(inv)
+            }
+          })
+          .catch((e) => {
+            console.error("Error while fetching the linked invoice", e)
+            if (e instanceof Error) {
+              alert(e.message)
+            }
+          });
+      }
+    } catch (e) {
+      console.error("Error while fetching the order", e)
+      if (e instanceof Error) {
+        alert(e.message)
+      }
+    }
   }
 
   useEffect(() => {
@@ -82,21 +89,21 @@ export const OrderEditor = (props: OrderEditorProps) => {
     // eslint-disable-next-line
   }, [orderId]);
 
-  const fetchProductGroups = () => {
-    listAllPGroups()
-      .then(rsp => {
-        // Axios response: data is in rsp.data, status is rsp.status
-        if (rsp.status === 200) {
-          setPGroups(rsp.data.content)
-        }
-      })
-      .catch((e) => {
+  const fetchProductGroups = async () => {
+    try {
+      const rsp = await listAllPGroups()
+      if (rsp.status !== 200) {
+        console.error("Cannot load product groups")
         setPGroups([])
-        console.error("Error while fetching product groups", e)
-        if (e instanceof Error) {
-          alert(e.message)
-        }
-      });
+        return
+      }
+      const data: PGroup[] = rsp.data.content
+      console.info("Loaded %d product groups", data.length)
+      setPGroups(data)
+    } catch (e) {
+      console.error("Error while fetching product groups", e)
+      setPGroups([])
+    }
   }
 
   const sendToPreparation = () => {
@@ -262,7 +269,7 @@ export const OrderEditor = (props: OrderEditorProps) => {
         </div>
         <div className="flex flex-col space-y-1 pt-2 px-2">
           {
-            pGroups.filter(grp => order?.items.map(i => i.group).includes(grp.name))
+            pGroups?.filter(grp => order?.items.map(i => i.group).includes(grp.name))
               .map((grp) => <div key={grp.name}>
                 <div className="font font-mono font-bold text-sm text-center ">{grp.displayName}</div>
                 {order?.items.filter(it => it.group === grp.name).map((item) => {

@@ -191,54 +191,9 @@ export const InvoiceEditor = (props: InvoiceProps) => {
   const [loc, setLoc] = useState({ pageNumber: 0, pageSize: DEFAULT_PAGE_SIZE })
 
   const location = useLocation()
-  useEffect(() => {
-    if (location === null || location.state === null) {
-      return
-    }
-    var newLocation = {
-      pageNumber: location.state.pageNumber,
-      pageSize: location.state.pageSize
-    }
-    setLoc(newLocation)
-  }, [location])
 
-
-  useEffect(() => {
-    console.info("Editing invoice %s", invoiceId)
-    props.activeMenu()
-    if (invoiceId === undefined) {
-      console.warn("Invalid invoice id. It should be value of 'new' or a certain ID value")
-      return
-    }
-    if (invoiceId !== "new") {
-      try {
-        getInvoice(invoiceId)
-          .then(rsp => {
-            if (!(rsp.status === 200)) {
-              console.error("Failed to fetch invoice %s", invoiceId)
-              return
-            }
-            const data: Invoice = rsp.data
-            if (data.paymentMethod !== null && data.paymentMethod !== undefined && data.paymentMethod !== "") {
-              const pM = paymentMethods.find(m => m.id === data.paymentMethod)
-              setSelectedPaymentMethod(pM || paymentMethods[0])
-            }
-            if (data.issuerId !== null && data.issuerId !== undefined && data.issuerId !== "") {
-              const issuer = issuers.find(usr => usr.id === data.issuerId)
-              setSelectedIssuer(issuer || issuers[0])
-            }
-            setInvoice({
-              ...data,
-              createdBy: props.chat.username,
-            })
-          })
-      } catch (e) {
-        console.error("Error while fetching invoice", e);
-        if (e instanceof Error) {
-          alert(e.message);
-        }
-      }
-    } else {
+  const fetchInvoice = async (invoiceId: string) => {
+    if (invoiceId === "new") {
       try {
         fetchReservations()
           .then(rsp => {
@@ -266,7 +221,54 @@ export const InvoiceEditor = (props: InvoiceProps) => {
           alert(e.message);
         }
       }
+      return
     }
+    try {
+      const rsp = await getInvoice(invoiceId)
+      if (rsp.status !== 200) {
+        console.error("Failed to fetch invoice %s", invoiceId)
+        return
+      }
+      const data: Invoice = rsp.data
+      if (data.paymentMethod !== null && data.paymentMethod !== undefined && data.paymentMethod !== "") {
+        const pM = paymentMethods.find(m => m.id === data.paymentMethod)
+        setSelectedPaymentMethod(pM || paymentMethods[0])
+      }
+      if (data.issuerId !== null && data.issuerId !== undefined && data.issuerId !== "") {
+        const issuer = issuers.find(usr => usr.id === data.issuerId)
+        setSelectedIssuer(issuer || issuers[0])
+      }
+      setInvoice(data)
+    } catch (e) {
+      console.error("Error while fetching invoice", e);
+      if (e instanceof Error) {
+        alert(e.message);
+      }
+    }
+  }
+
+
+  useEffect(() => {
+    if (location === null || location.state === null) {
+      return
+    }
+    var newLocation = {
+      pageNumber: location.state.pageNumber,
+      pageSize: location.state.pageSize
+    }
+    setLoc(newLocation)
+  }, [location])
+
+
+  useEffect(() => {
+    console.info("Editing invoice %s", invoiceId)
+    props.activeMenu()
+    if (invoiceId === undefined) {
+      console.warn("Invalid invoice id. It should be value of 'new' or a certain ID value")
+      return
+    }
+    fetchInvoice(invoiceId)
+
     if (products.length <= 0) {
       console.info("Fetch the products")
       listAllProductItems()
@@ -283,6 +285,8 @@ export const InvoiceEditor = (props: InvoiceProps) => {
           }
         });
     }
+    
+    // eslint-disable-next-line
   }, [invoiceId, products.length, props])
 
 

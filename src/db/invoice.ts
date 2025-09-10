@@ -65,10 +65,10 @@ export const listInvoiceByGuestName = async (fromDate: string, guestName: string
   );
 }
 
-export const getInvoice = async (invoiceId: string) => {
+export const getInvoice = (invoiceId: string) => {
   console.info("Fetching invoice from backend")
   
-  return await invoiceApi.get(`/${invoiceId}`);
+  return invoiceApi.get(`/${invoiceId}`);
 }
 
 export function getItemList() {

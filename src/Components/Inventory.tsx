@@ -692,7 +692,7 @@ export const Inventory = (props: InventoryProps) => {
       </div>
       <div>
         <div className="flex flex-col space-y-1">
-          {products.map((product) => {
+          {products?.map((product) => {
             return (
               <div
                 className="flex flex-row items-center border border-gray-300 shadow-2xl rounded-md bg-white dark:bg-slate-500 relative"

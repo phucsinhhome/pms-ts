@@ -278,7 +278,7 @@ export const InvoiceManager = (props: InvoiceManagerProps) => {
         })}
       </div>
       <div className="flex flex-col space-y-1.5 mt-2 divide-y">
-        {invoices.map((inv) => {
+        {invoices?.map((inv) => {
           return (
             <div
               className="flex flex-col px-2 relative"

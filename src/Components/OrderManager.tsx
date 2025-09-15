@@ -331,7 +331,7 @@ export const OrderManager = (props: OrderManagerProps) => {
         </div>
       </div>
       <div className="flex flex-col px-2 overflow-hidden space-y-1.5">
-        {orders.map((order) => {
+        {orders?.map((order) => {
           return (
             <div
               className={'flex flex-col w-full border border-gray-300 shadow-sm rounded-md px-2 ' + orderStyle(order.status)}

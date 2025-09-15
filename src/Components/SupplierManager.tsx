@@ -575,7 +575,7 @@ export const SupplierManager = (props: SupplierManagerProps) => {
         }
       </div>
       <div className="flex flex-col px-2 overflow-hidden space-y-1.5 divide-y">
-        {invoices.map((invoice) => {
+        {invoices?.map((invoice) => {
           return (
             <div
               className="flex flex-col py-1 relative"

@@ -126,7 +126,7 @@ export const TourManager = (props: TourManagerProps) => {
         </Button>
       </div>
       <div className="flex flex-col px-2 overflow-hidden space-y-1.5 divide-y">
-        {tours.map((tour) => {
+        {tours?.map((tour) => {
           return (
             <div
               className="flex flex-col py-1 relative"

@@ -10,7 +10,7 @@ export const updateReservation = async (reservation: Reservation) => {
   );
 }
 
-export const listLatestReservations = async (fromDate: string, toDate: string, pageNumber: number, pageSize: number) => {
+export const listLatestReservations = (fromDate: string, toDate: string, pageNumber: number, pageSize: number) => {
   console.info("Fetching reservations from backend")
   return reservationApi.get(
     `/list`,

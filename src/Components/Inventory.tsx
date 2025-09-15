@@ -76,7 +76,8 @@ export type AvailabilityChange = {
 const timeOpts = ['PT5M', 'PT15M', 'PT30M', 'PT45M', 'PT1H', 'PT1H15M', 'PT1H30M', 'PT2H']
 
 type InventoryProps = {
-  activeMenu: any
+  activeMenu: any,
+  handleUnauthorized: any
 }
 
 export const activeGroupStyle = (focus: boolean) => {
@@ -141,26 +142,26 @@ export const Inventory = (props: InventoryProps) => {
     })
   }
 
-  const fetchAllProducts = () => {
+  const fetchAllProducts = async () => {
     console.info("Loading all the products")
-
-    listProductItems(pagination.pageNumber, pagination.pageSize)
-      .then(rsp => {
-        // Axios response: data is in rsp.data, status is rsp.status
-        if (rsp.status === 200) {
-          const data = rsp.data;
-          indexProduct(data.content)
-          if (data.totalPages !== pagination.totalPages) {
-            setPagination({
-              ...pagination,
-              totalPages: data.totalPages
-            })
-          }
-        } else {
-          setProducts([]);
-        }
-      })
-      .catch(() => setProducts([]));
+    const rsp = await listProductItems(pagination.pageNumber, pagination.pageSize)
+    if (rsp.status === 401 || rsp.status === 403) {
+      props.handleUnauthorized()
+      return
+    }
+    // Axios response: data is in rsp.data, status is rsp.status
+    if (rsp.status === 200) {
+      const data = rsp.data;
+      indexProduct(data.content)
+      if (data.totalPages !== pagination.totalPages) {
+        setPagination({
+          ...pagination,
+          totalPages: data.totalPages
+        })
+      }
+    } else {
+      setProducts([]);
+    }
   }
 
   useEffect(() => {
@@ -185,17 +186,21 @@ export const Inventory = (props: InventoryProps) => {
     // eslint-disable-next-line
   }, [filteredName, activeGroup]);
 
-  const fetchPGroups = () => {
-    listAllPGroups()
-      .then(rsp => {
-        // Axios response: data is in rsp.data, status is rsp.status
-        if (rsp.status === 200) {
-          setPGroups(rsp.data.content)
-        }
-      })
-      .catch(() => {
+  const fetchPGroups = async () => {
+    try {
+      const rsp = await listAllPGroups();
+      if (rsp.status === 401 || rsp.status === 403) {
         setPGroups([])
-      });
+        props.handleUnauthorized()
+        return
+      }
+      if (rsp.status === 200) {
+        setPGroups(rsp.data.content)
+      }
+    } catch (error) {
+      console.error("Failed to fetch product groups", error);
+      setPGroups([])
+    }
   }
 
 
@@ -425,54 +430,18 @@ export const Inventory = (props: InventoryProps) => {
     setFilteredName(fN)
   }
 
-  const filterProducts = () => {
-    if (filteredName === '' && activeGroup === '') {
-      fetchAllProducts()
-      return
-    }
-    if (filteredName === '' && activeGroup !== '') {
-      listProductItemsByGroup(activeGroup, pagination.pageNumber, pagination.pageSize)
-        .then(rsp => {
-          if (rsp.status === 200) {
-            const data = rsp.data;
-            indexProduct(data.content)
-            if (pagination.totalPages !== data.totalPages) {
-              setPagination({
-                ...pagination,
-                totalPages: data.totalPages
-              })
-            }
-          } else {
-            setProducts([]);
-          }
-        })
-        .catch(() => setProducts([]))
-      return
-    }
-
-    if (filteredName !== '' && activeGroup === '') {
-      listProductItemsWithName(filteredName)
-        .then(rsp => {
-          if (rsp.status === 200) {
-            const data = rsp.data;
-            indexProduct(data.content)
-            // When searching by name only, set totalPages to 1
-            if (pagination.totalPages > 1) {
-              setPagination({
-                ...pagination,
-                totalPages: 1
-              })
-            }
-          } else {
-            setProducts([]);
-          }
-        })
-        .catch(() => setProducts([]))
-      return
-    }
-
-    listProductItemsWithNameAndGroup(filteredName, activeGroup, pagination.pageNumber, pagination.pageSize)
-      .then(rsp => {
+  const filterProducts = async () => {
+    try {
+      if (filteredName === '' && activeGroup === '') {
+        fetchAllProducts()
+        return
+      }
+      if (filteredName === '' && activeGroup !== '') {
+        const rsp = await listProductItemsByGroup(activeGroup, pagination.pageNumber, pagination.pageSize)
+        if (rsp.status === 401 || rsp.status === 403) {
+          props.handleUnauthorized()
+          return
+        }
         if (rsp.status === 200) {
           const data = rsp.data;
           indexProduct(data.content)
@@ -485,8 +454,53 @@ export const Inventory = (props: InventoryProps) => {
         } else {
           setProducts([]);
         }
-      })
-      .catch(() => setProducts([]))
+        return
+      }
+
+      if (filteredName !== '' && activeGroup === '') {
+        const rsp = await listProductItemsWithName(filteredName)
+        if (rsp.status === 401 || rsp.status === 403) {
+          props.handleUnauthorized()
+          return
+        }
+        if (rsp.status === 200) {
+          const data = rsp.data;
+          indexProduct(data.content)
+          // When searching by name only, set totalPages to 1
+          if (pagination.totalPages > 1) {
+            setPagination({
+              ...pagination,
+              totalPages: 1
+            })
+          }
+        } else {
+          setProducts([]);
+        }
+        return
+      }
+
+      const rsp = await listProductItemsWithNameAndGroup(filteredName, activeGroup, pagination.pageNumber, pagination.pageSize)
+      if (rsp.status === 401 || rsp.status === 403) {
+        props.handleUnauthorized()
+        return
+      }
+      if (rsp.status === 200) {
+        const data = rsp.data;
+        indexProduct(data.content)
+        if (pagination.totalPages !== data.totalPages) {
+          setPagination({
+            ...pagination,
+            totalPages: data.totalPages
+          })
+        }
+      } else {
+        setProducts([]);
+      }
+
+    } catch (error) {
+      console.error("Failed to filter products", error);
+      setProducts([]);
+    }
   }
 
   const emptyFilterText = () => {

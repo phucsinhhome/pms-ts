@@ -300,23 +300,45 @@ export const App = () => {
         <Route path="" element={<Welcome activeMenu={() => setActiveMenu(menus.home)} />} />
         <Route path="home" element={<Welcome activeMenu={() => setActiveMenu(menus.home)} />} />
         <Route path="profit" element={<ProfitReport activeMenu={() => setActiveMenu(menus.profit)} />} />
-        <Route path="invoice" element={<InvoiceManager activeMenu={() => setActiveMenu(menus.invoice)} />} />
-        <Route path="invoice/:invoiceId" element={<InvoiceEditor chat={getChat()} displayName={fullName()} authorizedUserId={authorizedUserId} activeMenu={() => setActiveMenu(menus.invoice)} />} />
-        <Route path="expense" element={<ExpenseManager chat={getChat()} displayName={fullName()} authorizedUserId={authorizedUserId} activeMenu={() => setActiveMenu(menus.expense)} />} />
-        <Route path="reservation" element={<ReservationManager activeMenu={() => setActiveMenu(menus.reservation)} />} />
+        <Route path="invoice" element={<InvoiceManager
+          activeMenu={() => setActiveMenu(menus.invoice)}
+          handleUnauthorized={() => handleLogin()}
+        />} />
+        <Route path="invoice/:invoiceId" element={<InvoiceEditor
+          chat={getChat()}
+          displayName={fullName()}
+          authorizedUserId={authorizedUserId}
+          activeMenu={() => setActiveMenu(menus.invoice)}
+          handleUnauthorized={() => handleLogin()}
+        />} />
+        <Route path="expense" element={<ExpenseManager
+          chat={getChat()}
+          displayName={fullName()}
+          authorizedUserId={authorizedUserId}
+          activeMenu={() => setActiveMenu(menus.expense)}
+          handleUnauthorized={() => handleLogin()}
+        />} />
+        <Route path="reservation" element={<ReservationManager
+          activeMenu={() => setActiveMenu(menus.reservation)}
+          handleUnauthorized={() => handleLogin()}
+        />} />
         <Route path="order" element={<OrderManager
           chat={getChat()}
           displayName={fullName()}
           authorizedUserId={authorizedUserId}
           activeMenu={() => setActiveMenu(menus.order)}
           configs={configs}
+          handleUnauthorized={() => handleLogin()}
         />} />
         <Route path="order/:orderId/:staffId"
           element={<OrderEditor
             setChat={(chat: Chat) => setChat(chat)}
             activeMenu={() => setActiveMenu(menus.order)} />}
         />
-        <Route path="inventory" element={<Inventory activeMenu={() => setActiveMenu(menus.inventory)} />} />
+        <Route path="inventory" element={<Inventory
+          activeMenu={() => setActiveMenu(menus.inventory)}
+          handleUnauthorized={() => handleLogin()}
+        />} />
         <Route path="product-group" element={<PGroupManager activeMenu={() => setActiveMenu(menus.productGroup)} />} />
         <Route path="supplier" element={<SupplierManager chat={getChat()} displayName={fullName()} authorizedUserId={authorizedUserId} activeMenu={() => setActiveMenu(menus.supplier)} />} />
         <Route path="tour" element={<TourManager

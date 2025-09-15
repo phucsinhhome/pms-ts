@@ -59,7 +59,8 @@ type ExpenseProps = {
   chat: Chat,
   authorizedUserId: string | null,
   displayName: string,
-  activeMenu: any
+  activeMenu: any,
+  handleUnauthorized: any
 }
 
 export const ExpenseManager = memo((props: ExpenseProps) => {
@@ -96,6 +97,10 @@ export const ExpenseManager = memo((props: ExpenseProps) => {
       let byDate = formatISODate(new Date())
 
       const res = await listExpenseByExpenserAndDate(props.chat.username, byDate, pagination.pageNumber, pagination.pageSize);
+      if (res.status === 401 || res.status === 403) {
+        props.handleUnauthorized()
+        return
+      }
       if (res === undefined || res.status !== 200) {
         console.warn("Invalid expense response")
         return

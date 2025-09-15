@@ -146,7 +146,8 @@ type InvoiceProps = {
   chat: Chat,
   authorizedUserId: string | null,
   displayName: string,
-  activeMenu: any
+  activeMenu: any,
+  handleUnauthorized: any
 }
 
 export const InvoiceEditor = (props: InvoiceProps) => {
@@ -195,27 +196,27 @@ export const InvoiceEditor = (props: InvoiceProps) => {
   const fetchInvoice = async (invoiceId: string) => {
     if (invoiceId === "new") {
       try {
-        fetchReservations()
-          .then(rsp => {
-            if (rsp.status === 200) {
-              setReservations(rsp.data.content)
-              setFilteredReservations(rsp.data.content)
-              setResFilteredText('')
-              setOpenChooseResModal(true)
-            } else {
-              setReservations([])
-              setFilteredReservations([])
-              setResFilteredText('')
-              setOpenChooseResModal(true)
-            }
-          })
-          .catch(() => {
-            setReservations([])
-            setFilteredReservations([])
-            setResFilteredText('')
-            setOpenChooseResModal(true)
-          })
+        const rsp = await fetchReservations()
+        if (rsp.status === 401 || rsp.status === 403) {
+          props.handleUnauthorized();
+          return
+        }
+        if (rsp.status === 200) {
+          setReservations(rsp.data.content)
+          setFilteredReservations(rsp.data.content)
+          setResFilteredText('')
+          setOpenChooseResModal(true)
+        } else {
+          setReservations([])
+          setFilteredReservations([])
+          setResFilteredText('')
+          setOpenChooseResModal(true)
+        }
       } catch (e) {
+        setReservations([])
+        setFilteredReservations([])
+        setResFilteredText('')
+        setOpenChooseResModal(true)
         console.error("Error while fetching reservations", e);
         if (e instanceof Error) {
           alert(e.message);
@@ -285,7 +286,7 @@ export const InvoiceEditor = (props: InvoiceProps) => {
           }
         });
     }
-    
+
     // eslint-disable-next-line
   }, [invoiceId, products.length, props])
 

@@ -10,9 +10,9 @@ export const listAllProductItems = async () => {
   );
 }
 
-export const listProductItems = async (page: number, size: number) => {
+export const listProductItems = (page: number, size: number) => {
   console.info("Fetching all products from the inventory")
-  return await inventoryApi.get(
+  return inventoryApi.get(
     `/list`,
     { params: { page, size } }
   );
@@ -48,28 +48,28 @@ export const planAvailability = async (change: AvailabilityChange) => {
   );
 }
 
-export const listProductItemsWithName = async (name: string) => {
+export const listProductItemsWithName = (name: string) => {
   console.info("Filter products with name contains %s", name)
   
-  return await inventoryApi.get(
+  return inventoryApi.get(
     `/list`,
     { params: { name, page: 0, size: 100 } }
   );
 }
 
-export const listProductItemsByGroup = async (group: string, page: number, size: number) => {
+export const listProductItemsByGroup = (group: string, page: number, size: number) => {
   console.info("Filter products with group %s", group)
   
-  return await inventoryApi.get(
+  return inventoryApi.get(
     `/list`,
     { params: { group, page, size } }
   );
 }
 
-export const listProductItemsWithNameAndGroup = async (name: string, group: string, page: number, size: number) => {
+export const listProductItemsWithNameAndGroup = (name: string, group: string, page: number, size: number) => {
   console.info("Filter products with name %s and group %s", name, group)
   
-  return await inventoryApi.get(
+  return inventoryApi.get(
     `/list`,
     { params: { group, name, page, size } }
   );

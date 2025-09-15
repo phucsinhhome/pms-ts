@@ -33,7 +33,8 @@ export type ResRoom = {
 }
 
 type ReservationManagerProps = {
-  activeMenu: any
+  activeMenu: any,
+  handleUnauthorized: any
 }
 
 export function ReservationManager(props: ReservationManagerProps) {
@@ -66,35 +67,36 @@ export function ReservationManager(props: ReservationManagerProps) {
     fetchReservations(fromDate, pNum, pSize)
   }
 
-  const fetchReservations = (fromDate: Date, pageNumber: number, pageSize: number) => {
+  const fetchReservations = async (fromDate: Date, pageNumber: number, pageSize: number) => {
     var toDate = addDays(fromDate, Configs.reservation.fetchDays)
     var fd = formatISODate(fromDate)
     var td = formatISODate(toDate)
     console.info("Loading reservations from date [%s] to [%s]...", fd, td)
 
-    listLatestReservations(fd, td, pageNumber, pageSize)
-      .then(rsp => {
-        // Axios response: data is in rsp.data, status is rsp.status
-        if (rsp.status === 200) {
-          const data = rsp.data;
-          setReservations(data.content)
-          var page = {
-            pageNumber: data.number,
-            pageSize: data.size,
-            totalElements: data.totalElements,
-            totalPages: data.totalPages
-          }
-          setPagination(page)
-        } else {
-          setReservations([])
-        }
-      })
-      .catch(() => setReservations([]));
+    const rsp = await listLatestReservations(fd, td, pageNumber, pageSize)
+    if (rsp.status === 401 || rsp.status === 403) {
+      props.handleUnauthorized();
+      return
+    }
+    if (rsp.status === 200) {
+      const data = rsp.data;
+      setReservations(data.content)
+      var page = {
+        pageNumber: data.number,
+        pageSize: data.size,
+        totalElements: data.totalElements,
+        totalPages: data.totalPages
+      }
+      setPagination(page)
+    } else {
+      setReservations([])
+    }
   }
 
   useEffect(() => {
     fetchReservations(new Date(), 0, Number(DEFAULT_PAGE_SIZE));
     props.activeMenu()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props]);
 
   const filterOpts = [
@@ -152,7 +154,7 @@ export function ReservationManager(props: ReservationManagerProps) {
         </div>
       </div>
       <div className="flex flex-row space-x-2 px-4">
-        {filterOpts.map((opt,idx) => {
+        {filterOpts.map((opt, idx) => {
           return (<Link
             to=''
             key={idx}

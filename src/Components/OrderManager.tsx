@@ -63,7 +63,8 @@ type OrderManagerProps = {
   authorizedUserId: string | null,
   displayName: string,
   activeMenu: any,
-  configs: AppConfig | undefined
+  configs: AppConfig | undefined,
+  handleUnauthorized: any
 }
 
 const menuDisplayMappings: { [key: string]: string } = {
@@ -108,12 +109,20 @@ export const OrderManager = (props: OrderManagerProps) => {
 
     let ordersData = { content: [], totalPages: 0, number: 0, size: 0, totalElements: 0 }
     if (activeStatuses.length === 0) {
-      ordersData = await listOrders(fromTime, pagination.pageNumber, pagination.pageSize)
-        .then(rsp => rsp.data)
+      const rsp = await listOrders(fromTime, pagination.pageNumber, pagination.pageSize);
+      if (rsp.status === 401 || rsp.status === 403) {
+        props.handleUnauthorized()
+        return
+      }
+      ordersData = rsp.data
     }
     if (activeStatuses.length > 0) {
-      ordersData = await listOrderByStatuses(fromTime, activeStatuses, pagination.pageNumber, pagination.pageSize)
-        .then(rsp => rsp.data)
+      const rsp = await listOrderByStatuses(fromTime, activeStatuses, pagination.pageNumber, pagination.pageSize);
+      if (rsp.status === 401 || rsp.status === 403) {
+        props.handleUnauthorized()
+        return
+      }
+      ordersData = rsp.data
     }
 
     var orders: Order[] = ordersData.content || []

@@ -51,7 +51,8 @@ export type Issuer = {
 }
 
 type InvoiceManagerProps = {
-  activeMenu: any
+  activeMenu: any,
+  handleUnauthorized(): any
 }
 
 
@@ -95,6 +96,10 @@ export const InvoiceManager = (props: InvoiceManagerProps) => {
     console.info("Loading invoices from date %s...", fd);
 
     const rsp = await listStayingAndComingInvoices(fd, pagination.pageNumber, pagination.pageSize);
+    if (rsp.status === 401 || rsp.status === 403) {
+      props.handleUnauthorized()
+      return
+    }
     if (rsp.status === 200) {
       const data = rsp.data;
       setInvoices(data.content);

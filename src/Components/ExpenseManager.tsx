@@ -26,7 +26,8 @@ export type Expense = {
   amount: number,
   expenserName: string,
   expenserId: string,
-  service: string
+  service: string,
+  tenantId: string
 }
 
 type EditingExpense = {
@@ -45,7 +46,8 @@ const defaultEmptExpense: Expense = {
   amount: 0,
   expenserName: 'Manager User',
   expenserId: 'manager',
-  service: ""
+  service: "",
+  tenantId: ""
 }
 
 const defaultEditingExpense = {
@@ -389,7 +391,8 @@ export const ExpenseManager = memo((props: ExpenseProps) => {
         expenserName: props.displayName,
         service: editingExpense.origin.service,
         id: editingExpense.origin.id,
-        amount: editingExpense.origin.amount
+        amount: editingExpense.origin.amount,
+        tenantId: editingExpense.origin.tenantId
       }
       if (exp.id === null || exp.id === "" || exp.id === "new") {
         exp.id = newExpId()

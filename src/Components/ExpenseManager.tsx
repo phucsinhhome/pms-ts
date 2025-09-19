@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef, ChangeEvent, memo } from "react";
 import { TextInput, Label, Spinner, Modal, Button } from "flowbite-react";
-import { deleteExpense, generate, newExpId } from "../db/expense";
+import { assignExpense, deleteExpense, generate, listExpenseByDate, newExpId } from "../db/expense";
 import { classifyServiceByItemName } from "../db/classification";
 import { Chat, DEFAULT_PAGE_SIZE } from "../App";
-import { HiOutlineCash, HiX } from "react-icons/hi";
+import { HiOutlineCash, HiUserCircle, HiX } from "react-icons/hi";
 import { formatISODate, formatISODateTime, formatMoneyAmount, formatVND } from "../Service/Utils";
 import { PiBrainThin } from "react-icons/pi";
 import { FaRotate } from "react-icons/fa6";
@@ -16,6 +16,7 @@ import { FaUmbrellaBeach } from "react-icons/fa";
 import { IoMdRemoveCircle } from "react-icons/io";
 import { CiEdit } from "react-icons/ci";
 import Moment from "react-moment";
+import { listUsers, UserInfo } from "../db/users";
 
 export type Expense = {
   id: string,
@@ -32,9 +33,9 @@ export type Expense = {
 
 type EditingExpense = {
   origin: Expense,
-  formattedUnitPrice: string,
+  formattedUnitPrice?: string,
   itemMessage: string,
-  originItemName: string
+  originItemName?: string
 }
 
 const defaultEmptExpense: Expense = {
@@ -62,7 +63,8 @@ type ExpenseProps = {
   authorizedUserId: string | null,
   displayName: string,
   activeMenu: any,
-  handleUnauthorized: any
+  handleUnauthorized: any,
+  hasAuthority: (auth: string) => boolean
 }
 
 export const ExpenseManager = memo((props: ExpenseProps) => {
@@ -76,6 +78,11 @@ export const ExpenseManager = memo((props: ExpenseProps) => {
 
   const [openEditingExpenseModal, setOpenEditingExpenseModal] = useState(false)
   const [editingExpense, setEditingExpense] = useState<EditingExpense>(defaultEditingExpense)
+
+  const [openUsersModal, setOpenUsersModal] = useState(false)
+  const [users, setUsers] = useState<UserInfo[]>([])
+
+  const isAssignable = props.hasAuthority('expense:assign')
 
   const [pagination, setPagination] = useState<Pagination>({
     pageNumber: 0,
@@ -98,7 +105,12 @@ export const ExpenseManager = memo((props: ExpenseProps) => {
     try {
       let byDate = formatISODate(new Date())
 
-      const res = await listExpenseByExpenserAndDate(props.chat.username, byDate, pagination.pageNumber, pagination.pageSize);
+      let res;
+      if (isAssignable) {
+        res = await listExpenseByDate(byDate, pagination.pageNumber, pagination.pageSize);
+      } else {
+        res = await listExpenseByExpenserAndDate(props.chat.username, byDate, pagination.pageNumber, pagination.pageSize);
+      }
       if (res.status === 401 || res.status === 403) {
         props.handleUnauthorized()
         return
@@ -447,6 +459,40 @@ export const ExpenseManager = memo((props: ExpenseProps) => {
       })
   }
 
+  const chooseExpenser = async (exp: Expense) => {
+    setEditingExpense({ origin: exp, itemMessage: "" })
+    const rsp = await listUsers(0, 5);
+    if (rsp.status === 200) {
+      setUsers(rsp.data.content)
+      setOpenUsersModal(true)
+    }
+  }
+
+  const cancelSelectIssuer = () => {
+    setOpenUsersModal(false)
+  }
+
+  const changeIssuer = async (user: UserInfo) => {
+    try {
+      console.warn("Change the expense from {} to {}...", editingExpense.origin.expenserId, user.username)
+      const rsp = await assignExpense(editingExpense.origin.id, user.username)
+      if (rsp.status === 401) {
+        props.handleUnauthorized()
+      }
+      if (rsp.status === 403) {
+        alert("You are not allowed to change the expenser of this expense!")
+      }
+      if (rsp !== null && rsp.status === 200) {
+        console.log("Change expenser of expense %s to %s successully", editingExpense.origin.id, user.username)
+        fetchExpenses()
+      }
+    } catch (e) {
+      console.error(e)
+    } finally {
+      setOpenUsersModal(false)
+    }
+  }
+
   return (
     <div className="h-full pt-3 relative">
       <div className="flex flex-row px-2 space-x-2 align-middle">
@@ -471,12 +517,16 @@ export const ExpenseManager = memo((props: ExpenseProps) => {
                 <Moment format="DD.MM" className="w-10">{new Date(item.expenseDate)}</Moment>
                 <span className="w-6">{"x" + item.quantity}</span>
                 <span className="w-24">{formatVND(item.amount)}</span>
-                <span className="font font-mono font-black">{item.service}</span>
+                <span className="font font-mono font-black w-8">{item.service}</span>
+                {isAssignable ? <span className="font font-mono">{item.expenserId}</span> : <></>}
               </div>
               <div className="flex flex-row space-x-2 absolute right-1 top-2">
                 <IoMdRemoveCircle size="1.5em" className="mr-2 text-red-800 cursor-pointer"
                   onClick={() => askForDelExpenseConfirmation(item)}
                 />
+                {isAssignable ? <HiUserCircle size="1.5em" className="mr-2 text-blue-800 cursor-pointer"
+                  onClick={() => chooseExpenser(item)}
+                /> : <></>}
                 <CiEdit size="1.5em" className="mr-2 text-green-800 cursor-pointer"
                   onClick={() => editExpense(item)}
                 />
@@ -684,6 +734,38 @@ export const ExpenseManager = memo((props: ExpenseProps) => {
             </div>
           </div>
         </Modal.Body>
+      </Modal>
+
+      <Modal
+        show={openUsersModal}
+        onClose={cancelSelectIssuer}
+        popup
+        dismissible
+      >
+        <Modal.Header></Modal.Header>
+        <Modal.Body>
+          <div className="flex flex-row items-center gap-2 space-x-2 w-full ">
+            {
+              users?.map(user => {
+                return (
+                  <div
+                    key={user.username}
+                    className="flex flex-col border-spacing-1 shadow-sm hover:shadow-lg rounded-lg items-center "
+                    onClick={() => changeIssuer(user)}
+                  >
+                    <HiUserCircle />
+                    <span className="text text-center">{user.firstName + " " + user.lastName}</span>
+                  </div>
+                )
+              })
+            }
+          </div>
+        </Modal.Body>
+        <Modal.Footer className="flex justify-center gap-4">
+          <Button color="gray" onClick={cancelSelectIssuer}>
+            Cancel
+          </Button>
+        </Modal.Footer>
       </Modal>
     </div >
   );

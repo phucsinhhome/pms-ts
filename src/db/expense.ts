@@ -14,11 +14,11 @@ export const listLatestExpenses = async (pageNumber: number, pageSize: number) =
   );
 }
 
-export const listExpenseByDate = async (byDate: string, pageNumber: number, pageSize: number) => {
+export const listExpenseByDate = (byDate: string, pageNumber: number, pageSize: number) => {
   console.info("Fetching expenses by date %s", byDate)
 
-  return await expenseApi.get(
-    `/list/bydate`,
+  return expenseApi.get(
+    `/list/date`,
     { params: { byDate, page: pageNumber, size: pageSize } }
   );
 }
@@ -36,7 +36,7 @@ export const listExpenseByExpenserAndDate = (
   }
 
   return expenseApi.get(
-    `/list/bydate`,
+    `/list/expenser`,
     { params }
   );
 }
@@ -52,6 +52,15 @@ export const saveExpense = (expense: Expense) => {
   return expenseApi.post(
     `/update`,
     expense,
+    { headers: { 'Content-Type': 'application/json' } }
+  );
+}
+
+export const assignExpense = (expenseId: string, expenserId: string) => {
+  console.info("Assign expense %s...", expenseId)
+  return expenseApi.post(
+    `/assign`,
+    { 'expenseId': expenseId, 'expenserId': expenserId },
     { headers: { 'Content-Type': 'application/json' } }
   );
 }

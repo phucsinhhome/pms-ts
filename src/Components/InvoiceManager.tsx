@@ -43,6 +43,7 @@ export type Invoice = {
   items: InvoiceItem[],
   rooms: string[],
   createdBy: string,
+  tenantId: string,
 }
 
 export type Issuer = {

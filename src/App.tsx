@@ -33,7 +33,8 @@ export type Chat = {
   lastName: string | undefined,
   username: string,
   email?: string,
-  iss: string
+  iss: string,
+  tenantId: string
 }
 const defaultChatId = '0000000000'
 export const defaultChat: Chat = {
@@ -41,7 +42,8 @@ export const defaultChat: Chat = {
   firstName: "Login",
   lastName: "",
   username: 'no-user',
-  iss: 'https://phucsinhhcm.hopto.org/iam/realm/ps'
+  iss: 'https://phucsinhhcm.hopto.org/iam/realm/ps',
+  tenantId: ''
 }
 
 const menuOrder = ['home', 'expense', 'invoice', 'inventory', 'reservation', 'order', 'profit', 'tour', 'supplier', 'setting']
@@ -154,7 +156,8 @@ export const App = () => {
           lastName: data.family_name || "",
           username: data.preferred_username || data.email || "",
           email: data.email,
-          iss: data.iss
+          iss: data.iss,
+          tenantId: data.organization[0]
         });
         setAuthorizedUserId(data.sub);
         setAuthorities(data.authorities || []);
@@ -208,6 +211,10 @@ export const App = () => {
           .filter(menuKey => authorities.some(role => role.toLowerCase() === menuKey.toLowerCase()))
           .map(menuKey => menus[menuKey as keyof typeof menus]) // Type guard to remove undefined values
     );
+  }
+
+  const hasAuthority = (auth: string): boolean => {
+    return authorities.some(a => a.toLowerCase() === auth.toLowerCase());
   }
 
   const fetchConfig = async () => {
@@ -317,6 +324,7 @@ export const App = () => {
           authorizedUserId={authorizedUserId}
           activeMenu={() => setActiveMenu(menus.expense)}
           handleUnauthorized={() => handleLogin()}
+          hasAuthority={(auth: string) => hasAuthority(auth)}
         />} />
         <Route path="reservation" element={<ReservationManager
           activeMenu={() => setActiveMenu(menus.reservation)}

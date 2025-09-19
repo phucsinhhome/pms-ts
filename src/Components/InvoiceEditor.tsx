@@ -140,6 +140,7 @@ const defaultEmptyInvoice = {
   signed: false,
   country: '',
   createdBy: '',
+  tenantId: ''
 }
 
 type InvoiceProps = {
@@ -765,6 +766,7 @@ export const InvoiceEditor = (props: InvoiceProps) => {
           amount: i.totalPrice
         })),
         subTotal: res.rooms.map(r => r.totalPrice).reduce((r1, r2) => r1 + r2),
+        tenantId: props.chat.tenantId
       }
       setInvoice(inv)
     }
@@ -803,6 +805,7 @@ export const InvoiceEditor = (props: InvoiceProps) => {
           amount: 450000
         }],
         subTotal: 450000,
+        tenantId: props.chat.tenantId
       }
       setInvoice(inv)
     }

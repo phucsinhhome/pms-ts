@@ -10,6 +10,8 @@ const UserProfile: React.FC<UserProfileProps> = ({ userProfile, onSignOut }) => 
   const [firstName, setFirstName] = useState(userProfile?.given_name || "");
   const [lastName, setLastName] = useState(userProfile?.family_name || "");
   const [displayName, setDisplayName] = useState(userProfile?.name || "");
+  const [roles, setRoles] = useState(userProfile?.roles || []);
+  const [organization, setOrganization] = useState(userProfile?.organization || []);
   const [status, setStatus] = useState<string | null>(null);
 
   if (!userProfile) return <div className="p-4">No user profile found.</div>;
@@ -92,6 +94,14 @@ const UserProfile: React.FC<UserProfileProps> = ({ userProfile, onSignOut }) => 
           ) : (
             <div className="text-gray-900">{lastName}</div>
           )}
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700">Roles:</label>
+          <div className="text-gray-900">{roles.join(", ")}</div>
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700">Organization:</label>
+          <div className="text-gray-900">{organization.join(", ")}</div>
         </div>
         {status && <div className="mb-2 text-green-600">{status}</div>}
         {editing ? (

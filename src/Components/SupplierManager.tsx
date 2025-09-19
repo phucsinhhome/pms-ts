@@ -36,6 +36,7 @@ export type SupplierInvoice = {
   subTotal: number,
   paymentPhotos: string[],
   paymentMethod: string,
+  tenantId?: string
 }
 
 const emptySInvoice = {
@@ -354,7 +355,7 @@ export const SupplierManager = (props: SupplierManagerProps) => {
     let inv: SupplierInvoice = {
       ...eInvoice,
       paidTime: formatISODateTime(new Date()),
-      issuerId: props.chat.id
+      issuerId: props.chat.username
     }
 
     paidSInvoice(inv)
@@ -377,29 +378,28 @@ export const SupplierManager = (props: SupplierManagerProps) => {
       });
   }
 
-  const rejectInvoice = (invoice: SupplierInvoice) => {
+  const rejectInvoice = async (invoice: SupplierInvoice) => {
     let inv: SupplierInvoice = {
       ...invoice,
       status: 'REJECTED'
     }
 
-    rejectSInvoice(inv.id, props.chat.id)
-      .then(rsp => {
-        if (rsp.status === 200) {
-          console.info(`Reject invoice ${inv.id} successfully`)
-          setEInvoice(inv)
-          setResultMessage("Invoice rejected successfully")
-          setShowInvoiceDetail(false)
-          fetchInvoices()
-        } else {
-          console.error("Failed to reject invoice: ", rsp.statusText)
-          setResultMessage("Failed to reject invoice")
-        }
-      })
-      .catch((err) => {
-        console.error("Failed to reject invoice", err)
+    try {
+      const rsp = await rejectSInvoice(inv.id, props.chat.username)
+      if (rsp.status === 200) {
+        console.info(`Reject invoice ${inv.id} successfully`)
+        setEInvoice(inv)
+        setResultMessage("Invoice rejected successfully")
+        setShowInvoiceDetail(false)
+        fetchInvoices()
+      } else {
+        console.error("Failed to reject invoice: ", rsp.statusText)
         setResultMessage("Failed to reject invoice")
-      });
+      }
+    } catch (err) {
+      console.error("Failed to reject invoice", err)
+      setResultMessage("Failed to reject invoice")
+    }
   }
 
   const saveInvoice = () => {
@@ -415,7 +415,7 @@ export const SupplierManager = (props: SupplierManagerProps) => {
       let createdTime = eInvoice.createdTime === '' ? formatISODateTime(new Date()) : eInvoice.createdTime
       inv = {
         ...eInvoice,
-        issuerId: props.chat.id,
+        issuerId: props.chat.username,
         createdTime: createdTime
       }
       console.info(`New supplier invoice has been created at ${createdTime}`)

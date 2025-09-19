@@ -49,7 +49,7 @@ export const paidSInvoice = async (invoice: SupplierInvoice) => {
   });
 }
 
-export const rejectSInvoice = async (invoiceId: string, staffId: string) => {
+export const rejectSInvoice = (invoiceId: string, username: string) => {
   console.info("Reject supplier invoice")
-  return supplierApi.post(`/invoice/reject`, null, { params: { invoiceId, staffId } });
+  return supplierApi.post(`/invoice/reject`, null, { params: { invoiceId, username: username } });
 }

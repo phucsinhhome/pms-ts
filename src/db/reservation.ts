@@ -21,7 +21,7 @@ export const listLatestReservations = (fromDate: string, toDate: string, pageNum
 export const listStayingAndComingReservations = async (fromDate: string, pageNumber: number, pageSize: number) => {
   console.info("Fetching reservations from backend")
   return reservationApi.get(
-    `/list/upcoming`,
+    ``,
     { params: { fromDate, page: pageNumber, size: pageSize } }
   );
 }

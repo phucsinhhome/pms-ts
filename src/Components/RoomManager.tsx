@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { listLatestReservations } from "../db/reservation";
+import { listStayingAndComingReservations } from "../db/reservation";
 import { Button, Spinner } from "flowbite-react";
 import { addDays, formatISODate } from "../Service/Utils";
 import { DEFAULT_PAGE_SIZE } from "../App";
@@ -7,6 +7,7 @@ import { optionStyle, Pagination } from "./ProfitReport";
 import { collectRes } from "../db/reservation_extractor";
 import { MdAssignmentAdd } from "react-icons/md";
 import { Reservation } from "./ReservationManager";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 // List of room names
 const ROOM_NAMES = ["R1", "R2", "R3", "R4", "R5", "R6"];
@@ -32,7 +33,7 @@ export function RoomManager(props: RoomManagerProps) {
   // Number of days to show in columns
   const NUM_DAYS = 10;
 
-  // Generate date columns starting from yesterday
+  // Generate date columns starting from fromDate
   const dateColumns = useMemo(() => {
     const cols: Date[] = [];
     for (let i = 0; i < NUM_DAYS; i++) {
@@ -49,7 +50,7 @@ export function RoomManager(props: RoomManagerProps) {
       map[room] = {};
       dateColumns.forEach(date => map[room][formatISODate(date)] = []);
     });
-    reservations.forEach(res => {
+    reservations?.forEach(res => {
       if (!res.rooms) return;
       res.rooms.forEach(roomObj => {
         const roomName = roomObj.internalRoomName || roomObj.roomName;
@@ -75,10 +76,8 @@ export function RoomManager(props: RoomManagerProps) {
   }
 
   const fetchReservations = async (fromDate: Date, pageNumber: number, pageSize: number) => {
-    var toDate = addDays(fromDate, NUM_DAYS)
     var fd = formatISODate(fromDate)
-    var td = formatISODate(toDate)
-    const rsp = await listLatestReservations(fd, td, pageNumber, pageSize)
+    const rsp = await listStayingAndComingReservations(fd, pageNumber, pageSize)
     if (rsp.status === 401 || rsp.status === 403) {
       props.handleUnauthorized();
       return
@@ -99,10 +98,10 @@ export function RoomManager(props: RoomManagerProps) {
   }
 
   useEffect(() => {
-    fetchReservations(addDays(new Date(), -1), 0, Number(DEFAULT_PAGE_SIZE));
+    fetchReservations(fromDate, 0, Number(DEFAULT_PAGE_SIZE));
     props.activeMenu()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props]);
+  }, [props, fromDate]);
 
   const handleUpdateClick = async () => {
     setIsUpdating(true);
@@ -122,6 +121,20 @@ export function RoomManager(props: RoomManagerProps) {
     }
   };
 
+  // Move date range left
+  const handlePrevDates = () => {
+    const newFromDate = addDays(fromDate, -NUM_DAYS + 1);
+    setFromDate(newFromDate);
+    fetchReservations(newFromDate, 0, pagination.pageSize);
+  };
+
+  // Move date range right
+  const handleNextDates = () => {
+    const newFromDate = addDays(fromDate, NUM_DAYS - 1);
+    setFromDate(newFromDate);
+    fetchReservations(newFromDate, 0, pagination.pageSize);
+  };
+
   // Table view with sticky room names
   return (
     <div className="h-full pt-3 relative bg-green-50">
@@ -134,6 +147,9 @@ export function RoomManager(props: RoomManagerProps) {
         </div>
       </div>
       <div className="flex flex-row space-x-2 px-4">
+        <Button size="xs" color="gray" onClick={handlePrevDates} className="flex items-center">
+          <FaChevronLeft className="mr-1" /> Prev
+        </Button>
         {[
           { days: 0, label: 'Today' },
           { days: -1, label: 'Yesterday' },
@@ -150,6 +166,9 @@ export function RoomManager(props: RoomManagerProps) {
             {opt.label}
           </Button>
         ))}
+        <Button size="xs" color="gray" onClick={handleNextDates} className="flex items-center">
+          Next <FaChevronRight className="ml-1" />
+        </Button>
       </div>
       <div className="overflow-x-auto mt-4">
         <table className="min-w-max border-collapse">

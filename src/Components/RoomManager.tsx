@@ -47,9 +47,7 @@ export function RoomManager(props: RoomManagerProps) {
     const map: Record<string, Record<string, Reservation[]>> = {};
     ROOM_NAMES.forEach(room => {
       map[room] = {};
-      dateColumns.forEach(date => {
-        map[room][formatISODate(date)] = [];
-      });
+      dateColumns.forEach(date => map[room][formatISODate(date)] = []);
     });
     reservations.forEach(res => {
       if (!res.rooms) return;

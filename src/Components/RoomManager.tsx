@@ -23,7 +23,7 @@ export function RoomManager(props: RoomManagerProps) {
   const [deltaDays, setDeltaDays] = useState(-1)
   const [pagination, setPagination] = useState<Pagination>({
     pageNumber: 0,
-    pageSize: Number(DEFAULT_PAGE_SIZE),
+    pageSize: 50,
     totalElements: 200,
     totalPages: 20
   })
@@ -99,7 +99,7 @@ export function RoomManager(props: RoomManagerProps) {
   }
 
   useEffect(() => {
-    fetchReservations(new Date(), 0, Number(DEFAULT_PAGE_SIZE));
+    fetchReservations(addDays(new Date(), -1), 0, Number(DEFAULT_PAGE_SIZE));
     props.activeMenu()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props]);
@@ -111,7 +111,7 @@ export function RoomManager(props: RoomManagerProps) {
       const td = formatISODate(addDays(new Date(), NUM_DAYS));
       await collectRes(fd, td);
       setTimeout(() => {
-        fetchReservations(new Date(), 0, 10);
+        fetchReservations(addDays(new Date(), -1), 0, pagination.pageSize);
       }, 2000);
     }
     catch (error) {

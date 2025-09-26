@@ -173,14 +173,21 @@ export function RoomManager(props: RoomManagerProps) {
                   const key = formatISODate(date);
                   const resList = reservationMap[room][key];
                   return (
-                    <td key={key} className="px-2 py-2 border border-green-100 min-w-[120px]">
+                    <td key={key} className="py-1 border border-green-100 min-w-[120px]">
                       {resList && resList.length > 0 ? (
-                        resList.map(res => (
-                          <div key={res.id} className="flex flex-col bg-green-200  px-1 py-0.5 mb-1 text-xs shadow">
-                            <span className="text-green-900 font-bold">{res.guestName}</span>
-                            <span className="font-mono text-gray-400">{res.code}</span>
-                          </div>
-                        ))
+                        resList.map(res => {
+                          const firstDate = formatISODate(date) === formatISODate(new Date(res.checkInDate));
+                          return (
+                            res.canceled ? <></> :
+                              <div key={res.id} className={`flex flex-col bg-green-200 h-9 py-0.5 mb-1 text-xs shadow ${firstDate ? 'border-l-4 border-green-600 ml-2 pl-1' : ''} rounded`}>
+                                {firstDate ?
+                                  <span className="text-green-900 font-bold">{res.guestName}</span>
+                                  : <span className="text-green-900 font-bold">_</span>
+                                }
+                                <span className="font-mono text-gray-400">{res.code}</span>
+                              </div>
+                          )
+                        })
                       ) : null}
                     </td>
                   );

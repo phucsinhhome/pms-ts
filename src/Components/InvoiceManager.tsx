@@ -166,26 +166,20 @@ export const InvoiceManager = (props: InvoiceManagerProps) => {
     setDeletingInv(undefined)
   }
 
-  const confirmDeletion = () => {
+  const confirmDeletion = async () => {
     try {
       if (deletingInv === undefined || deletingInv === null) {
         return;
       }
       console.warn("Delete invoice %s...", deletingInv.id)
-      deleteInvoice(deletingInv)
-        .then(rsp => {
-          // Axios: check status code
-          if (rsp.status === 200) {
-            console.info("Delete invoice %s successfully", deletingInv.id)
-            fetchInvoices()
-          } else {
-            console.error("Failed to delete invoice %s: status %s", deletingInv.id, rsp.status)
-          }
-        })
-        .catch(err => {
-          console.error("Failed to delete invoice %s", deletingInv.id)
-          console.log(err)
-        })
+      const rsp = await deleteInvoice(deletingInv.id)
+      
+      if (rsp.status === 200) {
+        console.info("Delete invoice %s successfully", deletingInv.id)
+        fetchInvoices()
+      } else {
+        console.error("Failed to delete invoice %s: status %s", deletingInv.id, rsp.status)
+      }
     } catch (e) {
       console.error(e)
     } finally {

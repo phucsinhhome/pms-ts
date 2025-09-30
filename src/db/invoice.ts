@@ -5,41 +5,22 @@ export const Configs = {
   logo: process.env.REACT_APP_PS_LOGO
 }
 
-export const exportInvoice = async (invoice: Invoice) => {
-  console.info("Call API to export invoice");
-  return invoiceApi.post(
-    `/export`,
-    invoice,
-    { headers: { 'Content-Type': 'application/json' } }
-  );
-}
-
 export const updateInvoice = (invoice: Invoice) => {
   console.info("Call API to update invoice");
   return invoiceApi.post(
-    `/update`,
+    ``,
     invoice,
     { headers: { 'Content-Type': 'application/json' } }
   );
 }
 
-export const deleteInvoice = async (invoice: Invoice) => {
+export const deleteInvoice = (invoiceId: string) => {
   console.info("Call API to delete invoice");
   return invoiceApi.delete(
-    `/delete`,
+    `/${invoiceId}`,
     {
-      headers: { 'Content-Type': 'application/json' },
-      data: invoice
+      headers: { 'Content-Type': 'application/json' }
     }
-  );
-}
-
-export const listLatestInvoices = async (pageNumber: number, pageSize: number) => {
-  console.info("Fetching invoices from backend")
-  
-  return await invoiceApi.get(
-    `/list/recent`,
-    { params: { page: pageNumber, size: pageSize } }
   );
 }
 
@@ -51,7 +32,7 @@ export const listStayingAndComingInvoices = (fromDate: string, pageNumber: numbe
 export function listStayingAndComingInvoicesAndPrepaid(fromDate: string, includePrepaid: boolean, pageNumber: number, pageSize: number) {
   console.info("Fetching invoices from backend")
   return invoiceApi.get(
-    `/list/upcoming`,
+    ``,
     { params: { fromDate, includePrepaid, page: pageNumber, size: pageSize } }
   );
 }

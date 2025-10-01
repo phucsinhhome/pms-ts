@@ -22,6 +22,7 @@ import { Welcome } from "./Components/Welcome";
 import { getProfile } from "./db/users";
 import { Button } from "flowbite-react";
 import { RoomManager } from "./Components/RoomManager";
+import { InvoiceMap } from "./Components/InvoiceMap";
 
 // Add a lotus image to your public folder or assets and use its path here
 
@@ -62,7 +63,7 @@ const menus = {
     icon: <FaMoneyCheckAlt size={28} />
   },
   invoice: {
-    path: 'invoice',
+    path: 'invoice-map',
     displayName: 'Invoice',
     title: 'Invoice Management',
     icon: <FaFileInvoiceDollar size={28} />
@@ -309,6 +310,10 @@ export const App = () => {
         <Route path="home" element={<Welcome activeMenu={() => setActiveMenu(menus.home)} />} />
         <Route path="profit" element={<ProfitReport activeMenu={() => setActiveMenu(menus.profit)} />} />
         <Route path="invoice" element={<InvoiceManager
+          activeMenu={() => setActiveMenu(menus.invoice)}
+          handleUnauthorized={() => handleLogin()}
+        />} />
+        <Route path="invoice-map" element={<InvoiceMap
           activeMenu={() => setActiveMenu(menus.invoice)}
           handleUnauthorized={() => handleLogin()}
         />} />

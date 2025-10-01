@@ -11,52 +11,45 @@ import { GiHouse } from "react-icons/gi";
 import { IoMdPersonAdd, IoMdRemoveCircle } from "react-icons/io";
 import { CiEdit } from "react-icons/ci";
 import { Invoice } from "./InvoiceManager";
+import { BiLogOut } from "react-icons/bi";
 
 type InvoiceMapProps = {
   activeMenu: any,
   handleUnauthorized(): any
 }
 
+const ROOM_LAYOUT = [
+  { name: "R1", style: "absolute top-2 left-1 w-32 h-24" },
+  { name: "R2", style: "absolute top-2 left-36 w-32 h-24" },
+  { name: "R3", style: "absolute top-2 left-72 w-32 h-24" },
+  { name: "R4", style: "absolute top-32 left-1 w-32 h-24" },
+  { name: "R5", style: "absolute top-32 left-36 w-32 h-24" },
+  { name: "R6", style: "absolute top-32 left-72 w-32 h-24" }
+];
 
 export const InvoiceMap = (props: InvoiceMapProps) => {
   const [invoices, setInvoices] = useState<Invoice[]>([])
-
   const [fromDate, setFromDate] = useState(new Date());
   const [deltaDays, setDeltaDays] = useState(0)
-
   const [pagination, setPagination] = useState<Pagination>({
     pageNumber: 0,
     pageSize: DEFAULT_PAGE_SIZE,
     totalElements: 0,
     totalPages: 0
   })
-
   const [openModal, setOpenModal] = useState(false)
   const [deletingInv, setDeletingInv] = useState<Invoice>()
   const [filterGName, setFilterGName] = useState('')
 
   const filterDay = (numDays: number) => {
-
     var newDate = Date.now() + numDays * 86400000
     var newDD = new Date(newDate)
-    console.info("Change filter date to %s", newDD.toISOString())
     setFromDate(newDD)
     setDeltaDays(numDays)
   }
 
-  const handlePaginationClick = (pageNumber: number) => {
-    console.log("Pagination nav bar click to page %s", pageNumber)
-    var pNum = pageNumber < 0 ? 0 : pageNumber > pagination.totalPages - 1 ? pagination.totalPages - 1 : pageNumber;
-    setPagination({
-      ...pagination,
-      pageNumber: pNum
-    })
-  }
-
   const fetchInvoices = async () => {
     const fd = formatISODate(fromDate);
-    console.info("Loading invoices from date %s...", fd);
-
     const rsp = await listStayingAndComingInvoices(fd, pagination.pageNumber, pagination.pageSize);
     if (rsp.status === 401 || rsp.status === 403) {
       props.handleUnauthorized()
@@ -75,7 +68,6 @@ export const InvoiceMap = (props: InvoiceMapProps) => {
         setPagination(page);
       }
     } else {
-      // Optionally handle non-200 status
       setInvoices([]);
     }
   }
@@ -83,9 +75,20 @@ export const InvoiceMap = (props: InvoiceMapProps) => {
   useEffect(() => {
     fetchInvoices();
     props.activeMenu();
-
     // eslint-disable-next-line
   }, [pagination.pageNumber, fromDate]);
+
+  // Filter invoices for each room: not checked out or check-in today
+  const getRoomGuests = (roomName: string) => {
+    const today = formatISODate(new Date());
+    return invoices.filter(inv => {
+      const roomList = Array.isArray(inv.rooms) ? inv.rooms : [inv.rooms];
+      const hasRoom = roomList.includes(roomName);
+      const notCheckedOut = formatISODate(new Date(inv.checkOutDate)) > today;
+      const checkInToday = formatISODate(new Date(inv.checkInDate)) === today;
+      return hasRoom && (notCheckedOut || checkInToday);
+    });
+  };
 
   const filterOpts = [
     {
@@ -134,7 +137,7 @@ export const InvoiceMap = (props: InvoiceMapProps) => {
       }
       console.warn("Delete invoice %s...", deletingInv.id)
       const rsp = await deleteInvoice(deletingInv.id)
-      
+
       if (rsp.status === 200) {
         console.info("Delete invoice %s successfully", deletingInv.id)
         fetchInvoices()
@@ -195,6 +198,10 @@ export const InvoiceMap = (props: InvoiceMapProps) => {
   const emptyFilteredName = () => {
     setFilterGName('')
     fetchInvoices()
+  }
+
+  function handlePaginationClick(arg0: number): void {
+    throw new Error("Function not implemented.");
   }
 
   return (
@@ -317,8 +324,30 @@ export const InvoiceMap = (props: InvoiceMapProps) => {
           </Button>
         </Modal.Footer>
       </Modal>
-
-
+      <div className="h-[400px] w-full relative bg-green-50 rounded-lg shadow-lg mt-4">
+        {ROOM_LAYOUT.map(room => (
+          <div key={room.name} className={room.style + " border border-green-700 rounded-lg bg-green-100 flex flex-col items-center justify-start p-2"}>
+            <div className="font-bold text-green-900 mb-1 flex items-center">
+              <GiHouse className="mr-1" /> {room.name}
+            </div>
+            <div className="flex flex-col space-y-1 w-full">
+              {getRoomGuests(room.name).map(inv => {
+                const today = formatISODate(new Date());
+                const notCheckedOut = formatISODate(new Date(inv.checkOutDate)) > today;
+                return (
+                  <div key={inv.id}
+                    className="bg-green-200 rounded px-2 py-1 text-green-900 text-xs font-semibold shadow flex items-center justify-between">
+                    {notCheckedOut && (
+                      <BiLogOut className="text-green-900" title="Not checked out" />
+                    )}
+                    <span>{inv.guestName}</span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
     </div >
   );
 }

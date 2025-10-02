@@ -63,7 +63,7 @@ const menus = {
     icon: <FaMoneyCheckAlt size={28} />
   },
   invoice: {
-    path: 'invoice-map',
+    path: 'invoice',
     displayName: 'Invoice',
     title: 'Invoice Management',
     icon: <FaFileInvoiceDollar size={28} />
@@ -159,7 +159,7 @@ export const App = () => {
           username: data.preferred_username || data.email || "",
           email: data.email,
           iss: data.iss,
-          tenantId: data.organization[0]
+          tenantId: data.organization?data.organization[0]:""
         });
         setAuthorizedUserId(data.sub);
         setAuthorities(data.authorities || []);

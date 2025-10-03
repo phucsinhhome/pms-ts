@@ -1,7 +1,7 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
 import { useParams } from "react-router-dom";
 import { Avatar, Button, Label, Modal, TextInput } from "flowbite-react";
-import { DEFAULT_PAGE_SIZE } from "../App";
+import { Chat, DEFAULT_PAGE_SIZE } from "../App";
 import { formatISODate, formatISODateTime, formatRooms, formatVND } from "../Service/Utils";
 import { confirmOrder, fetchOrder, rejectOrder, serveOrder } from "../db/order";
 import { getInvoice, listInvoiceByGuestName } from "../db/invoice";
@@ -16,7 +16,7 @@ type OrderParams = {
 }
 
 type OrderEditorProps = {
-  setChat: any,
+  chat: Chat,
   activeMenu: any
 }
 
@@ -74,12 +74,6 @@ export const OrderEditor = (props: OrderEditorProps) => {
 
   useEffect(() => {
     if (staffId !== null) {
-      props.setChat({
-        id: staffId,
-        firstName: staffId,
-        lastName: "",
-        username: staffId
-      })
       console.info(`Update the user to ${staffId}`)
     }
     readOrder();
@@ -106,51 +100,61 @@ export const OrderEditor = (props: OrderEditorProps) => {
     }
   }
 
-  const sendToPreparation = () => {
+  const sendToPreparation = async () => {
 
     if (order === undefined) {
       console.warn("Invalid order")
       return
     }
-    var confirmedAt = formatISODateTime(new Date())
-    var confirmedOrder = {
-      ...order,
-      confirmedAt: confirmedAt,
-      confirmedBy: staffId,
-      status: 'CONFIRMED'
-    }
+    try {
+      var confirmedAt = formatISODateTime(new Date())
+      var confirmedOrder = {
+        ...order,
+        confirmedAt: confirmedAt,
+        confirmedBy: props.chat.username,
+        status: 'CONFIRMED'
+      }
 
-    confirmOrder(confirmedOrder)
-      .then((rsp) => {
-        if (rsp.status === 200) {
-          const data: Order = rsp.data
-          console.info("Send oder to preparation %s successfully", data.orderId)
-          setOrder(data)
-        }
-      })
-      .catch((e) => {
-        console.error("Error while sending order to preparation", e)
-        if (e instanceof Error) {
-          alert(e.message)
-        }
-      })
+      const rsp = await confirmOrder(confirmedOrder)
+      if (rsp.status === 400) {
+        alert(rsp.data.message)
+      }
+      if (rsp.status === 200) {
+        const data: Order = rsp.data
+        console.info("Send oder to preparation %s successfully", data.orderId)
+        setOrder(data)
+      }
+    } catch (e) {
+      console.error("Error while sending order to preparation", e)
+      if (e instanceof Error) {
+        alert(e.message)
+      }
+    }
   }
 
-  const markAsServed = () => {
-    if (order === undefined) {
-      return
-    }
-
-    serveOrder({
-      ...order,
-      servedAt: formatISODateTime(new Date())
-    }).then(rsp => {
+  const markAsServed = async () => {
+    try {
+      if (order === undefined) {
+        return
+      }
+      const rsp = await serveOrder({
+        ...order,
+        servedAt: formatISODateTime(new Date())
+      })
+      if (rsp.status === 400) {
+        alert(rsp.data.message)
+      }
       if (rsp.status === 200) {
         const data: Order = rsp.data
         setOrder(data)
         console.info("Order %s has been served successfully", data.orderId)
       }
-    })
+    } catch (e) {
+      console.error("Error while marking the order as served", e)
+      if (e instanceof Error) {
+        alert(e.message)
+      }
+    }
   }
 
   const stopPreparation = async () => {

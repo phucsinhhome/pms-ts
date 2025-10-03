@@ -350,7 +350,7 @@ export const App = () => {
         />} />
         <Route path="order/:orderId/:staffId"
           element={<OrderEditor
-            setChat={(chat: Chat) => setChat(chat)}
+            chat={getChat()}
             activeMenu={() => setActiveMenu(menus.order)} />}
         />
         <Route path="inventory" element={<Inventory

@@ -3,13 +3,14 @@ import { Link } from "react-router-dom";
 import { Button, TextInput } from "flowbite-react";
 import { DEFAULT_PAGE_SIZE } from "../App";
 import { HiX } from "react-icons/hi";
-import { formatISODate } from "../Service/Utils";
+import { formatISODate, addDays } from "../Service/Utils";
 import { deleteInvoice, listInvoiceByGuestName, listStayingAndComingInvoices } from "../db/invoice";
 import { optionStyle, Pagination } from "./ProfitReport";
 import { GiHouse } from "react-icons/gi";
 import { IoMdPersonAdd } from "react-icons/io";
 import { Invoice } from "./InvoiceManager";
 import { BiLogIn, BiLogOut } from "react-icons/bi";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 type InvoiceMapProps = {
   activeMenu: any,
@@ -21,17 +22,14 @@ type InvoiceWindow = {
   state: 'staying' | 'tobeCheckOut' | 'tobeCheckIn' | 'outOfWindow'
 }
 
-const ROOM_WIDTH = 250;
+const ROOM_WIDTH = 180;
 const ROOM_HEIGHT = 120;
 
 // 2D map: each cell is either a room name or null for empty
 const ROOM_MAP: (string | null)[][] = [
-  ["R1"],
-  ["R2"],
-  ["R3"],
-  ["R4"],
-  ["R5"],
-  ["R6"]
+  ["R1", "R4"],
+  ["R2", "R5"],
+  ["R3", "R6"]
 ];
 
 const invoiceIcons = {
@@ -114,24 +112,6 @@ export const InvoiceMap = (props: InvoiceMapProps) => {
       return roomList.includes(roomName);
     });
   };
-
-  const filterOpts = [
-    {
-      days: 0,
-      label: 'Today'
-    },
-    {
-      days: -1,
-      label: 'Yesterday'
-    },
-    {
-      days: -5,
-      label: '5 days'
-    },
-    {
-      days: -1 * new Date().getDate(),
-      label: '1st'
-    }]
 
   const pageClass = (pageNum: number) => {
     var noHighlight = "px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
@@ -225,9 +205,18 @@ export const InvoiceMap = (props: InvoiceMapProps) => {
     fetchInvoices()
   }
 
-  function handlePaginationClick(arg0: number): void {
-    throw new Error("Function not implemented.");
-  }
+  // Arrow handlers for workDate navigation
+  const handlePrevDate = () => {
+    setWorkDate(prev => addDays(prev, -1));
+  };
+  const handleNextDate = () => {
+    setWorkDate(prev => addDays(prev, 1));
+  };
+
+  // Handler to jump to today
+  const handleJumpToToday = () => {
+    setWorkDate(new Date());
+  };
 
   return (
     <div className="h-full pt-3 relative">
@@ -251,42 +240,34 @@ export const InvoiceMap = (props: InvoiceMapProps) => {
           onChange={changeFilterGName}
           rightIcon={() => <HiX onClick={emptyFilteredName} />}
         />
+
       </div>
-      <div className="flex flex-row space-x-2 px-4">
-        {filterOpts.map((opt) => {
-          return (<Link
-            key={opt.days}
-            to=""
-            onClick={() => filterDay(opt.days)}
-            relative="route"
-            className={optionStyle(deltaDays === opt.days)}
-          >
-            {opt.label}
-          </Link>)
-        })}
+      <div className="flex flex-col px-2 items-center space-y-2">
+        <div className="flex w-full justify-center">
+          <Button size="xs" color="success" onClick={handleJumpToToday} className="w-36" >
+            Today
+          </Button>
+        </div>
+        <div className="flex flex-row space-x-2 px-4 items-center">
+          <Button size="xs" color="gray" onClick={handlePrevDate} className="flex items-center">
+            <FaChevronLeft className="mr-1" /> Prev
+          </Button>
+          <span className="font-bold text-green-900 px-2">
+            {workDate.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })}
+          </span>
+          <Button size="xs" color="gray" onClick={handleNextDate} className="flex items-center">
+            Next <FaChevronRight className="ml-1" />
+          </Button>
+        </div>
       </div>
       {/* Room layout grid */}
       <div
-        className="mt-4"
-        style={{
-          width: ROOM_MAP[0].length * ROOM_WIDTH,
-          height: ROOM_MAP.length * ROOM_HEIGHT,
-          display: "grid",
-          gridTemplateColumns: `repeat(${ROOM_MAP[0].length}, ${ROOM_WIDTH}px)`,
-          gridTemplateRows: `repeat(${ROOM_MAP.length}, ${ROOM_HEIGHT}px)`,
-          gap: "8px"
-        }}
+        className="grid grid-cols-2 grid-rows-3 gap-2 mt-4 p-2"
       >
         {ROOM_MAP.flatMap((row, rowIdx) =>
           row.map((roomName, colIdx) => (
             <div
               key={`cell-${rowIdx}-${colIdx}`}
-              style={{
-                width: ROOM_WIDTH,
-                height: ROOM_HEIGHT,
-                position: "relative",
-                visibility: roomName ? "visible" : "hidden"
-              }}
               className={roomName
                 ? "border border-green-700 rounded-lg bg-green-50 flex flex-col items-center p-2"
                 : ""}

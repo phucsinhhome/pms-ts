@@ -63,7 +63,7 @@ const menus = {
     icon: <FaMoneyCheckAlt size={28} />
   },
   invoice: {
-    path: 'invoice',
+    path: 'invoice-map',
     displayName: 'Invoice',
     title: 'Invoice Management',
     icon: <FaFileInvoiceDollar size={28} />

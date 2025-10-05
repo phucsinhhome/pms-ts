@@ -13,7 +13,9 @@ export type PGroup = {
   description: string,
   status: string,
   includedGroupId: string | null,
-  includedGroup: boolean
+  includedGroup: boolean,
+  tenantId?: string,
+  urlPath?: string,
 }
 
 
@@ -156,6 +158,15 @@ export const PGroupManager = (props: PGroupProps) => {
     let eI = {
       ...editingPGroup,
       description: description
+    }
+    setEditingPGroup(eI)
+  }
+
+  const changeUrlPath = (e: ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value
+    let eI = {
+      ...editingPGroup,
+      urlPath: value
     }
     setEditingPGroup(eI)
   }
@@ -336,6 +347,21 @@ export const PGroupManager = (props: PGroupProps) => {
                 required={false}
                 value={editingPGroup.description}
                 onChange={changeDescription}
+                className="w-full"
+              />
+            </div>
+            <div className="flex flex-col w-full align-middle space-y-1 py-2">
+              <div className="flex items-center">
+                <Label
+                  htmlFor="urlPath"
+                  value="URL Path:"
+                />
+              </div>
+              <TextInput
+                id="urlPath"
+                required={false}
+                value={editingPGroup.urlPath}
+                onChange={changeUrlPath}
                 className="w-full"
               />
             </div>

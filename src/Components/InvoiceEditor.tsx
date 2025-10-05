@@ -16,10 +16,12 @@ import { Product } from "./Inventory";
 import { Reservation, ResRoom } from "./ReservationManager";
 import { listAllProductItems } from "../db/inventory";
 import { FaEye } from "react-icons/fa6";
-import { IoMdArrowBack, IoMdRemoveCircle } from "react-icons/io";
+import { IoMdArrowBack, IoMdCopy, IoMdRemoveCircle } from "react-icons/io";
 import { CiEdit } from "react-icons/ci";
 import { MdAssignmentAdd } from "react-icons/md";
 import { nanoid } from "nanoid";
+import { listAllPGroups } from "../db/pgroup";
+import { PGroup } from "./PGroupManager";
 
 
 const paymentIcons = [
@@ -189,6 +191,9 @@ export const InvoiceEditor = (props: InvoiceProps) => {
 
   const [openRoomModal, setOpenRoomModal] = useState(false)
   const [selectedRooms, setSelectedRooms] = useState<string[]>([])
+
+  const [showMenu, setShowMenu] = useState(false)
+  const [pGroups, setPGroups] = useState<PGroup[]>([])
 
   const [dirty, setDirty] = useState(false)
   const [loc, setLoc] = useState({ pageNumber: 0, pageSize: DEFAULT_PAGE_SIZE })
@@ -912,6 +917,56 @@ export const InvoiceEditor = (props: InvoiceProps) => {
 
   }
 
+  const fetchPGroups = async () => {
+    try {
+      const rsp = await listAllPGroups()
+      if (rsp.status === 200) {
+        let data = rsp.data.content
+        console.info("Fetched %d product groups", data.length)
+        setPGroups(data)
+      }
+    }
+    catch (e) {
+      setPGroups([])
+      console.error("Error while fetching product groups", e)
+      if (e instanceof Error) {
+        alert(e.message)
+      }
+    };
+  }
+
+  const copyMenu = (group: PGroup) => {
+    let url = `${group.urlPath}/${group.name}/${invoice.id}`;
+    navigator.clipboard.writeText(url);
+    console.info("Url %s has been copied", url);
+    setShowMenu(false);
+
+    // Show non-blocking notification
+    const notification = document.createElement("div");
+    notification.textContent = "URL copied to clipboard!";
+    notification.style.position = "fixed";
+    notification.style.bottom = "32px";
+    notification.style.left = "50%";
+    notification.style.transform = "translateX(-50%)";
+    notification.style.background = "#38a169";
+    notification.style.color = "#fff";
+    notification.style.padding = "8px 24px";
+    notification.style.borderRadius = "8px";
+    notification.style.boxShadow = "0 2px 8px rgba(0,0,0,0.15)";
+    notification.style.zIndex = "9999";
+    document.body.appendChild(notification);
+    setTimeout(() => {
+      document.body.removeChild(notification);
+    }, 2000);
+  }
+
+  const handleMenuClick = () => {
+    if (!showMenu && pGroups.length <= 0) {
+      fetchPGroups()
+    }
+    setShowMenu(!showMenu)
+  }
+
   return (
     <>
       <div className="h-full pt-3">
@@ -1094,17 +1149,20 @@ export const InvoiceEditor = (props: InvoiceProps) => {
           <Button size="xs" color="green" onClick={() => editItem(defaultEmptyItem.origin)}>
             <MdAssignmentAdd size="1.5em" className="mr-2" /> Add
           </Button>
+          <Button size="xs" color="green" onClick={handleMenuClick}>
+            <MdAssignmentAdd size="1.5em" className="mr-2" /> Menu
+          </Button>
           <Button size="xs" color="green" onClick={showViewInv}>
             <FaEye size="1.5em" className="mr-2" /> View
           </Button>
           <Button size="xs" color="green" onClick={handleSaveInvoice}>
             <HiSave size="1.5em" className="mr-2" /> Save
           </Button>
-          <Button size="xs" color="green">
+          <Button size="xs" color="green"
+            onClick={() => navigate(-1)}
+          >
             <IoMdArrowBack size="1.5em" className="mr-2" />
-            <Link to=".."
-              relative="path"
-              state={{ pageNumber: loc.pageNumber, pageSize: loc.pageSize }}>Back</Link>
+            <span>Back</span>
           </Button>
         </div>
 
@@ -1719,6 +1777,34 @@ export const InvoiceEditor = (props: InvoiceProps) => {
           <Button color="gray" onClick={cancelSelectRoom}>
             Cancel
           </Button>
+        </Modal.Footer>
+      </Modal>
+
+
+      <Modal
+        show={showMenu}
+        popup={true}
+      >
+        <Modal.Header />
+        <Modal.Body>
+          <div className="flex flex-col items-center justify-center px-0 pb-2 space-y-2 overflow-scroll">
+            {pGroups.map((pg) => (
+              <div key={pg.groupId} className="flex flex-row items-center space-x-2">
+                {/* Icon */}
+                <IoMdCopy color="brown" className="w-6 h-6" />
+                {/* Button with text */}
+                <Button
+                  onClick={() => copyMenu(pg)}
+                  color="green"
+                  className="whitespace-nowrap flex items-center"
+                >
+                  {`Copy menu ${pg.displayName}`}
+                </Button>
+              </div>
+            ))}
+          </div>
+        </Modal.Body>
+        <Modal.Footer className="flex justify-center">
         </Modal.Footer>
       </Modal>
     </>

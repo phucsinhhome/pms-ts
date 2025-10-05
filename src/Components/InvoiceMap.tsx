@@ -1,16 +1,18 @@
-import React, { useState, useEffect, ChangeEvent } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Button, TextInput } from "flowbite-react";
+import { Button, Spinner } from "flowbite-react";
 import { DEFAULT_PAGE_SIZE } from "../App";
-import { HiX } from "react-icons/hi";
 import { formatISODate, addDays } from "../Service/Utils";
-import { deleteInvoice, listInvoiceByGuestName, listStayingAndComingInvoices } from "../db/invoice";
-import { optionStyle, Pagination } from "./ProfitReport";
+import { listStayingAndComingInvoices } from "../db/invoice";
+import { Pagination } from "./ProfitReport";
 import { GiHouse } from "react-icons/gi";
-import { IoMdList, IoMdPersonAdd } from "react-icons/io";
+import { IoMdList } from "react-icons/io";
 import { Invoice } from "./InvoiceManager";
 import { BiLogIn, BiLogOut } from "react-icons/bi";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { collectRes } from "../db/reservation_extractor";
+import { Configs } from "./InvoiceEditor";
+import { MdAssignmentAdd } from "react-icons/md";
 
 type InvoiceMapProps = {
   activeMenu: any,
@@ -22,8 +24,6 @@ type InvoiceWindow = {
   state: 'staying' | 'tobeCheckOut' | 'tobeCheckIn' | 'outOfWindow'
 }
 
-const ROOM_WIDTH = 180;
-const ROOM_HEIGHT = 120;
 
 // 2D map: each cell is either a room name or null for empty
 const ROOM_MAP: (string | null)[][] = [
@@ -33,32 +33,23 @@ const ROOM_MAP: (string | null)[][] = [
 ];
 
 const invoiceIcons = {
-  tobeCheckIn: <BiLogIn className="text-green-900" title="To be checked in" />,
-  tobeCheckOut: <BiLogOut className="text-red-900" title="To be checked out" />,
-  staying: <GiHouse className="text-blue-900" title="Staying" />
+  tobeCheckIn: <BiLogIn className="text-green-900 w-6" title="To be checked in" />,
+  tobeCheckOut: <BiLogOut className="text-red-900 w-6" title="To be checked out" />,
+  staying: <GiHouse className="text-blue-900 w-6" title="Staying" />
 }
 
 export const InvoiceMap = (props: InvoiceMapProps) => {
   const [invoices, setInvoices] = useState<InvoiceWindow[]>([])
   const [workDate, setWorkDate] = useState(new Date());
-  const [deltaDays, setDeltaDays] = useState(0)
   const [pagination, setPagination] = useState<Pagination>({
     pageNumber: 0,
     pageSize: DEFAULT_PAGE_SIZE,
     totalElements: 0,
     totalPages: 0
   })
-  const [openModal, setOpenModal] = useState(false)
-  const [deletingInv, setDeletingInv] = useState<Invoice>()
-  const [filterGName, setFilterGName] = useState('')
   const navigate = useNavigate();
+  const [isUpdating, setIsUpdating] = useState(false);
 
-  const filterDay = (numDays: number) => {
-    var newDate = Date.now() + numDays * 86400000
-    var newDD = new Date(newDate)
-    setWorkDate(newDD)
-    setDeltaDays(numDays)
-  }
 
   const toWindow = (inv: Invoice): InvoiceWindow => {
     const today = formatISODate(workDate);
@@ -114,97 +105,8 @@ export const InvoiceMap = (props: InvoiceMapProps) => {
     });
   };
 
-  const pageClass = (pageNum: number) => {
-    var noHighlight = "px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-    var highlight = "px-3 py-2 leading-tight text-bold text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"
-
-    return pagination.pageNumber === pageNum ? highlight : noHighlight
-  }
 
   //================ DELETE INVOICE ==========================//
-  const handleDeleteInvoice = (inv: Invoice) => {
-    if (!isDeleteable(inv)) {
-      console.warn("Can not delete the paid invoice")
-      return
-    }
-    setDeletingInv(inv);
-    setOpenModal(true)
-  }
-
-  const cancelDeletion = () => {
-    setOpenModal(false)
-    setDeletingInv(undefined)
-  }
-
-  const confirmDeletion = async () => {
-    try {
-      if (deletingInv === undefined || deletingInv === null || deletingInv.id === undefined) {
-        return;
-      }
-      console.warn("Delete invoice %s...", deletingInv.id)
-      const rsp = await deleteInvoice(deletingInv.id)
-
-      if (rsp.status === 200) {
-        console.info("Delete invoice %s successfully", deletingInv.id)
-        fetchInvoices()
-      } else {
-        console.error("Failed to delete invoice %s: status %s", deletingInv.id, rsp.status)
-      }
-    } catch (e) {
-      console.error(e)
-    } finally {
-      setOpenModal(false)
-      setDeletingInv(undefined)
-    }
-  }
-
-  const isDeleteable = (inv: Invoice) => {
-    if (inv.prepaied) {
-      return false
-    }
-    if (inv.paymentMethod === null || inv.paymentMethod === undefined || inv.paymentMethod === "") {
-      return true
-    }
-    return false
-  }
-
-  const changeFilterGName = (e: ChangeEvent<HTMLInputElement>) => {
-    let fN = e.target.value
-    setFilterGName(fN)
-    if (fN === '') {
-      fetchInvoices()
-      return
-    }
-    let fromDate = formatISODate(new Date())
-
-    listInvoiceByGuestName(fromDate, fN, 0, DEFAULT_PAGE_SIZE)
-      .then(rsp => {
-        // Axios: check status code and update state
-        if (rsp.status === 200) {
-          const data = rsp.data;
-          setInvoices(data.content)
-          if (data.totalPages !== pagination.totalPages) {
-            var page = {
-              pageNumber: data.number,
-              pageSize: data.size,
-              totalElements: data.totalElements,
-              totalPages: data.totalPages
-            }
-            setPagination(page)
-          }
-        } else {
-          setInvoices([]);
-        }
-      })
-      .catch(() =>
-        setInvoices([])
-      )
-  }
-
-  const emptyFilteredName = () => {
-    setFilterGName('')
-    fetchInvoices()
-  }
 
   // Arrow handlers for workDate navigation
   const handlePrevDate = () => {
@@ -219,30 +121,44 @@ export const InvoiceMap = (props: InvoiceMapProps) => {
     setWorkDate(new Date());
   };
 
+  const handleUpdateClick = async () => {
+    setIsUpdating(true);
+    try {
+      const fd = formatISODate(workDate);
+      const td = formatISODate(addDays(workDate, Configs.reservation.fetchDays));
+      const rsp = await collectRes(fd, td);
+      if (rsp.status === 200) {
+        console.info("Reservation sync started, fetch latest invoices...")
+        fetchInvoices();
+      }
+    }
+    catch (error) {
+      console.error("Failed to collect reservations: ", error);
+    }
+    finally {
+      setIsUpdating(false);
+    }
+  };
+
   return (
     <div className="h-full pt-3 relative">
       <div className="flex flex-row px-2 space-x-4 pb-2 items-center">
-        <Button size="md" color="green">
-          <IoMdPersonAdd size="1.5em" className="mr-2" />
-          <Link
-            to="../invoice/new"
-            relative="route"
-          >
-            Add
-          </Link>
+        <Button size="md" color="green"
+          onClick={() => handleUpdateClick()}>
+          {isUpdating ? <Spinner aria-label="Default status example" size="1.5em" />
+            : <MdAssignmentAdd size="1.5em" className="mr-2" />} Sync
         </Button>
         <Button size="md" color="success" onClick={handleJumpToToday} className="w-36" >
           Today
         </Button>
-        <Button size="md" color="green">
-          <IoMdList size="1.5em" className="mr-2" />
-          <Link
-            to="/invoice"
-            relative="route"
-          >
-            List
-          </Link>
-        </Button>
+        <Link
+          to="/invoice"
+          relative="route"
+        >
+          <Button size="md" color="green">
+            <IoMdList size="1.5em" className="mr-2" />List
+          </Button>
+        </Link>
       </div>
       <div className="flex flex-col px-2 items-center space-y-2">
         <div className="flex flex-row space-x-2 px-4 items-center">
@@ -276,12 +192,17 @@ export const InvoiceMap = (props: InvoiceMapProps) => {
                   </div>
                   <div className="flex flex-col space-y-2 w-full">
                     {getRoomGuests(roomName).map(inv => (
-                      <div key={inv.invoice.id}
-                        className="bg-green-200 rounded px-1 py-1 text-green-900 text-md font-semibold shadow flex items-center"
-                        onClick={() => navigate(`/invoice/${inv.invoice.id}`)}
-                      >
-                        {inv.state in invoiceIcons ? invoiceIcons[inv.state as keyof typeof invoiceIcons] : null}
-                        <span>{inv.invoice?.guestName}</span>
+                      <div className="flex flex-col bg-green-200 rounded px-1 py-1 shadow">
+                        <div key={inv.invoice.id}
+                          className=" text-green-900 text-lg font-semibold  flex items-center"
+                          onClick={() => navigate(`/invoice/${inv.invoice.id}`)}
+                        >
+                          {inv.state in invoiceIcons ? invoiceIcons[inv.state as keyof typeof invoiceIcons] : null}
+                          <span>{inv.invoice?.guestName}</span>
+                        </div>
+                        <div className="text-sm font-mono text-gray-400">
+                          {inv.invoice.reservationCode}
+                        </div>
                       </div>
                     ))}
                   </div>

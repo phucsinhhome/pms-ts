@@ -173,7 +173,7 @@ export const InvoiceManager = (props: InvoiceManagerProps) => {
       }
       console.warn("Delete invoice %s...", deletingInv.id)
       const rsp = await deleteInvoice(deletingInv.id)
-      
+
       if (rsp.status === 200) {
         console.info("Delete invoice %s successfully", deletingInv.id)
         fetchInvoices()
@@ -239,15 +239,14 @@ export const InvoiceManager = (props: InvoiceManagerProps) => {
   return (
     <div className="h-full pt-3 relative">
       <div className="flex flex-row px-2 space-x-4 pb-2 items-center">
-        <Button size="md" color="green">
-          <IoMdPersonAdd size="1.5em" className="mr-2" />
-          <Link
-            to="../invoice/new"
-            relative="route"
-          >
-            Add
-          </Link>
-        </Button>
+
+        <Link
+          to="../invoice/new"
+          relative="route"
+        ><Button size="md" color="green">
+            <IoMdPersonAdd size="1.5em" className="mr-2" />
+            Add </Button>
+        </Link>
         <TextInput
           sizing="xs"
           id="filteredName"
@@ -258,15 +257,16 @@ export const InvoiceManager = (props: InvoiceManagerProps) => {
           onChange={changeFilterGName}
           rightIcon={() => <HiX onClick={emptyFilteredName} />}
         />
-        <Button size="md" color="green">
-          <IoMdMap size="1.5em" className="mr-2" />
-          <Link
-            to="/invoice-map"
-            relative="route"
-          >
+        <Link
+          to="/invoice-map"
+          relative="route"
+        >
+          <Button size="md" color="green">
+            <IoMdMap size="1.5em" className="mr-2" />
             Map
-          </Link>
-        </Button>
+          </Button>
+        </Link>
+
       </div>
       <div className="flex flex-row space-x-2 px-4">
         {filterOpts.map((opt) => {

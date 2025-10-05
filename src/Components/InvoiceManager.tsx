@@ -8,7 +8,7 @@ import { formatISODate, formatVND } from "../Service/Utils";
 import { deleteInvoice, listInvoiceByGuestName, listStayingAndComingInvoices } from "../db/invoice";
 import { optionStyle, Pagination } from "./ProfitReport";
 import { GiHouse } from "react-icons/gi";
-import { IoMdPersonAdd, IoMdRemoveCircle } from "react-icons/io";
+import { IoMdMap, IoMdPersonAdd, IoMdRemoveCircle } from "react-icons/io";
 import { CiEdit } from "react-icons/ci";
 
 
@@ -168,7 +168,7 @@ export const InvoiceManager = (props: InvoiceManagerProps) => {
 
   const confirmDeletion = async () => {
     try {
-      if (deletingInv === undefined || deletingInv === null) {
+      if (deletingInv === undefined || deletingInv === null || deletingInv.id === undefined) {
         return;
       }
       console.warn("Delete invoice %s...", deletingInv.id)
@@ -239,7 +239,7 @@ export const InvoiceManager = (props: InvoiceManagerProps) => {
   return (
     <div className="h-full pt-3 relative">
       <div className="flex flex-row px-2 space-x-4 pb-2 items-center">
-        <Button size="xs" color="green">
+        <Button size="md" color="green">
           <IoMdPersonAdd size="1.5em" className="mr-2" />
           <Link
             to="../invoice/new"
@@ -258,6 +258,15 @@ export const InvoiceManager = (props: InvoiceManagerProps) => {
           onChange={changeFilterGName}
           rightIcon={() => <HiX onClick={emptyFilteredName} />}
         />
+        <Button size="md" color="green">
+          <IoMdMap size="1.5em" className="mr-2" />
+          <Link
+            to="/invoice-map"
+            relative="route"
+          >
+            Map
+          </Link>
+        </Button>
       </div>
       <div className="flex flex-row space-x-2 px-4">
         {filterOpts.map((opt) => {

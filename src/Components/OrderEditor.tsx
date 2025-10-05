@@ -195,7 +195,7 @@ export const OrderEditor = (props: OrderEditorProps) => {
         console.warn("Invalid order")
         return
       }
-      if (choosenInvoice === undefined || choosenInvoice === null) {
+      if (choosenInvoice === undefined || choosenInvoice === null || choosenInvoice.id === undefined) {
         console.warn("Invalid choosen invoice")
         return
       }

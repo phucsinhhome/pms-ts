@@ -1,5 +1,5 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button, TextInput } from "flowbite-react";
 import { DEFAULT_PAGE_SIZE } from "../App";
 import { HiX } from "react-icons/hi";
@@ -7,7 +7,7 @@ import { formatISODate, addDays } from "../Service/Utils";
 import { deleteInvoice, listInvoiceByGuestName, listStayingAndComingInvoices } from "../db/invoice";
 import { optionStyle, Pagination } from "./ProfitReport";
 import { GiHouse } from "react-icons/gi";
-import { IoMdPersonAdd } from "react-icons/io";
+import { IoMdList, IoMdPersonAdd } from "react-icons/io";
 import { Invoice } from "./InvoiceManager";
 import { BiLogIn, BiLogOut } from "react-icons/bi";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
@@ -51,6 +51,7 @@ export const InvoiceMap = (props: InvoiceMapProps) => {
   const [openModal, setOpenModal] = useState(false)
   const [deletingInv, setDeletingInv] = useState<Invoice>()
   const [filterGName, setFilterGName] = useState('')
+  const navigate = useNavigate();
 
   const filterDay = (numDays: number) => {
     var newDate = Date.now() + numDays * 86400000
@@ -137,7 +138,7 @@ export const InvoiceMap = (props: InvoiceMapProps) => {
 
   const confirmDeletion = async () => {
     try {
-      if (deletingInv === undefined || deletingInv === null) {
+      if (deletingInv === undefined || deletingInv === null || deletingInv.id === undefined) {
         return;
       }
       console.warn("Delete invoice %s...", deletingInv.id)
@@ -221,7 +222,7 @@ export const InvoiceMap = (props: InvoiceMapProps) => {
   return (
     <div className="h-full pt-3 relative">
       <div className="flex flex-row px-2 space-x-4 pb-2 items-center">
-        <Button size="xs" color="green">
+        <Button size="md" color="green">
           <IoMdPersonAdd size="1.5em" className="mr-2" />
           <Link
             to="../invoice/new"
@@ -230,24 +231,20 @@ export const InvoiceMap = (props: InvoiceMapProps) => {
             Add
           </Link>
         </Button>
-        <TextInput
-          sizing="xs"
-          id="filteredName"
-          placeholder="John Smith"
-          type="text"
-          required={true}
-          value={filterGName}
-          onChange={changeFilterGName}
-          rightIcon={() => <HiX onClick={emptyFilteredName} />}
-        />
-
+        <Button size="md" color="success" onClick={handleJumpToToday} className="w-36" >
+          Today
+        </Button>
+        <Button size="md" color="green">
+          <IoMdList size="1.5em" className="mr-2" />
+          <Link
+            to="/invoice"
+            relative="route"
+          >
+            List
+          </Link>
+        </Button>
       </div>
       <div className="flex flex-col px-2 items-center space-y-2">
-        <div className="flex w-full justify-center">
-          <Button size="xs" color="success" onClick={handleJumpToToday} className="w-36" >
-            Today
-          </Button>
-        </div>
         <div className="flex flex-row space-x-2 px-4 items-center">
           <Button size="xs" color="gray" onClick={handlePrevDate} className="flex items-center">
             <FaChevronLeft className="mr-1" /> Prev
@@ -280,7 +277,9 @@ export const InvoiceMap = (props: InvoiceMapProps) => {
                   <div className="flex flex-col space-y-2 w-full">
                     {getRoomGuests(roomName).map(inv => (
                       <div key={inv.invoice.id}
-                        className="bg-green-200 rounded px-1 py-1 text-green-900 text-md font-semibold shadow flex items-center">
+                        className="bg-green-200 rounded px-1 py-1 text-green-900 text-md font-semibold shadow flex items-center"
+                        onClick={() => navigate(`/invoice/${inv.invoice.id}`)}
+                      >
                         {inv.state in invoiceIcons ? invoiceIcons[inv.state as keyof typeof invoiceIcons] : null}
                         <span>{inv.invoice?.guestName}</span>
                       </div>

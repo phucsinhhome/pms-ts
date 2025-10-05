@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, ChangeEvent } from "react";
-import { Link, useLocation, useParams } from "react-router-dom";
-import { getInvoice, updateInvoice } from "../db/invoice";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import { createInvoice, getInvoice, updateInvoice } from "../db/invoice";
 import { Table, TextInput, Label, Datepicker, Modal, Button } from 'flowbite-react';
 import { HiOutlineCash, HiOutlineClipboardCopy, HiSave, HiUserCircle, HiX } from "react-icons/hi";
 import { classifyServiceByItemName } from "../db/classification";
@@ -19,6 +19,7 @@ import { FaEye } from "react-icons/fa6";
 import { IoMdArrowBack, IoMdRemoveCircle } from "react-icons/io";
 import { CiEdit } from "react-icons/ci";
 import { MdAssignmentAdd } from "react-icons/md";
+import { nanoid } from "nanoid";
 
 
 const paymentIcons = [
@@ -191,6 +192,7 @@ export const InvoiceEditor = (props: InvoiceProps) => {
 
   const [dirty, setDirty] = useState(false)
   const [loc, setLoc] = useState({ pageNumber: 0, pageSize: DEFAULT_PAGE_SIZE })
+  const navigate = useNavigate();
 
   const location = useLocation()
 
@@ -315,12 +317,22 @@ export const InvoiceEditor = (props: InvoiceProps) => {
     }
 
     if (invoice.id === "new") {
-      var newId = String(Date.now())
       inv = {
         ...inv,
-        id: newId
+        id: ''
       }
-      console.info("Generated invoice id %s", newId)
+      console.info("Creating invoice...")
+      const res = await createInvoice(inv);
+      if (res.status !== 200) {
+        alert("Failed to create the invoice");
+        return
+      }
+      const createdInv: Invoice = res.data
+      const invoiceId = createdInv.id
+      console.info("Invoice %s has been created successfully", invoiceId);
+      navigate(`/invoice/${invoiceId}`, { state: { ...loc } });
+
+      return
     }
 
     const res = await updateInvoice(inv);
@@ -741,7 +753,7 @@ export const InvoiceEditor = (props: InvoiceProps) => {
     try {
       let invId = props.chat.id + (Date.now() % 10000000)
       let inv = {
-        id: props.chat.id + new Date().getTime(),
+        ...defaultEmptyInvoice,
         guestName: res.guestName,
         issuer: props.displayName,
         issuerId: props.chat.username,
@@ -778,9 +790,8 @@ export const InvoiceEditor = (props: InvoiceProps) => {
 
   const confirmNoRes = () => {
     try {
-      let invId = props.chat.id + (Date.now() % 10000000)
       let inv = {
-        id: props.chat.id + new Date().getTime(),
+        ...defaultEmptyInvoice,
         guestName: Configs.invoice.initialInvoice.guestName,
         issuer: props.displayName,
         issuerId: props.chat.username,
@@ -797,7 +808,7 @@ export const InvoiceEditor = (props: InvoiceProps) => {
         signed: false,
         country: '',
         items: [{
-          id: invId + (Date.now() % 10000000),
+          id: nanoid(10),
           itemName: "Bungalow garden view",
           unitPrice: 450000,
           quantity: 1,
@@ -1713,3 +1724,4 @@ export const InvoiceEditor = (props: InvoiceProps) => {
     </>
   );
 }
+

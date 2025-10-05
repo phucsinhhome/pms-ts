@@ -14,6 +14,15 @@ export const updateInvoice = (invoice: Invoice) => {
   );
 }
 
+export const createInvoice = (invoice: Invoice) => {
+  console.info("Call API to create invoice");
+  return invoiceApi.put(
+    ``,
+    invoice,
+    { headers: { 'Content-Type': 'application/json' } }
+  );
+}
+
 export const deleteInvoice = (invoiceId: string) => {
   console.info("Call API to delete invoice");
   return invoiceApi.delete(

@@ -530,7 +530,7 @@ export const Inventory = (props: InventoryProps) => {
         if (data === null) {
           return
         }
-        const updatedImageUrls = [...editingProduct.origin.imageUrls];
+        const updatedImageUrls = editingProduct.origin.imageUrls ? [...editingProduct.origin.imageUrls] : [];
         updatedImageUrls[idx] = data.objectURL;
 
         setEditingProduct({
@@ -619,7 +619,7 @@ export const Inventory = (props: InventoryProps) => {
       ...editingProduct,
       origin: {
         ...editingProduct.origin,
-        availabilities: [...editingProduct.origin.availabilities, { id: crypto.randomUUID(), from: '05:00', to: '23:00' }]
+        availabilities: editingProduct.origin.availabilities ? [...editingProduct.origin.availabilities, { id: crypto.randomUUID(), from: '05:00', to: '23:00' }] : [{ id: crypto.randomUUID(), from: '05:00', to: '23:00' }]
       }
     }
     setEditingProduct(eI)
@@ -885,7 +885,7 @@ export const Inventory = (props: InventoryProps) => {
               <div className="flex flex-col space-y-1">
                 {
 
-                  editingProduct.origin.availabilities.map((av, idx) => {
+                  editingProduct.origin.availabilities?.map((av, idx) => {
                     return (<div className="flex flex-row space-x-2" key={av.id}>
                       <div className="flex items-center">
                         <TextInput
@@ -965,7 +965,7 @@ export const Inventory = (props: InventoryProps) => {
                   </Label>
                 </div>
                 {
-                  editingProduct.origin.imageUrls.map((imgUrl, idx) =>
+                  editingProduct.origin.imageUrls?.map((imgUrl, idx) =>
                     <div className="w-1/5 relative">
                       <Label
                         htmlFor={"imgUrl" + idx}
@@ -993,7 +993,7 @@ export const Inventory = (props: InventoryProps) => {
                     <HiArrowCircleUp className="w-6 h-12 font-bold text-green-700" />
                     <FileInput
                       id="imgUrl"
-                      onChange={(e) => changeContentImage(e, editingProduct.origin.imageUrls.length)}
+                      onChange={(e) => changeContentImage(e, editingProduct.origin.imageUrls?.length || 0)}
                       disabled={editingProduct.origin.name === undefined || editingProduct.origin.name === null || editingProduct.origin.name === ''}
                       sizing="sm"
                       className="hidden"

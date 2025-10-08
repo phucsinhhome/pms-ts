@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, ChangeEvent } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { createInvoice, getInvoice, updateInvoice } from "../db/invoice";
 import { Table, TextInput, Label, Datepicker, Modal, Button } from 'flowbite-react';
-import { HiOutlineCash, HiOutlineClipboardCopy, HiSave, HiUserCircle, HiX } from "react-icons/hi";
+import { HiExternalLink, HiOutlineCash, HiOutlineClipboardCopy, HiSave, HiUserCircle, HiX } from "react-icons/hi";
 import { classifyServiceByItemName } from "../db/classification";
 import { addDays, formatISODate, formatMoneyAmount, formatShortDate, formatVND } from "../Service/Utils";
 import { Chat, DEFAULT_PAGE_SIZE } from "../App";
@@ -16,7 +16,7 @@ import { Product } from "./Inventory";
 import { Reservation, ResRoom } from "./ReservationManager";
 import { listAllProductItems } from "../db/inventory";
 import { FaEye } from "react-icons/fa6";
-import { IoMdArrowBack, IoMdCopy, IoMdRemoveCircle } from "react-icons/io";
+import { IoMdArrowBack, IoMdRemoveCircle } from "react-icons/io";
 import { CiEdit } from "react-icons/ci";
 import { MdAssignmentAdd } from "react-icons/md";
 import { nanoid } from "nanoid";
@@ -1784,21 +1784,20 @@ export const InvoiceEditor = (props: InvoiceProps) => {
       <Modal
         show={showMenu}
         popup={true}
+        dismissible
+        onClose={() => setShowMenu(false)}
       >
         <Modal.Header />
         <Modal.Body>
           <div className="flex flex-col items-center justify-center px-0 pb-2 space-y-2 overflow-scroll">
             {pGroups.map((pg) => (
-              <div key={pg.groupId} className="flex flex-row items-center space-x-2">
-                {/* Icon */}
-                <IoMdCopy color="brown" className="w-6 h-6" />
-                {/* Button with text */}
+              <div key={pg.groupId} className="flex flex-col items-center space-y-2 w-full">
                 <Button
                   onClick={() => copyMenu(pg)}
                   color="green"
-                  className="whitespace-nowrap flex items-center"
+                  className="whitespace-nowrap flex items-center w-full text-xl"
                 >
-                  {`Copy menu ${pg.displayName}`}
+                  <HiExternalLink className="mr-2 h-5 w-5"/> Copy menu  {pg.displayName}
                 </Button>
               </div>
             ))}

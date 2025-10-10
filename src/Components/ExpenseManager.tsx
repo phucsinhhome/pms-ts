@@ -468,7 +468,7 @@ export const ExpenseManager = memo((props: ExpenseProps) => {
     }
   }
 
-  const cancelSelectIssuer = () => {
+  const cancelSelectUser = () => {
     setOpenUsersModal(false)
   }
 
@@ -738,7 +738,7 @@ export const ExpenseManager = memo((props: ExpenseProps) => {
 
       <Modal
         show={openUsersModal}
-        onClose={cancelSelectIssuer}
+        onClose={cancelSelectUser}
         popup
         dismissible
       >
@@ -754,7 +754,7 @@ export const ExpenseManager = memo((props: ExpenseProps) => {
                     onClick={() => changeIssuer(user)}
                   >
                     <HiUserCircle />
-                    <span className="text text-center">{user.firstName + " " + user.lastName}</span>
+                    <span className="text text-center">{user.lastName ? user.firstName + " " + user.lastName : user.firstName}</span>
                   </div>
                 )
               })
@@ -762,7 +762,7 @@ export const ExpenseManager = memo((props: ExpenseProps) => {
           </div>
         </Modal.Body>
         <Modal.Footer className="flex justify-center gap-4">
-          <Button color="gray" onClick={cancelSelectIssuer}>
+          <Button color="gray" onClick={cancelSelectUser}>
             Cancel
           </Button>
         </Modal.Footer>

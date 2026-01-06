@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, ChangeEvent } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { createInvoice, getInvoice, updateInvoice } from "../db/invoice";
-import { Table, TextInput, Label, Datepicker, Modal, Button } from 'flowbite-react';
+import { Table, TextInput, Label, Datepicker, Modal, Button, Checkbox } from 'flowbite-react';
 import { HiExternalLink, HiOutlineCash, HiOutlineClipboardCopy, HiSave, HiUserCircle, HiX } from "react-icons/hi";
 import { classifyServiceByItemName } from "../db/classification";
 import { addDays, formatISODate, formatMoneyAmount, formatShortDate, formatVND } from "../Service/Utils";
@@ -181,6 +181,7 @@ export const InvoiceEditor = (props: InvoiceProps) => {
   const [editingItem, setEditingItem] = useState<EditingInvoiceItem>(defaultEmptyItem)
   const [lookupItems, setLookupItems] = useState<Product[]>([])
 
+  const [sharedInvWithCompanyInfo, setSharedInvWithCompanyInfo] = useState(false)
   const [openViewInvModal, setOpenViewInvModal] = useState(false)
 
   const [openChooseResModal, setOpenChooseResModal] = useState(false)
@@ -967,6 +968,10 @@ export const InvoiceEditor = (props: InvoiceProps) => {
     setShowMenu(!showMenu)
   }
 
+  const changeSharedInvWithCompanyInfo = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSharedInvWithCompanyInfo(!sharedInvWithCompanyInfo)
+  }
+
   return (
     <>
       <div className="h-full pt-3">
@@ -1576,6 +1581,21 @@ export const InvoiceEditor = (props: InvoiceProps) => {
               className="space-y-6 pb-4 sm:pb-6 lg:px-8 xl:pb-8 w-full px-4 py-4"
               ref={sharedInvRef}
             >
+              {
+                sharedInvWithCompanyInfo ? (
+                  <div className="flex flex-row pt-2">
+                    <div className="block w-1/5">
+                      <img src="/logo192.jpg" className="w-25 border border-1 rounded-2xl" alt=""></img>
+                    </div>
+                    <div className="flex flex-col w-4/5 ">
+                      <span className="text-right font-serif font-bold text-amber-800 capitalize">phuc sinh home</span>
+                      <span className="text-right font-mono text-[9px] font italic text-gray-500">Phuoc Xuan Hamlet, An Khanh Commune, Chau Thanh, Ben Tre</span>
+                      <span className="text-right font-mono text-[9px] font text-gray-800">+84 328 944 788</span>
+                    </div>
+                  </div>
+                ) : <></>
+              }
+
               <div className="flex flex-row w-full">
                 <div className="flex flex-col w-3/5">
                   <span className="font uppercase font-serif text-sm font-bold">{invoice.guestName}</span>
@@ -1671,7 +1691,11 @@ export const InvoiceEditor = (props: InvoiceProps) => {
           </div>
 
         </Modal.Body>
-        <Modal.Footer className="flex flex-col items-center py-2">
+        <Modal.Footer className="flex flex-row items-center py-2">
+          <div className="flex items-center gap-2">
+            <Checkbox id="sharedInvWithCompanyInfo" defaultChecked={sharedInvWithCompanyInfo} onChange={changeSharedInvWithCompanyInfo} />
+            <Label htmlFor="sharedInvWithCompanyInfo">With CI</Label>
+          </div>
           <Button onClick={downloadSharedInv} >
             <HiOutlineClipboardCopy className="mr-2 h-5 w-5" />
             Create shared invoice
@@ -1797,7 +1821,7 @@ export const InvoiceEditor = (props: InvoiceProps) => {
                   color="green"
                   className="whitespace-nowrap flex items-center w-full text-xl"
                 >
-                  <HiExternalLink className="mr-2 h-5 w-5"/> Copy menu  {pg.displayName}
+                  <HiExternalLink className="mr-2 h-5 w-5" /> Copy menu  {pg.displayName}
                 </Button>
               </div>
             ))}

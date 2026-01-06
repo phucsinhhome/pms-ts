@@ -1694,11 +1694,11 @@ export const InvoiceEditor = (props: InvoiceProps) => {
         <Modal.Footer className="flex flex-row items-center py-2">
           <div className="flex items-center gap-2">
             <Checkbox id="sharedInvWithCompanyInfo" defaultChecked={sharedInvWithCompanyInfo} onChange={changeSharedInvWithCompanyInfo} />
-            <Label htmlFor="sharedInvWithCompanyInfo">With CI</Label>
+            <Label htmlFor="sharedInvWithCompanyInfo">With company info</Label>
           </div>
           <Button onClick={downloadSharedInv} >
             <HiOutlineClipboardCopy className="mr-2 h-5 w-5" />
-            Create shared invoice
+            Copy Invoice
           </Button>
         </Modal.Footer>
       </Modal>

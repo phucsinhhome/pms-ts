@@ -151,6 +151,17 @@ const psBaseApi: AxiosInstance = axios.create({
     withCredentials: true
 });
 
+// room
+const roomApi: AxiosInstance = axios.create({
+    baseURL: `${process.env.REACT_APP_ROOM_ENDPOINT}`,
+    withCredentials: true
+});
+
+// ratePlan
+const ratePlanApi: AxiosInstance = axios.create({
+    baseURL: `${process.env.REACT_APP_RATE_PLAN_ENDPOINT}`,
+    withCredentials: true
+});
 
 export {
     reportApi,
@@ -169,5 +180,7 @@ export {
     classificationApi,
     statusApi,
     userApi,
-    psBaseApi
+    psBaseApi,
+    roomApi,
+    ratePlanApi
 }

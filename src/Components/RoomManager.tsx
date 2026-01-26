@@ -7,15 +7,17 @@ import { formatISODate } from "../Service/Utils";
 import { PiBrainThin } from "react-icons/pi";
 import { listExpenseByExpenserAndDate } from "../db/expense";
 import { Pagination } from "./ProfitReport";
-import { MdAssignmentAdd, MdOutlineFamilyRestroom } from "react-icons/md";
-import { FaUmbrellaBeach } from "react-icons/fa";
+import { MdAssignmentAdd, MdOutlineFamilyRestroom, MdOutlineMan } from "react-icons/md";
+import { FaHiking, FaUmbrellaBeach } from "react-icons/fa";
 import { IoMdRemoveCircle } from "react-icons/io";
 import { CiEdit } from "react-icons/ci";
 import { UserInfo } from "../db/users";
+import { listRoom } from "../db/room";
+import { FaBed, FaCouch } from "react-icons/fa6";
 
 export type Room = {
   id: string,
-  internalRoomName: string,
+  internalName: string,
   name: string,
   status: string,
   description?: string,
@@ -58,7 +60,7 @@ export const RoomManager = memo((props: RoomManagerProps) => {
   const [openUsersModal, setOpenUsersModal] = useState(false)
   const [users, setUsers] = useState<UserInfo[]>([])
 
-  const isAssignable = props.hasAuthority('expense:assign')
+  const deleteAuthorized = props.hasAuthority('room:delete')
 
   const [pagination, setPagination] = useState<Pagination>({
     pageNumber: 0,
@@ -77,26 +79,21 @@ export const RoomManager = memo((props: RoomManagerProps) => {
     })
   }
 
-  const fetchExpenses = async () => {
+  const fetchRooms = async () => {
     try {
       let byDate = formatISODate(new Date())
 
-      let res;
-      if (isAssignable) {
-        res = await listExpenseByDate(byDate, pagination.pageNumber, pagination.pageSize);
-      } else {
-        res = await listExpenseByExpenserAndDate(props.chat.username, byDate, pagination.pageNumber, pagination.pageSize);
-      }
+      let res = await listRoom(pagination.pageNumber, pagination.pageSize);
       if (res.status === 401 || res.status === 403) {
         props.handleUnauthorized()
         return
       }
       if (res === undefined || res.status !== 200) {
-        console.warn("Invalid expense response")
+        console.warn("Invalid room response")
         return
       }
       const data = res.data;
-      console.info("Fetched %s expenses by date %s", data.size, byDate)
+      console.info("Fetched %s rooms by date %s", data.size, byDate)
       let sortedExps = data.content
       setRooms(sortedExps)
       setPagination({
@@ -106,7 +103,7 @@ export const RoomManager = memo((props: RoomManagerProps) => {
         totalPages: data.totalPages
       })
     } catch (e) {
-      console.error("Error while fetching expenses", e)
+      console.error("Error while fetching rooms", e)
       if (e instanceof Error) {
         alert(e.message)
       }
@@ -115,13 +112,13 @@ export const RoomManager = memo((props: RoomManagerProps) => {
 
   useEffect(() => {
     props.activeMenu()
-    fetchExpenses()
+    fetchRooms()
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pagination.pageNumber]);
 
   useEffect(() => {
-    fetchExpenses()
+    fetchRooms()
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.chat]);
@@ -137,7 +134,7 @@ export const RoomManager = memo((props: RoomManagerProps) => {
   }
 
   //============ EXPENSE DELETION ====================//
-  const askForDelExpenseConfirmation = (exp: Room) => {
+  const deleletConfirmation = (exp: Room) => {
     setDeletingRoom(exp);
     setOpenDelExpenseModal(true)
   }
@@ -171,7 +168,7 @@ export const RoomManager = memo((props: RoomManagerProps) => {
   const cancelEditingExpense = () => {
     setEditingRoom(null)
     setOpenEditingRoomModal(false)
-    fetchExpenses()
+    fetchRooms()
   }
 
   const changeItemMessage = (e: ChangeEvent<HTMLInputElement>) => {
@@ -240,31 +237,32 @@ export const RoomManager = memo((props: RoomManagerProps) => {
               <div
                 className="font text-sm text-green-600"
               >
-                {room.internalRoomName} - {room.name}
+                {room.internalName} - {room.name}
               </div>
-              <div className="flex flex-row text-[10px] space-x-1">
+              <div className="flex flex-row text-[10px] space-x-3">
                 {/* Adult icon and count */}
-                <div className="flex items-center space-x-0.5">
-                  <HiUserCircle size="1em" className="text-blue-700" />
+                <div className="flex items-center space-x-1">
+                  <MdOutlineMan size="1em" className="text-yellow-700" />
                   <span>{room.maxAdults ?? 0}</span>
                 </div>
                 {/* Child icon and count */}
-                <div className="flex items-center space-x-0.5">
+                <div className="flex items-center space-x-1">
                   <MdOutlineFamilyRestroom size="1em" className="text-yellow-700" />
                   <span>{room.maxChildren ?? 0}</span>
                 </div>
                 {/* Double bed icon and count */}
-                <div className="flex items-center space-x-0.5">
-                  <FaUmbrellaBeach size="1em" className="text-red-700" />
+                <div className="flex items-center space-x-1">
+                  <FaBed size="1em" className="text-yellow-700" />
                   <span>{room.numDoubleBeds ?? 0}</span>
                 </div>
+                <div className="flex items-center space-x-1">
+                  <FaUmbrellaBeach size="1em" className="text-yellow-700" />
+                  <span>{room.numHammocks ?? 0}</span>
+                </div>
               </div>
-              <div className="flex flex-row space-x-2 absolute right-1 top-2">
-                <IoMdRemoveCircle size="1.5em" className="mr-2 text-red-800 cursor-pointer"
-                  onClick={() => askForDelExpenseConfirmation(room)}
-                />
-                {isAssignable ? <HiUserCircle size="1.5em" className="mr-2 text-blue-800 cursor-pointer"
-                  onClick={() => chooseExpenser(room)}
+              <div className="flex flex-row space-x-2 absolute right-1 top-1">
+                {deleteAuthorized ? <IoMdRemoveCircle size="1.5em" className="mr-2 text-red-800 cursor-pointer"
+                  onClick={() => deleletConfirmation(room)}
                 /> : <></>}
                 <CiEdit size="1.5em" className="mr-2 text-green-800 cursor-pointer"
                   onClick={() => editRoom(room)}

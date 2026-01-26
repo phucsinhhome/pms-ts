@@ -12,12 +12,12 @@ import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 // List of room names
 const ROOM_NAMES = ["R1", "R2", "R3", "R4", "R5", "R6"];
 
-type RoomManagerProps = {
+type ReservationMapProps = {
   activeMenu: any,
   handleUnauthorized: any
 }
 
-export function RoomManager(props: RoomManagerProps) {
+export function ReservationMap(props: ReservationMapProps) {
   const [reservations, setReservations] = useState<Reservation[]>([])
   // Start from yesterday
   const [fromDate, setFromDate] = useState(addDays(new Date(), -1));

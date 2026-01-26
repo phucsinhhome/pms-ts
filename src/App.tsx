@@ -21,8 +21,9 @@ import UserProfile from "./Components/UserProfile";
 import { Welcome } from "./Components/Welcome";
 import { getProfile } from "./db/users";
 import { Button } from "flowbite-react";
-import { RoomManager } from "./Components/RoomManager";
+import { ReservationMap } from "./Components/ReservationMap";
 import { InvoiceMap } from "./Components/InvoiceMap";
+import { RoomManager } from "./Components/RoomManager";
 
 // Add a lotus image to your public folder or assets and use its path here
 
@@ -121,7 +122,13 @@ const menus = {
     displayName: 'Group',
     title: 'Product Groups',
     icon: <FaBoxes size={28} />
-  }
+  },
+  room: {
+    path: 'roomman',
+    displayName: 'Room',
+    title: 'Room Management',
+    icon: <FaCalendarAlt size={28} />
+  },
 }
 
 
@@ -336,9 +343,17 @@ export const App = () => {
           activeMenu={() => setActiveMenu(menus.reservation)}
           handleUnauthorized={() => handleLogin()}
         />} />
-        <Route path="room" element={<RoomManager
+        <Route path="room" element={<ReservationMap
           activeMenu={() => setActiveMenu(menus.reservation)}
           handleUnauthorized={() => handleLogin()}
+        />} />
+        <Route path="roomman" element={<RoomManager
+          chat={getChat()}
+          displayName={fullName()}
+          authorizedUserId={authorizedUserId}
+          activeMenu={() => setActiveMenu(menus.room)}
+          handleUnauthorized={() => handleLogin()}
+          hasAuthority={(auth: string) => hasAuthority(auth)}
         />} />
         <Route path="order" element={<OrderManager
           chat={getChat()}

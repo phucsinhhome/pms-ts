@@ -1,22 +1,17 @@
 import React, { useState, useEffect, useRef, ChangeEvent, memo } from "react";
 import { TextInput, Label, Spinner, Modal, Button } from "flowbite-react";
-import { assignExpense, deleteExpense, generate, listExpenseByDate, newExpId } from "../db/expense";
-import { classifyServiceByItemName } from "../db/classification";
+import { listExpenseByDate } from "../db/expense";
 import { Chat, DEFAULT_PAGE_SIZE } from "../App";
-import { HiOutlineCash, HiUserCircle, HiX } from "react-icons/hi";
-import { formatISODate, formatISODateTime, formatMoneyAmount, formatVND } from "../Service/Utils";
+import { HiUserCircle, HiX } from "react-icons/hi";
+import { formatISODate } from "../Service/Utils";
 import { PiBrainThin } from "react-icons/pi";
-import { FaRotate } from "react-icons/fa6";
 import { listExpenseByExpenserAndDate } from "../db/expense";
 import { Pagination } from "./ProfitReport";
-import { saveExpense } from "../db/expense";
-import { Link } from "react-router-dom";
-import { MdAssignmentAdd } from "react-icons/md";
+import { MdAssignmentAdd, MdOutlineFamilyRestroom } from "react-icons/md";
 import { FaUmbrellaBeach } from "react-icons/fa";
 import { IoMdRemoveCircle } from "react-icons/io";
 import { CiEdit } from "react-icons/ci";
-import Moment from "react-moment";
-import { listUsers, UserInfo } from "../db/users";
+import { UserInfo } from "../db/users";
 
 export type Room = {
   id: string,
@@ -50,15 +45,15 @@ type RoomManagerProps = {
 
 export const RoomManager = memo((props: RoomManagerProps) => {
 
-  const [expenses, setExpenses] = useState([])
+  const [rooms, setRooms] = useState<Room[]>([]);
   const [generatingExp, setGeneratingExp] = useState(false);
   const [classifyingExp, setClassifyingExp] = useState(false);
 
   const [openDelExpenseModal, setOpenDelExpenseModal] = useState(false)
   const [deletingRoom, setDeletingRoom] = useState<Room>()
 
-  const [openEditingExpenseModal, setOpenEditingExpenseModal] = useState(false)
-  const [editingRoom, setEditingRoom] = useState<Room>()
+  const [openEditingExpenseModal, setOpenEditingRoomModal] = useState(false)
+  const [editingRoom, setEditingRoom] = useState<Room | null>(null)
 
   const [openUsersModal, setOpenUsersModal] = useState(false)
   const [users, setUsers] = useState<UserInfo[]>([])
@@ -103,7 +98,7 @@ export const RoomManager = memo((props: RoomManagerProps) => {
       const data = res.data;
       console.info("Fetched %s expenses by date %s", data.size, byDate)
       let sortedExps = data.content
-      setExpenses(sortedExps)
+      setRooms(sortedExps)
       setPagination({
         pageNumber: data.number,
         pageSize: data.size,
@@ -138,26 +133,11 @@ export const RoomManager = memo((props: RoomManagerProps) => {
     return pagination.pageNumber === pageNum ? highlight : noHighlight
   }
 
-  const handleDeleteExpense = (exp: Expense) => {
-    try {
-      console.warn("Deleting expense [%s]...", exp.id)
-      deleteExpense(exp)
-        .then((rsp: any) => {
-          if (rsp !== null) {
-            console.log("Delete expense %s successully", exp.id)
-            fetchExpenses()
-          }
-        })
-    } catch (e) {
-      console.error("Error while deleting expense", e)
-      if (e instanceof Error) {
-        alert(e.message)
-      }
-    }
+  const handleDeleteExpense = (exp: Room) => {
   }
 
   //============ EXPENSE DELETION ====================//
-  const askForDelExpenseConfirmation = (exp: Expense) => {
+  const askForDelExpenseConfirmation = (exp: Room) => {
     setDeletingRoom(exp);
     setOpenDelExpenseModal(true)
   }
@@ -182,271 +162,61 @@ export const RoomManager = memo((props: RoomManagerProps) => {
 
   }
 
-  //================= EDIT EXPENSE ===================//
-  const editExpense = (exp: Expense) => {
-    let uP = formatMoneyAmount(String(exp.unitPrice))
-    let eI = {
-      origin: exp,
-      formattedUnitPrice: uP.formattedAmount,
-      originItemName: exp.itemName,
-      itemMessage: ""
-    }
-    setEditingRoom(eI)
-    setOpenEditingExpenseModal(true)
+  //================= EDIT ===================//
+  const editRoom = (exp: Room | null) => {
+    setEditingRoom(exp)
+    setOpenEditingRoomModal(true)
   }
 
   const cancelEditingExpense = () => {
-    setEditingRoom(defaultEditingExpense)
-    setOpenEditingExpenseModal(false)
+    setEditingRoom(null)
+    setOpenEditingRoomModal(false)
     fetchExpenses()
   }
 
   const changeItemMessage = (e: ChangeEvent<HTMLInputElement>) => {
     let iMsg = e.target.value
-    let eI = {
-      ...editingRoom,
-      itemMessage: iMsg
-    }
-    setEditingRoom(eI)
   }
 
   const changeItemName = (e: ChangeEvent<HTMLInputElement>) => {
     let iName = e.target.value
-    let eI = {
-      ...editingRoom,
-      origin: {
-        ...editingRoom.origin,
-        itemName: iName
-      }
-    }
-    setEditingRoom(eI)
   }
 
   const emptyItemName = () => {
-    let eI = {
-      ...editingRoom,
-      origin: {
-        ...editingRoom.origin,
-        itemName: ''
-      }
-    }
-    setEditingRoom(eI)
   }
 
   const changeService = (e: ChangeEvent<HTMLInputElement>) => {
     let iName = e.target.value
-    let eI = {
-      ...editingRoom,
-      origin: {
-        ...editingRoom.origin,
-        service: iName
-      }
-    }
-    setEditingRoom(eI)
   }
 
   const blurItemName = async () => {
-    try {
-      let nItemName = editingRoom.origin.itemName
-      if (nItemName === null || nItemName === undefined || nItemName === "") {
-        return;
-      }
-      setClassifyingExp(true)
-      console.log("Classify the service by expense name [%s]", nItemName)
-      let rsp = await classifyServiceByItemName(nItemName);
-      if (rsp.status !== 200) {
-        console.error("Failed to classify service by item name %s", nItemName)
-        setClassifyingExp(false)
-        return;
-      }
-      let eI = {
-        ...editingRoom,
-        origin: {
-          ...editingRoom.origin,
-          service: rsp.data.service
-        }
-      }
-      setEditingRoom(eI)
-      setClassifyingExp(false)
-    } catch (e) {
-      console.error(e)
-      if (e instanceof Error) {
-        alert(e.message)
-      }
-    } finally {
-      setClassifyingExp(false)
-    }
   }
 
   const changeUnitPrice = (e: ChangeEvent<HTMLInputElement>) => {
     let v = e.target.value
-    let uP = formatMoneyAmount(v)
-    let eI = {
-      ...editingRoom,
-      origin: {
-        ...editingRoom.origin,
-        amount: uP.amount * editingRoom.origin.quantity,
-        unitPrice: uP.amount,
-      },
-      formattedUnitPrice: uP.formattedAmount
-    }
-    setEditingRoom(eI)
   }
 
   const changeQuantity = (delta: number) => {
-    let nQ = editingRoom.origin.quantity + delta
-    let eI = {
-      ...editingRoom,
-      origin: {
-        ...editingRoom.origin,
-        quantity: nQ,
-        amount: editingRoom.origin.unitPrice * nQ
-      }
-    }
-    setEditingRoom(eI)
+    
   }
 
   const generatePopupExpense = async () => {
-    let expMsg = editingRoom.itemMessage
-    console.info("Extracting expense from message %s", expMsg)
-    if (expMsg.length < 5) {
-      console.warn(`Too short message ${expMsg}. It must be longer than 5 characters`)
-      return
-    }
-    setGeneratingExp(true)
-    try {
-      let exp = await generateExpense(expMsg)
-      if (exp === null) {
-        console.warn(`Invalid generated expense. Failed to generate expense from ${expMsg}!`)
-        return
-      }
-      let uP = formatMoneyAmount(String(exp.unitPrice))
-      let eI = {
-        origin: exp,
-        formattedUnitPrice: uP.formattedAmount,
-        originItemName: exp.itemName,
-        itemMessage: expMsg
-      }
-      setEditingRoom(eI)
-    }
-    finally {
-      setGeneratingExp(false)
-    }
+    
   }
 
   const generateExpense = async (msg: string) => {
-    try {
-      const rsp = await generate(msg);
-      if (rsp === undefined || rsp.status !== 200) {
-        console.warn("Invalid response from expense generation")
-        return {
-          ...defaultEmptExpense,
-          expenseDate: formatISODateTime(new Date()),
-          expenserName: props.displayName,
-          expenserId: props.chat.username
-        }
-      }
-      let data = rsp.data
-      return {
-        ...data,
-        id: '',
-        amount: data.unitPrice * data.quantity,
-        expenseDate: formatISODateTime(new Date()),
-        expenserName: props.displayName,
-        expenserId: props.chat.username
-      }
-    } catch (e) {
-      console.error("Error while generating expense from message", e)
-      if (e instanceof Error) {
-        alert(e.message)
-      }
-      return {
-        ...defaultEmptExpense,
-        expenseDate: formatISODateTime(new Date()),
-        expenserName: props.displayName,
-        expenserId: props.chat.username
-      }
-    }
   }
 
   const processSaveExpense = () => {
-    try {
-      if (editingRoom.origin.itemName === '') {
-        console.warn("Invalid expense. Expense name must not be empty")
-        return Promise.resolve(false)
-      }
-      let exp = {
-        expenseDate: editingRoom.origin.expenseDate,
-        itemName: editingRoom.origin.itemName,
-        quantity: editingRoom.origin.quantity,
-        unitPrice: editingRoom.origin.unitPrice,
-        expenserId: props.chat.username,
-        expenserName: props.displayName,
-        service: editingRoom.origin.service,
-        id: editingRoom.origin.id,
-        amount: editingRoom.origin.amount,
-        tenantId: editingRoom.origin.tenantId
-      }
-      if (exp.id === null || exp.id === "" || exp.id === "new") {
-        exp.id = newExpId()
-        console.info("Generated the expense id %s", exp.id)
-      }
-      if (exp.expenseDate === null) {
-        let expDate = formatISODateTime(new Date())
-        exp.expenseDate = expDate
-        console.info("Updated expense date to %s", expDate)
-      }
-      if (exp.expenserId === null) {
-        exp.expenserId = props.chat.username
-        exp.expenserName = props.displayName
-        console.info("Updated expenser to %s", props.chat.username)
-      }
-      console.info("Save expense %s...", exp.id)
-      return saveExpense(exp)
-        .then((rsp) => rsp.status === 200)
-    } catch (e) {
-      console.error("Error while saving expense", e)
-      if (e instanceof Error) {
-        alert(e.message)
-      }
-      return Promise.resolve(false)
-    }
   }
 
   const handleSaveAndCompleteExpense = () => {
-    processSaveExpense()
-      .then((result: boolean) => {
-        if (result) {
-          cancelEditingExpense()
-        } else {
-          console.error("Failed to save expense")
-        }
-      })
   }
 
   const handleSaveAndContinueExpense = () => {
-
-    processSaveExpense()
-      .then((result: boolean) => {
-        if (result) {
-          setEditingRoom(defaultEditingExpense)
-          if (expMsgRef.current === null) {
-            return
-          }
-          expMsgRef.current.focus()
-        } else {
-          console.error("Failed to save expense")
-        }
-      })
   }
 
-  const chooseExpenser = async (exp: Expense) => {
-    setEditingRoom({ origin: exp, itemMessage: "" })
-    const rsp = await listUsers(0, 5);
-    if (rsp.status === 200) {
-      setUsers(rsp.data.content)
-      setOpenUsersModal(true)
-    }
+  const chooseExpenser = async (exp: Room) => {
   }
 
   const cancelSelectUser = () => {
@@ -454,62 +224,50 @@ export const RoomManager = memo((props: RoomManagerProps) => {
   }
 
   const changeIssuer = async (user: UserInfo) => {
-    try {
-      console.warn("Change the expense from {} to {}...", editingRoom.origin.expenserId, user.username)
-      const rsp = await assignExpense(editingRoom.origin.id, user.username)
-      if (rsp.status === 401) {
-        props.handleUnauthorized()
-      }
-      if (rsp.status === 403) {
-        alert("You are not allowed to change the expenser of this expense!")
-      }
-      if (rsp !== null && rsp.status === 200) {
-        console.log("Change expenser of expense %s to %s successully", editingRoom.origin.id, user.username)
-        fetchExpenses()
-      }
-    } catch (e) {
-      console.error(e)
-    } finally {
-      setOpenUsersModal(false)
-    }
   }
 
   return (
     <div className="h-full pt-3 relative">
       <div className="flex flex-row px-2 space-x-2 align-middle">
-        <Button size="xs" color="green" onClick={() => editExpense(defaultEmptExpense)}>
-          <MdAssignmentAdd size="1.5em" className="mr-2" /> Add
-        </Button>
-        <Button size="xs" color="green">
-          <FaUmbrellaBeach size="1.5em" className="mr-2" />
-          <Link to='../supplier' relative="path">Tour</Link>
+        <Button size="xs" color="green" onClick={() => editRoom(null)}>
+          <MdAssignmentAdd size="1.5em" className="mr-2" /> Add Room
         </Button>
       </div>
       <div className="flex flex-col px-2 pt-2 space-y-1.5 divide-y">
-        {expenses?.map((item) => {
+        {rooms?.map((room) => {
           return (
-            <div key={item.id} className="flex flex-col w-full px-1 space-y-1 relative">
+            <div key={room.id} className="flex flex-col w-full px-1 space-y-1 relative">
               <div
                 className="font text-sm text-green-600"
               >
-                {item.itemName}
+                {room.internalRoomName} - {room.name}
               </div>
               <div className="flex flex-row text-[10px] space-x-1">
-                <Moment format="DD.MM" className="w-10">{new Date(item.expenseDate)}</Moment>
-                <span className="w-6">{"x" + item.quantity}</span>
-                <span className="w-24">{formatVND(item.amount)}</span>
-                <span className="font font-mono font-black w-8">{item.service}</span>
-                {isAssignable ? <span className="font font-mono">{item.expenserId}</span> : <></>}
+                {/* Adult icon and count */}
+                <div className="flex items-center space-x-0.5">
+                  <HiUserCircle size="1em" className="text-blue-700" />
+                  <span>{room.maxAdults ?? 0}</span>
+                </div>
+                {/* Child icon and count */}
+                <div className="flex items-center space-x-0.5">
+                  <MdOutlineFamilyRestroom size="1em" className="text-yellow-700" />
+                  <span>{room.maxChildren ?? 0}</span>
+                </div>
+                {/* Double bed icon and count */}
+                <div className="flex items-center space-x-0.5">
+                  <FaUmbrellaBeach size="1em" className="text-red-700" />
+                  <span>{room.numDoubleBeds ?? 0}</span>
+                </div>
               </div>
               <div className="flex flex-row space-x-2 absolute right-1 top-2">
                 <IoMdRemoveCircle size="1.5em" className="mr-2 text-red-800 cursor-pointer"
-                  onClick={() => askForDelExpenseConfirmation(item)}
+                  onClick={() => askForDelExpenseConfirmation(room)}
                 />
                 {isAssignable ? <HiUserCircle size="1.5em" className="mr-2 text-blue-800 cursor-pointer"
-                  onClick={() => chooseExpenser(item)}
+                  onClick={() => chooseExpenser(room)}
                 /> : <></>}
                 <CiEdit size="1.5em" className="mr-2 text-green-800 cursor-pointer"
-                  onClick={() => editExpense(item)}
+                  onClick={() => editRoom(room)}
                 />
               </div>
             </div>
@@ -546,7 +304,7 @@ export const RoomManager = memo((props: RoomManagerProps) => {
         <Modal.Header>Confirm</Modal.Header>
         <Modal.Body>
           <div>
-            <span>{deletingRoom === null ? "" : "Are you sure to delete [" + deletingRoom?.itemName + "]?"}</span>
+            <span>{deletingRoom === null ? "" : "Are you sure to delete [" + deletingRoom?.name + "]?"}</span>
           </div>
         </Modal.Body>
         <Modal.Footer className="flex justify-center gap-4">
@@ -572,7 +330,7 @@ export const RoomManager = memo((props: RoomManagerProps) => {
                 id="itemMsg"
                 placeholder="3 ổ bánh mì 6k"
                 required={true}
-                value={editingRoom.itemMessage}
+                value={editingRoom?.name}
                 onChange={changeItemMessage}
                 className="w-full"
                 rightIcon={() => generatingExp ?
@@ -598,7 +356,7 @@ export const RoomManager = memo((props: RoomManagerProps) => {
                 id="itemName"
                 placeholder="Bánh mì"
                 required={true}
-                value={editingRoom.origin.itemName}
+                value={editingRoom?.name}
                 onChange={changeItemName}
                 onBlur={blurItemName}
                 className="w-full"
@@ -608,27 +366,8 @@ export const RoomManager = memo((props: RoomManagerProps) => {
             <div className="flex flex-row w-full align-middle">
               <div className="flex items-center w-2/5">
                 <Label
-                  htmlFor="unitPrice"
-                  value="Unit Price"
-                />
-              </div>
-              <TextInput
-                id="unitPrice"
-                placeholder="Enter amount here"
-                type="currency"
-                step={5000}
-                required={true}
-                value={editingRoom.formattedUnitPrice}
-                onChange={changeUnitPrice}
-                rightIcon={HiOutlineCash}
-                className="w-full"
-              />
-            </div>
-            <div className="flex flex-row w-full align-middle">
-              <div className="flex items-center w-2/5">
-                <Label
-                  htmlFor="quantity"
-                  value="Quantity"
+                  htmlFor="numAdults"
+                  value="Max Adults"
                 />
               </div>
               <div className="relative flex items-center w-full">
@@ -645,12 +384,12 @@ export const RoomManager = memo((props: RoomManagerProps) => {
                 </button>
                 <input
                   type="number"
-                  id="quantity-input"
+                  id="numAdults"
                   data-input-counter aria-describedby="helper-text-explanation"
                   className="bg-gray-50 border-x-0 border-gray-300 h-11 text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="999"
                   required
-                  value={editingRoom.origin.quantity}
+                  value={editingRoom?.maxAdults}
                   readOnly
                 />
                 <button
@@ -669,45 +408,217 @@ export const RoomManager = memo((props: RoomManagerProps) => {
             <div className="flex flex-row w-full align-middle">
               <div className="flex items-center w-2/5">
                 <Label
-                  htmlFor="amount"
-                  value="Amount"
+                  htmlFor="numChildren"
+                  value="Max Children"
                 />
               </div>
-              <span className="w-full">{formatVND(editingRoom.origin.amount)}</span>
-
+              <div className="relative flex items-center w-full">
+                <button
+                  type="button"
+                  id="decrement-button"
+                  data-input-counter-decrement="quantity-input"
+                  className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-s-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
+                  onClick={() => changeQuantity(-1)}
+                >
+                  <svg className="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
+                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h16" />
+                  </svg>
+                </button>
+                <input
+                  type="number"
+                  id="numChildren"
+                  data-input-counter aria-describedby="helper-text-explanation"
+                  className="bg-gray-50 border-x-0 border-gray-300 h-11 text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="999"
+                  required
+                  value={editingRoom?.maxChildren}
+                  readOnly
+                />
+                <button
+                  type="button"
+                  id="increment-button"
+                  data-input-counter-increment="quantity-input"
+                  className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-e-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
+                  onClick={() => changeQuantity(1)}
+                >
+                  <svg className="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
+                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 1v16M1 9h16" />
+                  </svg>
+                </button>
+              </div>
             </div>
             <div className="flex flex-row w-full align-middle">
               <div className="flex items-center w-2/5">
                 <Label
-                  htmlFor="service"
-                  value="Service"
+                  htmlFor="numSingleBeds"
+                  value="Num Single Beds"
                 />
               </div>
-              <TextInput
-                id="service"
-                placeholder="STAY TOUR or FOOD"
-                value={editingRoom.origin.service}
-                readOnly
-                required
-                onChange={changeService}
-                rightIcon={() => classifyingExp ?
-                  <Spinner aria-label="Default status example"
-                    className="w-8 h-8"
-                  /> :
-                  <FaRotate
-                    onClick={blurItemName}
-                    className="pointer-events-auto cursor-pointer w-10 h-8"
-                  />
-                }
-                className="w-full"
-              />
+              <div className="relative flex items-center w-full">
+                <button
+                  type="button"
+                  id="decrement-button"
+                  data-input-counter-decrement="quantity-input"
+                  className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-s-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
+                  onClick={() => changeQuantity(-1)}
+                >
+                  <svg className="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
+                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h16" />
+                  </svg>
+                </button>
+                <input
+                  type="number"
+                  id="numSingleBeds"
+                  data-input-counter aria-describedby="helper-text-explanation"
+                  className="bg-gray-50 border-x-0 border-gray-300 h-11 text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="999"
+                  required
+                  value={editingRoom?.numSingleBeds}
+                  readOnly
+                />
+                <button
+                  type="button"
+                  id="increment-button"
+                  data-input-counter-increment="quantity-input"
+                  className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-e-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
+                  onClick={() => changeQuantity(1)}
+                >
+                  <svg className="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
+                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 1v16M1 9h16" />
+                  </svg>
+                </button>
+              </div>
             </div>
+            <div className="flex flex-row w-full align-middle">
+              <div className="flex items-center w-2/5">
+                <Label
+                  htmlFor="numDoubleBeds"
+                  value="Num Double Beds"
+                />
+              </div>
+              <div className="relative flex items-center w-full">
+                <button
+                  type="button"
+                  id="decrement-button"
+                  data-input-counter-decrement="quantity-input"
+                  className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-s-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
+                  onClick={() => changeQuantity(-1)}
+                >
+                  <svg className="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
+                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h16" />
+                  </svg>
+                </button>
+                <input
+                  type="number"
+                  id="numDoubleBeds"
+                  data-input-counter aria-describedby="helper-text-explanation"
+                  className="bg-gray-50 border-x-0 border-gray-300 h-11 text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="999"
+                  required
+                  value={editingRoom?.numDoubleBeds}
+                  readOnly
+                />
+                <button
+                  type="button"
+                  id="increment-button"
+                  data-input-counter-increment="quantity-input"
+                  className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-e-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
+                  onClick={() => changeQuantity(1)}
+                >
+                  <svg className="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
+                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 1v16M1 9h16" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div className="flex flex-row w-full align-middle">
+              <div className="flex items-center w-2/5">
+                <Label
+                  htmlFor="numQueenBeds"
+                  value="Num Queen Beds"
+                />
+              </div>
+              <div className="relative flex items-center w-full">
+                <button
+                  type="button"
+                  id="decrement-button"
+                  data-input-counter-decrement="quantity-input"
+                  className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-s-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
+                  onClick={() => changeQuantity(-1)}
+                >
+                  <svg className="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
+                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h16" />
+                  </svg>
+                </button>
+                <input
+                  type="number"
+                  id="numQueenBeds"
+                  data-input-counter aria-describedby="helper-text-explanation"
+                  className="bg-gray-50 border-x-0 border-gray-300 h-11 text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="999"
+                  required
+                  value={editingRoom?.numQueenBeds}
+                  readOnly
+                />
+                <button
+                  type="button"
+                  id="increment-button"
+                  data-input-counter-increment="quantity-input"
+                  className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-e-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
+                  onClick={() => changeQuantity(1)}
+                >
+                  <svg className="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
+                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 1v16M1 9h16" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div className="flex flex-row w-full align-middle">
+              <div className="flex items-center w-2/5">
+                <Label
+                  htmlFor="numHammocks"
+                  value="Num Hammocks"
+                />
+              </div>
+              <div className="relative flex items-center w-full">
+                <button
+                  type="button"
+                  id="decrement-button"
+                  data-input-counter-decrement="quantity-input"
+                  className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-s-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
+                  onClick={() => changeQuantity(-1)}
+                >
+                  <svg className="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
+                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h16" />
+                  </svg>
+                </button>
+                <input
+                  type="number"
+                  id="numHammocks"
+                  data-input-counter aria-describedby="helper-text-explanation"
+                  className="bg-gray-50 border-x-0 border-gray-300 h-11 text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="999"
+                  required
+                  value={editingRoom?.numHammocks}
+                  readOnly
+                />
+                <button
+                  type="button"
+                  id="increment-button"
+                  data-input-counter-increment="quantity-input"
+                  className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-e-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
+                  onClick={() => changeQuantity(1)}
+                >
+                  <svg className="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
+                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 1v16M1 9h16" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            
             <div className="w-full flex justify-center">
-              <Button onClick={handleSaveAndCompleteExpense} className="mx-2" disabled={editingRoom.origin.itemName === ''}>
-                Save & Close
-              </Button>
-              <Button onClick={handleSaveAndContinueExpense} className="mx-2" disabled={editingRoom.origin.itemName === ''}>
-                Save & Continue
+              <Button onClick={handleSaveAndCompleteExpense} className="mx-2">
+                Save
               </Button>
               <Button onClick={cancelEditingExpense} className="mx-2">
                 Cancel

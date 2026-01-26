@@ -1,245 +1,275 @@
 import React, { useState, useEffect, useRef, ChangeEvent, memo } from "react";
-import { TextInput, Label, Spinner, Modal, Button } from "flowbite-react";
-import { listExpenseByDate } from "../db/expense";
+import { TextInput, Label, Modal, Button } from "flowbite-react";
 import { Chat, DEFAULT_PAGE_SIZE } from "../App";
 import { HiUserCircle, HiX } from "react-icons/hi";
 import { formatISODate } from "../Service/Utils";
-import { PiBrainThin } from "react-icons/pi";
-import { listExpenseByExpenserAndDate } from "../db/expense";
 import { Pagination } from "./ProfitReport";
-import { MdAssignmentAdd, MdOutlineFamilyRestroom, MdOutlineMan } from "react-icons/md";
-import { FaHiking, FaUmbrellaBeach } from "react-icons/fa";
+import {
+  MdAssignmentAdd,
+  MdOutlineFamilyRestroom,
+  MdOutlineMan,
+} from "react-icons/md";
+import { FaUmbrellaBeach } from "react-icons/fa";
 import { IoMdRemoveCircle } from "react-icons/io";
 import { CiEdit } from "react-icons/ci";
 import { UserInfo } from "../db/users";
-import { listRoom } from "../db/room";
-import { FaBed, FaCouch } from "react-icons/fa6";
+import { createRoom, deleteRoom, listRoom, saveRoom } from "../db/room";
+import { FaBed } from "react-icons/fa6";
 
 export type Room = {
-  id: string,
-  internalName: string,
-  name: string,
-  status: string,
-  description?: string,
-  roomTypeId?: string,
-  coverImageUrl?: string,
-  imageUrls?: string[],
-  maxAdults?: number,
-  maxChildren?: number,
-  amenities?: string[],
-  numSingleBeds?: number,
-  numDoubleBeds?: number,
-  numQueenBeds?: number,
-  numHammocks?: number,
-  view?: string,
-  cleaningTime: string
-}
+  id?: string;
+  internalName: string;
+  name: string;
+  status: string;
+  description?: string;
+  roomTypeId?: string;
+  coverImageUrl?: string;
+  imageUrls?: string[];
+  maxAdults?: number;
+  maxChildren?: number;
+  amenities?: string[];
+  numSingleBeds?: number;
+  numDoubleBeds?: number;
+  numQueenBeds?: number;
+  numHammocks?: number;
+  view?: string;
+  cleaningTime: string;
+};
 
+const defaultRoom: Room = {
+  internalName: "",
+  name: "",
+  status: "ACTIVE",
+  cleaningTime: "PT1H",
+};
 
 type RoomManagerProps = {
-  chat: Chat,
-  authorizedUserId: string | null,
-  displayName: string,
-  activeMenu: any,
-  handleUnauthorized: any,
-  hasAuthority: (auth: string) => boolean
-}
+  chat: Chat;
+  authorizedUserId: string | null;
+  displayName: string;
+  activeMenu: any;
+  handleUnauthorized: any;
+  hasAuthority: (auth: string) => boolean;
+};
 
 export const RoomManager = memo((props: RoomManagerProps) => {
-
   const [rooms, setRooms] = useState<Room[]>([]);
   const [generatingExp, setGeneratingExp] = useState(false);
   const [classifyingExp, setClassifyingExp] = useState(false);
 
-  const [openDelExpenseModal, setOpenDelExpenseModal] = useState(false)
-  const [deletingRoom, setDeletingRoom] = useState<Room>()
+  const [openDelExpenseModal, setOpenDelExpenseModal] = useState(false);
+  const [deletingRoom, setDeletingRoom] = useState<Room>();
 
-  const [openEditingExpenseModal, setOpenEditingRoomModal] = useState(false)
-  const [editingRoom, setEditingRoom] = useState<Room | null>(null)
+  const [openEditingModal, setOpenEditingModal] = useState(false);
+  const [editingRoom, setEditingRoom] = useState<Room>(defaultRoom);
 
-  const [openUsersModal, setOpenUsersModal] = useState(false)
-  const [users, setUsers] = useState<UserInfo[]>([])
+  const [openUsersModal, setOpenUsersModal] = useState(false);
+  const [users, setUsers] = useState<UserInfo[]>([]);
 
-  const deleteAuthorized = props.hasAuthority('room:delete')
+  const deleteAuthorized = props.hasAuthority("room:delete");
 
   const [pagination, setPagination] = useState<Pagination>({
     pageNumber: 0,
     pageSize: DEFAULT_PAGE_SIZE,
     totalElements: 0,
-    totalPages: 0
-  })
+    totalPages: 0,
+  });
 
-  const expMsgRef = useRef<HTMLInputElement>(null)
+  const expMsgRef = useRef<HTMLInputElement>(null);
 
   const handlePaginationClick = (pageNumber: number) => {
-    console.log("Pagination nav bar click to page %s", pageNumber)
+    console.log("Pagination nav bar click to page %s", pageNumber);
     setPagination({
       ...pagination,
-      pageNumber: pageNumber < 0 ? 0 : pageNumber > pagination.totalPages - 1 ? pagination.totalPages - 1 : pageNumber
-    })
-  }
+      pageNumber:
+        pageNumber < 0
+          ? 0
+          : pageNumber > pagination.totalPages - 1
+          ? pagination.totalPages - 1
+          : pageNumber,
+    });
+  };
 
   const fetchRooms = async () => {
     try {
-      let byDate = formatISODate(new Date())
+      let byDate = formatISODate(new Date());
 
       let res = await listRoom(pagination.pageNumber, pagination.pageSize);
       if (res.status === 401 || res.status === 403) {
-        props.handleUnauthorized()
-        return
+        props.handleUnauthorized();
+        return;
       }
       if (res === undefined || res.status !== 200) {
-        console.warn("Invalid room response")
-        return
+        console.warn("Invalid room response");
+        return;
       }
       const data = res.data;
-      console.info("Fetched %s rooms by date %s", data.size, byDate)
-      let sortedExps = data.content
-      setRooms(sortedExps)
+      console.info("Fetched %s rooms by date %s", data.size, byDate);
+      let sortedExps = data.content;
+      setRooms(sortedExps);
       setPagination({
         pageNumber: data.number,
         pageSize: data.size,
         totalElements: data.totalElements,
-        totalPages: data.totalPages
-      })
+        totalPages: data.totalPages,
+      });
     } catch (e) {
-      console.error("Error while fetching rooms", e)
+      console.error("Error while fetching rooms", e);
       if (e instanceof Error) {
-        alert(e.message)
+        alert(e.message);
       }
     }
-  }
+  };
 
   useEffect(() => {
-    props.activeMenu()
-    fetchRooms()
+    props.activeMenu();
+    fetchRooms();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pagination.pageNumber]);
 
   useEffect(() => {
-    fetchRooms()
+    fetchRooms();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.chat]);
 
   const pageClass = (pageNum: number) => {
-    var noHighlight = "px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-    var highlight = "px-3 py-2 leading-tight text-bold text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"
+    var noHighlight =
+      "px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white";
+    var highlight =
+      "px-3 py-2 leading-tight text-bold text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white";
 
-    return pagination.pageNumber === pageNum ? highlight : noHighlight
-  }
-
-  const handleDeleteExpense = (exp: Room) => {
-  }
+    return pagination.pageNumber === pageNum ? highlight : noHighlight;
+  };
 
   //============ EXPENSE DELETION ====================//
   const deleletConfirmation = (exp: Room) => {
     setDeletingRoom(exp);
-    setOpenDelExpenseModal(true)
-  }
+    setOpenDelExpenseModal(true);
+  };
 
   const cancelDelExpense = () => {
-    setOpenDelExpenseModal(false)
-    setDeletingRoom(undefined)
-  }
+    setOpenDelExpenseModal(false);
+    setDeletingRoom(undefined);
+  };
 
-  const confirmDelExpense = () => {
+  const confirmDelExpense = async () => {
     try {
-      if (deletingRoom === undefined || deletingRoom === null) {
+      if (editingRoom === undefined || editingRoom === null) {
         return;
       }
-      handleDeleteExpense(deletingRoom)
+      let res = await deleteRoom(editingRoom.id!);
+      if (res.status === 401 || res.status === 403) {
+        props.handleUnauthorized();
+        return;
+      }
     } catch (e) {
-      console.error(e)
+      console.error(e);
     } finally {
-      setOpenDelExpenseModal(false)
-      setDeletingRoom(undefined)
+      setOpenDelExpenseModal(false);
+      setDeletingRoom(undefined);
     }
-
-  }
+  };
 
   //================= EDIT ===================//
-  const editRoom = (exp: Room | null) => {
-    setEditingRoom(exp)
-    setOpenEditingRoomModal(true)
-  }
+  const editRoom = (exp: Room) => {
+    setEditingRoom(exp);
+    setOpenEditingModal(true);
+  };
 
-  const cancelEditingExpense = () => {
-    setEditingRoom(null)
-    setOpenEditingRoomModal(false)
-    fetchRooms()
-  }
+  const cancelEditing = () => {
+    setEditingRoom(defaultRoom);
+    setOpenEditingModal(false);
+    fetchRooms();
+  };
 
-  const changeItemMessage = (e: ChangeEvent<HTMLInputElement>) => {
-    let iMsg = e.target.value
-  }
 
-  const changeItemName = (e: ChangeEvent<HTMLInputElement>) => {
-    let iName = e.target.value
-  }
 
-  const emptyItemName = () => {
-  }
+  const emptyTextInput = (fieldName: string) => {
+    setEditingRoom({
+      ...editingRoom,
+      [fieldName]: "",
+    });
+  };
 
-  const changeService = (e: ChangeEvent<HTMLInputElement>) => {
-    let iName = e.target.value
-  }
+  const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
 
-  const blurItemName = async () => {
-  }
+    setEditingRoom({
+      ...editingRoom,
+      [name]: value,
+    });
+  };
 
-  const changeUnitPrice = (e: ChangeEvent<HTMLInputElement>) => {
-    let v = e.target.value
-  }
 
-  const changeQuantity = (delta: number) => {
-    
-  }
 
-  const generatePopupExpense = async () => {
-    
-  }
 
-  const generateExpense = async (msg: string) => {
-  }
+  const changeQuantity = (fieldName: string, delta: number) => {
+    let currentValue = (editingRoom as any)[fieldName] ?? 0;
+    setEditingRoom({
+      ...editingRoom,
+      [fieldName]: currentValue + delta,
+    });
+  };
 
-  const processSaveExpense = () => {
-  }
 
-  const handleSaveAndCompleteExpense = () => {
-  }
 
-  const handleSaveAndContinueExpense = () => {
-  }
+  const processSaveExpense = async () => {
+    console.info("Saving room %s...", editingRoom.id ?? "new");
+    let res = null;
+    if (editingRoom.id === null || editingRoom.id === undefined) {
+      // New room
+      res = await createRoom(editingRoom);
+    } else {
+      // Existing room
+      res = await saveRoom(editingRoom);
+    }
+    if (res.status === 401 || res.status === 403) {
+      props.handleUnauthorized();
+      return;
+    }
+    if (res === undefined || res.status !== 200) {
+      console.warn("Invalid room save response");
+      return;
+    }
 
-  const chooseExpenser = async (exp: Room) => {
-  }
+    setOpenEditingModal(false);
+    fetchRooms();
+  };
+
+  const handleSave = () => {
+    processSaveExpense();
+  };
+
+
 
   const cancelSelectUser = () => {
-    setOpenUsersModal(false)
-  }
+    setOpenUsersModal(false);
+  };
 
-  const changeIssuer = async (user: UserInfo) => {
-  }
+  const changeIssuer = async () => {};
+
+
 
   return (
-    <div className="h-full pt-3 relative">
-      <div className="flex flex-row px-2 space-x-2 align-middle">
-        <Button size="xs" color="green" onClick={() => editRoom(null)}>
+    <div className="relative h-full pt-3">
+      <div className="flex flex-row space-x-2 px-2 align-middle">
+        <Button size="xs" color="green" onClick={() => editRoom(defaultRoom)}>
           <MdAssignmentAdd size="1.5em" className="mr-2" /> Add Room
         </Button>
       </div>
-      <div className="flex flex-col px-2 pt-2 space-y-1.5 divide-y">
+      <div className="flex flex-col space-y-1.5 divide-y px-2 pt-2">
         {rooms?.map((room) => {
           return (
-            <div key={room.id} className="flex flex-col w-full px-1 space-y-1 relative">
-              <div
-                className="font text-sm text-green-600"
-              >
+            <div
+              key={room.internalName}
+              className="relative flex w-full flex-col space-y-1 px-1"
+            >
+              <div className="font text-sm text-green-600">
                 {room.internalName} - {room.name}
               </div>
-              <div className="flex flex-row text-[10px] space-x-3">
+              <div className="flex flex-row space-x-3 text-[10px]">
                 {/* Adult icon and count */}
                 <div className="flex items-center space-x-1">
                   <MdOutlineMan size="1em" className="text-yellow-700" />
@@ -247,7 +277,10 @@ export const RoomManager = memo((props: RoomManagerProps) => {
                 </div>
                 {/* Child icon and count */}
                 <div className="flex items-center space-x-1">
-                  <MdOutlineFamilyRestroom size="1em" className="text-yellow-700" />
+                  <MdOutlineFamilyRestroom
+                    size="1em"
+                    className="text-yellow-700"
+                  />
                   <span>{room.maxChildren ?? 0}</span>
                 </div>
                 {/* Double bed icon and count */}
@@ -260,49 +293,100 @@ export const RoomManager = memo((props: RoomManagerProps) => {
                   <span>{room.numHammocks ?? 0}</span>
                 </div>
               </div>
-              <div className="flex flex-row space-x-2 absolute right-1 top-1">
-                {deleteAuthorized ? <IoMdRemoveCircle size="1.5em" className="mr-2 text-red-800 cursor-pointer"
-                  onClick={() => deleletConfirmation(room)}
-                /> : <></>}
-                <CiEdit size="1.5em" className="mr-2 text-green-800 cursor-pointer"
+              <div className="absolute right-1 top-1 flex flex-row space-x-2">
+                {deleteAuthorized ? (
+                  <IoMdRemoveCircle
+                    size="1.5em"
+                    className="mr-2 cursor-pointer text-red-800"
+                    onClick={() => deleletConfirmation(room)}
+                  />
+                ) : (
+                  <></>
+                )}
+                <CiEdit
+                  size="1.5em"
+                  className="mr-2 cursor-pointer text-green-800"
                   onClick={() => editRoom(room)}
                 />
               </div>
             </div>
-          )
+          );
         })}
       </div>
 
-      <nav className="flex items-center justify-between pt-4 absolute bottom-1" aria-label="Table navigation">
+      <nav
+        className="absolute bottom-1 flex items-center justify-between pt-4"
+        aria-label="Table navigation"
+      >
         <ul className="inline-flex items-center -space-x-px">
-          <li onClick={() => handlePaginationClick(pagination.pageNumber - 1)} className="block px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-            <svg className="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd"></path></svg>
+          <li
+            onClick={() => handlePaginationClick(pagination.pageNumber - 1)}
+            className="ml-0 block rounded-l-lg border border-gray-300 bg-white px-3 py-2 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+          >
+            <svg
+              className="h-5 w-5"
+              aria-hidden="true"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fillRule="evenodd"
+                d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                clipRule="evenodd"
+              ></path>
+            </svg>
           </li>
           <li onClick={() => handlePaginationClick(0)} className={pageClass(0)}>
             1
           </li>
-          <li hidden={pagination.pageNumber + 1 <= 1 || pagination.pageNumber + 1 >= pagination.totalPages}
+          <li
+            hidden={
+              pagination.pageNumber + 1 <= 1 ||
+              pagination.pageNumber + 1 >= pagination.totalPages
+            }
             aria-current="page"
-            className={pageClass(pagination.pageNumber)}>
+            className={pageClass(pagination.pageNumber)}
+          >
             {pagination.pageNumber + 1}
           </li>
-          <li hidden={pagination.totalPages <= 1}
+          <li
+            hidden={pagination.totalPages <= 1}
             onClick={() => handlePaginationClick(pagination.totalPages - 1)}
-            className={pageClass(pagination.totalPages - 1)}>
+            className={pageClass(pagination.totalPages - 1)}
+          >
             {pagination.totalPages}
           </li>
-          <li onClick={() => handlePaginationClick(pagination.pageNumber + 1)} className="block px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-            <svg className="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
+          <li
+            onClick={() => handlePaginationClick(pagination.pageNumber + 1)}
+            className="block rounded-r-lg border border-gray-300 bg-white px-3 py-2 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+          >
+            <svg
+              className="h-5 w-5"
+              aria-hidden="true"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fillRule="evenodd"
+                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                clipRule="evenodd"
+              ></path>
+            </svg>
           </li>
         </ul>
       </nav>
-
 
       <Modal show={openDelExpenseModal} onClose={cancelDelExpense}>
         <Modal.Header>Confirm</Modal.Header>
         <Modal.Body>
           <div>
-            <span>{deletingRoom === null ? "" : "Are you sure to delete [" + deletingRoom?.name + "]?"}</span>
+            <span>
+              {deletingRoom === null
+                ? ""
+                : "Are you sure to delete [" + deletingRoom?.name + "]?"}
+            </span>
           </div>
         </Modal.Body>
         <Modal.Footer className="flex justify-center gap-4">
@@ -314,77 +398,79 @@ export const RoomManager = memo((props: RoomManagerProps) => {
       </Modal>
 
       <Modal
-        show={openEditingExpenseModal}
+        show={openEditingModal}
         size="md"
         popup={true}
-        onClose={cancelEditingExpense}
+        onClose={cancelEditing}
         initialFocus={expMsgRef}
       >
         <Modal.Header />
         <Modal.Body>
-          <div className="space-y-6 px-6 pb-4 sm:pb-6 lg:px-8 xl:pb-8">
-            <div className="flex flex-col w-full">
-              <TextInput
-                id="itemMsg"
-                placeholder="3 ổ bánh mì 6k"
-                required={true}
-                value={editingRoom?.name}
-                onChange={changeItemMessage}
-                className="w-full"
-                rightIcon={() => generatingExp ?
-                  <Spinner aria-label="Default status example"
-                    className="w-14 h-10"
-                  />
-                  : <PiBrainThin
-                    onClick={() => generatePopupExpense()}
-                    className="pointer-events-auto cursor-pointer w-14 h-10"
-                  />
-                }
-                ref={expMsgRef}
-              />
-            </div>
-            <div className="flex flex-row w-full align-middle">
-              <div className="flex items-center w-2/5">
-                <Label
-                  htmlFor="itemName"
-                  value="Item Name"
-                />
+          <div className="w-full space-y-2 pb-2 sm:pb-6 lg:px-8 xl:pb-8">
+            <div className="flex w-full flex-col align-middle">
+              <div className="flex w-3/5 items-center">
+                <Label htmlFor="name" value="Room Name" />
               </div>
               <TextInput
-                id="itemName"
-                placeholder="Bánh mì"
+                id="name"
+                placeholder="Bungalow garden view"
                 required={true}
                 value={editingRoom?.name}
-                onChange={changeItemName}
-                onBlur={blurItemName}
+                onChange={handleTextChange}
                 className="w-full"
-                rightIcon={() => <HiX onClick={emptyItemName} />}
+                rightIcon={() => <HiX onClick={() => emptyTextInput("name")} />}
               />
             </div>
-            <div className="flex flex-row w-full align-middle">
-              <div className="flex items-center w-2/5">
-                <Label
-                  htmlFor="numAdults"
-                  value="Max Adults"
-                />
+            <div className="flex w-full flex-col align-middle">
+              <div className="flex w-3/5 items-center">
+                <Label htmlFor="internalName" value="Internal Name" />
               </div>
-              <div className="relative flex items-center w-full">
+              <TextInput
+                id="internalName"
+                placeholder="Bungalow garden view"
+                required={true}
+                value={editingRoom?.internalName}
+                onChange={handleTextChange}
+                className="w-full"
+                rightIcon={() => (
+                  <HiX onClick={() => emptyTextInput("internalName")} />
+                )}
+              />
+            </div>
+            <div className="flex w-full flex-row align-middle">
+              <div className="flex w-3/5 items-center">
+                <Label htmlFor="numAdults" value="Max Adults" />
+              </div>
+              <div className="relative flex w-32 items-center">
                 <button
                   type="button"
                   id="decrement-button"
                   data-input-counter-decrement="quantity-input"
-                  className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-s-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
-                  onClick={() => changeQuantity(-1)}
+                  className="h-11 rounded-s-lg border border-gray-300 bg-gray-100 p-3 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700"
+                  onClick={() => changeQuantity("maxAdults", -1)}
                 >
-                  <svg className="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
-                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h16" />
+                  <svg
+                    className="h-3 w-3 text-gray-900 dark:text-white"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 18 2"
+                  >
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M1 1h16"
+                    />
                   </svg>
                 </button>
                 <input
                   type="number"
                   id="numAdults"
-                  data-input-counter aria-describedby="helper-text-explanation"
-                  className="bg-gray-50 border-x-0 border-gray-300 h-11 text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  data-input-counter
+                  aria-describedby="helper-text-explanation"
+                  className="block h-11 w-full border-x-0 border-gray-300 bg-gray-50 py-2.5 text-center text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
                   placeholder="999"
                   required
                   value={editingRoom?.maxAdults}
@@ -394,39 +480,61 @@ export const RoomManager = memo((props: RoomManagerProps) => {
                   type="button"
                   id="increment-button"
                   data-input-counter-increment="quantity-input"
-                  className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-e-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
-                  onClick={() => changeQuantity(1)}
+                  className="h-11 rounded-e-lg border border-gray-300 bg-gray-100 p-3 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700"
+                  onClick={() => changeQuantity("maxAdults", 1)}
                 >
-                  <svg className="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 1v16M1 9h16" />
+                  <svg
+                    className="h-3 w-3 text-gray-900 dark:text-white"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 18 18"
+                  >
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M9 1v16M1 9h16"
+                    />
                   </svg>
                 </button>
               </div>
             </div>
-            <div className="flex flex-row w-full align-middle">
-              <div className="flex items-center w-2/5">
-                <Label
-                  htmlFor="numChildren"
-                  value="Max Children"
-                />
+            <div className="flex w-full flex-row align-middle">
+              <div className="flex w-3/5 items-center">
+                <Label htmlFor="numChildren" value="Max Children" />
               </div>
-              <div className="relative flex items-center w-full">
+              <div className="relative flex w-32 items-center">
                 <button
                   type="button"
                   id="decrement-button"
                   data-input-counter-decrement="quantity-input"
-                  className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-s-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
-                  onClick={() => changeQuantity(-1)}
+                  className="h-11 rounded-s-lg border border-gray-300 bg-gray-100 p-3 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700"
+                  onClick={() => changeQuantity("maxChildren", -1)}
                 >
-                  <svg className="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
-                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h16" />
+                  <svg
+                    className="h-3 w-3 text-gray-900 dark:text-white"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 18 2"
+                  >
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M1 1h16"
+                    />
                   </svg>
                 </button>
                 <input
                   type="number"
                   id="numChildren"
-                  data-input-counter aria-describedby="helper-text-explanation"
-                  className="bg-gray-50 border-x-0 border-gray-300 h-11 text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  data-input-counter
+                  aria-describedby="helper-text-explanation"
+                  className="block h-11 w-full border-x-0 border-gray-300 bg-gray-50 py-2.5 text-center text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
                   placeholder="999"
                   required
                   value={editingRoom?.maxChildren}
@@ -436,39 +544,61 @@ export const RoomManager = memo((props: RoomManagerProps) => {
                   type="button"
                   id="increment-button"
                   data-input-counter-increment="quantity-input"
-                  className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-e-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
-                  onClick={() => changeQuantity(1)}
+                  className="h-11 rounded-e-lg border border-gray-300 bg-gray-100 p-3 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700"
+                  onClick={() => changeQuantity("maxChildren", 1)}
                 >
-                  <svg className="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 1v16M1 9h16" />
+                  <svg
+                    className="h-3 w-3 text-gray-900 dark:text-white"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 18 18"
+                  >
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M9 1v16M1 9h16"
+                    />
                   </svg>
                 </button>
               </div>
             </div>
-            <div className="flex flex-row w-full align-middle">
-              <div className="flex items-center w-2/5">
-                <Label
-                  htmlFor="numSingleBeds"
-                  value="Num Single Beds"
-                />
+            <div className="flex w-full flex-row align-middle">
+              <div className="flex w-3/5 items-center">
+                <Label htmlFor="numSingleBeds" value="Num Single Beds" />
               </div>
-              <div className="relative flex items-center w-full">
+              <div className="relative flex w-32 items-center">
                 <button
                   type="button"
                   id="decrement-button"
                   data-input-counter-decrement="quantity-input"
-                  className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-s-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
-                  onClick={() => changeQuantity(-1)}
+                  className="h-11 rounded-s-lg border border-gray-300 bg-gray-100 p-3 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700"
+                  onClick={() => changeQuantity("numSingleBeds", -1)}
                 >
-                  <svg className="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
-                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h16" />
+                  <svg
+                    className="h-3 w-3 text-gray-900 dark:text-white"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 18 2"
+                  >
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M1 1h16"
+                    />
                   </svg>
                 </button>
                 <input
                   type="number"
                   id="numSingleBeds"
-                  data-input-counter aria-describedby="helper-text-explanation"
-                  className="bg-gray-50 border-x-0 border-gray-300 h-11 text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  data-input-counter
+                  aria-describedby="helper-text-explanation"
+                  className="block h-11 w-full border-x-0 border-gray-300 bg-gray-50 py-2.5 text-center text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
                   placeholder="999"
                   required
                   value={editingRoom?.numSingleBeds}
@@ -478,39 +608,61 @@ export const RoomManager = memo((props: RoomManagerProps) => {
                   type="button"
                   id="increment-button"
                   data-input-counter-increment="quantity-input"
-                  className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-e-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
-                  onClick={() => changeQuantity(1)}
+                  className="h-11 rounded-e-lg border border-gray-300 bg-gray-100 p-3 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700"
+                  onClick={() => changeQuantity("numSingleBeds", 1)}
                 >
-                  <svg className="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 1v16M1 9h16" />
+                  <svg
+                    className="h-3 w-3 text-gray-900 dark:text-white"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 18 18"
+                  >
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M9 1v16M1 9h16"
+                    />
                   </svg>
                 </button>
               </div>
             </div>
-            <div className="flex flex-row w-full align-middle">
-              <div className="flex items-center w-2/5">
-                <Label
-                  htmlFor="numDoubleBeds"
-                  value="Num Double Beds"
-                />
+            <div className="flex w-full flex-row align-middle">
+              <div className="flex w-3/5 items-center">
+                <Label htmlFor="numDoubleBeds" value="Num Double Beds" />
               </div>
-              <div className="relative flex items-center w-full">
+              <div className="relative flex w-32 items-center">
                 <button
                   type="button"
                   id="decrement-button"
                   data-input-counter-decrement="quantity-input"
-                  className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-s-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
-                  onClick={() => changeQuantity(-1)}
+                  className="h-11 rounded-s-lg border border-gray-300 bg-gray-100 p-3 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700"
+                  onClick={() => changeQuantity("numDoubleBeds", -1)}
                 >
-                  <svg className="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
-                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h16" />
+                  <svg
+                    className="h-3 w-3 text-gray-900 dark:text-white"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 18 2"
+                  >
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M1 1h16"
+                    />
                   </svg>
                 </button>
                 <input
                   type="number"
                   id="numDoubleBeds"
-                  data-input-counter aria-describedby="helper-text-explanation"
-                  className="bg-gray-50 border-x-0 border-gray-300 h-11 text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  data-input-counter
+                  aria-describedby="helper-text-explanation"
+                  className="block h-11 w-full border-x-0 border-gray-300 bg-gray-50 py-2.5 text-center text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
                   placeholder="999"
                   required
                   value={editingRoom?.numDoubleBeds}
@@ -520,39 +672,61 @@ export const RoomManager = memo((props: RoomManagerProps) => {
                   type="button"
                   id="increment-button"
                   data-input-counter-increment="quantity-input"
-                  className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-e-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
-                  onClick={() => changeQuantity(1)}
+                  className="h-11 rounded-e-lg border border-gray-300 bg-gray-100 p-3 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700"
+                  onClick={() => changeQuantity("numDoubleBeds", 1)}
                 >
-                  <svg className="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 1v16M1 9h16" />
+                  <svg
+                    className="h-3 w-3 text-gray-900 dark:text-white"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 18 18"
+                  >
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M9 1v16M1 9h16"
+                    />
                   </svg>
                 </button>
               </div>
             </div>
-            <div className="flex flex-row w-full align-middle">
-              <div className="flex items-center w-2/5">
-                <Label
-                  htmlFor="numQueenBeds"
-                  value="Num Queen Beds"
-                />
+            <div className="flex w-full flex-row align-middle">
+              <div className="flex w-3/5 items-center">
+                <Label htmlFor="numQueenBeds" value="Num Queen Beds" />
               </div>
-              <div className="relative flex items-center w-full">
+              <div className="relative flex w-32 items-center">
                 <button
                   type="button"
                   id="decrement-button"
                   data-input-counter-decrement="quantity-input"
-                  className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-s-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
-                  onClick={() => changeQuantity(-1)}
+                  className="h-11 rounded-s-lg border border-gray-300 bg-gray-100 p-3 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700"
+                  onClick={() => changeQuantity("numQueenBeds", -1)}
                 >
-                  <svg className="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
-                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h16" />
+                  <svg
+                    className="h-3 w-3 text-gray-900 dark:text-white"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 18 2"
+                  >
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M1 1h16"
+                    />
                   </svg>
                 </button>
                 <input
                   type="number"
                   id="numQueenBeds"
-                  data-input-counter aria-describedby="helper-text-explanation"
-                  className="bg-gray-50 border-x-0 border-gray-300 h-11 text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  data-input-counter
+                  aria-describedby="helper-text-explanation"
+                  className="block h-11 w-full border-x-0 border-gray-300 bg-gray-50 py-2.5 text-center text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
                   placeholder="999"
                   required
                   value={editingRoom?.numQueenBeds}
@@ -562,39 +736,61 @@ export const RoomManager = memo((props: RoomManagerProps) => {
                   type="button"
                   id="increment-button"
                   data-input-counter-increment="quantity-input"
-                  className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-e-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
-                  onClick={() => changeQuantity(1)}
+                  className="h-11 rounded-e-lg border border-gray-300 bg-gray-100 p-3 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700"
+                  onClick={() => changeQuantity("numQueenBeds", 1)}
                 >
-                  <svg className="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 1v16M1 9h16" />
+                  <svg
+                    className="h-3 w-3 text-gray-900 dark:text-white"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 18 18"
+                  >
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M9 1v16M1 9h16"
+                    />
                   </svg>
                 </button>
               </div>
             </div>
-            <div className="flex flex-row w-full align-middle">
-              <div className="flex items-center w-2/5">
-                <Label
-                  htmlFor="numHammocks"
-                  value="Num Hammocks"
-                />
+            <div className="flex w-full flex-row align-middle">
+              <div className="flex w-3/5 items-center">
+                <Label htmlFor="numHammocks" value="Num Hammocks" />
               </div>
-              <div className="relative flex items-center w-full">
+              <div className="relative flex w-32 items-center">
                 <button
                   type="button"
                   id="decrement-button"
                   data-input-counter-decrement="quantity-input"
-                  className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-s-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
-                  onClick={() => changeQuantity(-1)}
+                  className="h-11 rounded-s-lg border border-gray-300 bg-gray-100 p-3 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700"
+                  onClick={() => changeQuantity("numHammocks", -1)}
                 >
-                  <svg className="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
-                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h16" />
+                  <svg
+                    className="h-3 w-3 text-gray-900 dark:text-white"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 18 2"
+                  >
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M1 1h16"
+                    />
                   </svg>
                 </button>
                 <input
                   type="number"
                   id="numHammocks"
-                  data-input-counter aria-describedby="helper-text-explanation"
-                  className="bg-gray-50 border-x-0 border-gray-300 h-11 text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  data-input-counter
+                  aria-describedby="helper-text-explanation"
+                  className="block h-11 w-full border-x-0 border-gray-300 bg-gray-50 py-2.5 text-center text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
                   placeholder="999"
                   required
                   value={editingRoom?.numHammocks}
@@ -604,59 +800,39 @@ export const RoomManager = memo((props: RoomManagerProps) => {
                   type="button"
                   id="increment-button"
                   data-input-counter-increment="quantity-input"
-                  className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-e-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
-                  onClick={() => changeQuantity(1)}
+                  className="h-11 rounded-e-lg border border-gray-300 bg-gray-100 p-3 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700"
+                  onClick={() => changeQuantity("numHammocks", 1)}
                 >
-                  <svg className="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 1v16M1 9h16" />
+                  <svg
+                    className="h-3 w-3 text-gray-900 dark:text-white"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 18 18"
+                  >
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M9 1v16M1 9h16"
+                    />
                   </svg>
                 </button>
               </div>
             </div>
-            
-            <div className="w-full flex justify-center">
-              <Button onClick={handleSaveAndCompleteExpense} className="mx-2">
+
+            <div className="flex w-full justify-center">
+              <Button onClick={handleSave} className="mx-2">
                 Save
               </Button>
-              <Button onClick={cancelEditingExpense} className="mx-2">
+              <Button onClick={cancelEditing} className="mx-2">
                 Cancel
               </Button>
             </div>
           </div>
         </Modal.Body>
       </Modal>
-
-      <Modal
-        show={openUsersModal}
-        onClose={cancelSelectUser}
-        popup
-        dismissible
-      >
-        <Modal.Header></Modal.Header>
-        <Modal.Body>
-          <div className="flex flex-row items-center gap-2 space-x-2 w-full ">
-            {
-              users?.map(user => {
-                return (
-                  <div
-                    key={user.username}
-                    className="flex flex-col border-spacing-1 shadow-sm hover:shadow-lg rounded-lg items-center "
-                    onClick={() => changeIssuer(user)}
-                  >
-                    <HiUserCircle />
-                    <span className="text text-center">{user.lastName ? user.firstName + " " + user.lastName : user.firstName}</span>
-                  </div>
-                )
-              })
-            }
-          </div>
-        </Modal.Body>
-        <Modal.Footer className="flex justify-center gap-4">
-          <Button color="gray" onClick={cancelSelectUser}>
-            Cancel
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </div >
+    </div>
   );
-})
+});

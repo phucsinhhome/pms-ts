@@ -127,7 +127,7 @@ export const formatLocalTime = (utcHourMinuteTime: string) => {
 }
 
 export const formatISOTime = (date: Date) => {
-    // Format: 07/30/2024
+    // Format: 14:30:00
     return date.toLocaleTimeString("en-GB", {
         hour: '2-digit',
         minute: '2-digit',

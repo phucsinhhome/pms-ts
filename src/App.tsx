@@ -24,6 +24,7 @@ import { Button } from "flowbite-react";
 import { ReservationMap } from "./Components/ReservationMap";
 import { InvoiceMap } from "./Components/InvoiceMap";
 import { RoomManager } from "./Components/RoomManager";
+import { RatePlanManager } from "./Components/RatePlanManager";
 
 // Add a lotus image to your public folder or assets and use its path here
 
@@ -127,6 +128,12 @@ const menus = {
     path: 'roomman',
     displayName: 'Room',
     title: 'Room Management',
+    icon: <FaCalendarAlt size={28} />
+  },
+  ratePlan: {
+    path: 'rate-plan',
+    displayName: 'Rate Plan',
+    title: 'Rate Plan Management',
     icon: <FaCalendarAlt size={28} />
   },
 }
@@ -352,6 +359,14 @@ export const App = () => {
           displayName={fullName()}
           authorizedUserId={authorizedUserId}
           activeMenu={() => setActiveMenu(menus.room)}
+          handleUnauthorized={() => handleLogin()}
+          hasAuthority={(auth: string) => hasAuthority(auth)}
+        />} />
+        <Route path="rate-plan" element={<RatePlanManager
+          chat={getChat()}
+          displayName={fullName()}
+          authorizedUserId={authorizedUserId}
+          activeMenu={() => setActiveMenu(menus.ratePlan)}
           handleUnauthorized={() => handleLogin()}
           hasAuthority={(auth: string) => hasAuthority(auth)}
         />} />

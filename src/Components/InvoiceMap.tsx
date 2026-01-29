@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, Spinner } from "flowbite-react";
-import { DEFAULT_PAGE_SIZE } from "../App";
 import { formatISODate, addDays } from "../Service/Utils";
 import { listStayingAndComingInvoices } from "../db/invoice";
 import { Pagination } from "./ProfitReport";

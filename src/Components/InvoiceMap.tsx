@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, Spinner } from "flowbite-react";
-import { DEFAULT_PAGE_SIZE } from "../App";
 import { formatISODate, addDays } from "../Service/Utils";
 import { listStayingAndComingInvoices } from "../db/invoice";
 import { Pagination } from "./ProfitReport";
@@ -38,12 +37,15 @@ const invoiceIcons = {
   staying: <GiHouse className="text-blue-900 w-6" title="Staying" />
 }
 
+
 export const InvoiceMap = (props: InvoiceMapProps) => {
   const [invoices, setInvoices] = useState<InvoiceWindow[]>([])
   const [workDate, setWorkDate] = useState(new Date());
+  const INVOICE_MAP_DEFAULT_PAGE_SIZE = Number(process.env.REACT_APP_INVOICE_MAP_DEFAULT_PAGE_SIZE)
+
   const [pagination, setPagination] = useState<Pagination>({
     pageNumber: 0,
-    pageSize: DEFAULT_PAGE_SIZE,
+    pageSize: INVOICE_MAP_DEFAULT_PAGE_SIZE,
     totalElements: 0,
     totalPages: 0
   })

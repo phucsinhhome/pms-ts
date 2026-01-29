@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef, ChangeEvent, memo } from "react";
+import React, { useState, useEffect, useRef, memo } from "react";
 import { TextInput, Label, Modal, Button } from "flowbite-react";
 import { Chat, DEFAULT_PAGE_SIZE } from "../App";
-import { HiUserCircle, HiX } from "react-icons/hi";
+import { HiX } from "react-icons/hi";
 import { formatISODate } from "../Service/Utils";
 import { Pagination } from "./ProfitReport";
 import {
@@ -12,7 +12,6 @@ import {
 import { FaUmbrellaBeach } from "react-icons/fa";
 import { IoMdRemoveCircle } from "react-icons/io";
 import { CiEdit } from "react-icons/ci";
-import { UserInfo } from "../db/users";
 import { createRoom, deleteRoom, listRoom, saveRoom } from "../db/room";
 import { FaBed } from "react-icons/fa6";
 
@@ -41,6 +40,12 @@ const defaultRoom: Room = {
   name: "",
   status: "ACTIVE",
   cleaningTime: "PT1H",
+  maxAdults: 2,
+  maxChildren: 0,
+  numSingleBeds: 0,
+  numDoubleBeds: 1,
+  numQueenBeds: 0,
+  numHammocks: 2,
 };
 
 type RoomManagerProps = {
@@ -54,17 +59,11 @@ type RoomManagerProps = {
 
 export const RoomManager = memo((props: RoomManagerProps) => {
   const [rooms, setRooms] = useState<Room[]>([]);
-  const [generatingExp, setGeneratingExp] = useState(false);
-  const [classifyingExp, setClassifyingExp] = useState(false);
 
   const [openDelExpenseModal, setOpenDelExpenseModal] = useState(false);
-  const [deletingRoom, setDeletingRoom] = useState<Room>();
 
   const [openEditingModal, setOpenEditingModal] = useState(false);
   const [editingRoom, setEditingRoom] = useState<Room>(defaultRoom);
-
-  const [openUsersModal, setOpenUsersModal] = useState(false);
-  const [users, setUsers] = useState<UserInfo[]>([]);
 
   const deleteAuthorized = props.hasAuthority("room:delete");
 
@@ -144,14 +143,14 @@ export const RoomManager = memo((props: RoomManagerProps) => {
   };
 
   //============ EXPENSE DELETION ====================//
-  const deleletConfirmation = (exp: Room) => {
-    setDeletingRoom(exp);
+  const deleletConfirmation = (room: Room) => {
+    setEditingRoom(room);
     setOpenDelExpenseModal(true);
   };
 
   const cancelDelExpense = () => {
     setOpenDelExpenseModal(false);
-    setDeletingRoom(undefined);
+    setEditingRoom(defaultRoom);
   };
 
   const confirmDelExpense = async () => {
@@ -164,11 +163,16 @@ export const RoomManager = memo((props: RoomManagerProps) => {
         props.handleUnauthorized();
         return;
       }
+      if (res === undefined || res.status !== 200) {
+        console.warn("Invalid room deletion response");
+        return;
+      }
+      fetchRooms();
     } catch (e) {
       console.error(e);
     } finally {
       setOpenDelExpenseModal(false);
-      setDeletingRoom(undefined);
+      setEditingRoom(defaultRoom);
     }
   };
 
@@ -194,11 +198,11 @@ export const RoomManager = memo((props: RoomManagerProps) => {
   };
 
   const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
+    const { id, value } = event.target;
 
     setEditingRoom({
       ...editingRoom,
-      [name]: value,
+      [id]: value,
     });
   };
 
@@ -241,15 +245,6 @@ export const RoomManager = memo((props: RoomManagerProps) => {
   const handleSave = () => {
     processSaveExpense();
   };
-
-
-
-  const cancelSelectUser = () => {
-    setOpenUsersModal(false);
-  };
-
-  const changeIssuer = async () => {};
-
 
 
   return (
@@ -383,9 +378,9 @@ export const RoomManager = memo((props: RoomManagerProps) => {
         <Modal.Body>
           <div>
             <span>
-              {deletingRoom === null
+              {editingRoom === null
                 ? ""
-                : "Are you sure to delete [" + deletingRoom?.name + "]?"}
+                : "Are you sure to delete room [" + editingRoom?.name + "]?"}
             </span>
           </div>
         </Modal.Body>

@@ -14,7 +14,7 @@ export const getRoom = (roomId: string) => {
 
 export const saveRoom = (room: Room) => {
   console.info("Saving the room %s", room.name);
-  return roomApi.post('', room, {
+  return roomApi.post(`/${room.id}`, room, {
     headers: { 'Content-Type': 'application/json' }
   });
 }

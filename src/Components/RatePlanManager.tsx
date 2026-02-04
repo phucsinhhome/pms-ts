@@ -303,12 +303,12 @@ export const RatePlanManager = memo((props: RoomManagerProps) => {
                     size="1em"
                     className="text-yellow-700"
                   />
-                  <span>{room.appliedStartDate ? formatISODate(room.appliedStartDate) : "N/A"}</span>
+                  <span>{ "N/A"}</span>
                 </div>
                 {/* Double bed icon and count */}
                 <div className="flex items-center space-x-1">
                   <FaBed size="1em" className="text-yellow-700" />
-                  <span>{room.appliedEndDate ? formatISODate(room.appliedEndDate) : "N/A"}</span>
+                  <span>{ "N/A"}</span>
                 </div>
                 <div className="flex items-center space-x-1">
                   <FaUmbrellaBeach size="1em" className="text-yellow-700" />

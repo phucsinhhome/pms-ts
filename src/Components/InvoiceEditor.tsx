@@ -301,54 +301,61 @@ export const InvoiceEditor = (props: InvoiceProps) => {
 
 
   const handleSaveInvoice = async () => {
-    console.info("Prepare to save invoice")
-    if (invoice === undefined) {
-      return
-    }
-    if (invoice.guestName === null
-      || invoice.guestName === undefined
-      || invoice.guestName === ""
-      || invoice.guestName === Configs.invoice.initialInvoice.guestName) {
-      console.warn("Invalid guest name")
-      editGuestName()
-      return
-    }
-
-    console.log(invoice)
-
-    var inv = {
-      ...invoice,
-      creatorId: null,
-      createdBy: props.chat.username,
-    }
-
-    if (invoice.id === "new") {
-      inv = {
-        ...inv,
-        id: ''
-      }
-      console.info("Creating invoice...")
-      const res = await createInvoice(inv);
-      if (res.status !== 200) {
-        alert("Failed to create the invoice");
+    try {
+      console.info("Prepare to save invoice")
+      if (invoice === undefined) {
         return
       }
-      const createdInv: Invoice = res.data
-      const invoiceId = createdInv.id
-      console.info("Invoice %s has been created successfully", invoiceId);
-      navigate(`/invoice/${invoiceId}`, { state: { ...loc } });
+      if (invoice.guestName === null
+        || invoice.guestName === undefined
+        || invoice.guestName === ""
+        || invoice.guestName === Configs.invoice.initialInvoice.guestName) {
+        console.warn("Invalid guest name")
+        editGuestName()
+        return
+      }
 
-      return
-    }
+      console.log(invoice)
 
-    const res = await updateInvoice(inv);
-    if (res.status !== 200) {
-      console.error("Failed to save invoice %s", invoiceId);
-      return
+      var inv = {
+        ...invoice
+      }
+
+      if (invoice.id === "new") {
+        inv = {
+          ...inv,
+          id: '',
+          creatorId: null,
+          createdBy: props.chat.username,
+        }
+        console.info("Creating invoice...")
+        const res = await createInvoice(inv);
+        if (res.status !== 200) {
+          alert("Failed to create the invoice");
+          return
+        }
+        const createdInv: Invoice = res.data
+        const invoiceId = createdInv.id
+        console.info("Invoice %s has been created successfully", invoiceId);
+        navigate(`/invoice/${invoiceId}`, { state: { ...loc } });
+
+        return
+      }
+
+      const res = await updateInvoice(inv);
+      if (res.status !== 200) {
+        console.error("Failed to save invoice %s", invoiceId);
+        return
+      }
+      console.info("Invoice %s has been saved successfully", invoiceId);
+      setInvoice(res.data);
+      setDirty(false);
+    } catch (e) {
+      console.error("Error while saving invoice", e)
+      if (e instanceof Error) {
+        alert(e.message)
+      }
     }
-    console.info("Invoice %s has been saved successfully", invoiceId);
-    setInvoice(inv);
-    setDirty(false);
   }
 
   const createOrUpdateItem = () => {

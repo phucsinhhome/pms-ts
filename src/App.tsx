@@ -312,6 +312,7 @@ export const App = () => {
         <Route path="invoice" element={<InvoiceManager
           activeMenu={() => setActiveMenu(menus.invoice)}
           handleUnauthorized={() => handleLogin()}
+          hasAuthority={(auth:string) => hasAuthority(auth)}
         />} />
         <Route path="invoice-map" element={<InvoiceMap
           activeMenu={() => setActiveMenu(menus.invoice)}
@@ -323,6 +324,7 @@ export const App = () => {
           authorizedUserId={authorizedUserId}
           activeMenu={() => setActiveMenu(menus.invoice)}
           handleUnauthorized={() => handleLogin()}
+          hasAuthority={(auth: string) => hasAuthority(auth)}
         />} />
         <Route path="expense" element={<ExpenseManager
           chat={getChat()}

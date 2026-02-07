@@ -10,6 +10,7 @@ import { optionStyle, Pagination } from "./ProfitReport";
 import { GiHouse } from "react-icons/gi";
 import { IoMdMap, IoMdPersonAdd, IoMdRemoveCircle } from "react-icons/io";
 import { CiEdit } from "react-icons/ci";
+import { PERMISSION_INVOICE_DELETE } from "../db/permission";
 
 
 export type InvoiceItem = {
@@ -53,7 +54,8 @@ export type Issuer = {
 
 type InvoiceManagerProps = {
   activeMenu: any,
-  handleUnauthorized(): any
+  handleUnauthorized(): any,
+  hasAuthority: (auth: string) => boolean
 }
 
 
@@ -153,7 +155,7 @@ export const InvoiceManager = (props: InvoiceManagerProps) => {
 
   //================ DELETE INVOICE ==========================//
   const handleDeleteInvoice = (inv: Invoice) => {
-    if (!isDeleteable(inv)) {
+    if (!isDeleteable()) {
       console.warn("Can not delete the paid invoice")
       return
     }
@@ -188,14 +190,11 @@ export const InvoiceManager = (props: InvoiceManagerProps) => {
     }
   }
 
-  const isDeleteable = (inv: Invoice) => {
-    if (inv.prepaied) {
+  const isDeleteable = () => {
+    if (!props.hasAuthority(PERMISSION_INVOICE_DELETE)) {
       return false
     }
-    if (inv.paymentMethod === null || inv.paymentMethod === undefined || inv.paymentMethod === "") {
-      return true
-    }
-    return false
+    return true
   }
 
   const changeFilterGName = (e: ChangeEvent<HTMLInputElement>) => {
@@ -309,7 +308,7 @@ export const InvoiceManager = (props: InvoiceManagerProps) => {
               </div>
               <div className="flex flex-row items-center space-x-2 absolute right-1 top-2">
                 {
-                  isDeleteable(inv) ?
+                  isDeleteable() ?
                     <IoMdRemoveCircle size="1.5em" className="mr-2 text-red-800 cursor-pointer"
                       onClick={() => handleDeleteInvoice(inv)}
                     />

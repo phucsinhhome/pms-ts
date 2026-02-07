@@ -4,10 +4,11 @@ const reportApi: AxiosInstance = axios.create({
     baseURL: `${process.env.REACT_APP_PROFIT_SERVICE_ENDPOINT}`,
     withCredentials: true
 });
-// reportApi
-//     .interceptors
-//     .request
-//     .use(configureAccessToken, (error) => Promise.reject(error));
+// profileApi
+const profileApi: AxiosInstance = axios.create({
+    baseURL: `${process.env.REACT_APP_PROFILE_ENDPOINT}`,
+    withCredentials: true
+}); 
 
 // expenseApi
 const expenseApi: AxiosInstance = axios.create({
@@ -168,6 +169,7 @@ export {
     configApi,
     classificationApi,
     statusApi,
+    profileApi,
     userApi,
     psBaseApi
 }

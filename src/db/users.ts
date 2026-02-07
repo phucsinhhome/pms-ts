@@ -18,16 +18,6 @@ export const getUsers: Issuer[] = [{
     displayName: "Kha Trần"
 }]
 
-export const getProfile = () => {
-    console.info("Get user profile");
-    return fetch(`${process.env.REACT_APP_USER_ENDPOINT}/profile`, {
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        credentials: 'include'
-    });
-}
-
 export const listUsers = (page: number, size: number) => {
     console.info("List the users");
     return userApi.get(`/`, { params: { page: page, size: size } });

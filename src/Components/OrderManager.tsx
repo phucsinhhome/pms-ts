@@ -67,13 +67,6 @@ type OrderManagerProps = {
   handleUnauthorized: any
 }
 
-const menuDisplayMappings: { [key: string]: string } = {
-  food: 'FOO',
-  baverage: 'BEV',
-  breakfast: 'BRE',
-  other: 'OTH'
-}
-
 export const OrderManager = (props: OrderManagerProps) => {
   const [orders, setOrders] = useState<Order[]>([])
   const [filteredName, setFilteredName] = useState('')
@@ -357,7 +350,7 @@ export const OrderManager = (props: OrderManagerProps) => {
                   }
                   <div className="flex flex-row items-center w-14">
                     <HiOutlineClock />
-                    <span className="font font-semibold text-red-950 text-[14px]">{menuDisplayMappings[order.group]}</span>
+                    <span className="font font-semibold text-red-950 text-[14px]">{order.group}</span>
                   </div>
                 </div>
               </div>

@@ -2,15 +2,6 @@ import { PaymentMethod } from "../Components/InvoiceEditor"
 
 export const paymentMethods: PaymentMethod[] = [
     {
-        id: "cash",
-        name: "Cash",
-        feeRate: 0,
-        template: "invoice_without_transfer_fee",
-        srcLargeImg: "/cash.svg",
-        paymentInfo: "/payment/cash.jpeg",
-        defaultIssuerId: "khatran"
-    },
-    {
         id: "creditCard",
         name: "Credit Card",
         feeRate: 0.025,
@@ -18,6 +9,15 @@ export const paymentMethods: PaymentMethod[] = [
         srcLargeImg: "/mastercard.svg",
         paymentInfo: "/payment/creditcard.jpeg",
         defaultIssuerId: "minhtran"
+    },
+    {
+        id: "cash",
+        name: "Cash",
+        feeRate: 0,
+        template: "invoice_without_transfer_fee",
+        srcLargeImg: "/cash.svg",
+        paymentInfo: "/payment/cash.jpeg",
+        defaultIssuerId: "khatran"
     },
     {
         id: "momo",

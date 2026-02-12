@@ -662,23 +662,11 @@ export const Inventory = (props: InventoryProps) => {
   }
 
   return (
-    <div className="px-2 h-full pt-3 relative">
-      <div className="flex flex-row px-0.5 py-2 space-x-3">
+    <div className="px-2 h-full">
+      <div className="flex flex-row px-0.5 py-2 space-x-1">
         <Button size="xs" color="green" onClick={addProduct}>
           <MdAssignmentAdd size="1.5em" className="mr-2" /> Add
         </Button>
-        <Button size="xs" color="green" onClick={updateAvailability}>
-          <MdOutlineBrowserUpdated size="1.5em" className="mr-2" /> Update availability
-        </Button>
-      </div>
-      <div className="flex flex-row items-center space-x-1 overflow-scroll pb-1">
-        {
-          pGroups.map((group) => <Label key={group.groupId} onClick={() => activateGroup(group.name)}
-            className={optionStyle(group.name === activeGroup)}
-          >{group.displayName}</Label>)
-        }
-      </div>
-      <div className="pb-2">
         <TextInput
           id="filteredName"
           placeholder="Enter product name to search"
@@ -689,9 +677,31 @@ export const Inventory = (props: InventoryProps) => {
           className="w-full"
           rightIcon={() => <HiX onClick={emptyFilterText} />}
         />
+        {/* <Button size="xs" color="green" onClick={updateAvailability}>
+          <MdOutlineBrowserUpdated size="1.5em" className="mr-2" /> Update availability
+        </Button> */}
       </div>
+      <div className="flex flex-row items-center space-x-1 overflow-scroll pb-1">
+        {
+          pGroups.map((group) => <Label key={group.groupId} onClick={() => activateGroup(group.name)}
+            className={optionStyle(group.name === activeGroup)}
+          >{group.displayName}</Label>)
+        }
+      </div>
+      {/* <div className="pb-2">
+        <TextInput
+          id="filteredName"
+          placeholder="Enter product name to search"
+          type="text"
+          required={true}
+          value={filteredName}
+          onChange={changeFilteredName}
+          className="w-full"
+          rightIcon={() => <HiX onClick={emptyFilterText} />}
+        />
+      </div> */}
       <div>
-        <div className="flex flex-col space-y-1">
+        <div className="flex-1 flex-col space-y-1 overflow-y-auto">
           {products?.map((product) => {
             return (
               <div
@@ -771,27 +781,33 @@ export const Inventory = (props: InventoryProps) => {
           })}
         </div>
       </div>
-      <div className="flex flex-row items-center justify-between absolute bottom-1">
-        <nav className="flex items-center justify-between pt-2" aria-label="Table navigation">
-          <ul className="inline-flex items-center -space-x-px">
-            <li onClick={() => handlePaginationClick(pagination.pageNumber - 1)} className="block px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-              <svg className="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd"></path></svg>
-            </li>
-            <li onClick={() => handlePaginationClick(0)} className={pageClass(0)}>
-              1
-            </li>
-            <li hidden={pagination.pageNumber + 1 <= 1 || pagination.pageNumber + 1 >= pagination.totalPages} aria-current="page" className={pageClass(pagination.pageNumber)}>
-              {pagination.pageNumber + 1}
-            </li>
-            <li hidden={pagination.totalPages <= 1} onClick={() => handlePaginationClick(pagination.totalPages - 1)} className={pageClass(pagination.totalPages - 1)}>
-              {pagination.totalPages}
-            </li>
-            <li onClick={() => handlePaginationClick(pagination.pageNumber + 1)} className="block px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-              <svg className="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
-            </li>
-          </ul>
-        </nav>
+      <div className="flex flex-row h-12 w-11/12 absolute left-1/2 -translate-x-1/2 bottom-0 rounded-3xl shadow-sm opacity-70 bg-slate-300 px-2 space-x-2 items-center justify-center">
+        <div className="flex flex-row items-center justify-between">
+          <nav className="flex items-center justify-between" aria-label="Table navigation">
+            <ul className="inline-flex items-center -space-x-px">
+              <li onClick={() => handlePaginationClick(pagination.pageNumber - 1)} className="block px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                <svg className="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd"></path></svg>
+              </li>
+              <li onClick={() => handlePaginationClick(0)} className={pageClass(0)}>
+                1
+              </li>
+              <li hidden={pagination.pageNumber + 1 <= 1 || pagination.pageNumber + 1 >= pagination.totalPages} aria-current="page" className={pageClass(pagination.pageNumber)}>
+                {pagination.pageNumber + 1}
+              </li>
+              <li hidden={pagination.totalPages <= 1} onClick={() => handlePaginationClick(pagination.totalPages - 1)} className={pageClass(pagination.totalPages - 1)}>
+                {pagination.totalPages}
+              </li>
+              <li onClick={() => handlePaginationClick(pagination.pageNumber + 1)} className="block px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                <svg className="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
+              </li>
+            </ul>
+          </nav>
+        </div>
+        <Button size="xs" color="green" onClick={updateAvailability}>
+          <MdOutlineBrowserUpdated size="1.5em" className="mr-2" /> Update availability
+        </Button>
       </div>
+
 
 
       <Modal

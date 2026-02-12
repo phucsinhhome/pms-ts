@@ -278,8 +278,8 @@ export const App = () => {
 
 
   return (
-    <div className="flex flex-col relative h-[100dvh] min-h-0 bg-slate-50">
-      <div className="mt-2">
+    <div className="flex flex-col relative h-[100dvh] bg-slate-500">
+      <div className="mt-1">
         {
           activeMenu === menus.home ? (
             <div className="mt-36 grid grid-cols-3 gap-5 p-2 grid-rows-2">
@@ -312,7 +312,7 @@ export const App = () => {
               >
                 &larr; Back
               </button>
-              <span className="text-2xl font-semibold text-green-900">{activeMenu.title}</span>
+              <span className="text-xl font-semibold text-green-900">{activeMenu.title}</span>
             </div>
           )
         }

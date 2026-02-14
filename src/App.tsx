@@ -19,12 +19,11 @@ import { TourManager } from "./Components/TourManager";
 import { TourEditor } from "./Components/TourEditor";
 import UserProfile from "./Components/UserProfile";
 import { Welcome } from "./Components/Welcome";
-import { getProfile } from "./db/users";
 import { Button } from "flowbite-react";
 import { ReservationMap } from "./Components/ReservationMap";
 import { InvoiceMap } from "./Components/InvoiceMap";
 import { RoomManager } from "./Components/RoomManager";
-import { RatePlanManager } from "./Components/RatePlanManager";
+import { getProfile } from "./db/profile";
 
 // Add a lotus image to your public folder or assets and use its path here
 
@@ -138,7 +137,6 @@ const menus = {
   },
 }
 
-
 export const App = () => {
   const [chat, setChat] = useState<Chat>(defaultChat);
   const [authorizedUserId, setAuthorizedUserId] = useState<string | null>(null)
@@ -153,45 +151,44 @@ export const App = () => {
   const [roles, setRoles] = useState<string[]>([]);
   const [authorities, setAuthorities] = useState<string[]>([]);
   const [userProfile, setUserProfile] = useState<any>(null);
+  const AUTH_URL =`${process.env.REACT_APP_PS_BASE_URL}/oauth2login.html`;
 
   const fetchUserProfile = async () => {
     try {
       const rsp = await getProfile();
-      if (rsp.ok) {
-        const json = await rsp.json();
-        if (!json) {
-          console.warn("No user profile found in the response");
+      if(rsp.status===200){
+        // Check if the final URL differs from the requested URL
+        if (rsp.request.responseURL && AUTH_URL === rsp.request.responseURL) {
+          console.warn("User is not authorized, redirecting to login.");
           return;
         }
-        const data: any = json;
-        console.info("User profile fetched:", data);
-        setUserProfile(data);
+        const profile: any = rsp.data;
+        console.info("User profile fetched:", profile);
+        if(!profile){
+          console.warn("No user profile data found");
+          return;
+        }
+        setUserProfile(profile);
         setChat({
-          id: data.sub,
-          firstName: data.given_name || "",
-          lastName: data.family_name || "",
-          username: data.preferred_username || data.email || "",
-          email: data.email,
-          iss: data.iss,
-          tenantId: data.organization?data.organization[0]:""
+          id: profile.sub,
+          firstName: profile.given_name || "",
+          lastName: profile.family_name || "",
+          username: profile.preferred_username || profile.email || "",
+          email: profile.email,
+          iss: profile.iss,
+          tenantId: profile.organization?profile.organization[0]:""
         });
-        setAuthorizedUserId(data.sub);
-        setAuthorities(data.authorities || []);
-        setRoles(data.roles || []);
-      } else if (rsp.status === 401) {
-        setUserProfile(null);
-        setChat(defaultChat);
-        setAuthorizedUserId(null);
-        setAuthorities([]);
-        setRoles([]);
-        handleLogin();
-      } else {
-        setUserProfile(null);
-        setChat(defaultChat);
-        setAuthorizedUserId(null);
-        setAuthorities([]);
-        setRoles([]);
+        setAuthorizedUserId(profile.sub);
+        setAuthorities(profile.authorities || []);
+        setRoles(profile.roles || []);
+        return;
       }
+      console.error("Failed to fetch user profile, status:", rsp.status);
+      setUserProfile(null);
+      setChat(defaultChat);
+      setAuthorizedUserId(null);
+      setAuthorities([]);
+      setRoles([]);
     } catch (error) {
       console.error("Failed to fetch user profile:", error);
       setUserProfile(null);
@@ -241,7 +238,7 @@ export const App = () => {
   const getChat = () => chat ? chat : defaultChat
 
   const handleLogin = () => {
-    window.location.href = `${process.env.REACT_APP_PS_BASE_URL}/oauth2login.html`;
+    window.location.href = AUTH_URL;
   };
 
   const handleSignOut = () => {
@@ -326,6 +323,7 @@ export const App = () => {
         <Route path="invoice" element={<InvoiceManager
           activeMenu={() => setActiveMenu(menus.invoice)}
           handleUnauthorized={() => handleLogin()}
+          hasAuthority={(auth:string) => hasAuthority(auth)}
         />} />
         <Route path="invoice-map" element={<InvoiceMap
           activeMenu={() => setActiveMenu(menus.invoice)}
@@ -337,6 +335,7 @@ export const App = () => {
           authorizedUserId={authorizedUserId}
           activeMenu={() => setActiveMenu(menus.invoice)}
           handleUnauthorized={() => handleLogin()}
+          hasAuthority={(auth: string) => hasAuthority(auth)}
         />} />
         <Route path="expense" element={<ExpenseManager
           chat={getChat()}

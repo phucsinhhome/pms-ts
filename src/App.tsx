@@ -278,8 +278,8 @@ export const App = () => {
 
 
   return (
-    <div className="flex flex-col relative h-[100dvh] bg-slate-500">
-      <div className="mt-1">
+    <div className="flex flex-col relative h-[100dvh] mx-2">
+      <div className="h-12 mt-1">
         {
           activeMenu === menus.home ? (
             <div className="mt-36 grid grid-cols-3 gap-5 p-2 grid-rows-2">

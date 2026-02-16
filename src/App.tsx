@@ -218,13 +218,17 @@ export const App = () => {
   }, [authorities]);
 
   const filterMenus = () => {
-    setFilteredMenus(
-      authorities.length === 0
+    let fM =authorities.length === 0
         ? [menus.home] // Default to home if no roles
         : menuOrder
           .filter(menuKey => authorities.some(role => role.toLowerCase() === menuKey.toLowerCase()))
           .map(menuKey => menus[menuKey as keyof typeof menus]) // Type guard to remove undefined values
-    );
+    setFilteredMenus(fM);
+    setActiveMenu(menus.home);
+    navigate('/home');
+    // fM.includes(menus.invoice)? setActiveMenu(menus.invoice) : setActiveMenu(menus.home);
+    // window.location.href = `${process.env.REACT_APP_PS_BASE_URL}/${activeMenu.path}`;
+    // navigate(`/${activeMenu.path}`);
   }
 
   const hasAuthority = (auth: string): boolean => {
@@ -279,10 +283,10 @@ export const App = () => {
 
   return (
     <div className="flex flex-col relative h-[100dvh] mx-2">
-      <div className="h-12 mt-1">
+      <div>
         {
           activeMenu === menus.home ? (
-            <div className="mt-36 grid grid-cols-3 gap-5 p-2 grid-rows-2">
+            <div className="mt-36 grid grid-cols-3 grid-rows-2 ">
               {
                 filteredMenus.map((menu) => (
                   <Link
@@ -293,7 +297,7 @@ export const App = () => {
                     onClick={() => setActiveMenu(menu)}
                   >
                     <div className="flex flex-col items-center">
-                      <span className="mb-1 text-green-800">{menu.icon}</span>
+                      <span className="text-green-800">{menu.icon}</span>
                       <span className="text-green-900 font-semibold">{menu.displayName}</span>
                     </div>
                   </Link>
@@ -301,7 +305,7 @@ export const App = () => {
               }
             </div>
           ) : (
-            <div className="pl-2 flex items-center space-x-2">
+            <div className="pl-2 flex items-center space-x-2 ">
               <button
                 className="bg-green-100 text-green-900 px-2 py-1 rounded hover:bg-green-200 mr-2 border border-green-700"
                 onClick={() => {

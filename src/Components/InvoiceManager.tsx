@@ -101,32 +101,37 @@ export const InvoiceManager = (props: InvoiceManagerProps) => {
   };
 
   const fetchInvoices = async () => {
-    const fd = formatISODate(fromDate);
-    console.info("Loading invoices from date %s...", fd);
+    try {
+      const fd = formatISODate(fromDate);
+      console.info("Loading invoices from date %s...", fd);
 
-    const rsp = await listStayingAndComingInvoices(
-      fd,
-      pagination.pageNumber,
-      pagination.pageSize,
-    );
-    if (rsp.status === 401 || rsp.status === 403) {
-      props.handleUnauthorized();
-      return;
-    }
-    if (rsp.status === 200) {
-      const data = rsp.data;
-      setInvoices(data.content);
-      if (data.totalPages !== pagination.totalPages) {
-        var page = {
-          pageNumber: data.number,
-          pageSize: data.size,
-          totalElements: data.totalElements,
-          totalPages: data.totalPages,
-        };
-        setPagination(page);
+      const rsp = await listStayingAndComingInvoices(
+        fd,
+        pagination.pageNumber,
+        pagination.pageSize,
+      );
+      if (rsp.status === 401 || rsp.status === 403) {
+        props.handleUnauthorized();
+        return;
       }
-    } else {
-      // Optionally handle non-200 status
+      if (rsp.status === 200) {
+        const data = rsp.data;
+        setInvoices(data.content);
+        if (data.totalPages !== pagination.totalPages) {
+          var page = {
+            pageNumber: data.number,
+            pageSize: data.size,
+            totalElements: data.totalElements,
+            totalPages: data.totalPages,
+          };
+          setPagination(page);
+        }
+      } else {
+        // Optionally handle non-200 status
+        setInvoices([]);
+      }
+    } catch (e) {
+      console.error(e);
       setInvoices([]);
     }
   };

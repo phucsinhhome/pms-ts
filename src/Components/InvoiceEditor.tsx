@@ -311,35 +311,36 @@ export const InvoiceEditor = (props: InvoiceProps) => {
   const location = useLocation();
 
   const fetchInvoice = async (invoiceId: string) => {
-    if (invoiceId === "new") {
-      try {
-        const rsp = await fetchReservations();
-        if (rsp.status === 401 || rsp.status === 403) {
-          props.handleUnauthorized();
-          return;
-        }
-        if (rsp.status === 200) {
-          setReservations(rsp.data.content);
-          setFilteredReservations(rsp.data.content);
-          setResFilteredText("");
-          setOpenChooseResModal(true);
-        } else {
+    try {
+      if (invoiceId === "new") {
+        try {
+          const rsp = await fetchReservations();
+          if (rsp.status === 401 || rsp.status === 403) {
+            props.handleUnauthorized();
+            return;
+          }
+          if (rsp.status === 200) {
+            setReservations(rsp.data.content);
+            setFilteredReservations(rsp.data.content);
+            setResFilteredText("");
+            setOpenChooseResModal(true);
+          } else {
+            setReservations([]);
+            setFilteredReservations([]);
+            setResFilteredText("");
+            setOpenChooseResModal(true);
+          }
+        } catch (e) {
           setReservations([]);
           setFilteredReservations([]);
           setResFilteredText("");
           setOpenChooseResModal(true);
+          console.error("Error while fetching reservations", e);
         }
-      } catch (e) {
-        setReservations([]);
-        setFilteredReservations([]);
-        setResFilteredText("");
-        setOpenChooseResModal(true);
-        console.error("Error while fetching reservations", e);
-        if (e instanceof Error) {
-          alert(e.message);
-        }
+        return;
       }
-      return;
+    } catch (e) {
+      console.error("Error while fetching invoice", e);
     }
     try {
       const rsp = await getInvoice(invoiceId);
@@ -367,9 +368,6 @@ export const InvoiceEditor = (props: InvoiceProps) => {
       setInvoice(data);
     } catch (e) {
       console.error("Error while fetching invoice", e);
-      if (e instanceof Error) {
-        alert(e.message);
-      }
     }
   };
 
@@ -407,9 +405,6 @@ export const InvoiceEditor = (props: InvoiceProps) => {
         })
         .catch((e) => {
           console.error("Error while fetching products", e);
-          if (e instanceof Error) {
-            alert(e.message);
-          }
         });
     }
 
@@ -448,10 +443,6 @@ export const InvoiceEditor = (props: InvoiceProps) => {
         };
         console.info("Creating invoice...");
         const res = await createInvoice(inv);
-        if (res.status !== 200) {
-          alert("Failed to create the invoice");
-          return;
-        }
         const createdInv: Invoice = res.data;
         const invoiceId = createdInv.id;
         console.info("Invoice %s has been created successfully", invoiceId);
@@ -470,9 +461,6 @@ export const InvoiceEditor = (props: InvoiceProps) => {
       setDirty(false);
     } catch (e) {
       console.error("Error while saving invoice", e);
-      if (e instanceof Error) {
-        alert(e.message);
-      }
     }
   };
 
@@ -1081,9 +1069,6 @@ export const InvoiceEditor = (props: InvoiceProps) => {
     } catch (e) {
       setPGroups([]);
       console.error("Error while fetching product groups", e);
-      if (e instanceof Error) {
-        alert(e.message);
-      }
     }
   };
 
@@ -1292,7 +1277,7 @@ export const InvoiceEditor = (props: InvoiceProps) => {
                   onClick={selectPaymentMethod}
                 >
                   {invoice.paymentMethod ? (
-                      <img
+                    <img
                       src={
                         paymentMethods.find(
                           (ic) => ic.id === selectedPaymentMethod.id,
@@ -1342,35 +1327,44 @@ export const InvoiceEditor = (props: InvoiceProps) => {
           </div>
         </form>
 
-        <div className="flex flex-row w-full space-x-3 justify-center">
+        <div className="flex w-full flex-row justify-center space-x-3">
           <Button
             size="xs"
             color="green"
             onClick={() => editItem(defaultEmptyItem.origin)}
           >
             <div className="flex flex-col items-center">
-              <MdAssignmentAdd size="1.5em" /><span>Add</span>
+              <MdAssignmentAdd size="1.5em" />
+              <span>Add</span>
             </div>
           </Button>
           <Button size="xs" color="green" onClick={handleMenuClick}>
             <div className="flex flex-col items-center">
-            <MdAssignmentAdd size="1.5em"/><span>Menu</span>
+              <MdAssignmentAdd size="1.5em" />
+              <span>Menu</span>
             </div>
           </Button>
-          <Button size="xs" color="green" onClick={showViewInv} disabled={!invoice.paymentMethod}>
+          <Button
+            size="xs"
+            color="green"
+            onClick={showViewInv}
+            disabled={!invoice.paymentMethod}
+          >
             <div className="flex flex-col items-center">
-              <FaEye size="1.5em"/><span>View</span>
-              </div>
-            </Button>
+              <FaEye size="1.5em" />
+              <span>View</span>
+            </div>
+          </Button>
           <Button size="xs" color="green" onClick={handleSaveInvoice}>
             <div className="flex flex-col items-center">
-            <HiSave size="1.5em" /><span>Save</span>
+              <HiSave size="1.5em" />
+              <span>Save</span>
             </div>
           </Button>
           <Button size="xs" color="green" onClick={() => navigate(-1)}>
             <div className="flex flex-col items-center">
-            <IoMdArrowBack size="1.5em" />
-            <span>Back</span>
+              <IoMdArrowBack size="1.5em" />
+              <span>Back</span>
             </div>
           </Button>
         </div>

@@ -78,7 +78,7 @@ const menus = {
     icon: <FaBoxes size={28} />
   },
   reservation: {
-    path: 'room',
+    path: 'reservation-map',
     displayName: 'Reservation',
     title: 'Reservation Management',
     icon: <FaCalendarAlt size={28} />
@@ -306,7 +306,7 @@ export const App = () => {
               }
             </div>
           ) : (
-            <div className="pl-2 flex items-center space-x-2 ">
+            <div className="flex items-center space-x-2 ">
               <button
                 className="bg-green-100 text-green-900 px-2 py-1 rounded hover:bg-green-200 mr-2 border border-green-700"
                 onClick={() => {
@@ -317,7 +317,7 @@ export const App = () => {
               >
                 &larr; Back
               </button>
-              <span className="text-xl font-semibold text-green-900">{activeMenu.title}</span>
+              <span className="text-sm font-semibold text-green-900">{activeMenu.title}</span>
             </div>
           )
         }
@@ -355,7 +355,7 @@ export const App = () => {
           activeMenu={() => setActiveMenu(menus.reservation)}
           handleUnauthorized={() => handleLogin()}
         />} />
-        <Route path="room" element={<ReservationMap
+        <Route path="reservation-map" element={<ReservationMap
           activeMenu={() => setActiveMenu(menus.reservation)}
           handleUnauthorized={() => handleLogin()}
         />} />

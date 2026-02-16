@@ -114,9 +114,6 @@ export const RoomManager = memo((props: RoomManagerProps) => {
       });
     } catch (e) {
       console.error("Error while fetching rooms", e);
-      if (e instanceof Error) {
-        alert(e.message);
-      }
     }
   };
 
@@ -188,8 +185,6 @@ export const RoomManager = memo((props: RoomManagerProps) => {
     fetchRooms();
   };
 
-
-
   const emptyTextInput = (fieldName: string) => {
     setEditingRoom({
       ...editingRoom,
@@ -206,9 +201,6 @@ export const RoomManager = memo((props: RoomManagerProps) => {
     });
   };
 
-
-
-
   const changeQuantity = (fieldName: string, delta: number) => {
     let currentValue = (editingRoom as any)[fieldName] ?? 0;
     setEditingRoom({
@@ -216,8 +208,6 @@ export const RoomManager = memo((props: RoomManagerProps) => {
       [fieldName]: currentValue + delta,
     });
   };
-
-
 
   const processSaveExpense = async () => {
     console.info("Saving room %s...", editingRoom.id ?? "new");
@@ -246,133 +236,137 @@ export const RoomManager = memo((props: RoomManagerProps) => {
     processSaveExpense();
   };
 
-
   return (
-    <div className="relative h-full pt-3">
-      <div className="flex flex-row space-x-2 px-2 align-middle">
+    <>
+      <div className="flex flex-row space-x-2 px-2 align-middle"></div>
+      <div className="flex-1 flex-col overflow-y-auto">
+        <div className="flex flex-col divide-y">
+          {rooms?.map((room) => {
+            return (
+              <div
+                key={room.internalName}
+                className="relative flex w-full flex-col space-y-1 px-1"
+              >
+                <div className="font text-sm text-green-600">
+                  {room.internalName} - {room.name}
+                </div>
+                <div className="flex flex-row space-x-3 text-[10px]">
+                  {/* Adult icon and count */}
+                  <div className="flex items-center space-x-1">
+                    <MdOutlineMan size="1em" className="text-yellow-700" />
+                    <span>{room.maxAdults ?? 0}</span>
+                  </div>
+                  {/* Child icon and count */}
+                  <div className="flex items-center space-x-1">
+                    <MdOutlineFamilyRestroom
+                      size="1em"
+                      className="text-yellow-700"
+                    />
+                    <span>{room.maxChildren ?? 0}</span>
+                  </div>
+                  {/* Double bed icon and count */}
+                  <div className="flex items-center space-x-1">
+                    <FaBed size="1em" className="text-yellow-700" />
+                    <span>{room.numDoubleBeds ?? 0}</span>
+                  </div>
+                  <div className="flex items-center space-x-1">
+                    <FaUmbrellaBeach size="1em" className="text-yellow-700" />
+                    <span>{room.numHammocks ?? 0}</span>
+                  </div>
+                </div>
+                <div className="absolute right-1 top-1 flex flex-row space-x-2">
+                  {deleteAuthorized ? (
+                    <IoMdRemoveCircle
+                      size="1.5em"
+                      className="mr-2 cursor-pointer text-red-800"
+                      onClick={() => deleletConfirmation(room)}
+                    />
+                  ) : (
+                    <></>
+                  )}
+                  <CiEdit
+                    size="1.5em"
+                    className="mr-2 cursor-pointer text-green-800"
+                    onClick={() => editRoom(room)}
+                  />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        <div className="h-14"></div>
+      </div>
+      <div className="absolute bottom-1 left-1/2 flex w-11/12 -translate-x-1/2 flex-row items-center justify-center space-x-2 rounded-3xl bg-slate-300 opacity-70 shadow-sm">
+        <nav
+          className="flex items-center justify-between"
+          aria-label="Table navigation"
+        >
+          <ul className="inline-flex items-center -space-x-px">
+            <li
+              onClick={() => handlePaginationClick(pagination.pageNumber - 1)}
+              className="ml-0 block rounded-l-lg border border-gray-300 bg-white px-3 py-2 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+            >
+              <svg
+                className="h-5 w-5"
+                aria-hidden="true"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                  clipRule="evenodd"
+                ></path>
+              </svg>
+            </li>
+            <li
+              onClick={() => handlePaginationClick(0)}
+              className={pageClass(0)}
+            >
+              1
+            </li>
+            <li
+              hidden={
+                pagination.pageNumber + 1 <= 1 ||
+                pagination.pageNumber + 1 >= pagination.totalPages
+              }
+              aria-current="page"
+              className={pageClass(pagination.pageNumber)}
+            >
+              {pagination.pageNumber + 1}
+            </li>
+            <li
+              hidden={pagination.totalPages <= 1}
+              onClick={() => handlePaginationClick(pagination.totalPages - 1)}
+              className={pageClass(pagination.totalPages - 1)}
+            >
+              {pagination.totalPages}
+            </li>
+            <li
+              onClick={() => handlePaginationClick(pagination.pageNumber + 1)}
+              className="block rounded-r-lg border border-gray-300 bg-white px-3 py-2 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+            >
+              <svg
+                className="h-5 w-5"
+                aria-hidden="true"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                  clipRule="evenodd"
+                ></path>
+              </svg>
+            </li>
+          </ul>
+        </nav>
         <Button size="xs" color="green" onClick={() => editRoom(defaultRoom)}>
           <MdAssignmentAdd size="1.5em" className="mr-2" /> Add Room
         </Button>
       </div>
-      <div className="flex flex-col space-y-1.5 divide-y px-2 pt-2">
-        {rooms?.map((room) => {
-          return (
-            <div
-              key={room.internalName}
-              className="relative flex w-full flex-col space-y-1 px-1"
-            >
-              <div className="font text-sm text-green-600">
-                {room.internalName} - {room.name}
-              </div>
-              <div className="flex flex-row space-x-3 text-[10px]">
-                {/* Adult icon and count */}
-                <div className="flex items-center space-x-1">
-                  <MdOutlineMan size="1em" className="text-yellow-700" />
-                  <span>{room.maxAdults ?? 0}</span>
-                </div>
-                {/* Child icon and count */}
-                <div className="flex items-center space-x-1">
-                  <MdOutlineFamilyRestroom
-                    size="1em"
-                    className="text-yellow-700"
-                  />
-                  <span>{room.maxChildren ?? 0}</span>
-                </div>
-                {/* Double bed icon and count */}
-                <div className="flex items-center space-x-1">
-                  <FaBed size="1em" className="text-yellow-700" />
-                  <span>{room.numDoubleBeds ?? 0}</span>
-                </div>
-                <div className="flex items-center space-x-1">
-                  <FaUmbrellaBeach size="1em" className="text-yellow-700" />
-                  <span>{room.numHammocks ?? 0}</span>
-                </div>
-              </div>
-              <div className="absolute right-1 top-1 flex flex-row space-x-2">
-                {deleteAuthorized ? (
-                  <IoMdRemoveCircle
-                    size="1.5em"
-                    className="mr-2 cursor-pointer text-red-800"
-                    onClick={() => deleletConfirmation(room)}
-                  />
-                ) : (
-                  <></>
-                )}
-                <CiEdit
-                  size="1.5em"
-                  className="mr-2 cursor-pointer text-green-800"
-                  onClick={() => editRoom(room)}
-                />
-              </div>
-            </div>
-          );
-        })}
-      </div>
-
-      <nav
-        className="absolute bottom-1 flex items-center justify-between pt-4"
-        aria-label="Table navigation"
-      >
-        <ul className="inline-flex items-center -space-x-px">
-          <li
-            onClick={() => handlePaginationClick(pagination.pageNumber - 1)}
-            className="ml-0 block rounded-l-lg border border-gray-300 bg-white px-3 py-2 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-          >
-            <svg
-              className="h-5 w-5"
-              aria-hidden="true"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fillRule="evenodd"
-                d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                clipRule="evenodd"
-              ></path>
-            </svg>
-          </li>
-          <li onClick={() => handlePaginationClick(0)} className={pageClass(0)}>
-            1
-          </li>
-          <li
-            hidden={
-              pagination.pageNumber + 1 <= 1 ||
-              pagination.pageNumber + 1 >= pagination.totalPages
-            }
-            aria-current="page"
-            className={pageClass(pagination.pageNumber)}
-          >
-            {pagination.pageNumber + 1}
-          </li>
-          <li
-            hidden={pagination.totalPages <= 1}
-            onClick={() => handlePaginationClick(pagination.totalPages - 1)}
-            className={pageClass(pagination.totalPages - 1)}
-          >
-            {pagination.totalPages}
-          </li>
-          <li
-            onClick={() => handlePaginationClick(pagination.pageNumber + 1)}
-            className="block rounded-r-lg border border-gray-300 bg-white px-3 py-2 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-          >
-            <svg
-              className="h-5 w-5"
-              aria-hidden="true"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fillRule="evenodd"
-                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                clipRule="evenodd"
-              ></path>
-            </svg>
-          </li>
-        </ul>
-      </nav>
-
       <Modal show={openDelExpenseModal} onClose={cancelDelExpense}>
         <Modal.Header>Confirm</Modal.Header>
         <Modal.Body>
@@ -828,6 +822,6 @@ export const RoomManager = memo((props: RoomManagerProps) => {
           </div>
         </Modal.Body>
       </Modal>
-    </div>
+    </>
   );
 });

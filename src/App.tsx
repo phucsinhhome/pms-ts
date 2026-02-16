@@ -126,7 +126,7 @@ const menus = {
     icon: <FaBoxes size={28} />
   },
   room: {
-    path: 'roomman',
+    path: 'room',
     displayName: 'Room',
     title: 'Room Management',
     icon: <FaBed size={28} />
@@ -359,7 +359,7 @@ export const App = () => {
           activeMenu={() => setActiveMenu(menus.reservation)}
           handleUnauthorized={() => handleLogin()}
         />} />
-        <Route path="roomman" element={<RoomManager
+        <Route path="room" element={<RoomManager
           chat={getChat()}
           displayName={fullName()}
           authorizedUserId={authorizedUserId}

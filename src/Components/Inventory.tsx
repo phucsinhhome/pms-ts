@@ -763,7 +763,7 @@ export const Inventory = (props: InventoryProps) => {
 
   return (
     <>
-      <div className="flex h-12 flex-row space-x-3 px-0.5 py-2 items-center">
+      <div className="flex h-12 flex-row space-x-3 py-2 items-center">
         <Button size="xs" color="green" onClick={addProduct}>
           <MdAssignmentAdd size="1.5em" className="mr-2" /> Add
         </Button>
@@ -781,7 +781,7 @@ export const Inventory = (props: InventoryProps) => {
           <MdOutlineBrowserUpdated size="1.5em" className="mr-2" /> Update availability
         </Button> */}
       </div>
-      <div className="flex h-12 flex-row items-center space-x-1 overflow-x-auto pb-1">
+      <div className="flex h-12 flex-row items-center space-x-1 overflow-x-auto">
         {pGroups.map((group) => (
           <Label
             key={group.groupId}
@@ -924,7 +924,7 @@ export const Inventory = (props: InventoryProps) => {
         <div className="h-12">
         </div>
       </div>
-      <div className="absolute bottom-0 left-1/2 flex w-11/12 -translate-x-1/2 flex-row items-center justify-center space-x-2 rounded-3xl bg-slate-300 px-2 opacity-70 shadow-sm">
+      <div className="absolute bottom-1 left-1/2 flex w-11/12 -translate-x-1/2 flex-row items-center justify-center space-x-2 rounded-3xl bg-slate-300 opacity-70 shadow-sm">
         <div className="flex flex-row items-center justify-between">
           <nav
             className="flex items-center justify-between"

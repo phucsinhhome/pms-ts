@@ -261,7 +261,7 @@ export const InvoiceManager = (props: InvoiceManagerProps) => {
 
   return (
     <>
-      <div className="flex flex-row items-center space-x-4 px-2 pb-2">
+      <div className="flex flex-row items-center space-x-4 pb-2">
         <Link to="../invoice/new" relative="route">
           <Button size="xs" color="green">
             <IoMdPersonAdd size="1.5em" className="mr-2" />
@@ -288,7 +288,7 @@ export const InvoiceManager = (props: InvoiceManagerProps) => {
           </Button>
         </Link> */}
       </div>
-      <div className="flex flex-row space-x-2 px-4 py-2">
+      <div className="flex flex-row space-x-2 py-2">
         {filterOpts.map((opt) => {
           return (
             <Link
@@ -356,7 +356,7 @@ export const InvoiceManager = (props: InvoiceManagerProps) => {
         </div>
         <div className="h-14"></div>
       </div>
-      <div className="absolute bottom-0 left-1/2 flex w-11/12 -translate-x-1/2 flex-row items-center justify-center space-x-2 rounded-3xl bg-slate-300 px-2 opacity-70 shadow-sm">
+      <div className="absolute bottom-1 left-1/2 flex w-11/12 -translate-x-1/2 flex-row items-center justify-center space-x-2 rounded-3xl bg-slate-300 opacity-70 shadow-sm">
         <nav
           className="flex flex-row items-center justify-between"
           aria-label="Table navigation"

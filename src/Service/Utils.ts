@@ -77,6 +77,21 @@ export const formatISODateTime = (date: Date) => {
     return date.toISOString().substring(0, 19)
 }
 
+export const formatLocaleDate = (date: Date) => {
+    let formattedDate = date.toLocaleDateString("en-CA", {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false,
+        timeZoneName: 'short' // Optional: adds your zone (e.g., GMT+7)
+    });
+    console.info("Formatted date: %s", formattedDate)
+    return formattedDate.substring(0, 10)
+}
+
 export const formatDatePartition = (date: Date) => {
     // Format: 2024/07/30
     var isoDateString = formatISODate(date)

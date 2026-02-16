@@ -10,10 +10,8 @@ import {
 import { Chat, DEFAULT_PAGE_SIZE } from "../App";
 import { HiX } from "react-icons/hi";
 import {
-  addDays,
   formatISODate,
-  formatISODateTime,
-  formatISOHourMinute,
+  formatLocaleDate,
 } from "../Service/Utils";
 import { Pagination } from "./ProfitReport";
 import {
@@ -49,7 +47,7 @@ const defaultRatePlan: RatePlan = {
   status: "ACTIVE",
   tenantId: "",
   appliedStartDate: new Date(),
-  appliedEndDate: addDays(new Date(), 30),
+  appliedEndDate: new Date(),
   baseOccupancy: 2,
   basePrice: 500000,
 };
@@ -211,16 +209,22 @@ export const RatePlanManager = memo((props: RoomManagerProps) => {
     });
   };
 
-  const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { id, value } = event.target;
-    const timePart = formatISODateTime(
-      editingRatePlan[id as keyof RatePlan] as Date,
-    ).split("T")[1];
+  const handleDateChange = (date: Date, id: string) => {
+    console.info("Date input change detected: %s and %s", date, id);
+    let eD = editingRatePlan[id as keyof RatePlan] as Date;
+    console.info("Current date value: %s", formatLocaleDate(eD));
+    let nD = new Date(date);
+
+    nD.setHours(eD.getHours());
+    nD.setMinutes(0);
+    nD.setSeconds(0);
+    nD.setMilliseconds(0);
     setEditingRatePlan({
       ...editingRatePlan,
-      [id]: new Date(value + "T" + timePart),
+      [id]: nD,
     });
   };
+
   const handleTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = event.target;
     let hourNum = parseInt(value, 10);
@@ -236,8 +240,6 @@ export const RatePlanManager = memo((props: RoomManagerProps) => {
     date.setMinutes(0);
     date.setSeconds(0);
     date.setMilliseconds(0);
-    const formattedValue = formatISODateTime(date);
-    console.info("Parsed time: %s", formattedValue);
     setEditingRatePlan({
       ...editingRatePlan,
       [id]: date,
@@ -495,8 +497,8 @@ export const RatePlanManager = memo((props: RoomManagerProps) => {
                   id="appliedStartDate"
                   required={true}
                   type="date"
-                  value={formatISODate(editingRatePlan?.appliedStartDate)}
-                  onChange={handleDateChange}
+                  value={formatLocaleDate(editingRatePlan?.appliedStartDate)}
+                  onSelectedDateChanged={(date) => handleDateChange(date, "appliedStartDate")}
                 />
                 <TextInput
                   id="appliedStartDate"
@@ -518,8 +520,8 @@ export const RatePlanManager = memo((props: RoomManagerProps) => {
                   id="appliedEndDate"
                   required={true}
                   type="date"
-                  value={formatISODate(editingRatePlan?.appliedEndDate)}
-                  onChange={handleDateChange}
+                  value={formatLocaleDate(editingRatePlan?.appliedEndDate)}
+                  onSelectedDateChanged={(date) => handleDateChange(date, "appliedEndDate")}
                 />
                 <TextInput
                   id="appliedEndDate"

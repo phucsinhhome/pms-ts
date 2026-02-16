@@ -263,7 +263,7 @@ export const InvoiceManager = (props: InvoiceManagerProps) => {
     <>
       <div className="flex flex-row items-center space-x-4 px-2 pb-2">
         <Link to="../invoice/new" relative="route">
-          <Button size="md" color="green">
+          <Button size="xs" color="green">
             <IoMdPersonAdd size="1.5em" className="mr-2" />
             Add{" "}
           </Button>
@@ -288,7 +288,7 @@ export const InvoiceManager = (props: InvoiceManagerProps) => {
           </Button>
         </Link> */}
       </div>
-      <div className="flex flex-row space-x-2 px-4">
+      <div className="flex flex-row space-x-2 px-4 py-2">
         {filterOpts.map((opt) => {
           return (
             <Link
@@ -303,55 +303,58 @@ export const InvoiceManager = (props: InvoiceManagerProps) => {
           );
         })}
       </div>
-      <div className="mt-2 flex flex-col space-y-1.5 divide-y">
-        {invoices?.map((inv) => {
-          return (
-            <div className="relative flex flex-col px-2" key={inv.id}>
-              <div className="flex flex-row space-x-2">
-                <div className="font font-sans text-green-800">
-                  {inv.guestName}
+      <div className="flex-1 flex-col overflow-y-auto">
+        <div className="flex flex-col divide-y space-y-2">
+          {invoices?.map((inv) => {
+            return (
+              <div className="relative flex flex-col px-2" key={inv.id}>
+                <div className="flex flex-row space-x-2">
+                  <div className="font font-sans text-green-800">
+                    {inv.guestName}
+                  </div>
+                  <div className="flex flex-row  items-center space-x-1 ">
+                    <GiHouse />
+                    <span className="font font-mono text-[12px]">
+                      {inv.rooms}
+                    </span>
+                  </div>
                 </div>
-                <div className="flex flex-row  items-center space-x-1 ">
-                  <GiHouse />
-                  <span className="font font-mono text-[12px]">
-                    {inv.rooms}
+                <div className="flex flex-row items-center space-x-1 text-[12px]">
+                  <Moment format="DD.MM">{new Date(inv.checkOutDate)}</Moment>
+                  <div className="w-24 pl-2">
+                    <span>{formatVND(inv.subTotal)}</span>
+                  </div>
+                  <span className="font w-8 font-mono">
+                    {inv.prepaied ? "TT" : "TS"}
                   </span>
+                  <span className="font font-mono">{inv.issuer}</span>
+                </div>
+                <div className="absolute right-1 top-2 flex flex-row items-center space-x-2">
+                  {isDeleteable() ? (
+                    <IoMdRemoveCircle
+                      size="1.5em"
+                      className="mr-2 cursor-pointer text-red-800"
+                      onClick={() => handleDeleteInvoice(inv)}
+                    />
+                  ) : (
+                    <div></div>
+                  )}
+                  <Link
+                    to={inv.id}
+                    state={{
+                      pageNumber: pagination.pageNumber,
+                      pageSize: pagination.pageSize,
+                    }}
+                    className="hove"
+                  >
+                    <CiEdit size="1.5em" className="mr-2 text-green-800" />
+                  </Link>
                 </div>
               </div>
-              <div className="flex flex-row items-center space-x-1 text-[12px]">
-                <Moment format="DD.MM">{new Date(inv.checkOutDate)}</Moment>
-                <div className="w-24 pl-2">
-                  <span>{formatVND(inv.subTotal)}</span>
-                </div>
-                <span className="font w-8 font-mono">
-                  {inv.prepaied ? "TT" : "TS"}
-                </span>
-                <span className="font font-mono">{inv.issuer}</span>
-              </div>
-              <div className="absolute right-1 top-2 flex flex-row items-center space-x-2">
-                {isDeleteable() ? (
-                  <IoMdRemoveCircle
-                    size="1.5em"
-                    className="mr-2 cursor-pointer text-red-800"
-                    onClick={() => handleDeleteInvoice(inv)}
-                  />
-                ) : (
-                  <div></div>
-                )}
-                <Link
-                  to={inv.id}
-                  state={{
-                    pageNumber: pagination.pageNumber,
-                    pageSize: pagination.pageSize,
-                  }}
-                  className="hove"
-                >
-                  <CiEdit size="1.5em" className="mr-2 text-green-800" />
-                </Link>
-              </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
+        <div className="h-14"></div>
       </div>
       <div className="absolute bottom-0 left-1/2 flex w-11/12 -translate-x-1/2 flex-row items-center justify-center space-x-2 rounded-3xl bg-slate-300 px-2 opacity-70 shadow-sm">
         <nav

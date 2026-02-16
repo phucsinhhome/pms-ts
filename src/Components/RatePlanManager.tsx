@@ -457,7 +457,7 @@ export const RatePlanManager = memo((props: RoomManagerProps) => {
           <div className="h-full w-full space-y-2 pb-2 sm:pb-6 lg:px-8 xl:pb-8">
             <div className="flex w-full flex-col align-middle">
               <div className="flex w-3/5 items-center">
-                <Label htmlFor="name" value="Room Name" />
+                <Label htmlFor="name" value="Plan Name" />
               </div>
               <TextInput
                 id="name"
@@ -471,7 +471,7 @@ export const RatePlanManager = memo((props: RoomManagerProps) => {
             </div>
             <div className="flex w-full flex-col align-middle">
               <div className="flex w-3/5 items-center">
-                <Label htmlFor="description" value="Internal Name" />
+                <Label htmlFor="description" value="Description" />
               </div>
               <TextInput
                 id="description"

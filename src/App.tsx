@@ -25,6 +25,7 @@ import { InvoiceMap } from "./Components/InvoiceMap";
 import { RoomManager } from "./Components/RoomManager";
 import { RatePlanManager } from "./Components/RatePlanManager";
 import { getProfile } from "./db/profile";
+import { FaBed, FaMoneyBill } from "react-icons/fa6";
 
 // Add a lotus image to your public folder or assets and use its path here
 
@@ -128,13 +129,13 @@ const menus = {
     path: 'roomman',
     displayName: 'Room',
     title: 'Room Management',
-    icon: <FaCalendarAlt size={28} />
+    icon: <FaBed size={28} />
   },
   'rate-plan': {
     path: 'rate-plan',
     displayName: 'Rate Plan',
     title: 'Rate Plan Management',
-    icon: <FaCalendarAlt size={28} />
+    icon: <FaMoneyBill size={28} />
   },
 }
 

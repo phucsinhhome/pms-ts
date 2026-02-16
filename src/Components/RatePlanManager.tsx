@@ -1,8 +1,20 @@
 import React, { useState, useEffect, useRef, memo } from "react";
-import { TextInput, Label, Modal, Button, Datepicker, Checkbox } from "flowbite-react";
+import {
+  TextInput,
+  Label,
+  Modal,
+  Button,
+  Datepicker,
+  Checkbox,
+} from "flowbite-react";
 import { Chat, DEFAULT_PAGE_SIZE } from "../App";
 import { HiX } from "react-icons/hi";
-import { addDays, formatISODate, formatISODateTime, formatISOHourMinute } from "../Service/Utils";
+import {
+  addDays,
+  formatISODate,
+  formatISODateTime,
+  formatISOHourMinute,
+} from "../Service/Utils";
 import { Pagination } from "./ProfitReport";
 import {
   MdAssignmentAdd,
@@ -57,7 +69,8 @@ export const RatePlanManager = memo((props: RoomManagerProps) => {
   const [openDelModal, setOpenDelModal] = useState(false);
 
   const [openEditingModal, setOpenEditingModal] = useState(false);
-  const [editingRatePlan, setEditingRatePlan] = useState<RatePlan>(defaultRatePlan);
+  const [editingRatePlan, setEditingRatePlan] =
+    useState<RatePlan>(defaultRatePlan);
 
   const deleteAuthorized = props.hasAuthority("rate-plan:delete");
 
@@ -78,8 +91,8 @@ export const RatePlanManager = memo((props: RoomManagerProps) => {
         pageNumber < 0
           ? 0
           : pageNumber > pagination.totalPages - 1
-            ? pagination.totalPages - 1
-            : pageNumber,
+          ? pagination.totalPages - 1
+          : pageNumber,
     });
   };
 
@@ -182,8 +195,6 @@ export const RatePlanManager = memo((props: RoomManagerProps) => {
     fetchRatePlans();
   };
 
-
-
   const emptyTextInput = (fieldName: string) => {
     setEditingRatePlan({
       ...editingRatePlan,
@@ -202,7 +213,9 @@ export const RatePlanManager = memo((props: RoomManagerProps) => {
 
   const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = event.target;
-    const timePart = formatISODateTime(editingRatePlan[id as keyof RatePlan] as Date).split("T")[1];
+    const timePart = formatISODateTime(
+      editingRatePlan[id as keyof RatePlan] as Date,
+    ).split("T")[1];
     setEditingRatePlan({
       ...editingRatePlan,
       [id]: new Date(value + "T" + timePart),
@@ -211,13 +224,19 @@ export const RatePlanManager = memo((props: RoomManagerProps) => {
   const handleTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = event.target;
     let hourNum = parseInt(value, 10);
-    let validHour = isNaN(hourNum) ? 0 : hourNum > 23 ? 23 : hourNum < 0 ? 0 : hourNum;
+    let validHour = isNaN(hourNum)
+      ? 0
+      : hourNum > 23
+      ? 23
+      : hourNum < 0
+      ? 0
+      : hourNum;
     let date = editingRatePlan[id as keyof RatePlan] as Date;
     date.setHours(validHour);
     date.setMinutes(0);
     date.setSeconds(0);
     date.setMilliseconds(0);
-    const formattedValue = formatISODateTime(date)
+    const formattedValue = formatISODateTime(date);
     console.info("Parsed time: %s", formattedValue);
     setEditingRatePlan({
       ...editingRatePlan,
@@ -244,7 +263,6 @@ export const RatePlanManager = memo((props: RoomManagerProps) => {
       [fieldName]: delta,
     });
   };
-
 
   const processSave = async () => {
     console.info("Saving rate plan %s...", editingRatePlan.id ?? "new");
@@ -273,133 +291,139 @@ export const RatePlanManager = memo((props: RoomManagerProps) => {
     processSave();
   };
 
-
   return (
-    <div className="relative h-full pt-3">
-      <div className="flex flex-row space-x-2 px-2 align-middle">
-        <Button size="xs" color="green" onClick={() => editRatePlan(defaultRatePlan)}>
+    <>
+      <div className="flex flex-row space-x-2 align-middle"></div>
+      <div className="flex-1 flex-col overflow-y-auto">
+        <div className="flex flex-col divide-y">
+          {ratePlans?.map((room) => {
+            return (
+              <div
+                key={room.id}
+                className="relative flex w-full flex-col space-y-1 px-1"
+              >
+                <div className="font text-sm text-green-600">{room.name}</div>
+                <div className="flex flex-row space-x-3 text-[10px]">
+                  {/* Adult icon and count */}
+                  <div className="flex items-center space-x-1">
+                    <MdOutlineMan size="1em" className="text-yellow-700" />
+                    <span>{room.roomId}</span>
+                  </div>
+                  {/* Child icon and count */}
+                  <div className="flex items-center space-x-1">
+                    <MdOutlineFamilyRestroom
+                      size="1em"
+                      className="text-yellow-700"
+                    />
+                    <span>{"N/A"}</span>
+                  </div>
+                  {/* Double bed icon and count */}
+                  <div className="flex items-center space-x-1">
+                    <FaBed size="1em" className="text-yellow-700" />
+                    <span>{"N/A"}</span>
+                  </div>
+                  <div className="flex items-center space-x-1">
+                    <FaUmbrellaBeach size="1em" className="text-yellow-700" />
+                    <span>{room.basePrice ?? 0}</span>
+                  </div>
+                </div>
+                <div className="absolute right-1 top-1 flex flex-row space-x-2">
+                  {deleteAuthorized ? (
+                    <IoMdRemoveCircle
+                      size="1.5em"
+                      className="mr-2 cursor-pointer text-red-800"
+                      onClick={() => deleletConfirmation(room)}
+                    />
+                  ) : (
+                    <></>
+                  )}
+                  <CiEdit
+                    size="1.5em"
+                    className="mr-2 cursor-pointer text-green-800"
+                    onClick={() => editRatePlan(room)}
+                  />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        <div className="h-14"></div>
+      </div>
+      <div className="absolute bottom-1 left-1/2 flex w-11/12 -translate-x-1/2 flex-row items-center justify-center space-x-2 rounded-3xl bg-slate-300 opacity-70 shadow-sm">
+        <nav
+          className="flex items-center justify-between"
+          aria-label="Table navigation"
+        >
+          <ul className="inline-flex items-center -space-x-px">
+            <li
+              onClick={() => handlePaginationClick(pagination.pageNumber - 1)}
+              className="ml-0 block rounded-l-lg border border-gray-300 bg-white px-3 py-2 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+            >
+              <svg
+                className="h-5 w-5"
+                aria-hidden="true"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                  clipRule="evenodd"
+                ></path>
+              </svg>
+            </li>
+            <li
+              onClick={() => handlePaginationClick(0)}
+              className={pageClass(0)}
+            >
+              1
+            </li>
+            <li
+              hidden={
+                pagination.pageNumber + 1 <= 1 ||
+                pagination.pageNumber + 1 >= pagination.totalPages
+              }
+              aria-current="page"
+              className={pageClass(pagination.pageNumber)}
+            >
+              {pagination.pageNumber + 1}
+            </li>
+            <li
+              hidden={pagination.totalPages <= 1}
+              onClick={() => handlePaginationClick(pagination.totalPages - 1)}
+              className={pageClass(pagination.totalPages - 1)}
+            >
+              {pagination.totalPages}
+            </li>
+            <li
+              onClick={() => handlePaginationClick(pagination.pageNumber + 1)}
+              className="block rounded-r-lg border border-gray-300 bg-white px-3 py-2 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+            >
+              <svg
+                className="h-5 w-5"
+                aria-hidden="true"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                  clipRule="evenodd"
+                ></path>
+              </svg>
+            </li>
+          </ul>
+        </nav>
+        <Button
+          size="xs"
+          color="green"
+          onClick={() => editRatePlan(defaultRatePlan)}
+        >
           <MdAssignmentAdd size="1.5em" className="mr-2" /> Add Rate Plan
         </Button>
       </div>
-      <div className="flex flex-col space-y-1.5 divide-y px-2 pt-2">
-        {ratePlans?.map((room) => {
-          return (
-            <div
-              key={room.id}
-              className="relative flex w-full flex-col space-y-1 px-1"
-            >
-              <div className="font text-sm text-green-600">
-                {room.name}
-              </div>
-              <div className="flex flex-row space-x-3 text-[10px]">
-                {/* Adult icon and count */}
-                <div className="flex items-center space-x-1">
-                  <MdOutlineMan size="1em" className="text-yellow-700" />
-                  <span>{room.roomId}</span>
-                </div>
-                {/* Child icon and count */}
-                <div className="flex items-center space-x-1">
-                  <MdOutlineFamilyRestroom
-                    size="1em"
-                    className="text-yellow-700"
-                  />
-                  <span>{ "N/A"}</span>
-                </div>
-                {/* Double bed icon and count */}
-                <div className="flex items-center space-x-1">
-                  <FaBed size="1em" className="text-yellow-700" />
-                  <span>{ "N/A"}</span>
-                </div>
-                <div className="flex items-center space-x-1">
-                  <FaUmbrellaBeach size="1em" className="text-yellow-700" />
-                  <span>{room.basePrice ?? 0}</span>
-                </div>
-              </div>
-              <div className="absolute right-1 top-1 flex flex-row space-x-2">
-                {deleteAuthorized ? (
-                  <IoMdRemoveCircle
-                    size="1.5em"
-                    className="mr-2 cursor-pointer text-red-800"
-                    onClick={() => deleletConfirmation(room)}
-                  />
-                ) : (
-                  <></>
-                )}
-                <CiEdit
-                  size="1.5em"
-                  className="mr-2 cursor-pointer text-green-800"
-                  onClick={() => editRatePlan(room)}
-                />
-              </div>
-            </div>
-          );
-        })}
-      </div>
-
-      <nav
-        className="absolute bottom-1 flex items-center justify-between pt-4"
-        aria-label="Table navigation"
-      >
-        <ul className="inline-flex items-center -space-x-px">
-          <li
-            onClick={() => handlePaginationClick(pagination.pageNumber - 1)}
-            className="ml-0 block rounded-l-lg border border-gray-300 bg-white px-3 py-2 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-          >
-            <svg
-              className="h-5 w-5"
-              aria-hidden="true"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fillRule="evenodd"
-                d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                clipRule="evenodd"
-              ></path>
-            </svg>
-          </li>
-          <li onClick={() => handlePaginationClick(0)} className={pageClass(0)}>
-            1
-          </li>
-          <li
-            hidden={
-              pagination.pageNumber + 1 <= 1 ||
-              pagination.pageNumber + 1 >= pagination.totalPages
-            }
-            aria-current="page"
-            className={pageClass(pagination.pageNumber)}
-          >
-            {pagination.pageNumber + 1}
-          </li>
-          <li
-            hidden={pagination.totalPages <= 1}
-            onClick={() => handlePaginationClick(pagination.totalPages - 1)}
-            className={pageClass(pagination.totalPages - 1)}
-          >
-            {pagination.totalPages}
-          </li>
-          <li
-            onClick={() => handlePaginationClick(pagination.pageNumber + 1)}
-            className="block rounded-r-lg border border-gray-300 bg-white px-3 py-2 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-          >
-            <svg
-              className="h-5 w-5"
-              aria-hidden="true"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fillRule="evenodd"
-                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                clipRule="evenodd"
-              ></path>
-            </svg>
-          </li>
-        </ul>
-      </nav>
-
       <Modal show={openDelModal} onClose={cancelDelExpense}>
         <Modal.Header>Confirm</Modal.Header>
         <Modal.Body>
@@ -407,7 +431,9 @@ export const RatePlanManager = memo((props: RoomManagerProps) => {
             <span>
               {editingRatePlan === null
                 ? ""
-                : "Are you sure to delete room [" + editingRatePlan?.name + "]?"}
+                : "Are you sure to delete room [" +
+                  editingRatePlan?.name +
+                  "]?"}
             </span>
           </div>
         </Modal.Body>
@@ -428,7 +454,7 @@ export const RatePlanManager = memo((props: RoomManagerProps) => {
       >
         <Modal.Header />
         <Modal.Body>
-          <div className="w-full h-full space-y-2 pb-2 sm:pb-6 lg:px-8 xl:pb-8">
+          <div className="h-full w-full space-y-2 pb-2 sm:pb-6 lg:px-8 xl:pb-8">
             <div className="flex w-full flex-col align-middle">
               <div className="flex w-3/5 items-center">
                 <Label htmlFor="name" value="Room Name" />
@@ -464,7 +490,7 @@ export const RatePlanManager = memo((props: RoomManagerProps) => {
                 <Label htmlFor="appliedStartDate" value="Start Date" />
               </div>
 
-              <div className="flex flex-row w-full">
+              <div className="flex w-full flex-row">
                 <Datepicker
                   id="appliedStartDate"
                   required={true}
@@ -487,7 +513,7 @@ export const RatePlanManager = memo((props: RoomManagerProps) => {
                 <Label htmlFor="appliedEndDate" value="End Date" />
               </div>
 
-              <div className="flex flex-row w-full">
+              <div className="flex w-full flex-row">
                 <Datepicker
                   id="appliedEndDate"
                   required={true}
@@ -573,6 +599,6 @@ export const RatePlanManager = memo((props: RoomManagerProps) => {
           </div>
         </Modal.Body>
       </Modal>
-    </div>
+    </>
   );
 });

@@ -763,7 +763,7 @@ export const Inventory = (props: InventoryProps) => {
 
   return (
     <>
-      <div className="flex h-12 flex-row space-x-1 px-0.5 py-2">
+      <div className="flex h-12 flex-row space-x-3 px-0.5 py-2 items-center">
         <Button size="xs" color="green" onClick={addProduct}>
           <MdAssignmentAdd size="1.5em" className="mr-2" /> Add
         </Button>
@@ -774,7 +774,7 @@ export const Inventory = (props: InventoryProps) => {
           required={true}
           value={filteredName}
           onChange={changeFilteredName}
-          className="w-full"
+          className="w-full rounded-sm"
           rightIcon={() => <HiX onClick={emptyFilterText} />}
         />
         {/* <Button size="xs" color="green" onClick={updateAvailability}>
@@ -924,7 +924,7 @@ export const Inventory = (props: InventoryProps) => {
         <div className="h-12">
         </div>
       </div>
-      <div className="absolute bottom-0 left-1/2 flex h-12 w-11/12 -translate-x-1/2 flex-row items-center justify-center space-x-2 rounded-3xl bg-slate-300 px-2 opacity-70 shadow-sm">
+      <div className="absolute bottom-0 left-1/2 flex w-11/12 -translate-x-1/2 flex-row items-center justify-center space-x-2 rounded-3xl bg-slate-300 px-2 opacity-70 shadow-sm">
         <div className="flex flex-row items-center justify-between">
           <nav
             className="flex items-center justify-between"
@@ -994,8 +994,7 @@ export const Inventory = (props: InventoryProps) => {
           </nav>
         </div>
         <Button size="xs" color="green" onClick={updateAvailability}>
-          <MdOutlineBrowserUpdated size="1.5em" className="mr-2" /> Update
-          availability
+          <MdOutlineBrowserUpdated size="1.5em" /> Availability
         </Button>
       </div>
 

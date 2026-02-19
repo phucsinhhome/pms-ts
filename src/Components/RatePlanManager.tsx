@@ -6,25 +6,23 @@ import {
   Button,
   Datepicker,
   Checkbox,
+  Select,
 } from "flowbite-react";
 import { Chat, DEFAULT_PAGE_SIZE } from "../App";
 import { HiX } from "react-icons/hi";
-import {
-  formatISODate,
-  formatLocaleDate,
-} from "../Service/Utils";
+import { formatISODate, formatLocaleDate, formatVND } from "../Service/Utils";
 import { Pagination } from "./ProfitReport";
 import {
   MdAssignmentAdd,
-  MdOutlineFamilyRestroom,
-  MdOutlineMan,
+  MdHouse,
 } from "react-icons/md";
-import { FaUmbrellaBeach } from "react-icons/fa";
 import { IoMdRemoveCircle } from "react-icons/io";
 import { CiEdit } from "react-icons/ci";
-import { FaBed } from "react-icons/fa6";
+import { FaMoneyBill, FaPlus } from "react-icons/fa6";
 import { create, deleteObject, list, save } from "../db/rate_plan";
 import CounterInput from "./CounterInput";
+import { Room } from "./RoomManager";
+import { listRoom } from "../db/room";
 
 export type RatePlan = {
   id?: string;
@@ -41,9 +39,25 @@ export type RatePlan = {
   tenantId: string;
 };
 
+export type RatePlanR = {
+  id?: string;
+  roomId: string;
+  name: string;
+  status: string;
+  description?: string;
+  appliedStartDate: string;
+  appliedEndDate: string;
+  basePrice: number;
+  baseOccupancy: number;
+  extraOccupancyPrice?: number;
+  includedMeals?: string[];
+  tenantId: string;
+};
+
 const defaultRatePlan: RatePlan = {
   roomId: "",
   name: "",
+  description: "",
   status: "ACTIVE",
   tenantId: "",
   appliedStartDate: new Date(),
@@ -69,6 +83,7 @@ export const RatePlanManager = memo((props: RoomManagerProps) => {
   const [openEditingModal, setOpenEditingModal] = useState(false);
   const [editingRatePlan, setEditingRatePlan] =
     useState<RatePlan>(defaultRatePlan);
+  const [rooms, setRooms] = useState<Room[]>([]);
 
   const deleteAuthorized = props.hasAuthority("rate-plan:delete");
 
@@ -109,7 +124,11 @@ export const RatePlanManager = memo((props: RoomManagerProps) => {
       }
       const data = res.data;
       console.info("Fetched %s rooms by date %s", data.size, byDate);
-      let sortedExps = data.content;
+      let sortedExps = data.content.map((item: RatePlanR) => ({
+        ...item,
+        appliedStartDate: new Date(`${item.appliedStartDate}Z`),
+        appliedEndDate: new Date(`${item.appliedEndDate}Z`),
+      }));
       setRatePlans(sortedExps);
       setPagination({
         pageNumber: data.number,
@@ -119,9 +138,25 @@ export const RatePlanManager = memo((props: RoomManagerProps) => {
       });
     } catch (e) {
       console.error("Error while fetching rooms", e);
-      if (e instanceof Error) {
-        alert(e.message);
+    }
+  };
+
+  const fetchRooms = async () => {
+    try {
+      let res = await listRoom(0, 100);
+      if (res.status === 401 || res.status === 403) {
+        props.handleUnauthorized();
+        return;
       }
+      if (res === undefined || res.status !== 200) {
+        console.warn("Invalid room response");
+        return;
+      }
+      const data = res.data;
+      console.info("Fetched %s rooms", data.size);
+      setRooms(data.content);
+    } catch (e) {
+      console.error("Error while fetching rooms", e);
     }
   };
 
@@ -134,6 +169,7 @@ export const RatePlanManager = memo((props: RoomManagerProps) => {
 
   useEffect(() => {
     fetchRatePlans();
+    fetchRooms();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.chat]);
@@ -259,6 +295,15 @@ export const RatePlanManager = memo((props: RoomManagerProps) => {
     });
   };
 
+  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = event.target.value;
+    let selectedRoom = rooms.find((room) => room.id === value);
+    setEditingRatePlan({
+      ...editingRatePlan,
+      roomId: selectedRoom?.id ?? "",
+    });
+  };
+
   const changeQuantity = (fieldName: string, delta: number) => {
     setEditingRatePlan({
       ...editingRatePlan,
@@ -298,35 +343,26 @@ export const RatePlanManager = memo((props: RoomManagerProps) => {
       <div className="flex flex-row space-x-2 align-middle"></div>
       <div className="flex-1 flex-col overflow-y-auto">
         <div className="flex flex-col divide-y">
-          {ratePlans?.map((room) => {
+          {ratePlans?.map((rate) => {
+            let room = rooms?.find((r) => r.id === rate.roomId);
             return (
               <div
-                key={room.id}
+                key={rate.id}
                 className="relative flex w-full flex-col space-y-1 px-1"
               >
-                <div className="font text-sm text-green-600">{room.name}</div>
+                <div className="font text-sm text-green-600">{rate.name}</div>
                 <div className="flex flex-row space-x-3 text-[10px]">
-                  {/* Adult icon and count */}
-                  <div className="flex items-center space-x-1">
-                    <MdOutlineMan size="1em" className="text-yellow-700" />
-                    <span>{room.roomId}</span>
+                  <div className="flex items-center space-x-0.5">
+                    <MdHouse size="1em" className="text-yellow-700" />
+                    <span>{room?.internalName ?? "N/A"}</span>
                   </div>
-                  {/* Child icon and count */}
-                  <div className="flex items-center space-x-1">
-                    <MdOutlineFamilyRestroom
-                      size="1em"
-                      className="text-yellow-700"
-                    />
-                    <span>{"N/A"}</span>
+                  <div className="flex items-center space-x-0.5">
+                    <FaMoneyBill size="1em" className="text-yellow-700" />
+                    <span>{`${formatVND(rate.basePrice ?? 0)}/${rate.baseOccupancy ?? 0} adults/night`}</span>
                   </div>
-                  {/* Double bed icon and count */}
-                  <div className="flex items-center space-x-1">
-                    <FaBed size="1em" className="text-yellow-700" />
-                    <span>{"N/A"}</span>
-                  </div>
-                  <div className="flex items-center space-x-1">
-                    <FaUmbrellaBeach size="1em" className="text-yellow-700" />
-                    <span>{room.basePrice ?? 0}</span>
+                  <div className="flex items-center space-x-0.5">
+                    <FaPlus size="1em" className="text-yellow-700" />
+                    <span>{formatVND(rate.extraOccupancyPrice ?? 0)}</span>
                   </div>
                 </div>
                 <div className="absolute right-1 top-1 flex flex-row space-x-2">
@@ -334,7 +370,7 @@ export const RatePlanManager = memo((props: RoomManagerProps) => {
                     <IoMdRemoveCircle
                       size="1.5em"
                       className="mr-2 cursor-pointer text-red-800"
-                      onClick={() => deleletConfirmation(room)}
+                      onClick={() => deleletConfirmation(rate)}
                     />
                   ) : (
                     <></>
@@ -342,7 +378,7 @@ export const RatePlanManager = memo((props: RoomManagerProps) => {
                   <CiEdit
                     size="1.5em"
                     className="mr-2 cursor-pointer text-green-800"
-                    onClick={() => editRatePlan(room)}
+                    onClick={() => editRatePlan(rate)}
                   />
                 </div>
               </div>
@@ -489,6 +525,23 @@ export const RatePlanManager = memo((props: RoomManagerProps) => {
             </div>
             <div className="flex w-full flex-col align-middle">
               <div className="flex w-3/5 items-center">
+                <Label htmlFor="room" value="Room" />
+              </div>
+              <Select
+                id="room"
+                required={true}
+                value={editingRatePlan?.roomId ?? ""}
+                onChange={handleSelectChange}
+              >
+                {rooms?.map((room) => (
+                  <option key={room.id} value={room.id}>
+                    {room.internalName} - {room.name}
+                  </option>
+                ))}
+              </Select>
+            </div>
+            <div className="flex w-full flex-col align-middle">
+              <div className="flex w-3/5 items-center">
                 <Label htmlFor="appliedStartDate" value="Start Date" />
               </div>
 
@@ -498,7 +551,9 @@ export const RatePlanManager = memo((props: RoomManagerProps) => {
                   required={true}
                   type="date"
                   value={formatLocaleDate(editingRatePlan?.appliedStartDate)}
-                  onSelectedDateChanged={(date) => handleDateChange(date, "appliedStartDate")}
+                  onSelectedDateChanged={(date) =>
+                    handleDateChange(date, "appliedStartDate")
+                  }
                 />
                 <TextInput
                   id="appliedStartDate"
@@ -521,7 +576,9 @@ export const RatePlanManager = memo((props: RoomManagerProps) => {
                   required={true}
                   type="date"
                   value={formatLocaleDate(editingRatePlan?.appliedEndDate)}
-                  onSelectedDateChanged={(date) => handleDateChange(date, "appliedEndDate")}
+                  onSelectedDateChanged={(date) =>
+                    handleDateChange(date, "appliedEndDate")
+                  }
                 />
                 <TextInput
                   id="appliedEndDate"
@@ -576,15 +633,31 @@ export const RatePlanManager = memo((props: RoomManagerProps) => {
                 </div>
                 <div className="flex flex-row space-x-4">
                   <div className="flex items-center gap-2">
-                    <Checkbox id="breakfast" onChange={handleMealChange} />
+                    <Checkbox
+                      id="breakfast"
+                      checked={editingRatePlan.includedMeals?.includes(
+                        "breakfast",
+                      )}
+                      onChange={handleMealChange}
+                    />
                     <Label htmlFor="breakfast">Breakfast</Label>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Checkbox id="lunch" />
+                    <Checkbox
+                      id="lunch"
+                      checked={editingRatePlan.includedMeals?.includes("lunch")}
+                      onChange={handleMealChange}
+                    />
                     <Label htmlFor="lunch">Lunch</Label>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Checkbox id="dinner" />
+                    <Checkbox
+                      id="dinner"
+                      checked={editingRatePlan.includedMeals?.includes(
+                        "dinner",
+                      )}
+                      onChange={handleMealChange}
+                    />
                     <Label htmlFor="dinner">Dinner</Label>
                   </div>
                 </div>

@@ -78,6 +78,10 @@ export const formatISODateTime = (date: Date) => {
 }
 
 export const formatLocaleDate = (date: Date) => {
+    console.log(date)
+    if (isNaN(date.getTime())) {
+        console.log("not valid date")
+    }
     let formattedDate = date.toLocaleDateString("en-CA", {
         year: 'numeric',
         month: '2-digit',
@@ -88,7 +92,6 @@ export const formatLocaleDate = (date: Date) => {
         hour12: false,
         timeZoneName: 'short' // Optional: adds your zone (e.g., GMT+7)
     });
-    console.info("Formatted date: %s", formattedDate)
     return formattedDate.substring(0, 10)
 }
 

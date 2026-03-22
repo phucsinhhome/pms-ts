@@ -1,11 +1,12 @@
 import { formatDatePartition } from "../Service/Utils";
 import { syncStatusOfMonth } from "../db/status";
-import React, { ChangeEvent, useEffect, useState } from "react";
-import { Button, Checkbox, Label, Spinner, TextInput } from "flowbite-react";
+import React, { ChangeEvent, useEffect, useState, FormEvent } from "react";
+import { Button, Checkbox, Label, Spinner, TextInput, Modal } from "flowbite-react";
 import { Link } from "react-router-dom";
 import { getConfigs, setAutoUpdateAvailability } from "../db/configs";
 import { syncReservationFromMailbox } from "../db/reservation";
 import { Chat } from "../App";
+import { registerBot } from '../db/bot'; // Import registerBot
 
 export type SettingProps = {
   syncing: boolean,
@@ -20,6 +21,12 @@ export const Settings = (props: SettingProps) => {
 
   const [datePartition, setDatePartition] = useState(formatDatePartition(new Date()))
   const [inventoryConfigs, setInventoryConfigs] = useState<any>()
+
+  // Bot Registration State
+  const [isBotModalOpen, setIsBotModalOpen] = useState(false);
+  const [botId, setBotId] = useState('');
+  const [botToken, setBotToken] = useState('');
+  const [isRegisteringBot, setIsRegisteringBot] = useState(false);
 
   const fetchInventoryConfigs = async () => {
     getConfigs("inventory")
@@ -100,6 +107,39 @@ export const Settings = (props: SettingProps) => {
     setDatePartition(iMsg)
   }
 
+  // Bot Registration Handlers
+  const handleBotIdChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setBotId(e.target.value);
+  };
+
+  const handleBotTokenChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setBotToken(e.target.value);
+  };
+
+  const handleRegisterBot = async (e: FormEvent) => {
+    e.preventDefault();
+    if (!botId || !botToken) {
+      alert('Bot ID and Bot Token are required.'); // Simple alert for now
+      return;
+    }
+
+    setIsRegisteringBot(true);
+    try {
+      await registerBot(botId, botToken);
+      alert('Bot registered successfully!'); // Success feedback
+      setBotId('');
+      setBotToken('');
+      setIsBotModalOpen(false);
+    } catch (error) {
+      console.error('Bot registration failed:', error);
+      // Assuming error object has a message property
+      alert(`Bot registration failed: ${error.message || 'An unknown error occurred'}`); // Error feedback
+    } finally {
+      setIsRegisteringBot(false);
+    }
+  };
+
+
   return (
     <>
       <div className="bg-slate-50 px-2 pt-6">
@@ -149,8 +189,59 @@ export const Settings = (props: SettingProps) => {
                 <Link to="../product-group" className="w-32">Product Groups</Link>
             }
           </div>
+
+          {/* New Button for Bot Registration */}
+          <div className="flex flex-row items-center mb-2 border rounded-sm shadow-sm p-2 space-x-2">
+            <Label className="w-32">Bot Registration</Label>
+            <Button onClick={() => setIsBotModalOpen(true)}>Register Bot</Button>
+          </div>
         </div>
       </div >
+
+      {/* Bot Registration Modal */}
+      <Modal show={isBotModalOpen} onClose={() => setIsBotModalOpen(false)} size="md" popup>
+        <Modal.Header />
+        <Modal.Body>
+          <form onSubmit={handleRegisterBot} className="space-y-6">
+            <h3 className="text-xl font-medium text-gray-900 dark:text-white">Register Your Bot</h3>
+            <div>
+              <div className="mb-2 block">
+                <Label htmlFor="botId" value="Bot ID" />
+              </div>
+              <TextInput
+                id="botId"
+                placeholder="Enter Bot ID"
+                value={botId}
+                onChange={handleBotIdChange}
+                required
+              />
+            </div>
+            <div>
+              <div className="mb-2 block">
+                <Label htmlFor="botToken" value="Bot Token" />
+              </div>
+              <TextInput
+                id="botToken"
+                type="password" // Masked input
+                placeholder="Enter Bot Token"
+                value={botToken}
+                onChange={handleBotTokenChange}
+                required
+              />
+            </div>
+            <div className="w-full">
+              {isRegisteringBot ? (
+                <Button color="gray" className="w-full" disabled>
+                  <Spinner size="sm" />
+                  <span className="pl-3">Registering...</span>
+                </Button>
+              ) : (
+                <Button type="submit" className="w-full">Register Bot</Button>
+              )}
+            </div>
+          </form>
+        </Modal.Body>
+      </Modal>
     </>
   )
 }

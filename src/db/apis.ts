@@ -147,6 +147,12 @@ const userApi: AxiosInstance = axios.create({
     withCredentials: true
 });
 
+// botApi
+const botApi: AxiosInstance = axios.create({
+    baseURL: `${process.env.REACT_APP_BOT_SERVICE_ENDPOINT}`,
+    withCredentials: true
+});
+
 const psBaseApi: AxiosInstance = axios.create({
     baseURL: `${process.env.REACT_APP_PS_BASE_URL}`,
     withCredentials: true
@@ -171,5 +177,6 @@ export {
     statusApi,
     profileApi,
     userApi,
+    botApi,
     psBaseApi
 }

@@ -133,7 +133,7 @@ export const Settings = (props: SettingProps) => {
     } catch (error) {
       console.error('Bot registration failed:', error);
       // Assuming error object has a message property
-      alert(`Bot registration failed: ${error.message || 'An unknown error occurred'}`); // Error feedback
+      alert(`Bot registration failed`); // Error feedback
     } finally {
       setIsRegisteringBot(false);
     }

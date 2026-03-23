@@ -1,4 +1,3 @@
-import { AxiosInstance } from 'axios';
 import { botApi } from './apis';
 
 export const registerBot = async (botId: string, botToken: string): Promise<any> => {

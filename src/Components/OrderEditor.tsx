@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { Avatar, Button, Label, Modal, TextInput } from "flowbite-react";
 import { Chat, DEFAULT_PAGE_SIZE } from "../App";
 import { formatISODate, formatISODateTime, formatRooms, formatVND } from "../Service/Utils";
-import { confirmOrder, fetchOrder, rejectOrder, serveOrder } from "../db/order";
+import { confirmOrder, fetchOrder, rejectOrder, saveOrder, serveOrder } from "../db/order";
 import { getInvoice, listInvoiceByGuestName } from "../db/invoice";
 import { Order, OrderStatus, SK } from "./OrderManager";
 import { Invoice } from "./InvoiceManager";
@@ -189,7 +189,7 @@ export const OrderEditor = (props: OrderEditorProps) => {
     setChoosenInvoice(inv)
   }
 
-  const confirmChangeInvoice = () => {
+  const confirmChangeInvoice = async () => {
     try {
       if (order === undefined || order === null) {
         console.warn("Invalid order")
@@ -207,9 +207,14 @@ export const OrderEditor = (props: OrderEditorProps) => {
         ...order,
         invoiceId: choosenInvoice.id
       }
-      setOrder(o)
 
-      console.info("Changed linked invoice to %s", choosenInvoice.id)
+      const rsp = await saveOrder(o);
+      if (rsp.status === 200) {
+        setOrder(rsp.data)
+        console.info("Changed linked invoice to %s", choosenInvoice.id)
+      } else {
+        console.error("Failed to save order with linked invoice")
+      }
     } catch (e) {
       console.error(e)
     }

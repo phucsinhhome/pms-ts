@@ -8,9 +8,8 @@ import { collectRes } from "../db/reservation_extractor";
 import { MdAssignmentAdd } from "react-icons/md";
 import { Reservation } from "./ReservationManager";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-
-// List of room names
-const ROOM_NAMES = ["R1", "R2", "R3", "R4", "R5", "R6"];
+import { listRoom } from "../db/room";
+import { Room } from "./RoomManager";
 
 type ReservationMapProps = {
   activeMenu: any,
@@ -19,6 +18,9 @@ type ReservationMapProps = {
 
 export function ReservationMap(props: ReservationMapProps) {
   const [reservations, setReservations] = useState<Reservation[]>([])
+  const [rooms, setRooms] = useState<Room[]>([])
+  const roomNames = useMemo(() => rooms.map(r => r.internalName), [rooms]);
+
   // Start from yesterday
   const [fromDate, setFromDate] = useState(addDays(new Date(), -1));
   const [deltaDays, setDeltaDays] = useState(-1)
@@ -46,7 +48,7 @@ export function ReservationMap(props: ReservationMapProps) {
   const reservationMap = useMemo(() => {
     // room -> date string -> reservation[]
     const map: Record<string, Record<string, Reservation[]>> = {};
-    ROOM_NAMES.forEach(room => {
+    roomNames.forEach(room => {
       map[room] = {};
       dateColumns.forEach(date => map[room][formatISODate(date)] = []);
     });
@@ -54,7 +56,7 @@ export function ReservationMap(props: ReservationMapProps) {
       if (!res.rooms) return;
       res.rooms.forEach(roomObj => {
         const roomName = roomObj.internalRoomName || roomObj.roomName;
-        if (!ROOM_NAMES.includes(roomName)) return;
+        if (!roomNames.includes(roomName)) return;
         let start = new Date(res.checkInDate);
         let end = new Date(res.checkOutDate);
         for (let d = new Date(start); d < end; d.setDate(d.getDate() + 1)) {
@@ -66,13 +68,24 @@ export function ReservationMap(props: ReservationMapProps) {
       });
     });
     return map;
-  }, [reservations, dateColumns]);
+  }, [reservations, dateColumns, roomNames]);
 
   const filterDay = (numDays: number) => {
     var newDD = addDays(new Date(), numDays)
     setFromDate(newDD)
     setDeltaDays(numDays)
     fetchReservations(newDD, pagination.pageNumber, pagination.pageSize)
+  }
+
+  const fetchRooms = async () => {
+    try {
+      const res = await listRoom(0, 100);
+      if (res.status === 200) {
+        setRooms(res.data.content);
+      }
+    } catch (e) {
+      console.error("Error while fetching rooms", e);
+    }
   }
 
   const fetchReservations = async (fromDate: Date, pageNumber: number, pageSize: number) => {
@@ -98,6 +111,7 @@ export function ReservationMap(props: ReservationMapProps) {
   }
 
   useEffect(() => {
+    fetchRooms();
     fetchReservations(fromDate, 0, Number(DEFAULT_PAGE_SIZE));
     props.activeMenu()
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -183,7 +197,7 @@ export function ReservationMap(props: ReservationMapProps) {
             </tr>
           </thead>
           <tbody>
-            {ROOM_NAMES.map(room => (
+            {roomNames.map(room => (
               <tr key={room}>
                 <td className="sticky left-0 z-10 bg-green-100 text-green-900 px-2 py-2 border border-green-200 font-bold">{room}</td>
                 {dateColumns.map(date => {

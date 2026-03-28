@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Chat } from "../App";
-import { getTour } from "../db/tour";
+import { getTour, saveTour } from "../db/tour";
 import { Tour } from "./TourManager";
 import { useParams } from "react-router-dom";
 import { Label, TextInput, Textarea, Button, Card, List } from "flowbite-react";
@@ -164,9 +164,24 @@ export const TourEditor = (props: TourEditorProps) => {
     }
   };
 
-  const handleSave = (field: string) => {
-    // TODO: Implement save to backend
-    setEditField(null);
+  const handleSave = async (field: string) => {
+    if (!tour) return;
+    try {
+      const rsp = await saveTour(tour);
+      if (rsp.status === 200) {
+        setTour(rsp.data);
+        console.info("Tour changes saved successfully");
+      } else {
+        console.error("Failed to save tour:", rsp.status);
+      }
+    } catch (error) {
+      console.error("Error saving tour:", error);
+      if (error instanceof Error) {
+        alert(error.message);
+      }
+    } finally {
+      setEditField(null);
+    }
   };
 
   const handleCancel = () => {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, Spinner } from "flowbite-react";
 import { formatISODate, addDays } from "../Service/Utils";
@@ -12,6 +12,8 @@ import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { collectRes } from "../db/reservation_extractor";
 import { Configs } from "./InvoiceEditor";
 import { MdAssignmentAdd } from "react-icons/md";
+import { listRoom } from "../db/room";
+import { Room } from "./RoomManager";
 
 type InvoiceMapProps = {
   activeMenu: any,
@@ -23,23 +25,15 @@ type InvoiceWindow = {
   state: 'staying' | 'tobeCheckOut' | 'tobeCheckIn' | 'outOfWindow'
 }
 
-
-// 2D map: each cell is either a room name or null for empty
-const ROOM_MAP: (string | null)[][] = [
-  ["R1", "R4"],
-  ["R2", "R5"],
-  ["R3", "R6"]
-];
-
 const invoiceIcons = {
   tobeCheckIn: <BiLogIn className="text-green-900 w-6" title="To be checked in" />,
   tobeCheckOut: <BiLogOut className="text-red-900 w-6" title="To be checked out" />,
   staying: <GiHouse className="text-blue-900 w-6" title="Staying" />
 }
 
-
 export const InvoiceMap = (props: InvoiceMapProps) => {
   const [invoices, setInvoices] = useState<InvoiceWindow[]>([])
+  const [rooms, setRooms] = useState<Room[]>([])
   const [workDate, setWorkDate] = useState(new Date());
   const INVOICE_MAP_DEFAULT_PAGE_SIZE = Number(process.env.REACT_APP_INVOICE_MAP_DEFAULT_PAGE_SIZE)
 
@@ -52,6 +46,17 @@ export const InvoiceMap = (props: InvoiceMapProps) => {
   const navigate = useNavigate();
   const [isUpdating, setIsUpdating] = useState(false);
 
+  // Group rooms into a 2-column layout
+  const roomGrid = useMemo(() => {
+    const grid: (string | null)[][] = [];
+    for (let i = 0; i < rooms.length; i += 2) {
+      grid.push([
+        rooms[i].internalName,
+        rooms[i + 1] ? rooms[i + 1].internalName : null
+      ]);
+    }
+    return grid;
+  }, [rooms]);
 
   const toWindow = (inv: Invoice): InvoiceWindow => {
     const today = formatISODate(workDate);
@@ -67,6 +72,17 @@ export const InvoiceMap = (props: InvoiceMapProps) => {
       return { invoice: inv, state: 'staying' }
     }
     return { invoice: inv, state: 'outOfWindow' }
+  }
+
+  const fetchRooms = async () => {
+    try {
+      const res = await listRoom(0, 100);
+      if (res.status === 200) {
+        setRooms(res.data.content);
+      }
+    } catch (e) {
+      console.error("Error while fetching rooms", e);
+    }
   }
 
   const fetchInvoices = async () => {
@@ -94,6 +110,7 @@ export const InvoiceMap = (props: InvoiceMapProps) => {
   }
 
   useEffect(() => {
+    fetchRooms();
     fetchInvoices();
     props.activeMenu();
     // eslint-disable-next-line
@@ -106,9 +123,6 @@ export const InvoiceMap = (props: InvoiceMapProps) => {
       return roomList.includes(roomName);
     });
   };
-
-
-  //================ DELETE INVOICE ==========================//
 
   // Arrow handlers for workDate navigation
   const handlePrevDate = () => {
@@ -177,14 +191,14 @@ export const InvoiceMap = (props: InvoiceMapProps) => {
       </div>
       {/* Room layout grid */}
       <div
-        className="grid grid-cols-2 grid-rows-3 gap-2 mt-4 p-2"
+        className="grid grid-cols-2 gap-2 mt-4 p-2 overflow-y-auto max-h-[calc(100vh-200px)]"
       >
-        {ROOM_MAP.flatMap((row, rowIdx) =>
+        {roomGrid.flatMap((row, rowIdx) =>
           row.map((roomName, colIdx) => (
             <div
               key={`cell-${rowIdx}-${colIdx}`}
               className={roomName
-                ? "border border-green-700 rounded-lg bg-green-50 flex flex-col items-center p-2"
+                ? "border border-green-700 rounded-lg bg-green-50 flex flex-col items-center p-2 min-h-[100px]"
                 : ""}
             >
               {roomName && (
@@ -194,9 +208,9 @@ export const InvoiceMap = (props: InvoiceMapProps) => {
                   </div>
                   <div className="flex flex-col space-y-2 w-full">
                     {getRoomGuests(roomName).map(inv => (
-                      <div className="flex flex-col bg-green-200 rounded px-1 py-1 shadow">
-                        <div key={inv.invoice.id}
-                          className=" text-green-900 text-lg font-semibold  flex items-center"
+                      <div key={inv.invoice.id} className="flex flex-col bg-green-200 rounded px-1 py-1 shadow">
+                        <div
+                          className=" text-green-900 text-lg font-semibold  flex items-center cursor-pointer"
                           onClick={() => navigate(`/invoice/${inv.invoice.id}`)}
                         >
                           {inv.state in invoiceIcons ? invoiceIcons[inv.state as keyof typeof invoiceIcons] : null}

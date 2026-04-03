@@ -13,7 +13,7 @@ import { collectRes } from "../db/reservation_extractor";
 import { Configs } from "./InvoiceEditor";
 import { MdAssignmentAdd } from "react-icons/md";
 import { listRoom } from "../db/room";
-import { Room } from "./RoomManager";
+import { Room } from "./InvoiceManager";
 
 type InvoiceMapProps = {
   activeMenu: any,
@@ -51,8 +51,8 @@ export const InvoiceMap = (props: InvoiceMapProps) => {
     const grid: (string | null)[][] = [];
     for (let i = 0; i < rooms.length; i += 2) {
       grid.push([
-        rooms[i].internalName,
-        rooms[i + 1] ? rooms[i + 1].internalName : null
+        rooms[i].internalRoomName || rooms[i].name,
+        rooms[i + 1] ? (rooms[i + 1].internalRoomName || rooms[i + 1].name) : null
       ]);
     }
     return grid;

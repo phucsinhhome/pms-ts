@@ -1,168 +1,72 @@
 import axios, { AxiosInstance } from 'axios';
+
+const createApiInstance = (baseURL: string | undefined, withCredentials = true): AxiosInstance => {
+    return axios.create({
+        baseURL,
+        withCredentials
+    });
+};
+
 // reportApi
-const reportApi: AxiosInstance = axios.create({
-    baseURL: `${process.env.REACT_APP_PROFIT_SERVICE_ENDPOINT}`,
-    withCredentials: true
-});
+const reportApi = createApiInstance(process.env.REACT_APP_PROFIT_SERVICE_ENDPOINT);
 // profileApi
-const profileApi: AxiosInstance = axios.create({
-    baseURL: `${process.env.REACT_APP_PROFILE_ENDPOINT}`,
-    withCredentials: true
-}); 
+const profileApi = createApiInstance(process.env.REACT_APP_PROFILE_ENDPOINT);
 
 // expenseApi
-const expenseApi: AxiosInstance = axios.create({
-    baseURL: `${process.env.REACT_APP_EXPENSE_SERVICE_ENDPOINT}`,
-    withCredentials: true
-});
-// expenseApi
-//     .interceptors
-//     .request
-//     .use(configureAccessToken, (error) => Promise.reject(error));
+const expenseApi = createApiInstance(process.env.REACT_APP_EXPENSE_SERVICE_ENDPOINT);
 
 // invoiceApi
-const invoiceApi: AxiosInstance = axios.create({
-    baseURL: `${process.env.REACT_APP_INVOICE_SERVICE_ENDPOINT}`,
-    withCredentials: true
-});
-// invoiceApi
-//     .interceptors
-//     .request
-//     .use(configureAccessToken, (error) => Promise.reject(error));
+const invoiceApi = createApiInstance(process.env.REACT_APP_INVOICE_SERVICE_ENDPOINT);
 
 // inventoryApi
-const inventoryApi: AxiosInstance = axios.create({
-    baseURL: `${process.env.REACT_APP_INVENTORY_ENDPOINT}`,
-    withCredentials: true
-});
-// inventoryApi
-//     .interceptors
-//     .request
-//     .use(configureAccessToken, (error) => Promise.reject(error));
+const inventoryApi = createApiInstance(process.env.REACT_APP_INVENTORY_ENDPOINT);
 
 // productApi
-const productApi: AxiosInstance = axios.create({
-    baseURL: `${process.env.REACT_APP_PRODUCT_SERVICE_ENDPOINT}`,
-    withCredentials: true
-});
-// productApi
-//     .interceptors
-//     .request
-//     .use(configureAccessToken, (error) => Promise.reject(error));
+const productApi = createApiInstance(process.env.REACT_APP_PRODUCT_SERVICE_ENDPOINT);
 
 // productGroupApi
-const productGroupApi: AxiosInstance = axios.create({
-    baseURL: `${process.env.REACT_APP_PRODUCT_GROUP_ENDPOINT}`,
-    withCredentials: true
-});
-// productGroupApi
-//     .interceptors
-//     .request
-//     .use(configureAccessToken, (error) => Promise.reject(error));
+const productGroupApi = createApiInstance(process.env.REACT_APP_PRODUCT_GROUP_ENDPOINT);
 
 // orderApi
-const orderApi: AxiosInstance = axios.create({
-    baseURL: `${process.env.REACT_APP_ORDER_ENDPOINT}`,
-    withCredentials: true
-});
-// orderApi
-//     .interceptors
-//     .request
-//     .use(configureAccessToken, (error) => Promise.reject(error));
+const orderApi = createApiInstance(process.env.REACT_APP_ORDER_ENDPOINT);
 
 // reservationApi
-const reservationApi: AxiosInstance = axios.create({
-    baseURL: `${process.env.REACT_APP_RESERVATION_SERVICE_ENDPOINT}`,
-    withCredentials: true
-});
-// reservationApi
-//     .interceptors
-//     .request
-//     .use(configureAccessToken, (error) => Promise.reject(error));
+const reservationApi = createApiInstance(process.env.REACT_APP_RESERVATION_SERVICE_ENDPOINT);
 
 // reservationExtractApi
-const reservationExtractApi: AxiosInstance = axios.create({
-    baseURL: `${process.env.REACT_APP_RESERVATION_EXTRACT_SERVICE_ENDPOINT}`,
-    withCredentials: false
-});
-// reservationExtractApi
-//     .interceptors
-//     .request
-//     .use(configureAccessToken, (error) => Promise.reject(error));
+const reservationExtractApi = createApiInstance(process.env.REACT_APP_RESERVATION_EXTRACT_SERVICE_ENDPOINT, false);
 
 // supplierApi
-const supplierApi: AxiosInstance = axios.create({
-    baseURL: `${process.env.REACT_APP_SUPPLIER_ENDPOINT}`,
-    withCredentials: true
-});
-// supplierApi
-//     .interceptors
-//     .request
-//     .use(configureAccessToken, (error) => Promise.reject(error));
+const supplierApi = createApiInstance(process.env.REACT_APP_SUPPLIER_ENDPOINT);
 
 // tourApi
-const tourApi: AxiosInstance = axios.create({
-    baseURL: `${process.env.REACT_APP_TOUR_ENDPOINT}`,
-    withCredentials: true
-});
-// tourApi
-//     .interceptors
-//     .request
-//     .use(configureAccessToken, (error) => Promise.reject(error));
+const tourApi = createApiInstance(process.env.REACT_APP_TOUR_ENDPOINT);
+
 // tourRequestApi
-const tourRequestApi: AxiosInstance = axios.create({
-    baseURL: `${process.env.REACT_APP_TOUR_REQUEST_ENDPOINT}`,
-    withCredentials: true
-});
-// tourRequestApi
-//     .interceptors
-//     .request
-//     .use(configureAccessToken, (error) => Promise.reject(error));
+const tourRequestApi = createApiInstance(process.env.REACT_APP_TOUR_REQUEST_ENDPOINT);
 
 // configApi
-const configApi: AxiosInstance = axios.create({
-    baseURL: `${process.env.REACT_APP_CONFIG_ENDPOINT}`,
-    withCredentials: true
-});
-// configApi
-//     .interceptors
-//     .request
-//     .use(configureAccessToken, (error) => Promise.reject(error));
+const configApi = createApiInstance(process.env.REACT_APP_CONFIG_ENDPOINT);
 
 // classificationApi
-const classificationApi: AxiosInstance = axios.create({
-    baseURL: `${process.env.REACT_APP_SERVICE_CLASSIFICATION_ENDPOINT}`,
-    withCredentials: true
-});
+const classificationApi = createApiInstance(process.env.REACT_APP_SERVICE_CLASSIFICATION_ENDPOINT);
 
 // statusApi
-const statusApi: AxiosInstance = axios.create({
-    baseURL: `${process.env.REACT_APP_STATUS_ENDPOINT}`,
-    withCredentials: true
-});
+const statusApi = createApiInstance(process.env.REACT_APP_STATUS_ENDPOINT);
 
-// statusApi
-const userApi: AxiosInstance = axios.create({
-    baseURL: `${process.env.REACT_APP_USER_ENDPOINT}`,
-    withCredentials: true
-});
+// userApi
+const userApi = createApiInstance(process.env.REACT_APP_USER_ENDPOINT);
 
-const psBaseApi: AxiosInstance = axios.create({
-    baseURL: `${process.env.REACT_APP_PS_BASE_URL}`,
-    withCredentials: true
-});
+// botApi
+const botApi = createApiInstance(process.env.REACT_APP_BOT_SERVICE_ENDPOINT);
+
+const psBaseApi = createApiInstance(process.env.REACT_APP_PS_BASE_URL);
 
 // room
-const roomApi: AxiosInstance = axios.create({
-    baseURL: `${process.env.REACT_APP_ROOM_ENDPOINT}`,
-    withCredentials: true
-});
+const roomApi = createApiInstance(process.env.REACT_APP_ROOM_ENDPOINT);
 
 // ratePlan
-const ratePlanApi: AxiosInstance = axios.create({
-    baseURL: `${process.env.REACT_APP_RATE_PLAN_ENDPOINT}`,
-    withCredentials: true
-});
+const ratePlanApi = createApiInstance(process.env.REACT_APP_RATE_PLAN_ENDPOINT);
 
 export {
     reportApi,
@@ -182,6 +86,7 @@ export {
     statusApi,
     profileApi,
     userApi,
+    botApi,
     psBaseApi,
     roomApi,
     ratePlanApi

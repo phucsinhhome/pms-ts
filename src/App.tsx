@@ -149,7 +149,9 @@ export const App = () => {
   const [activeMenu, setActiveMenu] = useState(menus.home)
   const [configs, setConfigs] = useState<AppConfig>()
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
+  const [loadingProfile, setLoadingProfile] = useState(true);
+  const [loadingConfig, setLoadingConfig] = useState(true);
+  const [configError, setConfigError] = useState<string | null>(null);
   const [roles, setRoles] = useState<string[]>([]);
   const [authorities, setAuthorities] = useState<string[]>([]);
   const [userProfile, setUserProfile] = useState<any>(null);
@@ -200,7 +202,7 @@ export const App = () => {
       setRoles([]);
     }
     finally {
-      setLoading(false);
+      setLoadingProfile(false);
     }
   };
 
@@ -237,8 +239,17 @@ export const App = () => {
   }
 
   const fetchConfig = async () => {
-    let cfg = await appConfigs()
-    setConfigs(cfg)
+    try {
+      setLoadingConfig(true);
+      setConfigError(null);
+      let cfg = await appConfigs()
+      setConfigs(cfg)
+    } catch (error) {
+      console.error("Failed to fetch config:", error);
+      setConfigError("Offline/Update Failed. Please check your connection and try again.");
+    } finally {
+      setLoadingConfig(false);
+    }
   }
 
   const getChat = () => chat ? chat : defaultChat
@@ -266,7 +277,7 @@ export const App = () => {
       : "px-1 py-1 bg-green-50 text-center text-green-800 text-sm font-sans rounded-sm shadow-sm transition-transform duration-150";
   }
 
-  if (loading) {
+  if (loadingConfig || (loadingProfile && !userProfile)) {
     return (
       <div className="flex flex-col items-center justify-center h-[100dvh] bg-white">
         <div className="w-32 h-32 rounded-full bg-gray-100 flex items-center justify-center shadow-lg mb-6">
@@ -276,7 +287,26 @@ export const App = () => {
             className="w-24 h-24 object-contain"
           />
         </div>
-        <div className="text-lg text-gray-600 font-semibold">Loading...</div>
+        <div className="text-lg text-gray-600 font-semibold">
+            {loadingConfig ? "Loading Configuration..." : "Fetching User Profile..."}
+        </div>
+      </div>
+    );
+  }
+
+  if (configError && !configs) {
+    return (
+      <div className="flex flex-col items-center justify-center h-[100dvh] bg-white p-4">
+        <div className="text-red-600 text-xl font-bold mb-4">Error</div>
+        <div className="text-lg text-gray-600 mb-6 text-center">{configError}</div>
+        <Button
+          className="bg-green-700 text-white px-6 py-2 rounded hover:bg-green-800 font-bold"
+          onClick={() => {
+            fetchConfig();
+          }}
+        >
+          Retry
+        </Button>
       </div>
     );
   }
@@ -342,6 +372,7 @@ export const App = () => {
           activeMenu={() => setActiveMenu(menus.invoice)}
           handleUnauthorized={() => handleLogin()}
           hasAuthority={(auth: string) => hasAuthority(auth)}
+          configs={configs}
         />} />
         <Route path="expense" element={<ExpenseManager
           chat={getChat()}

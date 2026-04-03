@@ -110,9 +110,10 @@ export const appConfigs = async (): Promise<AppConfig> => {
             // Background refresh (non-blocking)
             fetchWithRetry(configUrl, 1, 0)
                 .then(fresh => {
-                    if (fresh.version !== parsed.version) {
-                        localStorage.setItem(CACHE_KEY, JSON.stringify(fresh));
-                        console.info(`Configuration updated from ${parsed.version} to ${fresh.version}`);
+                    const freshStr = JSON.stringify(fresh);
+                    if (fresh.version !== parsed.version || freshStr !== cached) {
+                        localStorage.setItem(CACHE_KEY, freshStr);
+                        console.info(`Configuration updated. New version: ${fresh.version || 'unversioned'}`);
                     } else {
                         console.info("Configuration is up to date.");
                     }
@@ -133,7 +134,7 @@ export const appConfigs = async (): Promise<AppConfig> => {
 const fetchWithRetry = async (url: string, retries: number, delay: number): Promise<any> => {
     for (let i = 0; i < retries; i++) {
         try {
-            const res = await fetch(url);
+            const res = await fetch(url, { cache: 'no-cache' });
             if (!res.ok) throw new Error(`Status: ${res.status}`);
             return await res.json();
         } catch (err) {

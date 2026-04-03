@@ -4,7 +4,7 @@ export const paymentMethods: PaymentMethod[] = [
     {
         id: "creditCard",
         name: "Credit Card",
-        feeRate: 0.025,
+        feeRate: 0.031,
         template: "invoice_with_transfer_fee",
         srcLargeImg: "/mastercard.svg",
         paymentInfo: "/payment/creditcard.jpeg",
@@ -30,7 +30,7 @@ export const paymentMethods: PaymentMethod[] = [
     }, {
         id: "paypal",
         name: "Paypal",
-        feeRate: 0.025,
+        feeRate: 0.031,
         template: "invoice_without_transfer_fee",
         srcLargeImg: "/paypal.svg",
         paymentInfo: "/payment/paypal.png",
@@ -38,7 +38,7 @@ export const paymentMethods: PaymentMethod[] = [
     }, {
         id: "bankTransfer",
         name: "Bank Transfer",
-        feeRate: 0.0,
+        feeRate: 0,
         template: "invoice_without_transfer_fee",
         srcLargeImg: "/bank.svg",
         paymentInfo: "/payment/bankTransfer.jpg",

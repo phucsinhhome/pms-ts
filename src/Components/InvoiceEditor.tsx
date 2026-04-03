@@ -44,6 +44,7 @@ import { nanoid } from "nanoid";
 import { listAllPGroups } from "../db/pgroup";
 import { PGroup } from "./PGroupManager";
 import { PERMISSION_INVOICE_ASSIGN } from "../db/permission";
+import { AppConfig, PaymentMethod } from "../db/configs";
 
 const roomIcons = [
   {
@@ -173,16 +174,6 @@ const userIcons = [
   },
 ];
 
-export type PaymentMethod = {
-  id: string;
-  name: string;
-  feeRate: number;
-  template: string;
-  srcLargeImg: string;
-  paymentInfo: string;
-  defaultIssuerId: string;
-};
-
 type EditingInvoiceItem = {
   origin: InvoiceItem;
   formattedUnitPrice: string;
@@ -250,9 +241,11 @@ type InvoiceProps = {
   activeMenu: any;
   handleUnauthorized: any;
   hasAuthority: (auth: string) => boolean;
+  configs?: AppConfig;
 };
 
 export const InvoiceEditor = (props: InvoiceProps) => {
+  const pMethods = props.configs?.invoice?.paymentMethods || paymentMethods;
   const [invoice, setInvoice] = useState<Invoice>(defaultEmptyInvoice);
 
   const { invoiceId } = useParams();
@@ -275,7 +268,7 @@ export const InvoiceEditor = (props: InvoiceProps) => {
 
   const [openPaymentModal, setOpenPaymentModal] = useState(false);
   const [selectedPaymentMethod, setSelectedPaymentMethod] =
-    useState<PaymentMethod>(paymentMethods[0]);
+    useState<PaymentMethod>(pMethods[0]);
 
   const [products, setProducts] = useState<Product[]>([]);
   const [openEditingItemModal, setOpenEditingItemModal] = useState(false);
@@ -353,8 +346,8 @@ export const InvoiceEditor = (props: InvoiceProps) => {
         data.paymentMethod !== undefined &&
         data.paymentMethod !== ""
       ) {
-        const pM = paymentMethods.find((m) => m.id === data.paymentMethod);
-        setSelectedPaymentMethod(pM || paymentMethods[0]);
+        const pM = pMethods.find((m) => m.id === data.paymentMethod);
+        setSelectedPaymentMethod(pM || pMethods[0]);
       }
       if (
         data.issuerId !== null &&
@@ -699,7 +692,7 @@ export const InvoiceEditor = (props: InvoiceProps) => {
   ) => {
     try {
       let is = e.currentTarget;
-      let pM = paymentMethods.find((p) => p.id === is.id);
+      let pM = pMethods.find((p) => p.id === is.id);
       if (pM === undefined) {
         console.warn("Cannot find payment method with id %s", is.id);
         return;
@@ -1294,7 +1287,7 @@ export const InvoiceEditor = (props: InvoiceProps) => {
                   {invoice.paymentMethod ? (
                       <img
                       src={
-                        paymentMethods.find(
+                        pMethods.find(
                           (ic) => ic.id === selectedPaymentMethod.id,
                         )?.srcLargeImg
                       }
@@ -1506,7 +1499,7 @@ export const InvoiceEditor = (props: InvoiceProps) => {
           <Modal.Header>Payment</Modal.Header>
           <Modal.Body>
             <div className="flex w-full flex-row items-center space-x-2">
-              {paymentMethods.map((pM) => {
+              {pMethods.map((pM) => {
                 return (
                   <div className="block w-1/5" key={pM.id}>
                     <img

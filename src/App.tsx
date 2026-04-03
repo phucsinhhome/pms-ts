@@ -323,6 +323,7 @@ export const App = () => {
           activeMenu={() => setActiveMenu(menus.invoice)}
           handleUnauthorized={() => handleLogin()}
           hasAuthority={(auth: string) => hasAuthority(auth)}
+          configs={configs}
         />} />
         <Route path="expense" element={<ExpenseManager
           chat={getChat()}

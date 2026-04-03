@@ -1,23 +1,22 @@
 # Project State: PMS (pms-ts)
 
 **Project Name:** PMS (pms-ts)
-**Current Phase:** Phase 1: Foundation & Refactoring (IN PROGRESS)
-**Objective:** Replace hardcoded room names in maps with dynamic data and refactor shared services.
-**Current Focus:** Ensuring `ReservationMap` and `InvoiceMap` are fully database-driven.
+**Current Phase:** Phase 2: Feature Completion & Persistence (PLANNED)
+**Objective:** Enhance order-invoice linking and implement persistence for tour management.
 
 ## Recent Updates
-- **Initial Setup Completed**:
-    - Created `.planning` directory and documentation files (`PROJECT.md`, `REQUIREMENTS.md`, `ROADMAP.md`, `STATE.md`).
-    - Mapped the codebase and identified key components (`InvoiceManager`, `ReservationManager`, `OrderEditor`, etc.).
-    - Verified `PLAN.md` tasks: Order-Invoice bug fix (done), Tour Management save (done), and Map refactoring (done - need verification).
+- **Phase 1: Foundation & Refactoring (COMPLETED)**:
+    - ✅ **Dynamic Configuration**: Successfully refactored `AppConfig` and `InvoiceEditor` to use remote `paymentMethods` with static fallbacks.
+    - ✅ **API Factory**: Consolidated `src/db/apis.ts` into a factory-based structure, reducing redundancy.
+    - ✅ **Dynamic Room Maps**: Refactored `RoomManager.tsx` (Reservation Map) and `InvoiceMap.tsx` to fetch room data dynamically from the database via `src/db/room.ts`.
+    - ✅ **Root Config Distribution**: Updated `App.tsx` to distribute global configuration to child components.
 
 ## Known Issues & Debt
-- **Map Refactoring Needs Verification**: Confirm if `ReservationMap.tsx` and `InvoiceMap.tsx` are correctly fetching data.
-- **Microservices Complexity**: Managing multiple Axios instances for different domains can lead to redundancy in API logic.
+- **Microservices Complexity**: Managing multiple Axios instances for different domains can lead to redundancy in API logic (partially addressed by API factory).
 - **Inconsistent Error Handling**: Ensure all user-facing actions have unified error reporting and feedback.
+- **Tour Persistence**: Need to verify if backend supports the `handleSave` logic in `TourEditor`.
 
-## Next Steps
-- Verify the dynamic data fetching in `ReservationMap.tsx`.
-- Review `InvoiceMap.tsx` for database-driven room mapping.
-- Refactor `src/db/apis.ts` to reduce potential redundancy in Axios instance creation.
-- Implement more robust error handling in the `handleSave` functions of editors.
+## Next Steps (Phase 2)
+- Implement backend persistence for linking invoices to orders.
+- Finalize and test the `handleSave` function in `TourEditor`.
+- Refine the UI for `RatePlanManager`.

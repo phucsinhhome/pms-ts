@@ -1,6 +1,16 @@
 import { Chat } from "../App"
 import { configApi } from "./apis";
 
+export type PaymentMethod = {
+  id: string;
+  name: string;
+  feeRate: number;
+  template: string;
+  srcLargeImg: string;
+  paymentInfo: string;
+  defaultIssuerId: string;
+};
+
 export type AppConfig = {
     app: {
         showProfile: boolean
@@ -12,6 +22,9 @@ export type AppConfig = {
             defaultMenuApp: string,
             menuAppMappings: [{ app: string, startWiths: string }]
         }
+    },
+    invoice: {
+        paymentMethods: PaymentMethod[]
     }
 }
 
@@ -33,6 +46,53 @@ export const defaultAppConfigs: AppConfig = {
             defaultMenuApp: "REACT_APP_MENU_WEB_APP",
             menuAppMappings: [{ app: "REACT_APP_MENU_VI_WEB_APP", startWiths: "/vi[a-z]+/" }]
         }
+    },
+    invoice: {
+        paymentMethods: [
+            {
+                id: "creditCard",
+                name: "Credit Card",
+                feeRate: 0.031,
+                template: "invoice_with_transfer_fee",
+                srcLargeImg: "/mastercard.svg",
+                paymentInfo: "/payment/creditcard.jpeg",
+                defaultIssuerId: "minhtran"
+            },
+            {
+                id: "cash",
+                name: "Cash",
+                feeRate: 0,
+                template: "invoice_without_transfer_fee",
+                srcLargeImg: "/cash.svg",
+                paymentInfo: "/payment/cash.jpeg",
+                defaultIssuerId: "khatran"
+            },
+            {
+                id: "momo",
+                name: "MoMo",
+                feeRate: 0,
+                template: "invoice_without_transfer_fee",
+                srcLargeImg: "/momo-square.png",
+                paymentInfo: "/payment/mono.jpg",
+                defaultIssuerId: "minhtran"
+            }, {
+                id: "paypal",
+                name: "Paypal",
+                feeRate: 0.031,
+                template: "invoice_without_transfer_fee",
+                srcLargeImg: "/paypal.svg",
+                paymentInfo: "/payment/paypal.png",
+                defaultIssuerId: "minhtran"
+            }, {
+                id: "bankTransfer",
+                name: "Bank Transfer",
+                feeRate: 0,
+                template: "invoice_without_transfer_fee",
+                srcLargeImg: "/bank.svg",
+                paymentInfo: "/payment/bankTransfer.jpg",
+                defaultIssuerId: "minhtran"
+            }
+        ]
     }
 }
 

@@ -1,4 +1,4 @@
-import { PaymentMethod } from "../Components/InvoiceEditor"
+import { PaymentMethod } from "./configs"
 
 export const paymentMethods: PaymentMethod[] = [
     {

@@ -1,51 +1,5 @@
 import { PaymentMethod } from "./configs"
 
-export const paymentMethods: PaymentMethod[] = [
-    {
-        id: "creditCard",
-        name: "Credit Card",
-        feeRate: 0.031,
-        template: "invoice_with_transfer_fee",
-        srcLargeImg: "/mastercard.svg",
-        paymentInfo: "/payment/creditcard.jpeg",
-        defaultIssuerId: "minhtran"
-    },
-    {
-        id: "cash",
-        name: "Cash",
-        feeRate: 0,
-        template: "invoice_without_transfer_fee",
-        srcLargeImg: "/cash.svg",
-        paymentInfo: "/payment/cash.jpeg",
-        defaultIssuerId: "khatran"
-    },
-    {
-        id: "momo",
-        name: "MoMo",
-        feeRate: 0,
-        template: "invoice_without_transfer_fee",
-        srcLargeImg: "/momo-square.png",
-        paymentInfo: "/payment/mono.jpg",
-        defaultIssuerId: "minhtran"
-    }, {
-        id: "paypal",
-        name: "Paypal",
-        feeRate: 0.031,
-        template: "invoice_without_transfer_fee",
-        srcLargeImg: "/paypal.svg",
-        paymentInfo: "/payment/paypal.png",
-        defaultIssuerId: "minhtran"
-    }, {
-        id: "bankTransfer",
-        name: "Bank Transfer",
-        feeRate: 0,
-        template: "invoice_without_transfer_fee",
-        srcLargeImg: "/bank.svg",
-        paymentInfo: "/payment/bankTransfer.jpg",
-        defaultIssuerId: "minhtran"
-    }
-]
-
 export const rooms = [
     {
         id: "r1",

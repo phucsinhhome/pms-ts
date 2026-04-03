@@ -32,7 +32,7 @@ import Moment from "react-moment";
 import { listLatestReservations } from "../db/reservation";
 import html2canvas from "html2canvas";
 import { Invoice, InvoiceItem, Issuer } from "./InvoiceManager";
-import { paymentMethods, rooms } from "../db/staticdata";
+import { rooms } from "../db/staticdata";
 import { Product } from "./Inventory";
 import { Reservation, ResRoom } from "./ReservationManager";
 import { listAllProductItems } from "../db/inventory";
@@ -44,7 +44,7 @@ import { nanoid } from "nanoid";
 import { listAllPGroups } from "../db/pgroup";
 import { PGroup } from "./PGroupManager";
 import { PERMISSION_INVOICE_ASSIGN } from "../db/permission";
-import { AppConfig, PaymentMethod } from "../db/configs";
+import { AppConfig, PaymentMethod, defaultAppConfigs } from "../db/configs";
 
 const roomIcons = [
   {
@@ -222,7 +222,7 @@ const defaultEmptyInvoice = {
   checkInDate: formatISODate(new Date()),
   checkOutDate: formatISODate(new Date()),
   prepaied: false,
-  paymentMethod: paymentMethods[0].id,
+  paymentMethod: defaultAppConfigs.invoice.paymentMethods[0].id,
   reservationCode: "",
   items: [],
   creatorId: "",
@@ -245,7 +245,7 @@ type InvoiceProps = {
 };
 
 export const InvoiceEditor = (props: InvoiceProps) => {
-  const pMethods = props.configs?.invoice?.paymentMethods || paymentMethods;
+  const pMethods = props.configs?.invoice?.paymentMethods || defaultAppConfigs.invoice.paymentMethods;
   const [invoice, setInvoice] = useState<Invoice>(defaultEmptyInvoice);
 
   const { invoiceId } = useParams();

@@ -10,6 +10,7 @@
     - ✅ **API Factory**: Consolidated `src/db/apis.ts` into a factory-based structure, reducing redundancy.
     - ✅ **Dynamic Room Maps**: Refactored `RoomManager.tsx` (Reservation Map) and `InvoiceMap.tsx` to fetch room data dynamically from the database via `src/db/room.ts`.
     - ✅ **Root Config Distribution**: Updated `App.tsx` to distribute global configuration to child components.
+    - ✅ **Consolidated Configuration**: Removed redundant `paymentMethods` from `staticdata.ts` and updated `InvoiceEditor` to use `defaultAppConfigs` as the primary fallback.
 
 ## Known Issues & Debt
 - **Microservices Complexity**: Managing multiple Axios instances for different domains can lead to redundancy in API logic (partially addressed by API factory).

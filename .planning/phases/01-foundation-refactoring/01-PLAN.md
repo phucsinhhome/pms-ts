@@ -28,6 +28,11 @@
 - Verify if `RoomManager.tsx` (Reservation Map) and `InvoiceMap.tsx` are correctly fetching and displaying room data.
 - Assess if hardcoded `ROOM_NAMES` and `ROOM_MAP` should be moved to dynamic configuration in this phase or a subsequent one.
 
+### Task 6: Consolidate Payment Method Configuration
+- Remove redundant `paymentMethods` from `src/db/staticdata.ts`.
+- Update `InvoiceEditor.tsx` to use `defaultAppConfigs.invoice.paymentMethods` as the primary fallback instead of `staticdata.ts`.
+- Ensure all references to static `paymentMethods` in `InvoiceEditor.tsx` are removed.
+
 ### Verification
 #### Automated Tests
 - No automated tests currently exist for these components; rely on manual verification.

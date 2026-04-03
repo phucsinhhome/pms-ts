@@ -197,7 +197,7 @@ export function RoomManager(props: RoomManagerProps) {
             </tr>
           </thead>
           <tbody>
-            {ROOM_NAMES.map(room => (
+            {roomNames.map((room: string) => (
               <tr key={room}>
                 <td className="sticky left-0 z-10 bg-green-100 text-green-900 px-2 py-2 border border-green-200 font-bold">{room}</td>
                 {dateColumns.map(date => {

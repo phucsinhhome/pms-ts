@@ -12,6 +12,7 @@ export type PaymentMethod = {
 };
 
 export type AppConfig = {
+    version: string,
     app: {
         showProfile: boolean
     },
@@ -29,6 +30,7 @@ export type AppConfig = {
 }
 
 export const defaultAppConfigs: AppConfig = {
+    version: "1.0.0",
     app: {
         showProfile: true
     },
@@ -96,16 +98,51 @@ export const defaultAppConfigs: AppConfig = {
     }
 }
 
+const CACHE_KEY = 'pms_app_config';
+
 export const appConfigs = async (): Promise<AppConfig> => {
     const configUrl = 'https://raw.githubusercontent.com/phucsinhhome/configs/refs/heads/ps-prod/pms/app.json'
 
-    const opts = {
-        method: 'GET'
+    const cached = localStorage.getItem(CACHE_KEY);
+    if (cached) {
+        try {
+            const parsed = JSON.parse(cached) as AppConfig;
+            // Background refresh (non-blocking)
+            fetchWithRetry(configUrl, 1, 0)
+                .then(fresh => {
+                    if (fresh.version !== parsed.version) {
+                        localStorage.setItem(CACHE_KEY, JSON.stringify(fresh));
+                        console.info(`Configuration updated from ${parsed.version} to ${fresh.version}`);
+                    } else {
+                        console.info("Configuration is up to date.");
+                    }
+                })
+                .catch(err => console.warn("Background refresh failed", err));
+            return parsed;
+        } catch (e) {
+            console.warn("Cache corrupted, fetching fresh...");
+        }
     }
-    const res = await fetch(configUrl, opts);
-    const jsn = await res.json()
-    return jsn as AppConfig
+
+    // No cache: Fetch with 3 retries
+    const fresh = await fetchWithRetry(configUrl, 3, 1000);
+    localStorage.setItem(CACHE_KEY, JSON.stringify(fresh));
+    return fresh as AppConfig;
 }
+
+const fetchWithRetry = async (url: string, retries: number, delay: number): Promise<any> => {
+    for (let i = 0; i < retries; i++) {
+        try {
+            const res = await fetch(url);
+            if (!res.ok) throw new Error(`Status: ${res.status}`);
+            return await res.json();
+        } catch (err) {
+            console.warn(`Fetch attempt ${i + 1} failed:`, err);
+            if (i === retries - 1) throw new Error(`Failed to load configuration after ${retries} retries`);
+            await new Promise(resolve => setTimeout(resolve, delay));
+        }
+    }
+};
 
 export const getConfigs = (config: string) => {
     console.info(`Fetching ${config} configs`)

@@ -1,5 +1,3 @@
-import { PaymentMethod } from "./configs"
-
 export const rooms = [
     {
         id: "r1",

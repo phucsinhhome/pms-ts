@@ -1,15 +1,9 @@
-import React, { useState, useEffect, useMemo } from "react";
-import { listStayingAndComingReservations } from "../db/reservation";
-import { Button, Spinner } from "flowbite-react";
-import { addDays, formatISODate } from "../Service/Utils";
+import React, { useState, useEffect } from "react";
+import { Button, Modal, Label, TextInput, Table, Spinner, Select } from "flowbite-react";
 import { Chat, DEFAULT_PAGE_SIZE } from "../App";
-import { optionStyle, Pagination } from "./ProfitReport";
-import { collectRes } from "../db/reservation_extractor";
-import { MdAssignmentAdd } from "react-icons/md";
-import { Reservation } from "./ReservationManager";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import { listRoom } from "../db/room";
-import { Room } from "./InvoiceManager";
+import { listRoom, createRoom, updateRoom, deleteRoom, Room } from "../db/room";
+import { HiOutlineExclamationCircle, HiPlus, HiPencil, HiTrash, HiUserGroup, HiOutlineViewGrid, HiBadgeCheck } from "react-icons/hi";
+import { Pagination } from "./ProfitReport";
 
 type RoomManagerProps = {
   chat: Chat,
@@ -20,218 +14,335 @@ type RoomManagerProps = {
   hasAuthority: (auth: string) => boolean
 }
 
-export function RoomManager(props: RoomManagerProps) {
-  const [reservations, setReservations] = useState<Reservation[]>([])
-  const [rooms, setRooms] = useState<Room[]>([])
-  const roomNames = useMemo(() => rooms.map(r => r.internalRoomName), [rooms]);
+const defaultEmptyRoom: Partial<Room> = {
+  name: "",
+  internalName: "",
+  status: "AVAILABLE",
+  maxAdults: 2,
+  numDoubleBeds: 1
+};
 
-  // Start from yesterday
-  const [fromDate, setFromDate] = useState(addDays(new Date(), -1));
-  const [deltaDays, setDeltaDays] = useState(-1)
+export function RoomManager(props: RoomManagerProps) {
+  const [rooms, setRooms] = useState<Room[]>([]);
+  const [loading, setLoading] = useState(false);
   const [pagination, setPagination] = useState<Pagination>({
     pageNumber: 0,
-    pageSize: 50,
-    totalElements: 200,
-    totalPages: 20
-  })
-  const [isUpdating, setIsUpdating] = useState(false);
+    pageSize: DEFAULT_PAGE_SIZE,
+    totalElements: 0,
+    totalPages: 0
+  });
 
-  // Number of days to show in columns
-  const NUM_DAYS = 10;
+  const [openModal, setOpenModal] = useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [editingRoom, setEditingRoom] = useState<Partial<Room>>(defaultEmptyRoom);
+  const [deletingRoom, setDeletingRoom] = useState<Room | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
-  // Generate date columns starting from fromDate
-  const dateColumns = useMemo(() => {
-    const cols: Date[] = [];
-    for (let i = 0; i < NUM_DAYS; i++) {
-      cols.push(addDays(fromDate, i));
-    }
-    return cols;
-  }, [fromDate]);
+  const filteredRooms = (rooms || []).filter(room => 
+    (room.name || "").toLowerCase().includes(searchTerm.toLowerCase()) || 
+    (room.internalName || "").toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
-  // Map reservations to room and date
-  const reservationMap = useMemo(() => {
-    // room -> date string -> reservation[]
-    const map: Record<string, Record<string, Reservation[]>> = {};
-    roomNames.forEach(room => {
-      map[room] = {};
-      dateColumns.forEach(date => map[room][formatISODate(date)] = []);
-    });
-    reservations?.forEach(res => {
-      if (!res.rooms) return;
-      res.rooms.forEach(roomObj => {
-        const roomName = roomObj.internalRoomName || roomObj.roomName;
-        if (!roomNames.includes(roomName)) return;
-        let start = new Date(res.checkInDate);
-        let end = new Date(res.checkOutDate);
-        for (let d = new Date(start); d < end; d.setDate(d.getDate() + 1)) {
-          const key = formatISODate(d);
-          if (map[roomName][key]) {
-            map[roomName][key].push(res);
-          }
-        }
-      });
-    });
-    return map;
-  }, [reservations, dateColumns, roomNames]);
-
-  const filterDay = (numDays: number) => {
-    var newDD = addDays(new Date(), numDays)
-    setFromDate(newDD)
-    setDeltaDays(numDays)
-    fetchReservations(newDD, pagination.pageNumber, pagination.pageSize)
-  }
-
-  const fetchRooms = async () => {
+  const fetchRooms = async (page = 0) => {
+    setLoading(true);
     try {
-      const res = await listRoom(0, 100);
+      const res = await listRoom(page, pagination.pageSize);
       if (res.status === 200) {
         setRooms(res.data.content);
+        setPagination({
+          pageNumber: res.data.number,
+          pageSize: res.data.size,
+          totalElements: res.data.totalElements,
+          totalPages: res.data.totalPages
+        });
       }
     } catch (e) {
       console.error("Error while fetching rooms", e);
+    } finally {
+      setLoading(false);
     }
-  }
-
-  const fetchReservations = async (fromDate: Date, pageNumber: number, pageSize: number) => {
-    var fd = formatISODate(fromDate)
-    const rsp = await listStayingAndComingReservations(fd, pageNumber, pageSize)
-    if (rsp.status === 401 || rsp.status === 403) {
-      props.handleUnauthorized();
-      return
-    }
-    if (rsp.status === 200) {
-      const data = rsp.data;
-      setReservations(data.content)
-      var page = {
-        pageNumber: data.number,
-        pageSize: data.size,
-        totalElements: data.totalElements,
-        totalPages: data.totalPages
-      }
-      setPagination(page)
-    } else {
-      setReservations([])
-    }
-  }
+  };
 
   useEffect(() => {
     fetchRooms();
-    fetchReservations(fromDate, 0, Number(DEFAULT_PAGE_SIZE));
-    props.activeMenu()
+    props.activeMenu();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props, fromDate]);
+  }, []);
 
-  const handleUpdateClick = async () => {
-    setIsUpdating(true);
+  const handleAddClick = () => {
+    setEditingRoom(defaultEmptyRoom);
+    setOpenModal(true);
+  };
+
+  const handleEditClick = (room: Room) => {
+    setEditingRoom(room);
+    setOpenModal(true);
+  };
+
+  const handleDeleteClick = (room: Room) => {
+    setDeletingRoom(room);
+    setOpenDeleteModal(true);
+  };
+
+  const handleSaveRoom = async () => {
     try {
-      const fd = formatISODate(new Date());
-      const td = formatISODate(addDays(new Date(), NUM_DAYS));
-      await collectRes(fd, td);
-      setTimeout(() => {
-        fetchReservations(addDays(new Date(), -1), 0, pagination.pageSize);
-      }, 2000);
-    }
-    catch (error) {
-      console.error("Failed to collect reservations: ", error);
-    }
-    finally {
-      setIsUpdating(false);
+      if (editingRoom.id) {
+        await updateRoom(editingRoom as Room);
+      } else {
+        await createRoom(editingRoom);
+      }
+      setOpenModal(false);
+      fetchRooms(pagination.pageNumber);
+    } catch (e) {
+      console.error("Error saving room", e);
+      alert("Failed to save room");
     }
   };
 
-  // Move date range left
-  const handlePrevDates = () => {
-    const newFromDate = addDays(fromDate, -NUM_DAYS + 1);
-    setFromDate(newFromDate);
-    fetchReservations(newFromDate, 0, pagination.pageSize);
+  const confirmDelete = async () => {
+    if (!deletingRoom?.id) return;
+    try {
+      await deleteRoom(deletingRoom.id);
+      setOpenDeleteModal(false);
+      fetchRooms(pagination.pageNumber);
+    } catch (e) {
+      console.error("Error deleting room", e);
+      alert("Failed to delete room");
+    }
   };
 
-  // Move date range right
-  const handleNextDates = () => {
-    const newFromDate = addDays(fromDate, NUM_DAYS - 1);
-    setFromDate(newFromDate);
-    fetchReservations(newFromDate, 0, pagination.pageSize);
-  };
-
-  // Table view with sticky room names
   return (
-    <div className="h-full pt-3 relative bg-green-50">
-      <div className="flex flex-wrap pb-4 px-2 space-x-4 space-y-2">
-        <div className="flex flex-row items-center mb-2">
-          <Button size="xs" color="green" onClick={handleUpdateClick}>
-            {isUpdating ? <Spinner aria-label="Default status example" size="1.5em" />
-              : <MdAssignmentAdd size="1.5em" className="mr-2" />} Sync Reservation
-          </Button>
-        </div>
-      </div>
-      <div className="flex flex-row space-x-2 px-4">
-        <Button size="xs" color="gray" onClick={handlePrevDates} className="flex items-center">
-          <FaChevronLeft className="mr-1" /> Prev
-        </Button>
-        {[
-          { days: 0, label: 'Today' },
-          { days: -1, label: 'Yesterday' },
-          { days: -5, label: '5 days' },
-          { days: -1 * new Date().getDate(), label: '1st' }
-        ].map((opt, idx) => (
-          <Button
-            key={idx}
-            size="xs"
-            color={deltaDays === opt.days ? "success" : "gray"}
-            onClick={() => filterDay(opt.days)}
-            className={optionStyle(deltaDays === opt.days)}
-          >
-            {opt.label}
-          </Button>
-        ))}
-        <Button size="xs" color="gray" onClick={handleNextDates} className="flex items-center">
-          Next <FaChevronRight className="ml-1" />
+    <div className="p-2 sm:p-4">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 space-y-2 sm:space-y-0">
+        <h1 className="text-xl sm:text-2xl font-bold text-green-900">Room Management</h1>
+        <Button color="green" onClick={handleAddClick} className="w-full sm:w-auto">
+          <HiPlus className="mr-2 h-5 w-5" /> Add Room
         </Button>
       </div>
-      <div className="overflow-x-auto mt-4">
-        <table className="min-w-max border-collapse">
-          <thead>
-            <tr>
-              <th className="sticky left-0 z-10 bg-green-100 text-green-900 px-2 py-2 border border-green-200"></th>
-              {dateColumns.map(date => (
-                <th key={date.toISOString()} className="bg-green-50 text-green-900 px-2 py-2 border border-green-200 whitespace-nowrap">
-                  {date.toLocaleDateString(undefined, { month: "short", day: "numeric" })}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {roomNames.map((room: string) => (
-              <tr key={room}>
-                <td className="sticky left-0 z-10 bg-green-100 text-green-900 px-2 py-2 border border-green-200 font-bold">{room}</td>
-                {dateColumns.map(date => {
-                  const key = formatISODate(date);
-                  const resList = reservationMap[room][key];
-                  return (
-                    <td key={key} className="py-1 border border-green-100 min-w-[120px]">
-                      {resList && resList.length > 0 ? (
-                        resList.map(res => {
-                          const firstDate = formatISODate(date) === formatISODate(new Date(res.checkInDate));
-                          return (
-                            res.canceled ? <></> :
-                              <div key={res.id} className={`flex flex-col bg-green-200 h-9 py-0.5 mb-1 text-xs shadow ${firstDate ? 'border-l-4 border-green-600 ml-2 pl-1' : ''} rounded`}>
-                                {firstDate ?
-                                  <span className="text-green-900 font-bold">{res.guestName}</span>
-                                  : <span className="text-green-900 font-bold">_</span>
-                                }
-                                <span className="font-mono text-gray-400">{res.code}</span>
-                              </div>
-                          )
-                        })
-                      ) : null}
-                    </td>
-                  );
-                })}
-              </tr>
-            ))}
-          </tbody>
-        </table>
+
+      <div className="mb-4">
+        <TextInput
+          id="search"
+          type="text"
+          placeholder="Search rooms..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
       </div>
+
+      {/* Mobile Card View */}
+      <div className="grid grid-cols-1 gap-4 sm:hidden mb-4">
+        {loading ? (
+          <div className="text-center py-10">
+            <Spinner size="xl" />
+          </div>
+        ) : filteredRooms.length === 0 ? (
+          <div className="text-center py-10 text-gray-500">
+            No rooms found.
+          </div>
+        ) : (
+          filteredRooms.map((room) => (
+            <div key={room.id} className="bg-white p-4 rounded-lg shadow border border-gray-100 flex flex-col space-y-3">
+              <div className="flex justify-between items-start">
+                <div className="flex flex-col">
+                  <span className="text-xs font-mono text-gray-400 uppercase tracking-wider">{room.internalName}</span>
+                  <span className="text-xl font-bold text-green-900">{room.name}</span>
+                </div>
+                <div className="flex space-x-2">
+                  <Button size="xs" color="gray" onClick={() => handleEditClick(room)}>
+                    <HiPencil className="h-4 w-4" />
+                  </Button>
+                  <Button size="xs" color="failure" onClick={() => handleDeleteClick(room)}>
+                    <HiTrash className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+              
+              <div className="flex flex-wrap gap-2">
+                <div className="flex items-center text-xs text-gray-600 bg-green-50 px-2 py-1 rounded border border-green-100">
+                  <HiBadgeCheck className={`mr-1.5 h-4 w-4 ${room.status === 'AVAILABLE' ? 'text-green-500' : 'text-yellow-500'}`} />
+                  <span className="font-semibold uppercase">{room.status || 'N/A'}</span>
+                </div>
+                <div className="flex items-center text-xs text-gray-600 bg-blue-50 px-2 py-1 rounded border border-blue-100">
+                  <HiUserGroup className="mr-1.5 h-4 w-4 text-blue-500" />
+                  <span>Max Adults: <b>{room.maxAdults || 0}</b></span>
+                </div>
+                <div className="flex items-center text-xs text-gray-600 bg-indigo-50 px-2 py-1 rounded border border-indigo-100">
+                  <HiOutlineViewGrid className="mr-1.5 h-4 w-4 text-indigo-500" />
+                  <span>Beds: <b>{room.numDoubleBeds || 0}</b></span>
+                </div>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+
+      {/* Desktop Table View */}
+      <div className="hidden sm:block overflow-x-auto shadow-sm sm:rounded-lg border border-gray-100">
+        <Table hoverable>
+          <Table.Head>
+            <Table.HeadCell className="bg-green-100">Internal Name</Table.HeadCell>
+            <Table.HeadCell className="bg-green-100">Display Name</Table.HeadCell>
+            <Table.HeadCell className="bg-green-100 text-center">Actions</Table.HeadCell>
+          </Table.Head>
+          <Table.Body className="divide-y">
+            {loading ? (
+              <Table.Row>
+                <Table.Cell colSpan={3} className="text-center py-10">
+                  <Spinner size="xl" />
+                </Table.Cell>
+              </Table.Row>
+            ) : filteredRooms.length === 0 ? (
+              <Table.Row>
+                <Table.Cell colSpan={3} className="text-center py-10 text-gray-500">
+                  No rooms found.
+                </Table.Cell>
+              </Table.Row>
+            ) : (
+              filteredRooms.map((room) => (
+                <Table.Row key={room.id} className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                  <Table.Cell className="whitespace-nowrap font-bold text-gray-900 dark:text-white">
+                    {room.internalName}
+                  </Table.Cell>
+                  <Table.Cell>
+                    <div className="flex flex-col">
+                      <span className="font-bold text-green-900 dark:text-white text-lg">
+                        {room.name}
+                      </span>
+                      <div className="flex flex-wrap items-center gap-2 mt-1">
+                        <div className="flex items-center text-[10px] text-gray-500 bg-green-50 px-1.5 py-0.5 rounded border border-green-100 shadow-sm">
+                          <HiBadgeCheck className={`mr-1 h-3 w-3 ${room.status === 'AVAILABLE' ? 'text-green-500' : 'text-yellow-500'}`} />
+                          <span className="font-semibold uppercase">{room.status || 'N/A'}</span>
+                        </div>
+                        <div className="flex items-center text-[10px] text-gray-500 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-100 shadow-sm">
+                          <HiUserGroup className="mr-1 h-3 w-3 text-blue-500" />
+                          <span>Max: <b>{room.maxAdults || 0}</b></span>
+                        </div>
+                        <div className="flex items-center text-[10px] text-gray-500 bg-indigo-50 px-1.5 py-0.5 rounded border border-indigo-100 shadow-sm">
+                          <HiOutlineViewGrid className="mr-1 h-3 w-3 text-indigo-500" />
+                          <span>Beds: <b>{room.numDoubleBeds || 0}</b></span>
+                        </div>
+                      </div>
+                    </div>
+                  </Table.Cell>
+                  <Table.Cell>
+                    <div className="flex justify-center space-x-2">
+                      <Button size="xs" color="gray" onClick={() => handleEditClick(room)}>
+                        <HiPencil className="h-4 w-4" />
+                      </Button>
+                      <Button size="xs" color="failure" onClick={() => handleDeleteClick(room)}>
+                        <HiTrash className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </Table.Cell>
+                </Table.Row>
+              ))
+            )}
+          </Table.Body>
+        </Table>
+      </div>
+
+      {/* Create/Edit Modal */}
+      <Modal show={openModal} onClose={() => setOpenModal(false)}>
+        <Modal.Header>{editingRoom.id ? "Edit Room" : "Add New Room"}</Modal.Header>
+        <Modal.Body>
+          <div className="space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <div className="mb-2 block">
+                  <Label htmlFor="internalName" value="Internal Room Name" />
+                </div>
+                <TextInput
+                  id="internalName"
+                  placeholder="e.g. R1, VIP1"
+                  value={editingRoom.internalName}
+                  onChange={(e) => setEditingRoom({ ...editingRoom, internalName: e.target.value })}
+                  required
+                />
+              </div>
+              <div>
+                <div className="mb-2 block">
+                  <Label htmlFor="status" value="Status" />
+                </div>
+                <Select
+                  id="status"
+                  value={editingRoom.status || "AVAILABLE"}
+                  onChange={(e) => setEditingRoom({ ...editingRoom, status: e.target.value })}
+                >
+                  <option value="AVAILABLE">Available</option>
+                  <option value="DIRTY">Dirty</option>
+                  <option value="CLEANING">Cleaning</option>
+                  <option value="MAINTENANCE">Maintenance</option>
+                </Select>
+              </div>
+            </div>
+            <div>
+              <div className="mb-2 block">
+                <Label htmlFor="name" value="Display Name" />
+              </div>
+              <TextInput
+                id="name"
+                placeholder="e.g. Room 101"
+                value={editingRoom.name}
+                onChange={(e) => setEditingRoom({ ...editingRoom, name: e.target.value })}
+                required
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <div className="mb-2 block">
+                  <Label htmlFor="maxAdults" value="Max Adults" />
+                </div>
+                <TextInput
+                  id="maxAdults"
+                  type="number"
+                  placeholder="2"
+                  value={editingRoom.maxAdults || 0}
+                  onChange={(e) => setEditingRoom({ ...editingRoom, maxAdults: parseInt(e.target.value) || 0 })}
+                />
+              </div>
+              <div>
+                <div className="mb-2 block">
+                  <Label htmlFor="numDoubleBeds" value="Double Beds" />
+                </div>
+                <TextInput
+                  id="numDoubleBeds"
+                  type="number"
+                  placeholder="1"
+                  value={editingRoom.numDoubleBeds || 0}
+                  onChange={(e) => setEditingRoom({ ...editingRoom, numDoubleBeds: parseInt(e.target.value) || 0 })}
+                />
+              </div>
+            </div>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button color="green" onClick={handleSaveRoom}>Save</Button>
+          <Button color="gray" onClick={() => setOpenModal(false)}>Cancel</Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Delete Confirmation Modal */}
+      <Modal show={openDeleteModal} size="md" popup onClose={() => setOpenDeleteModal(false)}>
+        <Modal.Header />
+        <Modal.Body>
+          <div className="text-center">
+            <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
+            <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+              Are you sure you want to delete room <b>{deletingRoom?.internalName}</b>?
+            </h3>
+            <div className="flex justify-center gap-4">
+              <Button color="failure" onClick={confirmDelete}>
+                Yes, I'm sure
+              </Button>
+              <Button color="gray" onClick={() => setOpenDeleteModal(false)}>
+                No, cancel
+              </Button>
+            </div>
+          </div>
+        </Modal.Body>
+      </Modal>
     </div>
   );
 }

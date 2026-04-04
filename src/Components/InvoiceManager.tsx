@@ -16,6 +16,8 @@ import { IoMdMap, IoMdPersonAdd, IoMdRemoveCircle } from "react-icons/io";
 import { CiEdit } from "react-icons/ci";
 import { PERMISSION_INVOICE_DELETE } from "../db/permission";
 
+import { Room } from "../db/room";
+
 export type InvoiceItem = {
   id: string;
   itemName: string;
@@ -24,11 +26,7 @@ export type InvoiceItem = {
   amount: number;
   service: string;
 };
-export type Room = {
-  id: string;
-  name: string;
-  internalRoomName: string;
-};
+
 export type Invoice = {
   id: string;
   guestName: string;

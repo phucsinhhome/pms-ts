@@ -25,6 +25,11 @@
 - **Google Generative AI Integration:** Implement AI-assisted tasks (e.g., invoice classification, automated guest replies).
 - **Firebase Real-time Features:** Enhance real-time status updates for room occupancy.
 
+## Phase 6: Room Manager and Invoice Map Optimization
+- **Refactor Room/Invoice Mapping**: Switch to ID-based matching to ensure data integrity.
+- **Improved Visualization**: Enhance Room Manager and Invoice Map views to correctly show room status.
+- **Performance & Lifecycle Fixes**: Optimize state management and component rendering.
+
 ## Future Phases
 - **Mobile Companion App:** Lightweight mobile version for staff members.
 - **Reporting Dashboard:** Comprehensive visual analytics for revenue, occupancy, and guest behavior.

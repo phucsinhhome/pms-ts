@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { Avatar, Button, Label, Modal, TextInput } from "flowbite-react";
 import { Chat, DEFAULT_PAGE_SIZE } from "../App";
 import { formatISODate, formatISODateTime, formatRooms, formatVND } from "../Service/Utils";
-import { confirmOrder, fetchOrder, rejectOrder, saveOrder, serveOrder } from "../db/order";
+import { confirmOrder, fetchOrder, getPotentialInvoices, rejectOrder, saveOrder, serveOrder } from "../db/order";
 import { getInvoice, listInvoiceByGuestName } from "../db/invoice";
 import { Order, OrderStatus, SK } from "./OrderManager";
 import { Invoice } from "./InvoiceManager";
@@ -27,6 +27,7 @@ export const OrderEditor = (props: OrderEditorProps) => {
 
   const [showInvoices, setShowInvoices] = useState(false)
   const [invoices, setInvoices] = useState<Invoice[]>([])
+  const [potentialInvoices, setPotentialInvoices] = useState<Invoice[]>([])
   const [choosenInvoice, setChoosenInvoice] = useState<Invoice | null>()
   const [filteredName, setFilteredName] = useState('')
 
@@ -59,11 +60,18 @@ export const OrderEditor = (props: OrderEditorProps) => {
           })
           .catch((e) => {
             console.error("Error while fetching the linked invoice", e)
-            if (e instanceof Error) {
-              alert(e.message)
-            }
           });
       }
+
+      // Fetch potential invoices
+      getPotentialInvoices(orderId)
+        .then(rsp => {
+          if (rsp.status === 200) {
+            setPotentialInvoices(rsp.data);
+          }
+        })
+        .catch(err => console.warn("Failed to fetch potential invoices", err));
+
     } catch (e) {
       console.error("Error while fetching the order", e)
       if (e instanceof Error) {
@@ -189,6 +197,21 @@ export const OrderEditor = (props: OrderEditorProps) => {
     setChoosenInvoice(inv)
   }
 
+  const handleUnlink = async () => {
+    if (!order) return;
+    try {
+      const o = { ...order, invoiceId: "" };
+      const rsp = await saveOrder(o);
+      if (rsp.status === 200) {
+        setOrder(rsp.data);
+        setChoosenInvoice(null);
+        console.info("Order unlinked successfully");
+      }
+    } catch (e) {
+      console.error("Failed to unlink order", e);
+    }
+  };
+
   const confirmChangeInvoice = async () => {
     try {
       if (order === undefined || order === null) {
@@ -201,6 +224,7 @@ export const OrderEditor = (props: OrderEditorProps) => {
       }
       if (order.invoiceId === choosenInvoice.id) {
         console.warn("You choose the same linked invoice")
+        setShowInvoices(false)
         return
       }
       var o = {
@@ -310,13 +334,18 @@ export const OrderEditor = (props: OrderEditorProps) => {
       </div>
       <div className="flex flex-row items-center justify-between pt-3 px-2">
         <Button onClick={stopPreparation} disabled={order?.status !== 'SENT'}>Reject</Button>
+        <div className="flex space-x-2">
+          {order?.invoiceId ? (
+            <Button color="failure" onClick={handleUnlink}>
+              Unlink
+            </Button>
+          ) : null}
+          <Button onClick={() => setShowInvoices(true)}>
+            {order?.invoiceId ? "Change Invoice" : "Link Invoice"}
+          </Button>
+        </div>
         {
-          order?.invoiceId === null || order?.invoiceId === '' ?
-            <Button onClick={() => setShowInvoices(true)} >Link invoice</Button>
-            : <></>
-        }
-        {
-          order?.status === 'SENT' && order.invoiceId !== null ?
+          order?.status === 'SENT' && order.invoiceId ?
             <Button onClick={sendToPreparation} >Confirm</Button>
             : <></>
         }
@@ -335,57 +364,96 @@ export const OrderEditor = (props: OrderEditorProps) => {
         onClose={cancelLinkInvoice}
         popup={true}
       >
-        <Modal.Header></Modal.Header>
-        <Modal.Body>
-          <div className="pb-2 px-2">
-            <TextInput
-              id="filteredName"
-              placeholder="Enter guest name to search"
-              type="text"
-              required={true}
-              value={filteredName}
-              onChange={changeFilteredName}
-              className="w-full"
-            />
+        <Modal.Header>
+          <div className="px-4 pt-4 pb-2 border-b">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+              Link Order to Invoice
+            </h3>
           </div>
-          <div className="flex flex-col">
-            {invoices && invoices.length > 0 ?
+        </Modal.Header>
+        <Modal.Body>
+          <div className="space-y-4 pt-4">
+            {potentialInvoices.length > 0 && (
               <div>
-                <div><span className="font italic">Choose to link the order with an invoice</span></div>
-                <div className="flex flex-col space-y-2">
-                  {invoices.map(inv =>
+                <span className="text-sm font-semibold text-green-700 dark:text-green-400 mb-2 block">
+                  Recommended (Current Guests)
+                </span>
+                <div className="grid grid-cols-1 gap-2">
+                  {potentialInvoices.map(inv => (
                     <div
                       key={inv.id}
                       className={choosenInvoice?.id === inv.id
-                        ? "flex flex-col py-1 px-2  border border-gray-100 shadow-sm rounded-md bg-amber-600 dark:bg-slate-500"
-                        : "flex flex-col py-1 px-2 border border-gray-100 shadow-sm rounded-md bg-white dark:bg-slate-500"
+                        ? "flex flex-col py-2 px-3 border-2 border-green-500 rounded-lg bg-green-50 dark:bg-green-900 cursor-pointer"
+                        : "flex flex-col py-2 px-3 border border-gray-200 rounded-lg bg-white dark:bg-gray-800 hover:bg-gray-50 cursor-pointer"
                       }
                       onClick={() => handleInvSelection(inv)}
                     >
-                      <Label
-                        className="font-bold text-xs text-left text-blue-600 hover:underline overflow-hidden"
-                      >
-                        {inv.guestName}
-                      </Label>
-                      <Label
-                        className="font-mono text-sm text-left text-gray-500 overflow-hidden"
-                      >
-                        {inv.checkInDate}
-                      </Label>
+                      <div className="flex justify-between items-center">
+                        <span className="font-bold text-sm text-blue-700 dark:text-blue-400">
+                          {inv.guestName}
+                        </span>
+                        <span className="text-[10px] font-mono text-gray-500">
+                          {formatRooms(inv.rooms)}
+                        </span>
+                      </div>
+                      <span className="text-[10px] text-gray-500">
+                        {inv.checkInDate} - {inv.checkOutDate}
+                      </span>
                     </div>
-                  )}
+                  ))}
                 </div>
               </div>
-              : <div className="flex flex-wrap -mx-3 mb-6">
-                <span className="text-red-800 text-center">...</span>
+            )}
+
+            <div>
+              <span className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 block">
+                Search Guest
+              </span>
+              <TextInput
+                id="filteredName"
+                placeholder="Enter guest name to search"
+                type="text"
+                required={true}
+                value={filteredName}
+                onChange={changeFilteredName}
+                className="w-full"
+              />
+            </div>
+
+            {invoices.length > 0 && (
+              <div className="max-h-60 overflow-y-auto space-y-2 mt-2">
+                {invoices.map(inv => (
+                  <div
+                    key={inv.id}
+                    className={choosenInvoice?.id === inv.id
+                      ? "flex flex-col py-2 px-3 border-2 border-blue-500 rounded-lg bg-blue-50 dark:bg-blue-900 cursor-pointer"
+                      : "flex flex-col py-2 px-3 border border-gray-200 rounded-lg bg-white dark:bg-gray-800 hover:bg-gray-50 cursor-pointer"
+                    }
+                    onClick={() => handleInvSelection(inv)}
+                  >
+                    <div className="flex justify-between items-center">
+                      <span className="font-bold text-sm text-blue-700 dark:text-blue-400">
+                        {inv.guestName}
+                      </span>
+                      <span className="text-[10px] font-mono text-gray-500">
+                        {formatRooms(inv.rooms)}
+                      </span>
+                    </div>
+                    <span className="text-[10px] text-gray-500">
+                      {inv.checkInDate}
+                    </span>
+                  </div>
+                ))}
               </div>
-            }
+            )}
           </div>
         </Modal.Body>
-        <Modal.Footer className="flex justify-center gap-4">
-          <Button onClick={confirmChangeInvoice}>Confirm</Button>
+        <Modal.Footer className="flex justify-end space-x-2">
           <Button color="gray" onClick={cancelChangeInvoice}>
             Cancel
+          </Button>
+          <Button color="green" onClick={confirmChangeInvoice} disabled={!choosenInvoice}>
+            Link Selected
           </Button>
         </Modal.Footer>
       </Modal>

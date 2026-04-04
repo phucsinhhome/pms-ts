@@ -8,8 +8,7 @@ import { collectRes } from "../db/reservation_extractor";
 import { MdAssignmentAdd } from "react-icons/md";
 import { Reservation } from "./ReservationManager";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import { listRoom } from "../db/room";
-import { Room } from "./InvoiceManager";
+import { listRoom, Room } from "../db/room";
 
 type ReservationMapProps = {
   activeMenu: any,
@@ -19,7 +18,7 @@ type ReservationMapProps = {
 export function ReservationMap(props: ReservationMapProps) {
   const [reservations, setReservations] = useState<Reservation[]>([])
   const [rooms, setRooms] = useState<Room[]>([])
-  const roomNames = useMemo(() => rooms.map(r => r.internalRoomName), [rooms]);
+  const roomNames = useMemo(() => rooms.map(r => r.internalName), [rooms]);
 
   // Start from yesterday
   const [fromDate, setFromDate] = useState(addDays(new Date(), -1));
@@ -55,7 +54,7 @@ export function ReservationMap(props: ReservationMapProps) {
     reservations?.forEach(res => {
       if (!res.rooms) return;
       res.rooms.forEach(roomObj => {
-        const roomName = roomObj.internalRoomName || roomObj.roomName;
+        const roomName = roomObj.internalName || roomObj.roomName;
         if (!roomNames.includes(roomName)) return;
         let start = new Date(res.checkInDate);
         let end = new Date(res.checkOutDate);

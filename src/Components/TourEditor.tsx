@@ -3,10 +3,11 @@ import { Chat } from "../App";
 import { getTour, saveTour } from "../db/tour";
 import { Tour } from "./TourManager";
 import { useParams } from "react-router-dom";
-import { Label, TextInput, Textarea, Button, Card, List } from "flowbite-react";
+import { Label, TextInput, Textarea, Button, Card, Spinner } from "flowbite-react";
 import { CiEdit } from "react-icons/ci";
-import { IoMdSave, IoMdClose } from "react-icons/io";
+import { IoMdClose } from "react-icons/io";
 import { MdAdd } from "react-icons/md";
+import { HiTrash } from "react-icons/hi";
 
 type TourEditorProps = {
   chat: Chat;
@@ -21,7 +22,6 @@ const EditField = ({
   field,
   editField,
   onEdit,
-  onSave,
   onCancel,
   onChange,
   type = "text",
@@ -31,7 +31,6 @@ const EditField = ({
   field: string;
   editField: string | null;
   onEdit: (field: string) => void;
-  onSave: (field: string) => void;
   onCancel: () => void;
   onChange: (field: string, value: any) => void;
   type?: "text" | "number" | "textarea";
@@ -48,28 +47,20 @@ const EditField = ({
           <div className="flex space-x-2">
             <Button
               size="xs"
-              color="success"
-              onClick={() => onSave(field)}
-              className="text-green-700 dark:text-green-500"
-            >
-              <IoMdSave size="1em" />
-            </Button>
-            <Button
-              size="xs"
               color="failure"
               onClick={onCancel}
-              className="text-red-700 dark:text-red-500"
+              className="text-red-700 dark:text-red-500 bg-transparent border-none shadow-none"
             >
-              <IoMdClose size="1em" />
+              <IoMdClose size="1.2em" />
             </Button>
           </div>
         ) : (
           <Button
             size="xs"
             onClick={() => onEdit(field)}
-            className="text-green-700 dark:text-green-500 bg-transparent"
+            className="text-green-700 dark:text-green-500 bg-transparent border-none shadow-none"
           >
-            <CiEdit size="1em" />
+            <CiEdit size="1.2em" />
           </Button>
         )}
       </div>
@@ -110,6 +101,7 @@ export const TourEditor = (props: TourEditorProps) => {
   const [featureImage, setFeatureImage] = useState<string | null>(null);
   const [slots, setSlots] = useState<any[]>([]);
   const [prices, setPrices] = useState<number[]>([]);
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     if (!tourId) return;
@@ -164,13 +156,23 @@ export const TourEditor = (props: TourEditorProps) => {
     }
   };
 
-  const handleSave = async (field: string) => {
+  const handleSave = async () => {
     if (!tour) return;
+    setIsSaving(true);
     try {
-      const rsp = await saveTour(tour);
+      const tourToSave = {
+        ...tour,
+        slots: slots,
+        prices: prices
+      };
+      const rsp = await saveTour(tourToSave);
       if (rsp.status === 200) {
-        setTour(rsp.data);
+        const data = rsp.data;
+        setTour(data);
+        setSlots(data.slots || []);
+        setPrices(data.prices || []);
         console.info("Tour changes saved successfully");
+        alert("Changes saved successfully");
       } else {
         console.error("Failed to save tour:", rsp.status);
       }
@@ -181,7 +183,18 @@ export const TourEditor = (props: TourEditorProps) => {
       }
     } finally {
       setEditField(null);
+      setIsSaving(false);
     }
+  };
+
+  const handleDeleteSlot = (index: number) => {
+    const updatedSlots = slots.filter((_, i) => i !== index);
+    setSlots(updatedSlots);
+  };
+
+  const handleDeletePrice = (index: number) => {
+    const updatedPrices = prices.filter((_, i) => i !== index);
+    setPrices(updatedPrices);
   };
 
   const handleCancel = () => {
@@ -189,13 +202,12 @@ export const TourEditor = (props: TourEditorProps) => {
   };
 
   const handleAddSlot = () => {
-    // Logic to add a new slot
     setSlots([...slots, { startTime: "", endTime: "" }]);
   };
 
   const handleEditSlot = (index: number, field: string, value: string) => {
     const updatedSlots = [...slots];
-    updatedSlots[index][field] = value;
+    updatedSlots[index] = { ...updatedSlots[index], [field]: value };
     setSlots(updatedSlots);
   };
 
@@ -210,26 +222,39 @@ export const TourEditor = (props: TourEditorProps) => {
   };
 
   if (!tour) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex justify-center items-center h-full">
+        <Spinner size="xl" />
+      </div>
+    );
   }
 
   return (
-    <div className="flex flex-col h-full pt-6 px-4 sm:px-6 bg-gray-50 dark:bg-gray-800">
+    <div className="flex flex-col h-full pt-6 px-4 sm:px-6 bg-gray-50 dark:bg-gray-800 pb-20">
       <Card className="dark:bg-gray-700">
         <div className="flex items-center justify-between">
           <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-4 text-center sm:text-left">
             {tour.name || "Tour Details"}
           </h1>
-          <Button size="xs" onClick={() => handleEditClick("name")} className="bg-transparent hover:text-green-500">
-            <CiEdit size="1em" />
+          <Button size="xs" onClick={() => handleEditClick("name")} className="bg-transparent hover:text-green-500 border-none shadow-none">
+            <CiEdit size="1.5em" />
           </Button>
         </div>
 
+        {editField === "name" && (
+          <div className="mb-4">
+            <TextInput
+              value={tour.name || ""}
+              onChange={(e) => handleInputChange("name", e.target.value)}
+              placeholder="Tour Name"
+            />
+          </div>
+        )}
+
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-          {/* Tour ID - Read Only */}
           <div className="space-y-2">
             <span className="text-xs italic font-thin text-gray-500 dark:text-gray-400">
-              {tour.tourId}
+              ID: {tour.tourId}
             </span>
           </div>
 
@@ -239,12 +264,10 @@ export const TourEditor = (props: TourEditorProps) => {
             field="localeName"
             editField={editField}
             onEdit={handleEditClick}
-            onSave={handleSave}
             onCancel={handleCancel}
             onChange={handleInputChange}
           />
 
-          {/* Feature Image Field */}
           <div className="space-y-2 col-span-full">
             <div className="flex items-center justify-between">
               <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -254,26 +277,20 @@ export const TourEditor = (props: TourEditorProps) => {
                 <div className="flex space-x-2">
                   <Button
                     size="xs"
-                    onClick={() => handleSave("featureImgUrl")}
-                    className="text-green-700 dark:text-green-500 bg-transparent"
-                  >
-                    <IoMdSave size="1em" />
-                  </Button>
-                  <Button
-                    size="xs"
+                    color="failure"
                     onClick={handleCancel}
-                    className="text-brown-700 dark:text-brown-500 bg-transparent"
+                    className="bg-transparent border-none shadow-none"
                   >
-                    <IoMdClose size="1em" />
+                    <IoMdClose size="1.5em" />
                   </Button>
                 </div>
               ) : (
                 <Button
                   size="xs"
                   onClick={() => handleEditClick("featureImgUrl")}
-                  className="text-green-700 dark:text-green-500 bg-transparent"
+                  className="text-green-700 dark:text-green-500 bg-transparent border-none shadow-none"
                 >
-                  <CiEdit size="1em" />
+                  <CiEdit size="1.5em" />
                 </Button>
               )}
             </div>
@@ -312,7 +329,6 @@ export const TourEditor = (props: TourEditorProps) => {
             field="details"
             editField={editField}
             onEdit={handleEditClick}
-            onSave={handleSave}
             onCancel={handleCancel}
             onChange={handleInputChange}
             type="textarea"
@@ -323,7 +339,6 @@ export const TourEditor = (props: TourEditorProps) => {
             field="detailUrl"
             editField={editField}
             onEdit={handleEditClick}
-            onSave={handleSave}
             onCancel={handleCancel}
             onChange={handleInputChange}
           />
@@ -333,7 +348,6 @@ export const TourEditor = (props: TourEditorProps) => {
             field="maxGroup"
             editField={editField}
             onEdit={handleEditClick}
-            onSave={handleSave}
             onCancel={handleCancel}
             onChange={handleInputChange}
             type="number"
@@ -344,7 +358,6 @@ export const TourEditor = (props: TourEditorProps) => {
             field="displayOffset"
             editField={editField}
             onEdit={handleEditClick}
-            onSave={handleSave}
             onCancel={handleCancel}
             onChange={handleInputChange}
             type="number"
@@ -356,34 +369,40 @@ export const TourEditor = (props: TourEditorProps) => {
             <Label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
               Slots:
             </Label>
-            <Button size="xs" onClick={handleAddSlot} className="hover:text-green-500 bg-transparent">
-              <MdAdd size="1em" />
+            <Button size="xs" onClick={handleAddSlot} className="text-green-700 hover:text-green-500 bg-transparent border-none shadow-none">
+              <MdAdd size="1.5em" />
             </Button>
           </div>
-          <List className="bg-gray-100 dark:bg-gray-600 p-4 rounded-md text-gray-900 dark:text-white">
+          <div className="bg-gray-100 dark:bg-gray-600 p-4 rounded-md text-gray-900 dark:text-white space-y-2">
             {slots && slots.length > 0 ? (
               slots.map((slot, index) => (
-                <List.Item key={index} className="mb-1">
-                  <div className="flex items-center space-x-2">
-                    <TextInput
-                      type="time"
-                      value={slot?.startTime || ""}
-                      onChange={(e) => handleEditSlot(index, "startTime", e.target.value)}
-                      className="w-1/2"
-                    />
-                    <TextInput
-                      type="time"
-                      value={slot?.endTime || ""}
-                      onChange={(e) => handleEditSlot(index, "endTime", e.target.value)}
-                      className="w-1/2"
-                    />
-                  </div>
-                </List.Item>
+                <div key={index} className="flex items-center space-x-2">
+                  <TextInput
+                    type="time"
+                    value={slot?.startTime || ""}
+                    onChange={(e) => handleEditSlot(index, "startTime", e.target.value)}
+                    className="w-[45%]"
+                  />
+                  <TextInput
+                    type="time"
+                    value={slot?.endTime || ""}
+                    onChange={(e) => handleEditSlot(index, "endTime", e.target.value)}
+                    className="w-[45%]"
+                  />
+                  <Button
+                    size="xs"
+                    color="failure"
+                    onClick={() => handleDeleteSlot(index)}
+                    className="bg-transparent border-none shadow-none text-red-600"
+                  >
+                    <HiTrash size="1.2em" />
+                  </Button>
+                </div>
               ))
             ) : (
-              <List.Item>No slots available</List.Item>
+              <div className="text-sm text-gray-500">No slots available</div>
             )}
-          </List>
+          </div>
         </div>
 
         <div className="mt-6">
@@ -391,27 +410,58 @@ export const TourEditor = (props: TourEditorProps) => {
             <Label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
               Prices:
             </Label>
-            <Button size="xs" onClick={handleAddPrice} className="hover:text-green-500 bg-transparent">
-              <MdAdd size="1em" />
+            <Button size="xs" onClick={handleAddPrice} className="text-green-700 hover:text-green-500 bg-transparent border-none shadow-none">
+              <MdAdd size="1.5em" />
             </Button>
           </div>
-          <List className="bg-gray-100 dark:bg-gray-600 p-4 rounded-md text-gray-900 dark:text-white">
+          <div className="bg-gray-100 dark:bg-gray-600 p-4 rounded-md text-gray-900 dark:text-white space-y-2">
             {prices && prices.length > 0 ? (
               prices.map((price, index) => (
-                <List.Item key={index} className="mb-1">
-                  {`For ${index + 1} ${index === 0 ? 'person' : 'people'}: $`}
-                  <TextInput
-                    type="number"
-                    value={price}
-                    onChange={(e) => handleEditPrice(index, parseFloat(e.target.value))}
-                    className="w-1/4 inline"
-                  />
-                </List.Item>
+                <div key={index} className="flex items-center space-x-2">
+                  <div className="flex-grow text-sm">
+                    {`For ${index + 1} ${index === 0 ? 'person' : 'people'}: `}
+                  </div>
+                  <div className="flex items-center">
+                    <span className="mr-1">$</span>
+                    <TextInput
+                      type="number"
+                      value={price}
+                      onChange={(e) => handleEditPrice(index, parseFloat(e.target.value))}
+                      className="w-24"
+                    />
+                  </div>
+                  <Button
+                    size="xs"
+                    color="failure"
+                    onClick={() => handleDeletePrice(index)}
+                    className="bg-transparent border-none shadow-none text-red-600"
+                  >
+                    <HiTrash size="1.2em" />
+                  </Button>
+                </div>
               ))
             ) : (
-              <List.Item>No prices available</List.Item>
+              <div className="text-sm text-gray-500">No prices available</div>
             )}
-          </List>
+          </div>
+        </div>
+
+        <div className="mt-8 flex justify-center">
+          <Button
+            color="green"
+            onClick={handleSave}
+            disabled={isSaving}
+            className="w-full sm:w-48"
+          >
+            {isSaving ? (
+              <>
+                <Spinner size="sm" className="mr-2" />
+                Saving...
+              </>
+            ) : (
+              "Save All Changes"
+            )}
+          </Button>
         </div>
       </Card>
     </div>

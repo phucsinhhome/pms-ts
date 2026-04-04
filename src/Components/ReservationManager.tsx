@@ -28,7 +28,7 @@ export type Reservation = {
 
 export type ResRoom = {
   roomName: string,
-  internalRoomName: string,
+  internalName: string,
   totalPrice: number
 }
 

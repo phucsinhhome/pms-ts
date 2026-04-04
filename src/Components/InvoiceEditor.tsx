@@ -192,7 +192,7 @@ const defaultEmptyItem = {
 };
 
 export const internalRooms = (rooms: ResRoom[]) => {
-  return rooms.map((r) => r.internalRoomName);
+  return rooms.map((r) => r.internalName);
 };
 
 export const Configs = {

@@ -21,8 +21,7 @@ import { CiEdit } from "react-icons/ci";
 import { FaMoneyBill, FaPlus } from "react-icons/fa";
 import { create, deleteObject, list, save } from "../db/rate_plan";
 import CounterInput from "./CounterInput";
-import { Room } from "./InvoiceManager";
-import { listRoom } from "../db/room";
+import { Room, listRoom } from "../db/room";
 
 export type RatePlan = {
   id?: string;
@@ -354,7 +353,7 @@ export const RatePlanManager = memo((props: RatePlanManagerProps) => {
                 <div className="flex flex-row space-x-3 text-[10px]">
                   <div className="flex items-center space-x-0.5">
                     <MdHouse size="1em" className="text-yellow-700" />
-                    <span>{room?.internalRoomName ?? "N/A"}</span>
+                    <span>{room?.internalName ?? "N/A"}</span>
                   </div>
                   <div className="flex items-center space-x-0.5">
                     <FaMoneyBill size="1em" className="text-yellow-700" />
@@ -535,7 +534,7 @@ export const RatePlanManager = memo((props: RatePlanManagerProps) => {
               >
                 {rooms?.map((room) => (
                   <option key={room.id} value={room.id}>
-                    {room.internalRoomName} - {room.name}
+                    {room.internalName} - {room.name}
                   </option>
                 ))}
               </Select>

@@ -7,7 +7,7 @@
 ## Recent Updates
 - **Phase 4: Advanced UX & Optimization (In Progress)**:
     - ✅ **Room Management Improvement**: Refactored `Room` type into `src/db/room.ts` for centralization.
-    - ✅ **Enhanced Room UI**: Added `status`, `maxAdults`, and `numDoubleBeds` visualization with icons in `RoomManager`. All properties are now editable via the Room Modal.
+    - ✅ **Enhanced Room UI**: Added `status` (ACTIVE/INACTIVE), `maxAdults`, and `numDoubleBeds` visualization with icons in `RoomManager`. All properties are now editable via the Room Modal.
     - ✅ **Search Functionality**: Implemented search/filter by name and internal name in `RoomManager`.
     - ✅ **Mobile Card Layout**: Implemented a responsive card-based list for mobile devices while retaining the table view for desktop.
     - ✅ **UI Cleanup**: Removed unnecessary `room.id` from the list view to reduce clutter.

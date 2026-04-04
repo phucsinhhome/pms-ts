@@ -17,7 +17,7 @@ type RoomManagerProps = {
 const defaultEmptyRoom: Partial<Room> = {
   name: "",
   internalName: "",
-  status: "AVAILABLE",
+  status: "ACTIVE",
   maxAdults: 2,
   numDoubleBeds: 1
 };
@@ -131,7 +131,7 @@ export function RoomManager(props: RoomManagerProps) {
       </div>
 
       {/* Mobile Card View */}
-      <div className="grid grid-cols-1 gap-4 sm:hidden mb-4">
+      <div className="grid grid-cols-1 gap-4 sm:hidden mb-4 overflow-y-auto max-h-[calc(100vh-200px)] pr-1">
         {loading ? (
           <div className="text-center py-10">
             <Spinner size="xl" />
@@ -160,7 +160,7 @@ export function RoomManager(props: RoomManagerProps) {
               
               <div className="flex flex-wrap gap-2">
                 <div className="flex items-center text-xs text-gray-600 bg-green-50 px-2 py-1 rounded border border-green-100">
-                  <HiBadgeCheck className={`mr-1.5 h-4 w-4 ${room.status === 'AVAILABLE' ? 'text-green-500' : 'text-yellow-500'}`} />
+                  <HiBadgeCheck className={`mr-1.5 h-4 w-4 ${room.status === 'ACTIVE' ? 'text-green-500' : 'text-red-500'}`} />
                   <span className="font-semibold uppercase">{room.status || 'N/A'}</span>
                 </div>
                 <div className="flex items-center text-xs text-gray-600 bg-blue-50 px-2 py-1 rounded border border-blue-100">
@@ -178,12 +178,12 @@ export function RoomManager(props: RoomManagerProps) {
       </div>
 
       {/* Desktop Table View */}
-      <div className="hidden sm:block overflow-x-auto shadow-sm sm:rounded-lg border border-gray-100">
+      <div className="hidden sm:block overflow-x-auto overflow-y-auto max-h-[calc(100vh-280px)] shadow-sm sm:rounded-lg border border-gray-100 relative">
         <Table hoverable>
           <Table.Head>
-            <Table.HeadCell className="bg-green-100">Internal Name</Table.HeadCell>
-            <Table.HeadCell className="bg-green-100">Display Name</Table.HeadCell>
-            <Table.HeadCell className="bg-green-100 text-center">Actions</Table.HeadCell>
+            <Table.HeadCell className="bg-green-100 sticky top-0 z-10">Internal Name</Table.HeadCell>
+            <Table.HeadCell className="bg-green-100 sticky top-0 z-10">Display Name</Table.HeadCell>
+            <Table.HeadCell className="bg-green-100 text-center sticky top-0 z-10">Actions</Table.HeadCell>
           </Table.Head>
           <Table.Body className="divide-y">
             {loading ? (
@@ -211,7 +211,7 @@ export function RoomManager(props: RoomManagerProps) {
                       </span>
                       <div className="flex flex-wrap items-center gap-2 mt-1">
                         <div className="flex items-center text-[10px] text-gray-500 bg-green-50 px-1.5 py-0.5 rounded border border-green-100 shadow-sm">
-                          <HiBadgeCheck className={`mr-1 h-3 w-3 ${room.status === 'AVAILABLE' ? 'text-green-500' : 'text-yellow-500'}`} />
+                          <HiBadgeCheck className={`mr-1 h-3 w-3 ${room.status === 'ACTIVE' ? 'text-green-500' : 'text-red-500'}`} />
                           <span className="font-semibold uppercase">{room.status || 'N/A'}</span>
                         </div>
                         <div className="flex items-center text-[10px] text-gray-500 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-100 shadow-sm">
@@ -266,13 +266,11 @@ export function RoomManager(props: RoomManagerProps) {
                 </div>
                 <Select
                   id="status"
-                  value={editingRoom.status || "AVAILABLE"}
-                  onChange={(e) => setEditingRoom({ ...editingRoom, status: e.target.value })}
+                  value={editingRoom.status || "ACTIVE"}
+                  onChange={(e) => setEditingRoom({ ...editingRoom, status: e.target.value as 'ACTIVE' | 'INACTIVE' })}
                 >
-                  <option value="AVAILABLE">Available</option>
-                  <option value="DIRTY">Dirty</option>
-                  <option value="CLEANING">Cleaning</option>
-                  <option value="MAINTENANCE">Maintenance</option>
+                  <option value="ACTIVE">Active</option>
+                  <option value="INACTIVE">Inactive</option>
                 </Select>
               </div>
             </div>

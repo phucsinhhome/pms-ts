@@ -4,7 +4,7 @@ export type Room = {
   id: string;
   name: string;
   internalName: string;
-  status?: string;
+  status?: 'ACTIVE' | 'INACTIVE';
   maxAdults?: number;
   numDoubleBeds?: number;
 };

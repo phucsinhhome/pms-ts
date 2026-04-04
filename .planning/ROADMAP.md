@@ -15,15 +15,15 @@
 - **Tour Management Save Feature:** Implement and test the `handleSave` function in `TourEditor`.
 - **Improved Rate Plan Management:** Refine the UI for managing room rates and occupancy.
 
-## Phase 4: Advanced UX & Optimization
-- **Interactive Map Enhancements:** Add more interactivity and detail to reservation/invoice maps.
-- **Advanced Filtering for Invoices/Reservations:** Implement sophisticated filtering and search in grids.
-- **Performance Optimization:** Optimize the rendering of large lists and map data.
+## Phase 4: Dynamic Room Integration (Current)
+- **Eliminate Static Room Data:** Replace all hardcoded room arrays and static lists (e.g., `getItemList` in `invoice.ts`) with backend API calls.
+- **Centralize Room Source of Truth:** Ensure `InvoiceEditor`, `ReservationMap`, and `InvoiceMap` use the same dynamic `Room` service.
+- **API Data Mapping:** Ensure room IDs and internal names match across all data extraction and display logic.
 
-## Phase 5: Integrations & AI Features
-- **MinIO Integration:** Finalize document and receipt handling with object storage.
-- **Google Generative AI Integration:** Implement AI-assisted tasks (e.g., invoice classification, automated guest replies).
-- **Firebase Real-time Features:** Enhance real-time status updates for room occupancy.
+## Phase 5: Advanced UX & Optimization
+- **Interactive Map Enhancements:** Add click-to-edit, tooltips, and quick actions to reservation/invoice maps.
+- **Advanced Filtering for Invoices/Reservations:** Implement multi-criteria search (Guest Name, Status, Room, Channel).
+- **Performance Optimization:** Optimize large list rendering and map lifecycle management.
 
 ## Phase 6: Room Manager and Invoice Map Optimization
 - **Refactor Room/Invoice Mapping**: Switch to ID-based matching to ensure data integrity.

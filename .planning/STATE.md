@@ -1,17 +1,20 @@
 # Project State: PMS (pms-ts)
 
 **Project Name:** PMS (pms-ts)
-**Current Phase:** Phase 4: Advanced UX & Optimization
-**Objective:** Enhance map interactivity and implement advanced filtering.
+**Current Phase:** Phase 4: Dynamic Room Integration
+**Objective:** Replace all static room data with backend API calls.
 
 ## Recent Updates
-- **Phase 4: Advanced UX & Optimization (In Progress)**:
-    - ✅ **Room Management Improvement**: Refactored `Room` type into `src/db/room.ts` for centralization.
-    - ✅ **Enhanced Room UI**: Added `status` (ACTIVE/INACTIVE), `maxAdults`, and `numDoubleBeds` visualization with icons in `RoomManager`. All properties are now editable via the Room Modal.
-    - ✅ **Search Functionality**: Implemented search/filter by name and internal name in `RoomManager`.
-    - ✅ **Mobile Card Layout**: Implemented a responsive card-based list for mobile devices while retaining the table view for desktop.
-    - ✅ **UI Cleanup**: Removed unnecessary `room.id` from the list view to reduce clutter.
-    - ✅ **Code Refactoring**: Updated all components to import `Room` from centralized database module.
+- **Phase 4: Dynamic Room Integration (In Progress)**:
+    - ✅ **Centralized Room API**: Established `src/db/room.ts` as the primary service.
+    - ⏳ **Eliminate Static Room Data**: Auditing `src/db/invoice.ts` for removal of hardcoded rooms.
+
+- **Phase 5: Advanced UX & Optimization (Planned)**:
+    - ⏳ **Map Interactivity**: Move click-to-edit and tooltips here.
+    - ⏳ **Advanced Filtering**: Move multi-criteria search here.
+
+## Pending Tasks
+- [ ] **Bugs**: [Fix the compile error](todos/01-bugs/fix-the-compile-error.md) (High Priority)
 
 - **Phase 2: Configuration Caching & Resilience (COMPLETED)**:
     - ✅ **Cache-First Strategy**: Implemented in `src/db/configs.ts` using `localStorage` for near-instant loads.

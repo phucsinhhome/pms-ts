@@ -11,33 +11,6 @@ export type Room = {
   numDoubleBeds?: number;
 };
 
-export const roomIcons = [
-    {
-        id: "r1",
-        src: <GiHouse />
-    },
-    {
-        id: "r2",
-        src: <GiHouse />
-    },
-    {
-        id: "r3",
-        src: <GiHouse />
-    },
-    {
-        id: "r4",
-        src: <GiHouse />
-    },
-    {
-        id: "r5",
-        src: <GiHouse />
-    },
-    {
-        id: "r6",
-        src: <GiHouse />
-    }
-];
-
 export const listRoom = (page: number, size: number) => {
     return roomApi.get(``, { params: { page, size } });
 }

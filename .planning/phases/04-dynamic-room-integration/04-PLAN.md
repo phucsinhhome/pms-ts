@@ -1,27 +1,25 @@
-# Phase 4 Plan: Dynamic Room Integration
+# Phase 4 Plan: Dynamic Room Integration (Refined)
 
-This phase focuses on removing all static room data and ensuring the UI reflects dynamic data from the backend.
+This phase focuses on removing all static room data, standardizing room-related UI components, and ensuring all data is fetched dynamically.
 
 ## Tasks
 
-### 1. Centralize Room Icons and Types
-- [ ] Add `roomIcons` mapping to `src/db/room.ts` or a shared component location.
-- [ ] Ensure all components use the centralized `Room` type.
+### 1. Remove Room Icon Mapping (Technical Debt)
+- [ ] Delete `roomIcons` array from `src/db/room.tsx`.
+- [ ] Clean up imports of `roomIcons` in any consumer components.
 
-### 2. Refactor InvoiceEditor Room Selection
-- [ ] Update `openRoomModal` to use a vertical list layout (e.g., using `Table` or a stacked list).
-- [ ] Improve room selection visual feedback (using checkboxes or highlighted list items).
-- [ ] Fix the `roomIcons` reference error.
+### 2. Standardize Room Selection UI in InvoiceEditor
+- [ ] Update `openRoomModal` list in `InvoiceEditor.tsx` to use a single standard icon (`GiHouse`) for all rooms.
+- [ ] Remove lookup logic (`roomIcons.find(...)`) from the room rendering loop.
 
-### 3. Eliminate Static Data in DB Layer
-- [ ] Deprecate `getItemList` in `src/db/invoice.ts`.
-- [ ] Remove static room arrays from `src/db/staticdata.ts` (if they exist).
+### 3. Finalize Static Data Elimination
+- [ ] (Completed) Deprecate `getItemList` in `src/db/invoice.ts`.
+- [ ] (Completed) Remove static room arrays from `src/db/staticdata.ts`.
 
-### 4. Update Initialization Logic
-- [ ] Refactor `confirmNoRes` in `InvoiceEditor.tsx` to use the first room from the dynamic `rooms` state.
-- [ ] Ensure `useEffect` handles room fetching before any default initialization that depends on room data.
+### 4. Verification and Cleanup
+- [ ] Run `tsc --noEmit` to ensure no broken references remain.
+- [ ] Verify `InvoiceEditor` still displays rooms correctly with the unified icon.
 
 ## Verification
-- [ ] **Modal Check**: Verify the Room selection modal in `InvoiceEditor` is vertical and functional.
-- [ ] **No Book Check**: Verify creating a "No Book" invoice correctly uses a real room from the database.
-- [ ] **API Sync**: Verify room names in Maps and Editors are perfectly in sync with the database.
+- [ ] **Modal Verification**: Open Room Selection in Invoice Editor and confirm all rooms have the same icon.
+- [ ] **Build Stability**: No compilation errors after removing the mapping.

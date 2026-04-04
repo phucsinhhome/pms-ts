@@ -45,7 +45,7 @@ import { listAllPGroups } from "../db/pgroup";
 import { PGroup } from "./PGroupManager";
 import { PERMISSION_INVOICE_ASSIGN } from "../db/permission";
 import { AppConfig, PaymentMethod, defaultAppConfigs } from "../db/configs";
-import { listRoom, Room, roomIcons } from "../db/room";
+import { listRoom, Room } from "../db/room";
 
 const userIcons = [
   {
@@ -908,7 +908,7 @@ export const InvoiceEditor = (props: InvoiceProps) => {
     let rs = selectedRooms
       .map((rId) => rooms.find((r) => r.id === rId))
       .filter((r) => r !== undefined)
-      .map((r) => r.name);
+      .map((r) => r.internalName);
 
     let nInv = {
       ...invoice,
@@ -1950,44 +1950,39 @@ export const InvoiceEditor = (props: InvoiceProps) => {
         <Modal.Header>Select Rooms</Modal.Header>
         <Modal.Body>
           <div className="flex w-full flex-col overflow-y-auto max-h-96">
-            <Table hoverable>
-              <Table.Head>
-                <Table.HeadCell className="p-4">
-                  Select
-                </Table.HeadCell>
-                <Table.HeadCell>Room Name</Table.HeadCell>
-              </Table.Head>
-              <Table.Body className="divide-y">
-                {rooms.map((room) => (
-                  <Table.Row 
-                    key={room.id} 
-                    className="bg-white cursor-pointer"
-                    onClick={() => selectRoom(room.id)}
-                  >
-                    <Table.Cell className="p-4">
-                      <Checkbox 
-                        checked={selectedRooms.includes(room.id)}
-                        onChange={() => {}} // Controlled by Row onClick
-                      />
-                    </Table.Cell>
-                    <Table.Cell className="flex items-center space-x-2 font-medium text-gray-900 dark:text-white">
-                      {roomIcons.find((r) => r.id === room.id)?.src || <GiHouse />}
-                      <span>{room.name}</span>
-                    </Table.Cell>
-                  </Table.Row>
-                ))}
-              </Table.Body>
-            </Table>
+            <div className="divide-y divide-gray-100">
+              {rooms.map((room) => (
+                <div 
+                  key={room.id} 
+                  className="flex items-center justify-between p-4 bg-white hover:bg-green-50 cursor-pointer transition-colors"
+                  onClick={() => selectRoom(room.id)}
+                >
+                  <div className="flex items-center space-x-4">
+                    <div className="flex items-center justify-center w-10 h-10 rounded-full bg-green-100 text-green-600 text-xl">
+                      <GiHouse />
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="font-bold text-gray-900">{room.name}</span>
+                      <span className="text-xs text-gray-500 font-mono">{room.internalName}</span>
+                    </div>
+                  </div>
+                  <Checkbox 
+                    checked={selectedRooms.includes(room.id)}
+                    onChange={() => {}} // Controlled by Row onClick
+                    className="h-5 w-5 text-green-600 focus:ring-green-500"
+                  />
+                </div>
+              ))}
+            </div>
           </div>
         </Modal.Body>
         <Modal.Footer className="flex justify-center gap-4">
-          <Button onClick={confirmSelectRoom}>Done</Button>
+          <Button color="green" onClick={confirmSelectRoom}>Done</Button>
           <Button color="gray" onClick={cancelSelectRoom}>
             Cancel
           </Button>
         </Modal.Footer>
       </Modal>
-
       <Modal
         show={showMenu}
         popup={true}

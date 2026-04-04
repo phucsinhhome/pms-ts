@@ -1,17 +1,21 @@
 # Project State: PMS (pms-ts)
 
 **Project Name:** PMS (pms-ts)
-**Current Phase:** Phase 4: Dynamic Room Integration
-**Objective:** Replace all static room data with backend API calls.
+**Current Phase:** Phase 5: Advanced UX & Optimization
+**Objective:** Enhance map interactivity, tooltips, and advanced filtering.
 
 ## Recent Updates
-- **Phase 4: Dynamic Room Integration (In Progress)**:
-    - ✅ **Centralized Room API**: Established `src/db/room.ts` as the primary service.
-    - ⏳ **Eliminate Static Room Data**: Auditing `src/db/invoice.ts` for removal of hardcoded rooms.
+- **Phase 4: Dynamic Room Integration (COMPLETED)**:
+    - ✅ **Centralized Room API**: Refactored `src/db/room.tsx` with dynamic data source.
+    - ✅ **Vertical Room Selection**: Updated `InvoiceEditor.tsx` modal for better mobile/UX.
+    - ✅ **Static Data Removal**: Deleted `src/db/staticdata.ts` and cleaned up `src/db/invoice.ts`.
+    - ✅ **Unified Icons**: Removed redundant `roomIcons` mapping and standardized on single `GiHouse` icon for simplified maintenance.
+    - ✅ **ID-Based Logic**: Ensured `internalName` is used consistently for room identification.
 
-- **Phase 5: Advanced UX & Optimization (Planned)**:
-    - ⏳ **Map Interactivity**: Move click-to-edit and tooltips here.
-    - ⏳ **Advanced Filtering**: Move multi-criteria search here.
+- **Phase 5: Advanced UX & Optimization (In Progress)**:
+    - ⏳ **Map Interactivity**: Add click-to-edit and detailed tooltips for reservations.
+    - ⏳ **Advanced Filtering**: Implement multi-criteria search in Invoice/Reservation managers.
+
 
 ## Pending Tasks
 - [x] **Bugs**: [Fix the compile error](todos/01-bugs/fix-the-compile-error.md) (Completed)

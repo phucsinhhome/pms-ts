@@ -14,7 +14,7 @@
     - ⏳ **Advanced Filtering**: Move multi-criteria search here.
 
 ## Pending Tasks
-- [ ] **Bugs**: [Fix the compile error](todos/01-bugs/fix-the-compile-error.md) (High Priority)
+- [x] **Bugs**: [Fix the compile error](todos/01-bugs/fix-the-compile-error.md) (Completed)
 
 - **Phase 2: Configuration Caching & Resilience (COMPLETED)**:
     - ✅ **Cache-First Strategy**: Implemented in `src/db/configs.ts` using `localStorage` for near-instant loads.

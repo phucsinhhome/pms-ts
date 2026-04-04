@@ -61,7 +61,11 @@ export const getInvoice = (invoiceId: string) => {
   return invoiceApi.get(`/${invoiceId}`);
 }
 
-export function getItemList() {
+/**
+ * @deprecated Use dynamic APIs from room.ts and inventory.ts instead.
+ */
+export function getLegacyItemList() {
+  console.warn("Using legacy static item list. Please migrate to dynamic API.");
   return [
     {
       id: "R1",

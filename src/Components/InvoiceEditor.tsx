@@ -32,7 +32,6 @@ import Moment from "react-moment";
 import { listLatestReservations } from "../db/reservation";
 import html2canvas from "html2canvas";
 import { Invoice, InvoiceItem, Issuer } from "./InvoiceManager";
-import { rooms } from "../db/staticdata";
 import { Product } from "./Inventory";
 import { Reservation, ResRoom } from "./ReservationManager";
 import { listAllProductItems } from "../db/inventory";
@@ -40,128 +39,13 @@ import { FaEye } from "react-icons/fa6";
 import { IoMdArrowBack, IoMdRemoveCircle } from "react-icons/io";
 import { CiEdit } from "react-icons/ci";
 import { MdAssignmentAdd } from "react-icons/md";
+import { GiHouse } from "react-icons/gi";
 import { nanoid } from "nanoid";
 import { listAllPGroups } from "../db/pgroup";
 import { PGroup } from "./PGroupManager";
 import { PERMISSION_INVOICE_ASSIGN } from "../db/permission";
 import { AppConfig, PaymentMethod, defaultAppConfigs } from "../db/configs";
-
-const roomIcons = [
-  {
-    id: "r1",
-    src: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        strokeWidth="1.5"
-        stroke="currentColor"
-        className="size-6"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"
-        />
-      </svg>
-    ),
-  },
-  {
-    id: "r2",
-    src: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        strokeWidth="1.5"
-        stroke="currentColor"
-        className="size-6"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"
-        />
-      </svg>
-    ),
-  },
-  {
-    id: "r3",
-    src: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        strokeWidth="1.5"
-        stroke="currentColor"
-        className="size-6"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"
-        />
-      </svg>
-    ),
-  },
-  {
-    id: "r4",
-    src: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        strokeWidth="1.5"
-        stroke="currentColor"
-        className="size-6"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21"
-        />
-      </svg>
-    ),
-  },
-  {
-    id: "r5",
-    src: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        strokeWidth="1.5"
-        stroke="currentColor"
-        className="size-6"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21"
-        />
-      </svg>
-    ),
-  },
-  {
-    id: "r6",
-    src: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        strokeWidth="1.5"
-        stroke="currentColor"
-        className="size-6"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M8.25 21v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21m0 0h4.5V3.545M12.75 21h7.5V10.75M2.25 21h1.5m18 0h-18M2.25 9l4.5-1.636M18.75 3l-1.5.545m0 6.205 3 1m1.5.5-1.5-.5M6.75 7.364V3h-3v18m3-13.636 10.5-3.819"
-        />
-      </svg>
-    ),
-  },
-];
+import { listRoom, Room, roomIcons } from "../db/room";
 
 const userIcons = [
   {
@@ -290,7 +174,7 @@ export const InvoiceEditor = (props: InvoiceProps) => {
 
   const [openRoomModal, setOpenRoomModal] = useState(false);
   const [selectedRooms, setSelectedRooms] = useState<string[]>([]);
-
+  const [rooms, setRooms] = useState<Room[]>([]);
   const [showMenu, setShowMenu] = useState(false);
   const [pGroups, setPGroups] = useState<PGroup[]>([]);
 
@@ -401,8 +285,23 @@ export const InvoiceEditor = (props: InvoiceProps) => {
         });
     }
 
+    if (rooms.length <= 0) {
+      console.info("Fetch the rooms");
+      listRoom(0, 100)
+        .then((rsp) => {
+          if (rsp.status === 200) {
+            let data = rsp.data.content;
+            console.info("Fetched %d rooms", data.length);
+            setRooms(data);
+          }
+        })
+        .catch((e) => {
+          console.error("Error while fetching rooms", e);
+        });
+    }
+
     // eslint-disable-next-line
-  }, [invoiceId, products.length, props]);
+  }, [invoiceId, products.length, rooms.length, props]);
 
   const handleSaveInvoice = async () => {
     try {
@@ -914,6 +813,8 @@ export const InvoiceEditor = (props: InvoiceProps) => {
 
   const confirmNoRes = () => {
     try {
+      const defaultRoom = rooms.length > 0 ? rooms[0] : { name: "R1", internalName: "R1" };
+      const defaultRoomPrice = 450000;
       let inv = {
         ...defaultEmptyInvoice,
         guestName: Configs.invoice.initialInvoice.guestName,
@@ -925,7 +826,7 @@ export const InvoiceEditor = (props: InvoiceProps) => {
         paymentMethod: "",
         paymentPhotos: [],
         reservationCode: "",
-        rooms: ["R1"],
+        rooms: [defaultRoom.internalName],
         creatorId: null,
         createdBy: props.chat.username,
         sheetName: "",
@@ -934,14 +835,14 @@ export const InvoiceEditor = (props: InvoiceProps) => {
         items: [
           {
             id: nanoid(10),
-            itemName: "Bungalow garden view",
-            unitPrice: 450000,
+            itemName: defaultRoom.name,
+            unitPrice: defaultRoomPrice,
             quantity: 1,
             service: "STAY",
-            amount: 450000,
+            amount: defaultRoomPrice,
           },
         ],
-        subTotal: 450000,
+        subTotal: defaultRoomPrice,
         tenantId: props.chat.tenantId,
       };
       setInvoice(inv);
@@ -2046,26 +1947,37 @@ export const InvoiceEditor = (props: InvoiceProps) => {
       </Modal>
 
       <Modal show={openRoomModal} onClose={cancelSelectRoom} popup dismissible>
-        <Modal.Header></Modal.Header>
+        <Modal.Header>Select Rooms</Modal.Header>
         <Modal.Body>
-          <div className="flex w-full flex-row items-center gap-2 space-x-2 ">
-            {rooms.map((room) => {
-              return (
-                <div
-                  id={room.id}
-                  key={room.id}
-                  className={
-                    selectedRooms.includes(room.id)
-                      ? "flex border-spacing-1 flex-col items-center rounded-sm bg-slate-300 px-2 py-2 shadow-lg hover:shadow-lg"
-                      : "flex border-spacing-1 flex-col items-center rounded-sm px-2 py-2 shadow-lg hover:shadow-lg"
-                  }
-                  onClick={() => selectRoom(room.id)}
-                >
-                  {roomIcons.find((r) => r.id === room.id)?.src}
-                  <span className="text text-center">{room.name}</span>
-                </div>
-              );
-            })}
+          <div className="flex w-full flex-col overflow-y-auto max-h-96">
+            <Table hoverable>
+              <Table.Head>
+                <Table.HeadCell className="p-4">
+                  Select
+                </Table.HeadCell>
+                <Table.HeadCell>Room Name</Table.HeadCell>
+              </Table.Head>
+              <Table.Body className="divide-y">
+                {rooms.map((room) => (
+                  <Table.Row 
+                    key={room.id} 
+                    className="bg-white cursor-pointer"
+                    onClick={() => selectRoom(room.id)}
+                  >
+                    <Table.Cell className="p-4">
+                      <Checkbox 
+                        checked={selectedRooms.includes(room.id)}
+                        onChange={() => {}} // Controlled by Row onClick
+                      />
+                    </Table.Cell>
+                    <Table.Cell className="flex items-center space-x-2 font-medium text-gray-900 dark:text-white">
+                      {roomIcons.find((r) => r.id === room.id)?.src || <GiHouse />}
+                      <span>{room.name}</span>
+                    </Table.Cell>
+                  </Table.Row>
+                ))}
+              </Table.Body>
+            </Table>
           </div>
         </Modal.Body>
         <Modal.Footer className="flex justify-center gap-4">

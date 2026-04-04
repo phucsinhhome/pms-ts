@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { listStayingAndComingReservations } from "../db/reservation";
 import { Button, Spinner } from "flowbite-react";
 import { addDays, formatISODate } from "../Service/Utils";
-import { DEFAULT_PAGE_SIZE } from "../App";
+import { Chat, DEFAULT_PAGE_SIZE } from "../App";
 import { optionStyle, Pagination } from "./ProfitReport";
 import { collectRes } from "../db/reservation_extractor";
 import { MdAssignmentAdd } from "react-icons/md";
@@ -12,8 +12,12 @@ import { listRoom } from "../db/room";
 import { Room } from "./InvoiceManager";
 
 type RoomManagerProps = {
+  chat: Chat,
+  displayName: string,
+  authorizedUserId: string | null,
   activeMenu: any,
-  handleUnauthorized: any
+  handleUnauthorized: any,
+  hasAuthority: (auth: string) => boolean
 }
 
 export function RoomManager(props: RoomManagerProps) {

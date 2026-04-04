@@ -18,10 +18,10 @@ import {
 } from "react-icons/md";
 import { IoMdRemoveCircle } from "react-icons/io";
 import { CiEdit } from "react-icons/ci";
-import { FaMoneyBill, FaPlus } from "react-icons/fa6";
+import { FaMoneyBill, FaPlus } from "react-icons/fa";
 import { create, deleteObject, list, save } from "../db/rate_plan";
 import CounterInput from "./CounterInput";
-import { Room } from "./RoomManager";
+import { Room } from "./InvoiceManager";
 import { listRoom } from "../db/room";
 
 export type RatePlan = {
@@ -66,7 +66,7 @@ const defaultRatePlan: RatePlan = {
   basePrice: 500000,
 };
 
-type RoomManagerProps = {
+type RatePlanManagerProps = {
   chat: Chat;
   authorizedUserId: string | null;
   displayName: string;
@@ -75,7 +75,7 @@ type RoomManagerProps = {
   hasAuthority: (auth: string) => boolean;
 };
 
-export const RatePlanManager = memo((props: RoomManagerProps) => {
+export const RatePlanManager = memo((props: RatePlanManagerProps) => {
   const [ratePlans, setRatePlans] = useState<RatePlan[]>([]);
 
   const [openDelModal, setOpenDelModal] = useState(false);
@@ -354,7 +354,7 @@ export const RatePlanManager = memo((props: RoomManagerProps) => {
                 <div className="flex flex-row space-x-3 text-[10px]">
                   <div className="flex items-center space-x-0.5">
                     <MdHouse size="1em" className="text-yellow-700" />
-                    <span>{room?.internalName ?? "N/A"}</span>
+                    <span>{room?.internalRoomName ?? "N/A"}</span>
                   </div>
                   <div className="flex items-center space-x-0.5">
                     <FaMoneyBill size="1em" className="text-yellow-700" />
@@ -535,7 +535,7 @@ export const RatePlanManager = memo((props: RoomManagerProps) => {
               >
                 {rooms?.map((room) => (
                   <option key={room.id} value={room.id}>
-                    {room.internalName} - {room.name}
+                    {room.internalRoomName} - {room.name}
                   </option>
                 ))}
               </Select>

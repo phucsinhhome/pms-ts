@@ -9,7 +9,7 @@ import { MdAssignmentAdd } from "react-icons/md";
 import { Reservation } from "./ReservationManager";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { listRoom } from "../db/room";
-import { Room } from "./RoomManager";
+import { Room } from "./InvoiceManager";
 
 type ReservationMapProps = {
   activeMenu: any,
@@ -19,7 +19,7 @@ type ReservationMapProps = {
 export function ReservationMap(props: ReservationMapProps) {
   const [reservations, setReservations] = useState<Reservation[]>([])
   const [rooms, setRooms] = useState<Room[]>([])
-  const roomNames = useMemo(() => rooms.map(r => r.internalName), [rooms]);
+  const roomNames = useMemo(() => rooms.map(r => r.internalRoomName), [rooms]);
 
   // Start from yesterday
   const [fromDate, setFromDate] = useState(addDays(new Date(), -1));

@@ -25,7 +25,7 @@ import { InvoiceMap } from "./Components/InvoiceMap";
 import { RoomManager } from "./Components/RoomManager";
 import { RatePlanManager } from "./Components/RatePlanManager";
 import { getProfile } from "./db/profile";
-import { FaBed, FaMoneyBill } from "react-icons/fa6";
+import { FaBed, FaMoneyBill } from "react-icons/fa";
 
 // Add a lotus image to your public folder or assets and use its path here
 

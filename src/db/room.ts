@@ -1,5 +1,3 @@
-import React from "react";
-import { GiHouse } from "react-icons/gi";
 import { roomApi } from "./apis";
 
 export type Room = {

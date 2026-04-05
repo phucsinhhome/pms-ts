@@ -3,9 +3,10 @@
 **Project Name:** PMS (pms-ts)
 **Current Phase:** Phase 5: Advanced UX & Optimization
 **Objective:** Enhance map interactivity, tooltips, and advanced filtering.
-
 ## Recent Updates
+- **Quick Task (COMPLETED)**: Fixed room pre-selection in `InvoiceEditor` by correcting `internalName` mapping in `chooseRoom`.
 - **Phase 4: Dynamic Room Integration (COMPLETED)**:
+...
     - ✅ **Centralized Room API**: Refactored `src/db/room.tsx` with dynamic data source.
     - ✅ **Vertical Room Selection**: Updated `InvoiceEditor.tsx` modal for better mobile/UX.
     - ✅ **Static Data Removal**: Deleted `src/db/staticdata.ts` and cleaned up `src/db/invoice.ts`.

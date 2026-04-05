@@ -888,9 +888,9 @@ export const InvoiceEditor = (props: InvoiceProps) => {
   //================ ROOMS ==========================//
   const chooseRoom = () => {
     let sR = invoice.rooms
-      .map((rN) => rooms.find((r) => rN === r.name))
+      .map((rN) => rooms.find((r) => r.internalName === rN))
       .filter((r) => r !== undefined)
-      .map((r) => r.id);
+      .map((r) => r!.id);
     setSelectedRooms(sR);
     setOpenRoomModal(true);
   };

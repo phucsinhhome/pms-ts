@@ -4,6 +4,7 @@
 **Current Phase:** Phase 5: Advanced UX & Optimization
 **Objective:** Enhance map interactivity, tooltips, and advanced filtering.
 ## Recent Updates
+- **Quick Task (COMPLETED)**: Configured the app to run with TLS (HTTPS) and on port 3001 via `.env.development`.
 - **Quick Task (COMPLETED)**: Renamed `src/db/room.tsx` to `src/db/room.ts` since it no longer contains JSX.
 - **Quick Task (COMPLETED)**: Fixed room pre-selection in `InvoiceEditor` by correcting `internalName` mapping in `chooseRoom`.
 - **Phase 4: Dynamic Room Integration (COMPLETED)**:

@@ -51,7 +51,7 @@ export const defaultChat: Chat = {
   tenantId: ''
 }
 
-const menuOrder = ['home', 'expense', 'invoice', 'inventory', 'reservation', 'order', 'profit', 'tour', 'supplier', 'setting', 'room','rate-plan']
+const menuOrder = ['home', 'expense', 'invoice', 'inventory', 'reservation', 'order', 'profit', 'tour', 'supplier', 'setting', 'room','ratePlan']
 const menus = {
   home: {
     path: 'home',
@@ -131,7 +131,7 @@ const menus = {
     title: 'Room Management',
     icon: <FaBed size={28} />
   },
-  'rate-plan': {
+  ratePlan: {
     path: 'rate-plan',
     displayName: 'Rate Plan',
     title: 'Rate Plan Management',
@@ -225,7 +225,8 @@ export const App = () => {
         ? [menus.home] // Default to home if no roles
         : menuOrder
           .filter(menuKey => authorities.some(role => role.toLowerCase() === menuKey.toLowerCase()))
-          .map(menuKey => menus[menuKey as keyof typeof menus]) // Type guard to remove undefined values
+          .map(menuKey => menus[menuKey as keyof typeof menus])
+          .filter(Boolean) as any; // Type guard to remove undefined values
     setFilteredMenus(fM);
     setActiveMenu(menus.home);
     navigate('/home');
@@ -402,7 +403,7 @@ export const App = () => {
           chat={getChat()}
           displayName={fullName()}
           authorizedUserId={authorizedUserId}
-          activeMenu={() => setActiveMenu(menus['rate-plan'])}
+          activeMenu={() => setActiveMenu(menus.ratePlan)}
           handleUnauthorized={() => handleLogin()}
           hasAuthority={(auth: string) => hasAuthority(auth)}
         />} />

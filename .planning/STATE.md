@@ -4,6 +4,7 @@
 **Current Phase:** Phase 5: Advanced UX & Optimization
 **Objective:** Enhance map interactivity, tooltips, and advanced filtering.
 ## Recent Updates
+- **Quick Task (COMPLETED)**: Fixed Rate Plan menu visibility by correctly matching the `'rate-plan'` authority key between the backend and `menus` object in `App.tsx`.
 - **Quick Task (COMPLETED)**: Fixed `Uncaught TypeError: Cannot read properties of undefined (reading 'path')` in `App.tsx` by correcting `menuOrder` and adding a safety filter.
 - **Quick Task (COMPLETED)**: Configured the app to run with TLS (HTTPS) and on port 3001 via `.env.development`.
 - **Quick Task (COMPLETED)**: Renamed `src/db/room.tsx` to `src/db/room.ts` since it no longer contains JSX.

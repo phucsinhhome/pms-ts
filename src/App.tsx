@@ -51,7 +51,7 @@ export const defaultChat: Chat = {
   tenantId: ''
 }
 
-const menuOrder = ['home', 'expense', 'invoice', 'inventory', 'reservation', 'order', 'profit', 'tour', 'supplier', 'setting', 'room','ratePlan']
+const menuOrder = ['home', 'expense', 'invoice', 'inventory', 'reservation', 'order', 'profit', 'tour', 'supplier', 'setting', 'room','rate-plan']
 const menus = {
   home: {
     path: 'home',
@@ -131,7 +131,7 @@ const menus = {
     title: 'Room Management',
     icon: <FaBed size={28} />
   },
-  ratePlan: {
+  'rate-plan': {
     path: 'rate-plan',
     displayName: 'Rate Plan',
     title: 'Rate Plan Management',
@@ -403,7 +403,7 @@ export const App = () => {
           chat={getChat()}
           displayName={fullName()}
           authorizedUserId={authorizedUserId}
-          activeMenu={() => setActiveMenu(menus.ratePlan)}
+          activeMenu={() => setActiveMenu(menus['rate-plan'])}
           handleUnauthorized={() => handleLogin()}
           hasAuthority={(auth: string) => hasAuthority(auth)}
         />} />

@@ -101,34 +101,30 @@ export const defaultAppConfigs: AppConfig = {
 const CACHE_KEY = 'pms_app_config';
 
 export const appConfigs = async (): Promise<AppConfig> => {
-    const configUrl = 'https://raw.githubusercontent.com/phucsinhhome/configs/refs/heads/ps-prod/pms/app.json'
-
+    const configUrl = 'https://raw.githubusercontent.com/phucsinhhome/configs/refs/heads/ps-prod/pms/app.json';
     const cached = localStorage.getItem(CACHE_KEY);
+
+    try {
+        // Always load the current remote configuration for a new app session.
+        // The timestamp avoids serving an outdated response from an intermediary cache.
+        const fresh = await fetchWithRetry(`${configUrl}?t=${Date.now()}`, 3, 1000);
+        const freshConfig = fresh as AppConfig;
+        localStorage.setItem(CACHE_KEY, JSON.stringify(freshConfig));
+        return freshConfig;
+    } catch (error) {
+        console.warn("Remote configuration unavailable; using cached configuration", error);
+    }
+
     if (cached) {
         try {
-            const parsed = JSON.parse(cached) as AppConfig;
-            // Background refresh (non-blocking)
-            fetchWithRetry(configUrl, 1, 0)
-                .then(fresh => {
-                    const freshStr = JSON.stringify(fresh);
-                    if (fresh.version !== parsed.version || freshStr !== cached) {
-                        localStorage.setItem(CACHE_KEY, freshStr);
-                        console.info(`Configuration updated. New version: ${fresh.version || 'unversioned'}`);
-                    } else {
-                        console.info("Configuration is up to date.");
-                    }
-                })
-                .catch(err => console.warn("Background refresh failed", err));
-            return parsed;
-        } catch (e) {
-            console.warn("Cache corrupted, fetching fresh...");
+            return JSON.parse(cached) as AppConfig;
+        } catch (error) {
+            console.warn("Cached configuration is invalid", error);
         }
     }
 
-    // No cache: Fetch with 3 retries
-    const fresh = await fetchWithRetry(configUrl, 3, 1000);
-    localStorage.setItem(CACHE_KEY, JSON.stringify(fresh));
-    return fresh as AppConfig;
+    console.warn("No remote or cached configuration available; using defaults");
+    return defaultAppConfigs;
 }
 
 const fetchWithRetry = async (url: string, retries: number, delay: number): Promise<any> => {

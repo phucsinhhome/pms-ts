@@ -1,10 +1,21 @@
 import React, { useState, useEffect, useRef, ChangeEvent, memo } from "react";
 import { TextInput, Label, Spinner, Modal, Button } from "flowbite-react";
-import { assignExpense, deleteExpense, generate, listExpenseByDate, newExpId } from "../db/expense";
+import {
+  assignExpense,
+  deleteExpense,
+  generate,
+  listExpenseByDate,
+  newExpId,
+} from "../db/expense";
 import { classifyServiceByItemName } from "../db/classification";
 import { Chat, DEFAULT_PAGE_SIZE } from "../App";
 import { HiOutlineCash, HiUserCircle, HiX } from "react-icons/hi";
-import { formatISODate, formatISODateTime, formatMoneyAmount, formatVND } from "../Service/Utils";
+import {
+  formatISODate,
+  formatISODateTime,
+  formatMoneyAmount,
+  formatVND,
+} from "../Service/Utils";
 import { PiBrainThin } from "react-icons/pi";
 import { FaRotate } from "react-icons/fa6";
 import { listExpenseByExpenserAndDate } from "../db/expense";
@@ -19,287 +30,302 @@ import Moment from "react-moment";
 import { listUsers, UserInfo } from "../db/users";
 
 export type Expense = {
-  id: string,
-  expenseDate: string,
-  itemName: string,
-  quantity: number,
-  unitPrice: number,
-  amount: number,
-  expenserName: string,
-  expenserId: string,
-  service: string,
-  tenantId: string
-}
+  id: string;
+  expenseDate: string;
+  itemName: string;
+  quantity: number;
+  unitPrice: number;
+  amount: number;
+  expenserName: string;
+  expenserId: string;
+  service: string;
+  tenantId: string;
+};
 
 type EditingExpense = {
-  origin: Expense,
-  formattedUnitPrice?: string,
-  itemMessage: string,
-  originItemName?: string
-}
+  origin: Expense;
+  formattedUnitPrice?: string;
+  itemMessage: string;
+  originItemName?: string;
+};
 
 const defaultEmptExpense: Expense = {
-  id: '',
+  id: "",
   expenseDate: formatISODateTime(new Date()),
   itemName: "",
   quantity: 1,
   unitPrice: 0,
   amount: 0,
-  expenserName: 'Manager User',
-  expenserId: 'manager',
+  expenserName: "Manager User",
+  expenserId: "manager",
   service: "",
-  tenantId: ""
-}
+  tenantId: "",
+};
 
 const defaultEditingExpense = {
   origin: defaultEmptExpense,
   formattedUnitPrice: "",
   originItemName: "",
-  itemMessage: ""
-}
+  itemMessage: "",
+};
 
 type ExpenseProps = {
-  chat: Chat,
-  authorizedUserId: string | null,
-  displayName: string,
-  activeMenu: any,
-  handleUnauthorized: any,
-  hasAuthority: (auth: string) => boolean
-}
+  chat: Chat;
+  authorizedUserId: string | null;
+  displayName: string;
+  activeMenu: any;
+  handleUnauthorized: any;
+  hasAuthority: (auth: string) => boolean;
+};
 
 export const ExpenseManager = memo((props: ExpenseProps) => {
-
-  const [expenses, setExpenses] = useState([defaultEmptExpense])
+  const [expenses, setExpenses] = useState([defaultEmptExpense]);
   const [generatingExp, setGeneratingExp] = useState(false);
   const [classifyingExp, setClassifyingExp] = useState(false);
 
-  const [openDelExpenseModal, setOpenDelExpenseModal] = useState(false)
-  const [deletingExpense, setDeletingExpense] = useState<Expense>()
+  const [openDelExpenseModal, setOpenDelExpenseModal] = useState(false);
+  const [deletingExpense, setDeletingExpense] = useState<Expense>();
 
-  const [openEditingExpenseModal, setOpenEditingExpenseModal] = useState(false)
-  const [editingExpense, setEditingExpense] = useState<EditingExpense>(defaultEditingExpense)
+  const [openEditingExpenseModal, setOpenEditingExpenseModal] = useState(false);
+  const [editingExpense, setEditingExpense] = useState<EditingExpense>(
+    defaultEditingExpense,
+  );
 
-  const [openUsersModal, setOpenUsersModal] = useState(false)
-  const [users, setUsers] = useState<UserInfo[]>([])
+  const [openUsersModal, setOpenUsersModal] = useState(false);
+  const [users, setUsers] = useState<UserInfo[]>([]);
 
-  const isAssignable = props.hasAuthority('expense:assign')
+  const isAssignable = props.hasAuthority("expense:assign");
 
   const [pagination, setPagination] = useState<Pagination>({
     pageNumber: 0,
     pageSize: DEFAULT_PAGE_SIZE,
     totalElements: 0,
-    totalPages: 0
-  })
+    totalPages: 0,
+  });
 
-  const expMsgRef = useRef<HTMLInputElement>(null)
+  const expMsgRef = useRef<HTMLInputElement>(null);
 
   const handlePaginationClick = (pageNumber: number) => {
-    console.log("Pagination nav bar click to page %s", pageNumber)
+    console.log("Pagination nav bar click to page %s", pageNumber);
     setPagination({
       ...pagination,
-      pageNumber: pageNumber < 0 ? 0 : pageNumber > pagination.totalPages - 1 ? pagination.totalPages - 1 : pageNumber
-    })
-  }
+      pageNumber:
+        pageNumber < 0
+          ? 0
+          : pageNumber > pagination.totalPages - 1
+          ? pagination.totalPages - 1
+          : pageNumber,
+    });
+  };
 
   const fetchExpenses = async () => {
     try {
-      let byDate = formatISODate(new Date())
+      let byDate = formatISODate(new Date());
 
       let res;
       if (isAssignable) {
-        res = await listExpenseByDate(byDate, pagination.pageNumber, pagination.pageSize);
+        res = await listExpenseByDate(
+          byDate,
+          pagination.pageNumber,
+          pagination.pageSize,
+        );
       } else {
-        res = await listExpenseByExpenserAndDate(props.chat.username, byDate, pagination.pageNumber, pagination.pageSize);
+        res = await listExpenseByExpenserAndDate(
+          props.chat.username,
+          byDate,
+          pagination.pageNumber,
+          pagination.pageSize,
+        );
       }
       if (res.status === 401 || res.status === 403) {
-        props.handleUnauthorized()
-        return
+        props.handleUnauthorized();
+        return;
       }
       if (res === undefined || res.status !== 200) {
-        console.warn("Invalid expense response")
-        return
+        console.warn("Invalid expense response");
+        return;
       }
       const data = res.data;
-      console.info("Fetched %s expenses by date %s", data.size, byDate)
-      let sortedExps = data.content
-      setExpenses(sortedExps)
+      console.info("Fetched %s expenses by date %s", data.size, byDate);
+      let sortedExps = data.content;
+      setExpenses(sortedExps);
       setPagination({
         pageNumber: data.number,
         pageSize: data.size,
         totalElements: data.totalElements,
-        totalPages: data.totalPages
-      })
+        totalPages: data.totalPages,
+      });
     } catch (e) {
-      console.error("Error while fetching expenses", e)
+      console.error("Error while fetching expenses", e);
       if (e instanceof Error) {
-        alert(e.message)
+        alert(e.message);
       }
     }
-  }
+  };
 
   useEffect(() => {
-    props.activeMenu()
-    fetchExpenses()
+    props.activeMenu();
+    fetchExpenses();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pagination.pageNumber]);
 
   useEffect(() => {
-    fetchExpenses()
+    fetchExpenses();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.chat]);
 
   const pageClass = (pageNum: number) => {
-    var noHighlight = "px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-    var highlight = "px-3 py-2 leading-tight text-bold text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"
+    var noHighlight =
+      "px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white";
+    var highlight =
+      "px-3 py-2 leading-tight text-bold text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white";
 
-    return pagination.pageNumber === pageNum ? highlight : noHighlight
-  }
+    return pagination.pageNumber === pageNum ? highlight : noHighlight;
+  };
 
   const handleDeleteExpense = (exp: Expense) => {
     try {
-      console.warn("Deleting expense [%s]...", exp.id)
-      deleteExpense(exp)
-        .then((rsp: any) => {
-          if (rsp !== null) {
-            console.log("Delete expense %s successully", exp.id)
-            fetchExpenses()
-          }
-        })
+      console.warn("Deleting expense [%s]...", exp.id);
+      deleteExpense(exp).then((rsp: any) => {
+        if (rsp !== null) {
+          console.log("Delete expense %s successully", exp.id);
+          fetchExpenses();
+        }
+      });
     } catch (e) {
-      console.error("Error while deleting expense", e)
+      console.error("Error while deleting expense", e);
       if (e instanceof Error) {
-        alert(e.message)
+        alert(e.message);
       }
     }
-  }
+  };
 
   //============ EXPENSE DELETION ====================//
   const askForDelExpenseConfirmation = (exp: Expense) => {
     setDeletingExpense(exp);
-    setOpenDelExpenseModal(true)
-  }
+    setOpenDelExpenseModal(true);
+  };
 
   const cancelDelExpense = () => {
-    setOpenDelExpenseModal(false)
-    setDeletingExpense(undefined)
-  }
+    setOpenDelExpenseModal(false);
+    setDeletingExpense(undefined);
+  };
 
   const confirmDelExpense = () => {
     try {
       if (deletingExpense === undefined || deletingExpense === null) {
         return;
       }
-      handleDeleteExpense(deletingExpense)
+      handleDeleteExpense(deletingExpense);
     } catch (e) {
-      console.error(e)
+      console.error(e);
     } finally {
-      setOpenDelExpenseModal(false)
-      setDeletingExpense(undefined)
+      setOpenDelExpenseModal(false);
+      setDeletingExpense(undefined);
     }
-
-  }
+  };
 
   //================= EDIT EXPENSE ===================//
   const editExpense = (exp: Expense) => {
-    let uP = formatMoneyAmount(String(exp.unitPrice))
+    let uP = formatMoneyAmount(String(exp.unitPrice));
     let eI = {
       origin: exp,
       formattedUnitPrice: uP.formattedAmount,
       originItemName: exp.itemName,
-      itemMessage: ""
-    }
-    setEditingExpense(eI)
-    setOpenEditingExpenseModal(true)
-  }
+      itemMessage: "",
+    };
+    setEditingExpense(eI);
+    setOpenEditingExpenseModal(true);
+  };
 
   const cancelEditingExpense = () => {
-    setEditingExpense(defaultEditingExpense)
-    setOpenEditingExpenseModal(false)
-    fetchExpenses()
-  }
+    setEditingExpense(defaultEditingExpense);
+    setOpenEditingExpenseModal(false);
+    fetchExpenses();
+  };
 
   const changeItemMessage = (e: ChangeEvent<HTMLInputElement>) => {
-    let iMsg = e.target.value
+    let iMsg = e.target.value;
     let eI = {
       ...editingExpense,
-      itemMessage: iMsg
-    }
-    setEditingExpense(eI)
-  }
+      itemMessage: iMsg,
+    };
+    setEditingExpense(eI);
+  };
 
   const changeItemName = (e: ChangeEvent<HTMLInputElement>) => {
-    let iName = e.target.value
+    let iName = e.target.value;
     let eI = {
       ...editingExpense,
       origin: {
         ...editingExpense.origin,
-        itemName: iName
-      }
-    }
-    setEditingExpense(eI)
-  }
+        itemName: iName,
+      },
+    };
+    setEditingExpense(eI);
+  };
 
   const emptyItemName = () => {
     let eI = {
       ...editingExpense,
       origin: {
         ...editingExpense.origin,
-        itemName: ''
-      }
-    }
-    setEditingExpense(eI)
-  }
+        itemName: "",
+      },
+    };
+    setEditingExpense(eI);
+  };
 
   const changeService = (e: ChangeEvent<HTMLInputElement>) => {
-    let iName = e.target.value
+    let iName = e.target.value;
     let eI = {
       ...editingExpense,
       origin: {
         ...editingExpense.origin,
-        service: iName
-      }
-    }
-    setEditingExpense(eI)
-  }
+        service: iName,
+      },
+    };
+    setEditingExpense(eI);
+  };
 
   const blurItemName = async () => {
     try {
-      let nItemName = editingExpense.origin.itemName
+      let nItemName = editingExpense.origin.itemName;
       if (nItemName === null || nItemName === undefined || nItemName === "") {
         return;
       }
-      setClassifyingExp(true)
-      console.log("Classify the service by expense name [%s]", nItemName)
+      setClassifyingExp(true);
+      console.log("Classify the service by expense name [%s]", nItemName);
       let rsp = await classifyServiceByItemName(nItemName);
       if (rsp.status !== 200) {
-        console.error("Failed to classify service by item name %s", nItemName)
-        setClassifyingExp(false)
+        console.error("Failed to classify service by item name %s", nItemName);
+        setClassifyingExp(false);
         return;
       }
       let eI = {
         ...editingExpense,
         origin: {
           ...editingExpense.origin,
-          service: rsp.data.service
-        }
-      }
-      setEditingExpense(eI)
-      setClassifyingExp(false)
+          service: rsp.data.service,
+        },
+      };
+      setEditingExpense(eI);
+      setClassifyingExp(false);
     } catch (e) {
-      console.error(e)
+      console.error(e);
       if (e instanceof Error) {
-        alert(e.message)
+        alert(e.message);
       }
     } finally {
-      setClassifyingExp(false)
+      setClassifyingExp(false);
     }
-  }
+  };
 
   const changeUnitPrice = (e: ChangeEvent<HTMLInputElement>) => {
-    let v = e.target.value
-    let uP = formatMoneyAmount(v)
+    let v = e.target.value;
+    let uP = formatMoneyAmount(v);
     let eI = {
       ...editingExpense,
       origin: {
@@ -307,92 +333,95 @@ export const ExpenseManager = memo((props: ExpenseProps) => {
         amount: uP.amount * editingExpense.origin.quantity,
         unitPrice: uP.amount,
       },
-      formattedUnitPrice: uP.formattedAmount
-    }
-    setEditingExpense(eI)
-  }
+      formattedUnitPrice: uP.formattedAmount,
+    };
+    setEditingExpense(eI);
+  };
 
   const changeQuantity = (delta: number) => {
-    let nQ = editingExpense.origin.quantity + delta
+    let nQ = editingExpense.origin.quantity + delta;
     let eI = {
       ...editingExpense,
       origin: {
         ...editingExpense.origin,
         quantity: nQ,
-        amount: editingExpense.origin.unitPrice * nQ
-      }
-    }
-    setEditingExpense(eI)
-  }
+        amount: editingExpense.origin.unitPrice * nQ,
+      },
+    };
+    setEditingExpense(eI);
+  };
 
   const generatePopupExpense = async () => {
-    let expMsg = editingExpense.itemMessage
-    console.info("Extracting expense from message %s", expMsg)
+    let expMsg = editingExpense.itemMessage;
+    console.info("Extracting expense from message %s", expMsg);
     if (expMsg.length < 5) {
-      console.warn(`Too short message ${expMsg}. It must be longer than 5 characters`)
-      return
+      console.warn(
+        `Too short message ${expMsg}. It must be longer than 5 characters`,
+      );
+      return;
     }
-    setGeneratingExp(true)
+    setGeneratingExp(true);
     try {
-      let exp = await generateExpense(expMsg)
+      let exp = await generateExpense(expMsg);
       if (exp === null) {
-        console.warn(`Invalid generated expense. Failed to generate expense from ${expMsg}!`)
-        return
+        console.warn(
+          `Invalid generated expense. Failed to generate expense from ${expMsg}!`,
+        );
+        return;
       }
-      let uP = formatMoneyAmount(String(exp.unitPrice))
+      let uP = formatMoneyAmount(String(exp.unitPrice));
       let eI = {
         origin: exp,
         formattedUnitPrice: uP.formattedAmount,
         originItemName: exp.itemName,
-        itemMessage: expMsg
-      }
-      setEditingExpense(eI)
+        itemMessage: expMsg,
+      };
+      setEditingExpense(eI);
+    } finally {
+      setGeneratingExp(false);
     }
-    finally {
-      setGeneratingExp(false)
-    }
-  }
+  };
 
   const generateExpense = async (msg: string) => {
     try {
       const rsp = await generate(msg);
       if (rsp === undefined || rsp.status !== 200) {
-        console.warn("Invalid response from expense generation")
+        console.warn("Invalid response from expense generation");
         return {
           ...defaultEmptExpense,
           expenseDate: formatISODateTime(new Date()),
           expenserName: props.displayName,
-          expenserId: props.chat.username
-        }
+          expenserId: props.chat.username,
+        };
       }
-      let data = rsp.data
+      let data = rsp.data;
       return {
         ...data,
-        id: '',
+        id: "",
         amount: data.unitPrice * data.quantity,
         expenseDate: formatISODateTime(new Date()),
         expenserName: props.displayName,
-        expenserId: props.chat.username
-      }
+        expenserId: props.chat.username,
+      };
     } catch (e) {
-      console.error("Error while generating expense from message", e)
+      console.error("Error while generating expense from message", e);
       if (e instanceof Error) {
-        alert(e.message)
+        alert(e.message);
       }
       return {
         ...defaultEmptExpense,
         expenseDate: formatISODateTime(new Date()),
         expenserName: props.displayName,
-        expenserId: props.chat.username
-      }
+        expenserId: props.chat.username,
+      };
     }
-  }
+  };
 
   const processSaveExpense = () => {
     try {
-      if (editingExpense.origin.itemName === '') {
-        console.warn("Invalid expense. Expense name must not be empty")
-        return Promise.resolve(false)
+      if (editingExpense.origin.itemName === "") {
+        console.warn("Invalid expense. Expense name must not be empty");
+        return Promise.resolve(false);
       }
       let exp = {
         expenseDate: editingExpense.origin.expenseDate,
@@ -404,168 +433,248 @@ export const ExpenseManager = memo((props: ExpenseProps) => {
         service: editingExpense.origin.service,
         id: editingExpense.origin.id,
         amount: editingExpense.origin.amount,
-        tenantId: editingExpense.origin.tenantId
-      }
+        tenantId: editingExpense.origin.tenantId,
+      };
       if (exp.id === null || exp.id === "" || exp.id === "new") {
-        exp.id = newExpId()
-        console.info("Generated the expense id %s", exp.id)
+        exp.id = newExpId();
+        console.info("Generated the expense id %s", exp.id);
       }
       if (exp.expenseDate === null) {
-        let expDate = formatISODateTime(new Date())
-        exp.expenseDate = expDate
-        console.info("Updated expense date to %s", expDate)
+        let expDate = formatISODateTime(new Date());
+        exp.expenseDate = expDate;
+        console.info("Updated expense date to %s", expDate);
       }
       if (exp.expenserId === null) {
-        exp.expenserId = props.chat.username
-        exp.expenserName = props.displayName
-        console.info("Updated expenser to %s", props.chat.username)
+        exp.expenserId = props.chat.username;
+        exp.expenserName = props.displayName;
+        console.info("Updated expenser to %s", props.chat.username);
       }
-      console.info("Save expense %s...", exp.id)
-      return saveExpense(exp)
-        .then((rsp) => rsp.status === 200)
+      console.info("Save expense %s...", exp.id);
+      return saveExpense(exp).then((rsp) => rsp.status === 200);
     } catch (e) {
-      console.error("Error while saving expense", e)
+      console.error("Error while saving expense", e);
       if (e instanceof Error) {
-        alert(e.message)
+        alert(e.message);
       }
-      return Promise.resolve(false)
+      return Promise.resolve(false);
     }
-  }
+  };
 
   const handleSaveAndCompleteExpense = () => {
-    processSaveExpense()
-      .then((result: boolean) => {
-        if (result) {
-          cancelEditingExpense()
-        } else {
-          console.error("Failed to save expense")
-        }
-      })
-  }
+    processSaveExpense().then((result: boolean) => {
+      if (result) {
+        cancelEditingExpense();
+      } else {
+        console.error("Failed to save expense");
+      }
+    });
+  };
 
   const handleSaveAndContinueExpense = () => {
-
-    processSaveExpense()
-      .then((result: boolean) => {
-        if (result) {
-          setEditingExpense(defaultEditingExpense)
-          if (expMsgRef.current === null) {
-            return
-          }
-          expMsgRef.current.focus()
-        } else {
-          console.error("Failed to save expense")
+    processSaveExpense().then((result: boolean) => {
+      if (result) {
+        setEditingExpense(defaultEditingExpense);
+        if (expMsgRef.current === null) {
+          return;
         }
-      })
-  }
+        expMsgRef.current.focus();
+      } else {
+        console.error("Failed to save expense");
+      }
+    });
+  };
 
   const chooseExpenser = async (exp: Expense) => {
-    setEditingExpense({ origin: exp, itemMessage: "" })
+    setEditingExpense({ origin: exp, itemMessage: "" });
     const rsp = await listUsers(0, 5);
     if (rsp.status === 200) {
-      setUsers(rsp.data.content)
-      setOpenUsersModal(true)
+      setUsers(rsp.data.content);
+      setOpenUsersModal(true);
     }
-  }
+  };
 
   const cancelSelectUser = () => {
-    setOpenUsersModal(false)
-  }
+    setOpenUsersModal(false);
+  };
 
   const changeIssuer = async (user: UserInfo) => {
     try {
-      console.warn("Change the expense from {} to {}...", editingExpense.origin.expenserId, user.username)
-      const rsp = await assignExpense(editingExpense.origin.id, user.username)
+      console.warn(
+        "Change the expense from {} to {}...",
+        editingExpense.origin.expenserId,
+        user.username,
+      );
+      const rsp = await assignExpense(editingExpense.origin.id, user.username);
       if (rsp.status === 401) {
-        props.handleUnauthorized()
+        props.handleUnauthorized();
       }
       if (rsp.status === 403) {
-        alert("You are not allowed to change the expenser of this expense!")
+        alert("You are not allowed to change the expenser of this expense!");
       }
       if (rsp !== null && rsp.status === 200) {
-        console.log("Change expenser of expense %s to %s successully", editingExpense.origin.id, user.username)
-        fetchExpenses()
+        console.log(
+          "Change expenser of expense %s to %s successully",
+          editingExpense.origin.id,
+          user.username,
+        );
+        fetchExpenses();
       }
     } catch (e) {
-      console.error(e)
+      console.error(e);
     } finally {
-      setOpenUsersModal(false)
+      setOpenUsersModal(false);
     }
-  }
+  };
 
   return (
-    <div className="h-full pt-3 relative">
-      <div className="flex flex-row px-2 space-x-2 align-middle">
-        <Button size="xs" color="green" onClick={() => editExpense(defaultEmptExpense)}>
-          <MdAssignmentAdd size="1.5em" className="mr-2" /> Add
-        </Button>
+    <>
+      <div className="flex flex-row space-x-2 align-middle">
         <Button size="xs" color="green">
           <FaUmbrellaBeach size="1.5em" className="mr-2" />
-          <Link to='../supplier' relative="path">Tour</Link>
+          <Link to="../supplier" relative="path">
+            Tour
+          </Link>
         </Button>
       </div>
-      <div className="flex flex-col px-2 pt-2 space-y-1.5 divide-y">
-        {expenses?.map((item) => {
-          return (
-            <div key={item.id} className="flex flex-col w-full px-1 space-y-1 relative">
+      <div className="flex-1 flex-col overflow-y-auto">
+        <div className="flex flex-col space-y-1.5 divide-y">
+          {expenses?.map((item) => {
+            return (
               <div
-                className="font text-sm text-green-600"
+                key={item.id}
+                className="relative flex w-full flex-col space-y-1 px-1"
               >
-                {item.itemName}
+                <div className="font text-sm text-green-600">
+                  {item.itemName}
+                </div>
+                <div className="flex flex-row space-x-1 text-[10px]">
+                  <Moment format="DD.MM" className="w-10">
+                    {new Date(item.expenseDate)}
+                  </Moment>
+                  <span className="w-6">{"x" + item.quantity}</span>
+                  <span className="w-24">{formatVND(item.amount)}</span>
+                  <span className="font w-8 font-mono font-black">
+                    {item.service}
+                  </span>
+                  {isAssignable ? (
+                    <span className="font font-mono">{item.expenserId}</span>
+                  ) : (
+                    <></>
+                  )}
+                </div>
+                <div className="absolute right-1 top-2 flex flex-row space-x-2">
+                  <IoMdRemoveCircle
+                    size="1.5em"
+                    className="mr-2 cursor-pointer text-red-800"
+                    onClick={() => askForDelExpenseConfirmation(item)}
+                  />
+                  {isAssignable ? (
+                    <HiUserCircle
+                      size="1.5em"
+                      className="mr-2 cursor-pointer text-blue-800"
+                      onClick={() => chooseExpenser(item)}
+                    />
+                  ) : (
+                    <></>
+                  )}
+                  <CiEdit
+                    size="1.5em"
+                    className="mr-2 cursor-pointer text-green-800"
+                    onClick={() => editExpense(item)}
+                  />
+                </div>
               </div>
-              <div className="flex flex-row text-[10px] space-x-1">
-                <Moment format="DD.MM" className="w-10">{new Date(item.expenseDate)}</Moment>
-                <span className="w-6">{"x" + item.quantity}</span>
-                <span className="w-24">{formatVND(item.amount)}</span>
-                <span className="font font-mono font-black w-8">{item.service}</span>
-                {isAssignable ? <span className="font font-mono">{item.expenserId}</span> : <></>}
-              </div>
-              <div className="flex flex-row space-x-2 absolute right-1 top-2">
-                <IoMdRemoveCircle size="1.5em" className="mr-2 text-red-800 cursor-pointer"
-                  onClick={() => askForDelExpenseConfirmation(item)}
-                />
-                {isAssignable ? <HiUserCircle size="1.5em" className="mr-2 text-blue-800 cursor-pointer"
-                  onClick={() => chooseExpenser(item)}
-                /> : <></>}
-                <CiEdit size="1.5em" className="mr-2 text-green-800 cursor-pointer"
-                  onClick={() => editExpense(item)}
-                />
-              </div>
-            </div>
-          )
-        })}
+            );
+          })}
+        </div>
+        <div className="h-14"></div>
       </div>
 
-      <nav className="flex items-center justify-between pt-4 absolute bottom-1" aria-label="Table navigation">
-        <ul className="inline-flex items-center -space-x-px">
-          <li onClick={() => handlePaginationClick(pagination.pageNumber - 1)} className="block px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-            <svg className="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd"></path></svg>
-          </li>
-          <li onClick={() => handlePaginationClick(0)} className={pageClass(0)}>
-            1
-          </li>
-          <li hidden={pagination.pageNumber + 1 <= 1 || pagination.pageNumber + 1 >= pagination.totalPages}
-            aria-current="page"
-            className={pageClass(pagination.pageNumber)}>
-            {pagination.pageNumber + 1}
-          </li>
-          <li hidden={pagination.totalPages <= 1}
-            onClick={() => handlePaginationClick(pagination.totalPages - 1)}
-            className={pageClass(pagination.totalPages - 1)}>
-            {pagination.totalPages}
-          </li>
-          <li onClick={() => handlePaginationClick(pagination.pageNumber + 1)} className="block px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-            <svg className="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
-          </li>
-        </ul>
-      </nav>
-
+      <div className="absolute bottom-1 left-1/2 flex w-11/12 -translate-x-1/2 flex-row items-center justify-center space-x-2 rounded-3xl bg-slate-300 opacity-70 shadow-sm">
+        <nav
+          className="flex items-center justify-between"
+          aria-label="Table navigation"
+        >
+          <ul className="inline-flex items-center -space-x-px">
+            <li
+              onClick={() => handlePaginationClick(pagination.pageNumber - 1)}
+              className="ml-0 block rounded-l-lg border border-gray-300 bg-white px-3 py-2 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+            >
+              <svg
+                className="h-5 w-5"
+                aria-hidden="true"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                  clipRule="evenodd"
+                ></path>
+              </svg>
+            </li>
+            <li
+              onClick={() => handlePaginationClick(0)}
+              className={pageClass(0)}
+            >
+              1
+            </li>
+            <li
+              hidden={
+                pagination.pageNumber + 1 <= 1 ||
+                pagination.pageNumber + 1 >= pagination.totalPages
+              }
+              aria-current="page"
+              className={pageClass(pagination.pageNumber)}
+            >
+              {pagination.pageNumber + 1}
+            </li>
+            <li
+              hidden={pagination.totalPages <= 1}
+              onClick={() => handlePaginationClick(pagination.totalPages - 1)}
+              className={pageClass(pagination.totalPages - 1)}
+            >
+              {pagination.totalPages}
+            </li>
+            <li
+              onClick={() => handlePaginationClick(pagination.pageNumber + 1)}
+              className="block rounded-r-lg border border-gray-300 bg-white px-3 py-2 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+            >
+              <svg
+                className="h-5 w-5"
+                aria-hidden="true"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                  clipRule="evenodd"
+                ></path>
+              </svg>
+            </li>
+          </ul>
+        </nav>
+        <Button
+          size="xs"
+          color="green"
+          onClick={() => editExpense(defaultEmptExpense)}
+        >
+          <MdAssignmentAdd size="1.5em" className="mr-2" /> Add
+        </Button>
+      </div>
 
       <Modal show={openDelExpenseModal} onClose={cancelDelExpense}>
         <Modal.Header>Confirm</Modal.Header>
         <Modal.Body>
           <div>
-            <span>{deletingExpense === null ? "" : "Are you sure to delete [" + deletingExpense?.itemName + "]?"}</span>
+            <span>
+              {deletingExpense === null
+                ? ""
+                : "Are you sure to delete [" + deletingExpense?.itemName + "]?"}
+            </span>
           </div>
         </Modal.Body>
         <Modal.Footer className="flex justify-center gap-4">
@@ -586,7 +695,7 @@ export const ExpenseManager = memo((props: ExpenseProps) => {
         <Modal.Header />
         <Modal.Body>
           <div className="space-y-6 px-6 pb-4 sm:pb-6 lg:px-8 xl:pb-8">
-            <div className="flex flex-col w-full">
+            <div className="flex w-full flex-col">
               <TextInput
                 id="itemMsg"
                 placeholder="3 ổ bánh mì 6k"
@@ -594,24 +703,25 @@ export const ExpenseManager = memo((props: ExpenseProps) => {
                 value={editingExpense.itemMessage}
                 onChange={changeItemMessage}
                 className="w-full"
-                rightIcon={() => generatingExp ?
-                  <Spinner aria-label="Default status example"
-                    className="w-14 h-10"
-                  />
-                  : <PiBrainThin
-                    onClick={() => generatePopupExpense()}
-                    className="pointer-events-auto cursor-pointer w-14 h-10"
-                  />
+                rightIcon={() =>
+                  generatingExp ? (
+                    <Spinner
+                      aria-label="Default status example"
+                      className="h-10 w-14"
+                    />
+                  ) : (
+                    <PiBrainThin
+                      onClick={() => generatePopupExpense()}
+                      className="pointer-events-auto h-10 w-14 cursor-pointer"
+                    />
+                  )
                 }
                 ref={expMsgRef}
               />
             </div>
-            <div className="flex flex-row w-full align-middle">
-              <div className="flex items-center w-2/5">
-                <Label
-                  htmlFor="itemName"
-                  value="Item Name"
-                />
+            <div className="flex w-full flex-row align-middle">
+              <div className="flex w-2/5 items-center">
+                <Label htmlFor="itemName" value="Item Name" />
               </div>
               <TextInput
                 id="itemName"
@@ -624,12 +734,9 @@ export const ExpenseManager = memo((props: ExpenseProps) => {
                 rightIcon={() => <HiX onClick={emptyItemName} />}
               />
             </div>
-            <div className="flex flex-row w-full align-middle">
-              <div className="flex items-center w-2/5">
-                <Label
-                  htmlFor="unitPrice"
-                  value="Unit Price"
-                />
+            <div className="flex w-full flex-row align-middle">
+              <div className="flex w-2/5 items-center">
+                <Label htmlFor="unitPrice" value="Unit Price" />
               </div>
               <TextInput
                 id="unitPrice"
@@ -643,30 +750,40 @@ export const ExpenseManager = memo((props: ExpenseProps) => {
                 className="w-full"
               />
             </div>
-            <div className="flex flex-row w-full align-middle">
-              <div className="flex items-center w-2/5">
-                <Label
-                  htmlFor="quantity"
-                  value="Quantity"
-                />
+            <div className="flex w-full flex-row align-middle">
+              <div className="flex w-2/5 items-center">
+                <Label htmlFor="quantity" value="Quantity" />
               </div>
-              <div className="relative flex items-center w-full">
+              <div className="relative flex w-full items-center">
                 <button
                   type="button"
                   id="decrement-button"
                   data-input-counter-decrement="quantity-input"
-                  className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-s-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
+                  className="h-11 rounded-s-lg border border-gray-300 bg-gray-100 p-3 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700"
                   onClick={() => changeQuantity(-1)}
                 >
-                  <svg className="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
-                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h16" />
+                  <svg
+                    className="h-3 w-3 text-gray-900 dark:text-white"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 18 2"
+                  >
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M1 1h16"
+                    />
                   </svg>
                 </button>
                 <input
                   type="number"
                   id="quantity-input"
-                  data-input-counter aria-describedby="helper-text-explanation"
-                  className="bg-gray-50 border-x-0 border-gray-300 h-11 text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  data-input-counter
+                  aria-describedby="helper-text-explanation"
+                  className="block h-11 w-full border-x-0 border-gray-300 bg-gray-50 py-2.5 text-center text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
                   placeholder="999"
                   required
                   value={editingExpense.origin.quantity}
@@ -676,31 +793,38 @@ export const ExpenseManager = memo((props: ExpenseProps) => {
                   type="button"
                   id="increment-button"
                   data-input-counter-increment="quantity-input"
-                  className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-e-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
+                  className="h-11 rounded-e-lg border border-gray-300 bg-gray-100 p-3 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700"
                   onClick={() => changeQuantity(1)}
                 >
-                  <svg className="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 1v16M1 9h16" />
+                  <svg
+                    className="h-3 w-3 text-gray-900 dark:text-white"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 18 18"
+                  >
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M9 1v16M1 9h16"
+                    />
                   </svg>
                 </button>
               </div>
             </div>
-            <div className="flex flex-row w-full align-middle">
-              <div className="flex items-center w-2/5">
-                <Label
-                  htmlFor="amount"
-                  value="Amount"
-                />
+            <div className="flex w-full flex-row align-middle">
+              <div className="flex w-2/5 items-center">
+                <Label htmlFor="amount" value="Amount" />
               </div>
-              <span className="w-full">{formatVND(editingExpense.origin.amount)}</span>
-
+              <span className="w-full">
+                {formatVND(editingExpense.origin.amount)}
+              </span>
             </div>
-            <div className="flex flex-row w-full align-middle">
-              <div className="flex items-center w-2/5">
-                <Label
-                  htmlFor="service"
-                  value="Service"
-                />
+            <div className="flex w-full flex-row align-middle">
+              <div className="flex w-2/5 items-center">
+                <Label htmlFor="service" value="Service" />
               </div>
               <TextInput
                 id="service"
@@ -709,23 +833,35 @@ export const ExpenseManager = memo((props: ExpenseProps) => {
                 readOnly
                 required
                 onChange={changeService}
-                rightIcon={() => classifyingExp ?
-                  <Spinner aria-label="Default status example"
-                    className="w-8 h-8"
-                  /> :
-                  <FaRotate
-                    onClick={blurItemName}
-                    className="pointer-events-auto cursor-pointer w-10 h-8"
-                  />
+                rightIcon={() =>
+                  classifyingExp ? (
+                    <Spinner
+                      aria-label="Default status example"
+                      className="h-8 w-8"
+                    />
+                  ) : (
+                    <FaRotate
+                      onClick={blurItemName}
+                      className="pointer-events-auto h-8 w-10 cursor-pointer"
+                    />
+                  )
                 }
                 className="w-full"
               />
             </div>
-            <div className="w-full flex justify-center">
-              <Button onClick={handleSaveAndCompleteExpense} className="mx-2" disabled={editingExpense.origin.itemName === ''}>
+            <div className="flex w-full justify-center">
+              <Button
+                onClick={handleSaveAndCompleteExpense}
+                className="mx-2"
+                disabled={editingExpense.origin.itemName === ""}
+              >
                 Save & Close
               </Button>
-              <Button onClick={handleSaveAndContinueExpense} className="mx-2" disabled={editingExpense.origin.itemName === ''}>
+              <Button
+                onClick={handleSaveAndContinueExpense}
+                className="mx-2"
+                disabled={editingExpense.origin.itemName === ""}
+              >
                 Save & Continue
               </Button>
               <Button onClick={cancelEditingExpense} className="mx-2">
@@ -736,29 +872,26 @@ export const ExpenseManager = memo((props: ExpenseProps) => {
         </Modal.Body>
       </Modal>
 
-      <Modal
-        show={openUsersModal}
-        onClose={cancelSelectUser}
-        popup
-        dismissible
-      >
+      <Modal show={openUsersModal} onClose={cancelSelectUser} popup dismissible>
         <Modal.Header></Modal.Header>
         <Modal.Body>
-          <div className="flex flex-row items-center gap-2 space-x-2 w-full ">
-            {
-              users?.map(user => {
-                return (
-                  <div
-                    key={user.username}
-                    className="flex flex-col border-spacing-1 shadow-sm hover:shadow-lg rounded-lg items-center "
-                    onClick={() => changeIssuer(user)}
-                  >
-                    <HiUserCircle />
-                    <span className="text text-center">{user.lastName ? user.firstName + " " + user.lastName : user.firstName}</span>
-                  </div>
-                )
-              })
-            }
+          <div className="flex w-full flex-row items-center gap-2 space-x-2 ">
+            {users?.map((user) => {
+              return (
+                <div
+                  key={user.username}
+                  className="flex border-spacing-1 flex-col items-center rounded-lg shadow-sm hover:shadow-lg "
+                  onClick={() => changeIssuer(user)}
+                >
+                  <HiUserCircle />
+                  <span className="text text-center">
+                    {user.lastName
+                      ? user.firstName + " " + user.lastName
+                      : user.firstName}
+                  </span>
+                </div>
+              );
+            })}
           </div>
         </Modal.Body>
         <Modal.Footer className="flex justify-center gap-4">
@@ -767,6 +900,6 @@ export const ExpenseManager = memo((props: ExpenseProps) => {
           </Button>
         </Modal.Footer>
       </Modal>
-    </div >
+    </>
   );
-})
+});

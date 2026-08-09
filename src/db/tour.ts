@@ -13,6 +13,13 @@ export const getTour = (tourId: string) => {
 
 export const saveTour = (tour: Tour) => {
   console.info("Saving the tour %s", tour.name);
+  return tourApi.post(`/${tour.tourId}`, tour, {
+    headers: { 'Content-Type': 'application/json' }
+  });
+}
+
+export const adjustTourQuantity = (tour: Tour) => {
+  console.info("Adjusting quantity for tour %s", tour.name);
   return tourApi.post(`/quantity/adjust`, tour, {
     headers: { 'Content-Type': 'application/json' }
   });

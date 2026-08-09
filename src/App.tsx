@@ -20,9 +20,12 @@ import { TourEditor } from "./Components/TourEditor";
 import UserProfile from "./Components/UserProfile";
 import { Welcome } from "./Components/Welcome";
 import { Button } from "flowbite-react";
-import { RoomManager } from "./Components/RoomManager";
+import { ReservationMap } from "./Components/ReservationMap";
 import { InvoiceMap } from "./Components/InvoiceMap";
+import { RoomManager } from "./Components/RoomManager";
+import { RatePlanManager } from "./Components/RatePlanManager";
 import { getProfile } from "./db/profile";
+import { FaBed, FaMoneyBill } from "react-icons/fa";
 
 // Add a lotus image to your public folder or assets and use its path here
 
@@ -48,7 +51,7 @@ export const defaultChat: Chat = {
   tenantId: ''
 }
 
-const menuOrder = ['home', 'expense', 'invoice', 'inventory', 'reservation', 'order', 'profit', 'tour', 'supplier', 'setting']
+const menuOrder = ['home', 'expense', 'invoice', 'inventory', 'reservation', 'order', 'profit', 'tour', 'supplier', 'setting', 'room','rate-plan']
 const menus = {
   home: {
     path: 'home',
@@ -75,7 +78,7 @@ const menus = {
     icon: <FaBoxes size={28} />
   },
   reservation: {
-    path: 'room',
+    path: 'reservation-map',
     displayName: 'Reservation',
     title: 'Reservation Management',
     icon: <FaCalendarAlt size={28} />
@@ -121,7 +124,19 @@ const menus = {
     displayName: 'Group',
     title: 'Product Groups',
     icon: <FaBoxes size={28} />
-  }
+  },
+  room: {
+    path: 'room',
+    displayName: 'Room',
+    title: 'Room Management',
+    icon: <FaBed size={28} />
+  },
+  'rate-plan': {
+    path: 'rate-plan',
+    displayName: 'Rate Plan',
+    title: 'Rate Plan Management',
+    icon: <FaMoneyBill size={28} />
+  },
 }
 
 export const App = () => {
@@ -206,13 +221,18 @@ export const App = () => {
   }, [authorities]);
 
   const filterMenus = () => {
-    setFilteredMenus(
-      authorities.length === 0
+    let fM =authorities.length === 0
         ? [menus.home] // Default to home if no roles
         : menuOrder
           .filter(menuKey => authorities.some(role => role.toLowerCase() === menuKey.toLowerCase()))
-          .map(menuKey => menus[menuKey as keyof typeof menus]) // Type guard to remove undefined values
-    );
+          .map(menuKey => menus[menuKey as keyof typeof menus])
+          .filter(Boolean) as any; // Type guard to remove undefined values
+    setFilteredMenus(fM);
+    setActiveMenu(menus.home);
+    navigate('/home');
+    // fM.includes(menus.invoice)? setActiveMenu(menus.invoice) : setActiveMenu(menus.home);
+    // window.location.href = `${process.env.REACT_APP_PS_BASE_URL}/${activeMenu.path}`;
+    // navigate(`/${activeMenu.path}`);
   }
 
   const hasAuthority = (auth: string): boolean => {
@@ -294,11 +314,11 @@ export const App = () => {
 
 
   return (
-    <div className="flex flex-col relative h-[100dvh] min-h-0 bg-slate-50">
-      <div className="mt-2">
+    <div className="flex flex-col relative h-[100dvh] mx-2">
+      <div>
         {
           activeMenu === menus.home ? (
-            <div className="mt-36 grid grid-cols-3 gap-5 p-2 grid-rows-2">
+            <div className="mt-36 grid grid-cols-3 grid-rows-2 ">
               {
                 filteredMenus.map((menu) => (
                   <Link
@@ -309,7 +329,7 @@ export const App = () => {
                     onClick={() => setActiveMenu(menu)}
                   >
                     <div className="flex flex-col items-center">
-                      <span className="mb-1 text-green-800">{menu.icon}</span>
+                      <span className="text-green-800">{menu.icon}</span>
                       <span className="text-green-900 font-semibold">{menu.displayName}</span>
                     </div>
                   </Link>
@@ -317,7 +337,7 @@ export const App = () => {
               }
             </div>
           ) : (
-            <div className="pl-2 flex items-center space-x-2">
+            <div className="flex items-center space-x-2 ">
               <button
                 className="bg-green-100 text-green-900 px-2 py-1 rounded hover:bg-green-200 mr-2 border border-green-700"
                 onClick={() => {
@@ -328,7 +348,7 @@ export const App = () => {
               >
                 &larr; Back
               </button>
-              <span className="text-2xl font-semibold text-green-900">{activeMenu.title}</span>
+              <span className="text-sm font-semibold text-green-900">{activeMenu.title}</span>
             </div>
           )
         }
@@ -367,9 +387,25 @@ export const App = () => {
           activeMenu={() => setActiveMenu(menus.reservation)}
           handleUnauthorized={() => handleLogin()}
         />} />
-        <Route path="room" element={<RoomManager
+        <Route path="reservation-map" element={<ReservationMap
           activeMenu={() => setActiveMenu(menus.reservation)}
           handleUnauthorized={() => handleLogin()}
+        />} />
+        <Route path="room" element={<RoomManager
+          chat={getChat()}
+          displayName={fullName()}
+          authorizedUserId={authorizedUserId}
+          activeMenu={() => setActiveMenu(menus.room)}
+          handleUnauthorized={() => handleLogin()}
+          hasAuthority={(auth: string) => hasAuthority(auth)}
+        />} />
+        <Route path="rate-plan" element={<RatePlanManager
+          chat={getChat()}
+          displayName={fullName()}
+          authorizedUserId={authorizedUserId}
+          activeMenu={() => setActiveMenu(menus['rate-plan'])}
+          handleUnauthorized={() => handleLogin()}
+          hasAuthority={(auth: string) => hasAuthority(auth)}
         />} />
         <Route path="order" element={<OrderManager
           chat={getChat()}

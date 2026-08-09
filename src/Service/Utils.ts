@@ -77,6 +77,24 @@ export const formatISODateTime = (date: Date) => {
     return date.toISOString().substring(0, 19)
 }
 
+export const formatLocaleDate = (date: Date) => {
+    console.log(date)
+    if (isNaN(date.getTime())) {
+        console.log("not valid date")
+    }
+    let formattedDate = date.toLocaleDateString("en-CA", {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false,
+        timeZoneName: 'short' // Optional: adds your zone (e.g., GMT+7)
+    });
+    return formattedDate.substring(0, 10)
+}
+
 export const formatDatePartition = (date: Date) => {
     // Format: 2024/07/30
     var isoDateString = formatISODate(date)
@@ -127,7 +145,7 @@ export const formatLocalTime = (utcHourMinuteTime: string) => {
 }
 
 export const formatISOTime = (date: Date) => {
-    // Format: 07/30/2024
+    // Format: 14:30:00
     return date.toLocaleTimeString("en-GB", {
         hour: '2-digit',
         minute: '2-digit',

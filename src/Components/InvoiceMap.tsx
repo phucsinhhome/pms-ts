@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, Spinner } from "flowbite-react";
 import { formatISODate, addDays } from "../Service/Utils";
@@ -12,8 +12,7 @@ import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { collectRes } from "../db/reservation_extractor";
 import { Configs } from "./InvoiceEditor";
 import { MdAssignmentAdd } from "react-icons/md";
-import { listRoom } from "../db/room";
-import { Room } from "./InvoiceManager";
+import { listRoom, Room } from "../db/room";
 
 type InvoiceMapProps = {
   activeMenu: any,
@@ -31,6 +30,12 @@ const invoiceIcons = {
   staying: <GiHouse className="text-blue-900 w-6" title="Staying" />
 }
 
+const invoiceStateStyles = {
+  tobeCheckIn: "bg-green-200 text-green-900",
+  tobeCheckOut: "bg-red-200 text-red-900",
+  staying: "bg-blue-200 text-blue-900"
+}
+
 export const InvoiceMap = (props: InvoiceMapProps) => {
   const [invoices, setInvoices] = useState<InvoiceWindow[]>([])
   const [rooms, setRooms] = useState<Room[]>([])
@@ -46,19 +51,34 @@ export const InvoiceMap = (props: InvoiceMapProps) => {
   const navigate = useNavigate();
   const [isUpdating, setIsUpdating] = useState(false);
 
-  // Group rooms into a 2-column layout
+  const fetchRooms = useCallback(async () => {
+    try {
+      const res = await listRoom(0, 100);
+      if (res.status === 401 || res.status === 403) {
+        props.handleUnauthorized()
+        return
+      }
+      if (res.status === 200) {
+        setRooms(res.data.content);
+      }
+    } catch (e) {
+      console.error("Error while fetching rooms", e);
+    }
+  }, [props]);
+
+  // Group rooms after fetchRooms updates the rooms state.
   const roomGrid = useMemo(() => {
     const grid: (string | null)[][] = [];
     for (let i = 0; i < rooms.length; i += 2) {
       grid.push([
-        rooms[i].internalRoomName || rooms[i].name,
-        rooms[i + 1] ? (rooms[i + 1].internalRoomName || rooms[i + 1].name) : null
+        rooms[i].internalName || rooms[i].name,
+        rooms[i + 1] ? (rooms[i + 1].internalName || rooms[i + 1].name) : null
       ]);
     }
     return grid;
   }, [rooms]);
 
-  const toWindow = (inv: Invoice): InvoiceWindow => {
+  const toWindow = useCallback((inv: Invoice): InvoiceWindow => {
     const today = formatISODate(workDate);
     const checkInDate = formatISODate(new Date(inv.checkInDate));
     const checkOutDate = formatISODate(new Date(inv.checkOutDate));
@@ -72,20 +92,9 @@ export const InvoiceMap = (props: InvoiceMapProps) => {
       return { invoice: inv, state: 'staying' }
     }
     return { invoice: inv, state: 'outOfWindow' }
-  }
+  }, [workDate]);
 
-  const fetchRooms = async () => {
-    try {
-      const res = await listRoom(0, 100);
-      if (res.status === 200) {
-        setRooms(res.data.content);
-      }
-    } catch (e) {
-      console.error("Error while fetching rooms", e);
-    }
-  }
-
-  const fetchInvoices = async () => {
+  const fetchInvoices = useCallback(async () => {
     const fd = formatISODate(workDate);
     const rsp = await listStayingAndComingInvoices(fd, pagination.pageNumber, pagination.pageSize);
     if (rsp.status === 401 || rsp.status === 403) {
@@ -96,7 +105,7 @@ export const InvoiceMap = (props: InvoiceMapProps) => {
       const data = rsp.data;
       setInvoices(data.content.map(toWindow).filter((invW: InvoiceWindow) => invW.state !== 'outOfWindow'));
       if (data.totalPages !== pagination.totalPages) {
-        var page = {
+        const page = {
           pageNumber: data.number,
           pageSize: data.size,
           totalElements: data.totalElements,
@@ -107,14 +116,13 @@ export const InvoiceMap = (props: InvoiceMapProps) => {
     } else {
       setInvoices([]);
     }
-  }
+  }, [pagination.pageNumber, pagination.pageSize, pagination.totalPages, props, toWindow, workDate]);
 
   useEffect(() => {
     fetchRooms();
     fetchInvoices();
     props.activeMenu();
-    // eslint-disable-next-line
-  }, [pagination.pageNumber, workDate]);
+  }, [fetchRooms, fetchInvoices, props]);
 
   // Filter invoices for each room: not checked out or check-in today
   const getRoomGuests = (roomName: string) => {
@@ -193,7 +201,7 @@ export const InvoiceMap = (props: InvoiceMapProps) => {
       <div
         className="grid grid-cols-2 gap-2 mt-4 p-2 overflow-y-auto max-h-[calc(100vh-200px)]"
       >
-        {roomGrid.flatMap((row, rowIdx) =>
+        {roomGrid?.flatMap((row, rowIdx) =>
           row.map((roomName, colIdx) => (
             <div
               key={`cell-${rowIdx}-${colIdx}`}
@@ -208,15 +216,18 @@ export const InvoiceMap = (props: InvoiceMapProps) => {
                   </div>
                   <div className="flex flex-col space-y-2 w-full">
                     {getRoomGuests(roomName).map(inv => (
-                      <div key={inv.invoice.id} className="flex flex-col bg-green-200 rounded px-1 py-1 shadow">
+                      <div
+                        key={inv.invoice.id}
+                        className={`flex flex-col rounded px-1 py-1 shadow ${invoiceStateStyles[inv.state as keyof typeof invoiceStateStyles]}`}
+                      >
                         <div
-                          className=" text-green-900 text-lg font-semibold  flex items-center cursor-pointer"
+                          className="text-lg font-semibold flex items-center cursor-pointer"
                           onClick={() => navigate(`/invoice/${inv.invoice.id}`)}
                         >
                           {inv.state in invoiceIcons ? invoiceIcons[inv.state as keyof typeof invoiceIcons] : null}
                           <span>{inv.invoice?.guestName}</span>
                         </div>
-                        <div className="text-sm font-mono text-gray-400">
+                        <div className="text-sm font-mono opacity-75">
                           {inv.invoice.reservationCode}
                         </div>
                       </div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, Spinner } from "flowbite-react";
 import { formatISODate, addDays } from "../Service/Utils";
@@ -45,7 +45,22 @@ export const InvoiceMap = (props: InvoiceMapProps) => {
   const navigate = useNavigate();
   const [isUpdating, setIsUpdating] = useState(false);
 
-  // Group rooms into a 2-column layout
+  const fetchRooms = useCallback(async () => {
+    try {
+      const res = await listRoom(0, 100);
+      if (res.status === 401 || res.status === 403) {
+        props.handleUnauthorized()
+        return
+      }
+      if (res.status === 200) {
+        setRooms(res.data.content);
+      }
+    } catch (e) {
+      console.error("Error while fetching rooms", e);
+    }
+  }, [props]);
+
+  // Group rooms after fetchRooms updates the rooms state.
   const roomGrid = useMemo(() => {
     const grid: (string | null)[][] = [];
     for (let i = 0; i < rooms.length; i += 2) {
@@ -57,7 +72,7 @@ export const InvoiceMap = (props: InvoiceMapProps) => {
     return grid;
   }, [rooms]);
 
-  const toWindow = (inv: Invoice): InvoiceWindow => {
+  const toWindow = useCallback((inv: Invoice): InvoiceWindow => {
     const today = formatISODate(workDate);
     const checkInDate = formatISODate(new Date(inv.checkInDate));
     const checkOutDate = formatISODate(new Date(inv.checkOutDate));
@@ -71,20 +86,9 @@ export const InvoiceMap = (props: InvoiceMapProps) => {
       return { invoice: inv, state: 'staying' }
     }
     return { invoice: inv, state: 'outOfWindow' }
-  }
+  }, [workDate]);
 
-  const fetchRooms = async () => {
-    try {
-      const res = await listRoom(0, 100);
-      if (res.status === 200) {
-        setRooms(res.data.content);
-      }
-    } catch (e) {
-      console.error("Error while fetching rooms", e);
-    }
-  }
-
-  const fetchInvoices = async () => {
+  const fetchInvoices = useCallback(async () => {
     const fd = formatISODate(workDate);
     const rsp = await listStayingAndComingInvoices(fd, pagination.pageNumber, pagination.pageSize);
     if (rsp.status === 401 || rsp.status === 403) {
@@ -95,7 +99,7 @@ export const InvoiceMap = (props: InvoiceMapProps) => {
       const data = rsp.data;
       setInvoices(data.content.map(toWindow).filter((invW: InvoiceWindow) => invW.state !== 'outOfWindow'));
       if (data.totalPages !== pagination.totalPages) {
-        var page = {
+        const page = {
           pageNumber: data.number,
           pageSize: data.size,
           totalElements: data.totalElements,
@@ -106,14 +110,13 @@ export const InvoiceMap = (props: InvoiceMapProps) => {
     } else {
       setInvoices([]);
     }
-  }
+  }, [pagination.pageNumber, pagination.pageSize, pagination.totalPages, props, toWindow, workDate]);
 
   useEffect(() => {
     fetchRooms();
     fetchInvoices();
     props.activeMenu();
-    // eslint-disable-next-line
-  }, [pagination.pageNumber, workDate]);
+  }, [fetchRooms, fetchInvoices, props]);
 
   // Filter invoices for each room: not checked out or check-in today
   const getRoomGuests = (roomName: string) => {
@@ -192,7 +195,7 @@ export const InvoiceMap = (props: InvoiceMapProps) => {
       <div
         className="grid grid-cols-2 gap-2 mt-4 p-2 overflow-y-auto max-h-[calc(100vh-200px)]"
       >
-        {roomGrid.flatMap((row, rowIdx) =>
+        {roomGrid?.flatMap((row, rowIdx) =>
           row.map((roomName, colIdx) => (
             <div
               key={`cell-${rowIdx}-${colIdx}`}

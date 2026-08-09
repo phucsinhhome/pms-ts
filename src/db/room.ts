@@ -14,7 +14,7 @@ export const listRoom = (page: number, size: number) => {
 }
 
 export const createRoom = (room: Partial<Room>) => {
-    return roomApi.put(``, room);
+    return roomApi.put(``, [room]);
 }
 
 export const updateRoom = (room: Room) => {

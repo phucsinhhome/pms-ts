@@ -16,8 +16,6 @@ import { IoMdMap, IoMdPersonAdd, IoMdRemoveCircle } from "react-icons/io";
 import { CiEdit } from "react-icons/ci";
 import { PERMISSION_INVOICE_DELETE } from "../db/permission";
 
-import { Room } from "../db/room";
-
 export type InvoiceItem = {
   id: string;
   itemName: string;

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
 import { useParams } from "react-router-dom";
-import { Avatar, Button, Label, Modal, TextInput } from "flowbite-react";
+import { Avatar, Button, Modal, TextInput } from "flowbite-react";
 import { Chat, DEFAULT_PAGE_SIZE } from "../App";
 import { formatISODate, formatISODateTime, formatRooms, formatVND } from "../Service/Utils";
 import { confirmOrder, fetchOrder, getPotentialInvoices, rejectOrder, saveOrder, serveOrder } from "../db/order";

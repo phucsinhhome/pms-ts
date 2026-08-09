@@ -1170,7 +1170,10 @@ export const Inventory = (props: InventoryProps) => {
                   </Label>
                 </div>
                 {editingProduct.origin.imageUrls?.map((imgUrl, idx) => (
-                  <div className="relative w-1/5">
+                  <div
+                    key={`${editingProduct.origin.id || "new"}-image-${idx}`}
+                    className="relative w-1/5"
+                  >
                     <Label htmlFor={"imgUrl" + idx}>
                       <img className="h-12 max-w-14" src={imgUrl} alt="" />
                       <FileInput

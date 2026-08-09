@@ -32,7 +32,7 @@ export function ReservationMap(props: ReservationMapProps) {
   const [isUpdating, setIsUpdating] = useState(false);
 
   // Number of days to show in columns
-  const NUM_DAYS = 10;
+  const NUM_DAYS = 30;
 
   // Generate date columns starting from fromDate
   const dateColumns = useMemo(() => {

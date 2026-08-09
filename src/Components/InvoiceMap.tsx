@@ -30,6 +30,12 @@ const invoiceIcons = {
   staying: <GiHouse className="text-blue-900 w-6" title="Staying" />
 }
 
+const invoiceStateStyles = {
+  tobeCheckIn: "bg-green-200 text-green-900",
+  tobeCheckOut: "bg-red-200 text-red-900",
+  staying: "bg-blue-200 text-blue-900"
+}
+
 export const InvoiceMap = (props: InvoiceMapProps) => {
   const [invoices, setInvoices] = useState<InvoiceWindow[]>([])
   const [rooms, setRooms] = useState<Room[]>([])
@@ -210,15 +216,18 @@ export const InvoiceMap = (props: InvoiceMapProps) => {
                   </div>
                   <div className="flex flex-col space-y-2 w-full">
                     {getRoomGuests(roomName).map(inv => (
-                      <div key={inv.invoice.id} className="flex flex-col bg-green-200 rounded px-1 py-1 shadow">
+                      <div
+                        key={inv.invoice.id}
+                        className={`flex flex-col rounded px-1 py-1 shadow ${invoiceStateStyles[inv.state as keyof typeof invoiceStateStyles]}`}
+                      >
                         <div
-                          className=" text-green-900 text-lg font-semibold  flex items-center cursor-pointer"
+                          className="text-lg font-semibold flex items-center cursor-pointer"
                           onClick={() => navigate(`/invoice/${inv.invoice.id}`)}
                         >
                           {inv.state in invoiceIcons ? invoiceIcons[inv.state as keyof typeof invoiceIcons] : null}
                           <span>{inv.invoice?.guestName}</span>
                         </div>
-                        <div className="text-sm font-mono text-gray-400">
+                        <div className="text-sm font-mono opacity-75">
                           {inv.invoice.reservationCode}
                         </div>
                       </div>

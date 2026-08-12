@@ -387,6 +387,7 @@ export const App = () => {
         <Route path="tax-policy" element={<TaxPolicyManager
           activeMenu={() => setActiveMenu(menus['tax-policy'])}
           handleUnauthorized={() => handleLogin()}
+          hasAuthority={(auth: string) => hasAuthority(auth)}
         />} />
         <Route path="invoice/:invoiceId" element={<InvoiceEditor
           chat={getChat()}

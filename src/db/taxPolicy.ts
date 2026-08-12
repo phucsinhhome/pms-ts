@@ -14,8 +14,11 @@ export type TaxPolicy = {
 export const listTaxPolicies = (): Promise<AxiosResponse<TaxPolicy[]>> =>
   taxPolicyApi.get("");
 
+export const createTaxPolicy = (policy: TaxPolicy): Promise<AxiosResponse<TaxPolicy>> =>
+  taxPolicyApi.post("", policy);
+
 export const updateTaxPolicy = (policy: TaxPolicy): Promise<AxiosResponse<TaxPolicy>> =>
   taxPolicyApi.put(`/${policy.id}`, policy);
 
-export const reorderTaxPolicies = (policies: TaxPolicy[]) =>
-  taxPolicyApi.put("/order", policies);
+export const reorderTaxPolicies = (policyIds: string[]): Promise<AxiosResponse<string[]>> =>
+  taxPolicyApi.put("/order", policyIds);

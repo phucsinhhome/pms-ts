@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Button, Label, Modal, Spinner, TextInput } from "flowbite-react";
-import { FaCheckCircle, FaEdit, FaTimesCircle } from "react-icons/fa";
-import { listTaxPolicies, reorderTaxPolicies, TaxPolicy, updateTaxPolicy } from "../db/taxPolicy";
+import { FaCheckCircle, FaEdit, FaPlus, FaTimesCircle } from "react-icons/fa";
+import { createTaxPolicy, listTaxPolicies, reorderTaxPolicies, TaxPolicy, updateTaxPolicy } from "../db/taxPolicy";
 
 type TaxPolicyManagerProps = {
     activeMenu: () => void;
     handleUnauthorized: () => void;
+    hasAuthority: (authority: string) => boolean;
 };
 
 const normalizePolicies = (policies: TaxPolicy[]) =>
@@ -25,6 +26,7 @@ export const TaxPolicyManager = (props: TaxPolicyManagerProps) => {
     const [policies, setPolicies] = useState<TaxPolicy[]>([]);
     const [selectedId, setSelectedId] = useState<string>();
     const [editingPolicy, setEditingPolicy] = useState<TaxPolicy>();
+    const [isCreating, setIsCreating] = useState(false);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState<string>();
@@ -63,13 +65,23 @@ export const TaxPolicyManager = (props: TaxPolicyManagerProps) => {
 
         const next = [...policies];
         [next[index], next[target]] = [next[target], next[index]];
-        const normalized = normalizePolicies(next);
-        setPolicies(normalized);
+        const requestedOrder = next.map((policy) => policy.id);
+        setPolicies(next.map((policy, order) => ({ ...policy, order })));
         setSaving(true);
         try {
-            const response = await reorderTaxPolicies(normalized);
+            const response = await reorderTaxPolicies(requestedOrder);
             if (response.status === 401 || response.status === 403) props.handleUnauthorized();
             if (response.status < 200 || response.status >= 300) throw new Error(`Tax API returned ${response.status}`);
+
+            const responseOrder = Array.isArray(response.data) && response.data.length > 0
+                ? response.data
+                : requestedOrder;
+            const policiesById = new Map(next.map((policy) => [policy.id, policy]));
+            const orderedPolicies = responseOrder
+                .map((policyId) => policiesById.get(policyId))
+                .filter((policy): policy is TaxPolicy => policy !== undefined);
+            const missingPolicies = next.filter((policy) => !responseOrder.includes(policy.id));
+            setPolicies([...orderedPolicies, ...missingPolicies].map((policy, order) => ({ ...policy, order })));
         } catch (e) {
             console.error("Unable to reorder tax policies", e);
             setError("Unable to save the policy order.");
@@ -79,19 +91,47 @@ export const TaxPolicyManager = (props: TaxPolicyManagerProps) => {
         }
     };
 
+    const openCreateModal = () => {
+        const nextOrder = policies.length;
+        setIsCreating(true);
+        setEditingPolicy({
+            tenantId: policies[0]?.tenantId || "",
+            id: "",
+            name: "",
+            order: nextOrder,
+            enabled: true,
+            taxRate: 0,
+            ruleExpression: "",
+        });
+    };
+
+    const closePolicyModal = () => {
+        if (!saving) {
+            setEditingPolicy(undefined);
+            setIsCreating(false);
+        }
+    };
+
     const savePolicy = async () => {
         if (!editingPolicy || saving) return;
         setSaving(true);
         setError(undefined);
         try {
-            const response = await updateTaxPolicy(editingPolicy);
+            const response = isCreating
+                ? await createTaxPolicy(editingPolicy)
+                : await updateTaxPolicy(editingPolicy);
             if (response.status === 401 || response.status === 403) {
                 props.handleUnauthorized();
                 return;
             }
             if (response.status < 200 || response.status >= 300) throw new Error(`Tax API returned ${response.status}`);
-            setPolicies((current) => normalizePolicies(current.map((policy) => policy.id === editingPolicy.id ? editingPolicy : policy)));
+            if (isCreating) {
+                await loadPolicies();
+            } else {
+                setPolicies((current) => normalizePolicies(current.map((policy) => policy.id === editingPolicy.id ? editingPolicy : policy)));
+            }
             setEditingPolicy(undefined);
+            setIsCreating(false);
         } catch (e) {
             console.error("Unable to update tax policy", e);
             setError("Unable to save the tax policy.");
@@ -102,6 +142,11 @@ export const TaxPolicyManager = (props: TaxPolicyManagerProps) => {
 
     return (
         <div className="relative flex h-[calc(100dvh-3rem)] flex-col">
+            <div className="flex items-center justify-end border-b p-2">
+                <Button size="sm" color="green" disabled={!props.hasAuthority("tax-policy:create") || loading || saving} onClick={openCreateModal}>
+                    <FaPlus className="mr-2" /> Add tax policy
+                </Button>
+            </div>
             {error && <div className="p-2 text-sm text-red-700">{error}</div>}
             <div className="flex-1 overflow-y-auto pb-20">
                 {loading ? <div className="flex justify-center p-8"><Spinner /></div> : policies.length === 0 ? <div className="p-8 text-center text-gray-500">No tax policies found.</div> : (
@@ -128,8 +173,8 @@ export const TaxPolicyManager = (props: TaxPolicyManagerProps) => {
                 <Button size="sm" color="light" disabled={saving || !selectedId || policies.findIndex((policy) => policy.id === selectedId) <= 0} onClick={() => moveSelected(-1)}>Move up</Button>
                 <Button size="sm" color="light" disabled={saving || !selectedId || policies.findIndex((policy) => policy.id === selectedId) === -1 || policies.findIndex((policy) => policy.id === selectedId) >= policies.length - 1} onClick={() => moveSelected(1)}>Move down</Button>
             </div>
-            <Modal show={!!editingPolicy} onClose={() => setEditingPolicy(undefined)}>
-                <Modal.Header>Edit tax policy</Modal.Header>
+            <Modal show={!!editingPolicy} onClose={closePolicyModal}>
+                <Modal.Header>{isCreating ? "Add tax policy" : "Edit tax policy"}</Modal.Header>
                 <Modal.Body>
                     {editingPolicy && <div className="space-y-4">
                         <div><Label htmlFor="policy-name" value="Name" /><TextInput id="policy-name" value={editingPolicy.name} onChange={(e) => setEditingPolicy({ ...editingPolicy, name: e.target.value })} /></div>
@@ -138,7 +183,7 @@ export const TaxPolicyManager = (props: TaxPolicyManagerProps) => {
                         <label className="flex items-center gap-2"><input type="checkbox" checked={editingPolicy.enabled} onChange={(e) => setEditingPolicy({ ...editingPolicy, enabled: e.target.checked })} /> Enabled</label>
                     </div>}
                 </Modal.Body>
-                <Modal.Footer><Button color="green" disabled={saving} onClick={savePolicy}>Save</Button><Button color="gray" onClick={() => setEditingPolicy(undefined)}>Cancel</Button></Modal.Footer>
+                <Modal.Footer><Button color="green" disabled={saving || !editingPolicy?.name.trim()} onClick={savePolicy}>Save</Button><Button color="gray" onClick={closePolicyModal}>Cancel</Button></Modal.Footer>
             </Modal>
         </div>
     );

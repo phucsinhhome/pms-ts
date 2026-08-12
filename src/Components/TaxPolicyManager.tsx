@@ -11,6 +11,16 @@ type TaxPolicyManagerProps = {
 const normalizePolicies = (policies: TaxPolicy[]) =>
     [...policies].sort((a, b) => a.order - b.order).map((policy, order) => ({ ...policy, order }));
 
+const extractPolicies = (payload: unknown): TaxPolicy[] => {
+    if (Array.isArray(payload)) return payload as TaxPolicy[];
+    if (!payload || typeof payload !== "object") return [];
+    const body = payload as { content?: unknown; data?: unknown; policies?: unknown };
+    if (Array.isArray(body.content)) return body.content as TaxPolicy[];
+    if (Array.isArray(body.policies)) return body.policies as TaxPolicy[];
+    if (Array.isArray(body.data)) return body.data as TaxPolicy[];
+    return [];
+};
+
 export const TaxPolicyManager = (props: TaxPolicyManagerProps) => {
     const [policies, setPolicies] = useState<TaxPolicy[]>([]);
     const [selectedId, setSelectedId] = useState<string>();
@@ -28,10 +38,10 @@ export const TaxPolicyManager = (props: TaxPolicyManagerProps) => {
                 props.handleUnauthorized();
                 return;
             }
-            if (response.status !== 200) throw new Error(`Tax API returned ${response.status}`);
-            const data = Array.isArray(response.data) ? response.data : [];
-            setPolicies(normalizePolicies(data));
-            setSelectedId((current) => current || data[0]?.id);
+            if (response.status !== 200) throw new Error(`Tax policy API returned ${response.status}`);
+            const data = normalizePolicies(extractPolicies(response.data));
+            setPolicies(data);
+            setSelectedId((current) => data.some((policy) => policy.id === current) ? current : data[0]?.id);
         } catch (e) {
             console.error("Unable to load tax policies", e);
             setError("Unable to load tax policies.");

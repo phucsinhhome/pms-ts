@@ -21,6 +21,9 @@ const invoiceApi = createApiInstance(process.env.REACT_APP_INVOICE_SERVICE_ENDPO
 // taxApi
 const taxApi = createApiInstance(process.env.REACT_APP_TAX_SERVICE_ENDPOINT);
 
+// tax policy API
+const taxPolicyApi = createApiInstance(process.env.REACT_APP_TAX_POLICY_ENDPOINT);
+
 // inventoryApi
 const inventoryApi = createApiInstance(process.env.REACT_APP_INVENTORY_ENDPOINT);
 
@@ -76,6 +79,7 @@ export {
     expenseApi,
     invoiceApi,
     taxApi,
+    taxPolicyApi,
     inventoryApi,
     productApi,
     productGroupApi,

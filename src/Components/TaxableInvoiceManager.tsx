@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Button, Modal, Spinner } from "flowbite-react";
 import { formatISODate, formatVND } from "../Service/Utils";
 import { listTaxableInvoices } from "../db/tax";
-import { DEFAULT_PAGE_SIZE } from "../App";
 import { Pagination } from "./ProfitReport";
 
 export type TaxableInvoiceItem = {

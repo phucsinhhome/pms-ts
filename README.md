@@ -16,6 +16,7 @@ From the root folder of the project. Create `.env` file which contains following
 |---|---|
 | `REACT_APP_EXPENSE_SERVICE_ENDPOINT` | The URL of expense service. E.g: `https://localhost:8443/expense`
 | `REACT_APP_INVOICE_SERVICE_ENDPOINT` | The URL of invoice service. E.g: `https://localhost:8443/invoice`
+| `REACT_APP_TAX_POLICY_ENDPOINT` | The URL of tax policy service. E.g: `https://localhost:8443/tax-policy`
 | `REACT_APP_PROFIT_SERVICE_ENDPOINT` | The URL of profit report service. E.g: `https://localhost:8443/profit`
 | `REACT_APP_RESERVATION_SERVICE_ENDPOINT` | The URL of reservation service. E.g: `https://localhost:8443/reservation`
 | `REACT_APP_SERVICE_CLASSIFICATION_ENDPOINT` | The URL of item classifcation service. E.g: `https://localhost:8443/classification`

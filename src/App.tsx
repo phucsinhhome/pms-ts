@@ -27,6 +27,7 @@ import { RatePlanManager } from "./Components/RatePlanManager";
 import { getProfile } from "./db/profile";
 import { FaBed, FaMoneyBill } from "react-icons/fa";
 import { TaxableInvoiceManager } from "./Components/TaxableInvoiceManager";
+import { TaxPolicyManager } from "./Components/TaxPolicyManager";
 
 // Add a lotus image to your public folder or assets and use its path here
 
@@ -52,7 +53,7 @@ export const defaultChat: Chat = {
   tenantId: ''
 }
 
-const menuOrder = ['home', 'expense', 'invoice', 'tax', 'inventory', 'reservation', 'order', 'profit', 'tour', 'supplier', 'setting', 'room','rate-plan']
+const menuOrder = ['home', 'expense', 'invoice', 'tax', 'tax-policy', 'inventory', 'reservation', 'order', 'profit', 'tour', 'supplier', 'setting', 'room','rate-plan']
 const menus = {
   home: {
     path: 'home',
@@ -76,6 +77,12 @@ const menus = {
     path: 'tax',
     displayName: 'Taxable Transaction',
     title: 'Taxable Transaction',
+    icon: <FaMoneyBill size={28} />
+  },
+  'tax-policy': {
+    path: 'tax-policy',
+    displayName: 'Tax Policy',
+    title: 'Tax Policy Management',
     icon: <FaMoneyBill size={28} />
   },
   inventory: {
@@ -375,6 +382,10 @@ export const App = () => {
         />} />
         <Route path="tax" element={<TaxableInvoiceManager
           activeMenu={() => setActiveMenu(menus.tax)}
+          handleUnauthorized={() => handleLogin()}
+        />} />
+        <Route path="tax-policy" element={<TaxPolicyManager
+          activeMenu={() => setActiveMenu(menus['tax-policy'])}
           handleUnauthorized={() => handleLogin()}
         />} />
         <Route path="invoice/:invoiceId" element={<InvoiceEditor

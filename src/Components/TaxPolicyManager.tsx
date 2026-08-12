@@ -179,7 +179,17 @@ export const TaxPolicyManager = (props: TaxPolicyManagerProps) => {
                     {editingPolicy && <div className="space-y-4">
                         <div><Label htmlFor="policy-name" value="Name" /><TextInput id="policy-name" value={editingPolicy.name} onChange={(e) => setEditingPolicy({ ...editingPolicy, name: e.target.value })} /></div>
                         <div><Label htmlFor="policy-rate" value="Tax rate" /><TextInput id="policy-rate" type="number" min="0" max="1" step="0.0001" value={editingPolicy.taxRate} onChange={(e) => setEditingPolicy({ ...editingPolicy, taxRate: Number(e.target.value) })} /><p className="text-xs text-gray-500">Enter a decimal value, for example 0.09 for 9%.</p></div>
-                        <div><Label htmlFor="policy-rule" value="Rule expression" /><TextInput id="policy-rule" value={editingPolicy.ruleExpression} onChange={(e) => setEditingPolicy({ ...editingPolicy, ruleExpression: e.target.value })} /></div>
+                        <div>
+                            <Label htmlFor="policy-rule" value="Rule expression" />
+                            <textarea
+                                id="policy-rule"
+                                rows={5}
+                                wrap="soft"
+                                className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-green-500 focus:ring-green-500"
+                                value={editingPolicy.ruleExpression}
+                                onChange={(e) => setEditingPolicy({ ...editingPolicy, ruleExpression: e.target.value })}
+                            />
+                        </div>
                         <label className="flex items-center gap-2"><input type="checkbox" checked={editingPolicy.enabled} onChange={(e) => setEditingPolicy({ ...editingPolicy, enabled: e.target.checked })} /> Enabled</label>
                     </div>}
                 </Modal.Body>

@@ -3,6 +3,8 @@ import { Button, Modal, Spinner } from "flowbite-react";
 import { formatISODate, formatVND } from "../Service/Utils";
 import { calculateTaxableInvoices, listTaxableInvoices, TaxCalculationResult } from "../db/tax";
 import { Pagination } from "./ProfitReport";
+import { HiArrowLeft, HiEye, HiFastForward, HiOutlineArrowCircleRight, HiOutlineArrowLeft, HiOutlineArrowRight } from "react-icons/hi";
+import { IoIosArrowForward, IoIosArrowRoundBack, IoMdArrowBack } from "react-icons/io";
 
 export type TaxableInvoiceItem = {
     id?: string;
@@ -150,13 +152,7 @@ export const TaxableInvoiceManager = (props: TaxableInvoiceManagerProps) => {
                     <input className="rounded border border-green-700 px-2 py-1 text-sm" type="date" value={toDate} onChange={(e) => { setToDate(e.target.value); setPagination(emptyPage); }} />
                 </label>
                 <Button size="sm" color="green" onClick={fetchInvoices}>Search</Button>
-                <Button size="sm" color="blue" disabled={calculating || loading} onClick={calculateTax}>
-                    {calculating ? <><Spinner size="sm" className="mr-2" /> Calculating...</> : "Calculate tax"}
-                </Button>
-                <label className="flex items-center gap-2 pb-1 text-sm">
-                    <input type="checkbox" checked={preview} onChange={(e) => setPreview(e.target.checked)} />
-                    Preview
-                </label>
+
             </div>
 
             {error && <div className="p-3 text-sm text-red-700">{error}</div>}
@@ -173,10 +169,20 @@ export const TaxableInvoiceManager = (props: TaxableInvoiceManagerProps) => {
                     </div>
                 )}
             </div>
-            <div className="flex justify-center gap-2 border-t bg-slate-100 p-2">
-                <Button size="xs" color="light" disabled={pagination.pageNumber === 0} onClick={() => changePage(pagination.pageNumber - 1)}>Previous</Button>
-                <span className="px-2 py-1 text-sm">Page {pagination.totalPages ? pagination.pageNumber + 1 : 0} of {pagination.totalPages}</span>
-                <Button size="xs" color="light" disabled={pagination.pageNumber >= pagination.totalPages - 1} onClick={() => changePage(pagination.pageNumber + 1)}>Next</Button>
+            <div className="flex justify-center gap-2 border-t bg-slate-100 p-1">
+                <Button size="xs" color="light" disabled={pagination.pageNumber === 0} onClick={() => changePage(pagination.pageNumber - 1)}><HiOutlineArrowLeft /></Button>
+                <span className="px-2 py-1 text-sm">{pagination.totalPages ? pagination.pageNumber + 1 : 0} of {pagination.totalPages}</span>
+                <Button size="xs" color="light" disabled={pagination.pageNumber >= pagination.totalPages - 1} onClick={() => changePage(pagination.pageNumber + 1)}><HiOutlineArrowRight /></Button>
+
+                <div className="flex flex-row items-center gap-2">
+                    <Button size="sm" color="green" disabled={calculating || loading} onClick={calculateTax}>
+                        {calculating ? <><Spinner size="sm" className="mr-2" /> Calculating...</> : "Calculate"}
+                    </Button>
+                    <label className="flex items-center gap-2 pb-1 text-sm">
+                        <input type="checkbox" checked={preview} onChange={(e) => setPreview(e.target.checked)} />
+                    </label>
+                </div>
+
             </div>
 
             <Modal show={showCalculationResults} onClose={() => setShowCalculationResults(false)}>

@@ -23,6 +23,7 @@ export type InvoiceItem = {
   quantity: number;
   amount: number;
   service: string;
+  taxRate: number;
 };
 
 export type Invoice = {
@@ -44,6 +45,8 @@ export type Invoice = {
   rooms: string[];
   createdBy: string;
   tenantId: string;
+  immigrationStatus: string;
+  taxGroup: string;
 };
 
 export type Issuer = {

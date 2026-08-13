@@ -71,6 +71,7 @@ const defaultEmptyItem = {
     quantity: 0,
     amount: 0,
     service: "",
+    taxRate: 0,
   },
   formattedUnitPrice: "",
 };
@@ -116,6 +117,8 @@ const defaultEmptyInvoice = {
   country: "",
   createdBy: "",
   tenantId: "",
+  immigrationStatus: "NONE",
+  taxGroup: "TAX_COUNTING",
 };
 
 type InvoiceProps = {
@@ -373,6 +376,7 @@ export const InvoiceEditor = (props: InvoiceProps) => {
         unitPrice: editingItem.origin.unitPrice,
         quantity: editingItem.origin.quantity,
         amount: editingItem.origin.amount,
+        taxRate: editingItem.origin.taxRate,
       };
       let items = [];
       if (item.id === null || item.id === "") {
@@ -710,6 +714,7 @@ export const InvoiceEditor = (props: InvoiceProps) => {
           amount: product.unitPrice,
           unitPrice: product.unitPrice,
           service: "",
+          taxRate: 0,
         },
         formattedUnitPrice: uP.formattedAmount,
       };
@@ -791,6 +796,8 @@ export const InvoiceEditor = (props: InvoiceProps) => {
         sheetName: "",
         signed: false,
         country: "",
+        immigrationStatus: "NONE",
+        taxGroup: "TAX_COUNTING",
         items: res.rooms.map((i) => ({
           id: invId + (Date.now() % 10000000),
           itemName: i.roomName,
@@ -798,11 +805,12 @@ export const InvoiceEditor = (props: InvoiceProps) => {
           quantity: 1,
           service: "STAY",
           amount: i.totalPrice,
+          taxRate: 0,
         })),
         subTotal: res.rooms
           .map((r) => r.totalPrice)
           .reduce((r1, r2) => r1 + r2),
-        tenantId: props.chat.tenantId,
+        tenantId: props.chat.tenantId
       };
       setInvoice(inv);
     } finally {
@@ -840,10 +848,13 @@ export const InvoiceEditor = (props: InvoiceProps) => {
             quantity: 1,
             service: "STAY",
             amount: defaultRoomPrice,
+            taxRate: 0,
           },
         ],
         subTotal: defaultRoomPrice,
         tenantId: props.chat.tenantId,
+        immigrationStatus: "NONE",
+        taxGroup: "TAX_COUNTING",
       };
       setInvoice(inv);
     } finally {

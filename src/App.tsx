@@ -26,6 +26,9 @@ import { RoomManager } from "./Components/RoomManager";
 import { RatePlanManager } from "./Components/RatePlanManager";
 import { getProfile } from "./db/profile";
 import { FaBed, FaMoneyBill } from "react-icons/fa";
+import { TaxableInvoiceManager } from "./Components/TaxableInvoiceManager";
+import { TaxPolicyManager } from "./Components/TaxPolicyManager";
+import { ImmigrationRegistrationManager } from "./Components/ImmigrationRegistrationManager";
 
 // Add a lotus image to your public folder or assets and use its path here
 
@@ -51,7 +54,7 @@ export const defaultChat: Chat = {
   tenantId: ''
 }
 
-const menuOrder = ['home', 'expense', 'invoice', 'inventory', 'reservation', 'order', 'profit', 'tour', 'supplier', 'setting', 'room','rate-plan']
+const menuOrder = ['home', 'expense', 'invoice', 'tax', 'tax-policy', 'immigration-registration', 'inventory', 'reservation', 'order', 'profit', 'tour', 'supplier', 'setting', 'room','rate-plan']
 const menus = {
   home: {
     path: 'home',
@@ -70,6 +73,24 @@ const menus = {
     displayName: 'Invoice',
     title: 'Invoice Management',
     icon: <FaFileInvoiceDollar size={28} />
+  },
+  tax: {
+    path: 'tax',
+    displayName: 'Taxable Transaction',
+    title: 'Taxable Transaction',
+    icon: <FaMoneyBill size={28} />
+  },
+  'tax-policy': {
+    path: 'tax-policy',
+    displayName: 'Tax Policy',
+    title: 'Tax Policy Management',
+    icon: <FaMoneyBill size={28} />
+  },
+  'immigration-registration': {
+    path: 'immigration-registration',
+    displayName: 'Immigration',
+    title: 'Immigration Registration',
+    icon: <FaUserCircle size={28} />
   },
   inventory: {
     path: 'inventory',
@@ -364,6 +385,19 @@ export const App = () => {
         />} />
         <Route path="invoice-map" element={<InvoiceMap
           activeMenu={() => setActiveMenu(menus.invoice)}
+          handleUnauthorized={() => handleLogin()}
+        />} />
+        <Route path="tax" element={<TaxableInvoiceManager
+          activeMenu={() => setActiveMenu(menus.tax)}
+          handleUnauthorized={() => handleLogin()}
+        />} />
+        <Route path="tax-policy" element={<TaxPolicyManager
+          activeMenu={() => setActiveMenu(menus['tax-policy'])}
+          handleUnauthorized={() => handleLogin()}
+          hasAuthority={(auth: string) => hasAuthority(auth)}
+        />} />
+        <Route path="immigration-registration" element={<ImmigrationRegistrationManager
+          activeMenu={() => setActiveMenu(menus['immigration-registration'])}
           handleUnauthorized={() => handleLogin()}
         />} />
         <Route path="invoice/:invoiceId" element={<InvoiceEditor

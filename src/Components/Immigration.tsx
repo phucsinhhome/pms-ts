@@ -15,39 +15,7 @@ import { GiHouse } from "react-icons/gi";
 import { IoMdMap, IoMdPersonAdd, IoMdRemoveCircle } from "react-icons/io";
 import { CiEdit } from "react-icons/ci";
 import { PERMISSION_INVOICE_DELETE } from "../db/permission";
-
-export type InvoiceItem = {
-  id: string;
-  itemName: string;
-  unitPrice: number;
-  quantity: number;
-  amount: number;
-  service: string;
-  taxRate: number;
-};
-
-export type Invoice = {
-  id: string;
-  guestName: string;
-  issuer: string;
-  issuerId: string;
-  subTotal: number;
-  checkInDate: string;
-  checkOutDate: string;
-  prepaied: boolean;
-  paymentMethod: string;
-  reservationCode: string;
-  creatorId: string | null;
-  sheetName: string;
-  country: string;
-  signed: boolean;
-  items: InvoiceItem[];
-  rooms: string[];
-  createdBy: string;
-  tenantId: string;
-  immigrationStatus: string;
-  taxGroup: string;
-};
+import { Invoice } from "./InvoiceManager";
 
 export type Issuer = {
   id: string;

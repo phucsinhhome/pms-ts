@@ -18,6 +18,12 @@ const expenseApi = createApiInstance(process.env.REACT_APP_EXPENSE_SERVICE_ENDPO
 // invoiceApi
 const invoiceApi = createApiInstance(process.env.REACT_APP_INVOICE_SERVICE_ENDPOINT);
 
+// taxApi
+const taxApi = createApiInstance(process.env.REACT_APP_TAX_SERVICE_ENDPOINT);
+
+// tax policy API
+const taxPolicyApi = createApiInstance(process.env.REACT_APP_TAX_POLICY_ENDPOINT);
+
 // inventoryApi
 const inventoryApi = createApiInstance(process.env.REACT_APP_INVENTORY_ENDPOINT);
 
@@ -68,10 +74,15 @@ const roomApi = createApiInstance(process.env.REACT_APP_ROOM_ENDPOINT);
 // ratePlan
 const ratePlanApi = createApiInstance(process.env.REACT_APP_RATE_PLAN_ENDPOINT);
 
+// immigration registration
+const immigrationRegistrationApi = createApiInstance(process.env.REACT_APP_IMMIGRATION_REGISTRATION_ENDPOINT);
+
 export {
     reportApi,
     expenseApi,
     invoiceApi,
+    taxApi,
+    taxPolicyApi,
     inventoryApi,
     productApi,
     productGroupApi,
@@ -89,5 +100,6 @@ export {
     botApi,
     psBaseApi,
     roomApi,
-    ratePlanApi
+    ratePlanApi,
+    immigrationRegistrationApi
 }

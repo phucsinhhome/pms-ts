@@ -62,6 +62,7 @@ const emptyItem = {
   quantity: 0,
   amount: 0,
   service: '',
+  taxRate: 0,
   formattedUnitPrice: ''
 }
 
@@ -93,7 +94,8 @@ const sampleSInvoice: SupplierInvoice = {
       "unitPrice": 800000,
       "quantity": 1,
       "service": "TOUR",
-      "amount": 800000
+      "amount": 800000,
+      "taxRate": 0
     },
     {
       "id": '223454545',
@@ -101,7 +103,8 @@ const sampleSInvoice: SupplierInvoice = {
       "unitPrice": 100000,
       "quantity": 1,
       "service": "TOUR",
-      "amount": 100000
+      "amount": 100000,
+      "taxRate": 0
     },
     {
       "id": '3345465',
@@ -109,7 +112,8 @@ const sampleSInvoice: SupplierInvoice = {
       "unitPrice": 10000,
       "quantity": 5,
       "service": "TOUR",
-      "amount": 50000
+      "amount": 50000,
+      "taxRate": 0
     }
   ],
   "paymentPhotos": [''],

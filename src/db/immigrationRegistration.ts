@@ -1,5 +1,6 @@
 import { AxiosResponse } from "axios";
 import { immigrationRegistrationApi } from "./apis";
+import { Invoice } from "../Components/InvoiceManager";
 
 export type ImmigrationGuest = {
   id: string;
@@ -37,21 +38,35 @@ export const listImmigrationRegistrations = (
     { params: { fromDate, toDate, page: pageNumber, size: pageSize } },
   );
 
-export const addImmigrationRegistration = (invoiceId: string) =>
-  immigrationRegistrationApi.post<ImmigrationRegistration>("/registrations", { invoiceId });
+export const listInvoicesForImmigration = (
+  fromDate: string,
+  toDate: string
+) =>
+  immigrationRegistrationApi.get<Invoice | Invoice[]>(
+    "/invoices",
+    { params: { fromDate, toDate } },
+  );
+
+export const addImmigrationRegistration = (
+  invoiceId: string,
+  guests: ImmigrationGuest[],
+) => immigrationRegistrationApi.post<ImmigrationRegistration>(
+  `/${encodeURIComponent(invoiceId)}`,
+  { guests },
+);
 
 export const removeImmigrationRegistration = (invoiceId: string) =>
-  immigrationRegistrationApi.delete(`/registrations/${invoiceId}`);
+  immigrationRegistrationApi.delete(`/${encodeURIComponent(invoiceId)}`);
 
 export const addImmigrationGuest = (
   invoiceId: string,
   guest: ImmigrationGuest,
 ) => immigrationRegistrationApi.post<ImmigrationRegistration>(
-  `/registrations/${invoiceId}/guests`,
+  `/${encodeURIComponent(invoiceId)}/guests`,
   guest,
 );
 
 export const removeImmigrationGuest = (invoiceId: string, guestId: string) =>
-  immigrationRegistrationApi.delete(`/registrations/${invoiceId}/guests/${encodeURIComponent(guestId)}`);
+  immigrationRegistrationApi.delete(`/${invoiceId}/guests/${encodeURIComponent(guestId)}`);
 
 export { unwrapPage };

@@ -1,18 +1,20 @@
 import React, { FormEvent, useEffect, useState } from "react";
 import { Button, Label, Modal, Spinner, TextInput } from "flowbite-react";
-import { formatISODate } from "../Service/Utils";
+import { beginOfMonth, formatISODate } from "../Service/Utils";
 import {
   addImmigrationGuest,
   addImmigrationRegistration,
   ImmigrationGuest,
   ImmigrationRegistration,
   listImmigrationRegistrations,
+  listInvoicesForImmigration,
   removeImmigrationGuest,
   removeImmigrationRegistration,
   unwrapPage,
 } from "../db/immigrationRegistration";
 import { Pagination } from "./ProfitReport";
 import { HiOutlineArrowLeft, HiOutlineArrowRight, HiPlus, HiTrash } from "react-icons/hi";
+import { Invoice } from "./InvoiceManager";
 
 type Props = {
   activeMenu: () => void;
@@ -31,15 +33,19 @@ const emptyPagination: Pagination = {
 const emptyGuest: GuestForm = { id: "", name: "", dateOfBirth: "", country: "" };
 
 export const ImmigrationRegistrationManager = ({ activeMenu, handleUnauthorized }: Props) => {
+  const beginingOfMonth = formatISODate(beginOfMonth(new Date()));
   const today = formatISODate(new Date());
-  const [fromDate, setFromDate] = useState(today);
+  const [fromDate, setFromDate] = useState(beginingOfMonth);
   const [toDate, setToDate] = useState(today);
   const [registrations, setRegistrations] = useState<ImmigrationRegistration[]>([]);
   const [pagination, setPagination] = useState<Pagination>(emptyPagination);
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [loadingInvoices, setLoadingInvoices] = useState(false);
   const [error, setError] = useState<string>();
-  const [invoiceId, setInvoiceId] = useState("");
+  const [invoiceOptions, setInvoiceOptions] = useState<Invoice[]>([]);
+  const [showInvoiceModal, setShowInvoiceModal] = useState(false);
+  const [selectedInvoice, setSelectedInvoice] = useState<Invoice>();
   const [selectedRegistration, setSelectedRegistration] = useState<ImmigrationRegistration>();
   const [guest, setGuest] = useState<GuestForm>(emptyGuest);
 
@@ -106,12 +112,49 @@ export const ImmigrationRegistrationManager = ({ activeMenu, handleUnauthorized 
     }
   };
 
-  const addRegistration = async (event: FormEvent) => {
-    event.preventDefault();
-    const value = invoiceId.trim();
-    if (!value) return;
-    const success = await request(() => addImmigrationRegistration(value));
-    if (success) setInvoiceId("");
+  const openInvoiceSelector = async () => {
+    setShowInvoiceModal(true);
+    setSelectedInvoice(undefined);
+    setLoadingInvoices(true);
+    setError(undefined);
+    const firstDayOfMonth = formatISODate(new Date(new Date().getFullYear(), new Date().getMonth(), 1));
+    try {
+      const response = await listInvoicesForImmigration(firstDayOfMonth, today);
+      if (response.status === 401 || response.status === 403) {
+        handleUnauthorized();
+        return;
+      }
+      if (response.status !== 200) throw new Error(`Invoice API returned ${response.status}`);
+      const data: any = response.data;
+      setInvoiceOptions(Array.isArray(data) ? data : data.content || []);
+    } catch (e) {
+      console.error("Unable to load invoices for immigration registration", e);
+      setInvoiceOptions([]);
+      setError("Unable to load invoices for registration.");
+    } finally {
+      setLoadingInvoices(false);
+    }
+  };
+
+  const guestFromInvoice = (invoice: Invoice): ImmigrationGuest => ({
+    id: "",
+    name: invoice.guestName || "",
+    dateOfBirth: "",
+    country: invoice.country || "",
+  });
+
+  const confirmRegistration = async () => {
+    if (!selectedInvoice) {
+      console.error("No invoice selected for immigration registration");
+      return;
+    }
+    const guest = guestFromInvoice(selectedInvoice);
+    let guests = guest ? [guest] : [];
+    const success = await request(() => addImmigrationRegistration(selectedInvoice.id, guests));
+    if (success) {
+      setShowInvoiceModal(false);
+      setSelectedInvoice(undefined);
+    }
   };
 
   const addGuest = async (event: FormEvent) => {
@@ -130,6 +173,37 @@ export const ImmigrationRegistrationManager = ({ activeMenu, handleUnauthorized 
   const removeGuest = (registration: ImmigrationRegistration, guestId: string) =>
     request(() => removeImmigrationGuest(registration.invoiceId, guestId));
 
+  const registrationContent = loading
+    ? <div className="flex justify-center p-8"><Spinner /></div>
+    : registrations.length === 0
+      ? <div className="p-8 text-center text-gray-500">No immigration registrations found.</div>
+      : registrations.map((registration) => (
+        <div key={registration.invoiceId} className="border-b p-3">
+          <div className="flex items-center gap-3">
+            <button type="button" className="flex-1 text-left" onClick={() => { setSelectedRegistration(registration); setGuest(emptyGuest); }}>
+              <div className="font-medium text-green-900">{registration.invoiceId}</div>
+              <div className="text-sm text-gray-600">Status: {registration.status} · Guests: {registration.guests?.length || 0}</div>
+            </button>
+            <Button size="xs" color="failure" disabled={saving} onClick={() => request(() => removeImmigrationRegistration(registration.invoiceId))}><HiTrash /></Button>
+          </div>
+          {(registration.guests || []).map((item) => <div key={item.id} className="ml-4 mt-2 flex items-center justify-between rounded bg-gray-50 px-3 py-2 text-sm">
+            <span>{item.name} · {item.dateOfBirth} · {item.country} · {item.id}</span>
+            <Button size="xs" color="failure" disabled={saving} onClick={() => removeGuest(registration, item.id)}><HiTrash /></Button>
+          </div>)}
+        </div>
+      ));
+
+  const invoiceSelectorContent = loadingInvoices
+    ? <div className="flex justify-center p-8"><Spinner /></div>
+    : invoiceOptions.length === 0
+      ? <div className="text-gray-500">No invoices found from the beginning of this month through today.</div>
+      : <div className="max-h-96 divide-y overflow-y-auto">
+        {invoiceOptions.map((invoice) => <button key={invoice.id} type="button" className={`flex w-full items-center justify-between p-3 text-left hover:bg-green-50 ${selectedInvoice?.id === invoice.id ? "bg-green-100" : ""}`} onClick={() => setSelectedInvoice(invoice)}>
+          <span className="font-medium text-green-900">{invoice.guestName || "-"}</span>
+          <span className="text-sm text-gray-600">{invoice.checkInDate ? new Date(invoice.checkInDate).toLocaleDateString() : "-"}</span>
+        </button>)}
+      </div>;
+
   return (
     <div className="relative flex h-[calc(100dvh-3rem)] flex-col">
       <div className="flex flex-wrap items-end gap-3 border-b pb-3">
@@ -140,34 +214,29 @@ export const ImmigrationRegistrationManager = ({ activeMenu, handleUnauthorized 
           <input className="rounded border border-green-700 px-2 py-1 text-sm" type="date" value={toDate} onChange={(e) => { setToDate(e.target.value); setPagination(emptyPagination); }} />
         </label>
         <Button size="sm" color="green" onClick={loadRegistrations} disabled={loading}>Refresh</Button>
-        <form className="flex items-end gap-2" onSubmit={addRegistration}>
-          <div><Label htmlFor="invoice-id" value="Invoice ID" /><TextInput id="invoice-id" value={invoiceId} onChange={(e) => setInvoiceId(e.target.value)} /></div>
-          <Button type="submit" size="sm" color="blue" disabled={saving || !invoiceId.trim()}><HiPlus className="mr-1" /> Add registration</Button>
-        </form>
+        <Button type="button" size="sm" color="blue" onClick={openInvoiceSelector} disabled={saving || loadingInvoices}><HiPlus className="mr-1" /> Add registration</Button>
       </div>
       {error && <div className="p-3 text-sm text-red-700">{error}</div>}
       <div className="flex-1 overflow-y-auto">
-        {loading ? <div className="flex justify-center p-8"><Spinner /></div> : registrations.length === 0 ? <div className="p-8 text-center text-gray-500">No immigration registrations found.</div> : registrations.map((registration) => (
-          <div key={registration.invoiceId} className="border-b p-3">
-            <div className="flex items-center gap-3">
-              <button type="button" className="flex-1 text-left" onClick={() => { setSelectedRegistration(registration); setGuest(emptyGuest); }}>
-                <div className="font-medium text-green-900">{registration.invoiceId}</div>
-                <div className="text-sm text-gray-600">Status: {registration.status} · Guests: {registration.guests?.length || 0}</div>
-              </button>
-              <Button size="xs" color="failure" disabled={saving} onClick={() => request(() => removeImmigrationRegistration(registration.invoiceId))}><HiTrash /></Button>
-            </div>
-            {(registration.guests || []).map((item) => <div key={item.id} className="ml-4 mt-2 flex items-center justify-between rounded bg-gray-50 px-3 py-2 text-sm">
-              <span>{item.name} · {item.dateOfBirth} · {item.country} · {item.id}</span>
-              <Button size="xs" color="failure" disabled={saving} onClick={() => removeGuest(registration, item.id)}><HiTrash /></Button>
-            </div>)}
-          </div>
-        ))}
+        {registrationContent}
       </div>
       <div className="flex justify-center gap-2 border-t bg-slate-100 p-1">
         <Button size="xs" color="light" disabled={pagination.pageNumber === 0} onClick={() => setPagination({ ...pagination, pageNumber: pagination.pageNumber - 1 })}><HiOutlineArrowLeft /></Button>
         <span className="px-2 py-1 text-sm">{pagination.totalPages ? pagination.pageNumber + 1 : 0} of {pagination.totalPages}</span>
         <Button size="xs" color="light" disabled={pagination.pageNumber >= pagination.totalPages - 1} onClick={() => setPagination({ ...pagination, pageNumber: pagination.pageNumber + 1 })}><HiOutlineArrowRight /></Button>
       </div>
+      <Modal show={showInvoiceModal} onClose={() => setShowInvoiceModal(false)}>
+        <Modal.Header>Select invoice for registration</Modal.Header>
+        <Modal.Body>
+          {invoiceSelectorContent}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button color="gray" onClick={() => setShowInvoiceModal(false)}>Cancel</Button>
+          <Button color="blue" disabled={!selectedInvoice || saving || loadingInvoices}
+            onClick={confirmRegistration}>{saving ? <><Spinner size="sm" className="mr-2" /> Creating...</> : "Confirm"}</Button>
+        </Modal.Footer>
+      </Modal>
+
       <Modal show={!!selectedRegistration} onClose={() => setSelectedRegistration(undefined)}>
         <Modal.Header>Add guest to registration</Modal.Header>
         <Modal.Body>

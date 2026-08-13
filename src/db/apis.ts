@@ -74,6 +74,9 @@ const roomApi = createApiInstance(process.env.REACT_APP_ROOM_ENDPOINT);
 // ratePlan
 const ratePlanApi = createApiInstance(process.env.REACT_APP_RATE_PLAN_ENDPOINT);
 
+// immigration registration
+const immigrationRegistrationApi = createApiInstance(process.env.REACT_APP_IMMIGRATION_REGISTRATION_ENDPOINT);
+
 export {
     reportApi,
     expenseApi,
@@ -97,5 +100,6 @@ export {
     botApi,
     psBaseApi,
     roomApi,
-    ratePlanApi
+    ratePlanApi,
+    immigrationRegistrationApi
 }

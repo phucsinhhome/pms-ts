@@ -8,7 +8,6 @@ import {
   ImmigrationRegistration,
   listImmigrationRegistrations,
   listInvoicesForImmigration,
-  removeImmigrationGuest,
   removeImmigrationRegistration,
   unwrapPage,
 } from "../db/immigrationRegistration";
@@ -170,10 +169,6 @@ export const ImmigrationRegistrationManager = ({ activeMenu, handleUnauthorized 
       setSelectedRegistration(undefined);
     }
   };
-
-  const removeGuest = (registration: ImmigrationRegistration, guestId: string) =>
-    request(() => removeImmigrationGuest(registration.invoiceId, guestId));
-
 
   const invoiceSelectorContent = loadingInvoices
     ? <div className="flex justify-center p-8"><Spinner /></div>

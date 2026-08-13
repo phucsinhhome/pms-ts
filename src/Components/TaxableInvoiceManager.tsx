@@ -3,8 +3,7 @@ import { Button, Modal, Spinner } from "flowbite-react";
 import { beginOfMonth, formatISODate, formatVND } from "../Service/Utils";
 import { calculateTaxableInvoices, listTaxableInvoices, TaxCalculationResult } from "../db/tax";
 import { Pagination } from "./ProfitReport";
-import { HiArrowLeft, HiEye, HiFastForward, HiOutlineArrowCircleRight, HiOutlineArrowLeft, HiOutlineArrowRight } from "react-icons/hi";
-import { IoIosArrowForward, IoIosArrowRoundBack, IoMdArrowBack } from "react-icons/io";
+import { HiOutlineArrowLeft, HiOutlineArrowRight } from "react-icons/hi";
 
 export type TaxableInvoiceItem = {
     id?: string;

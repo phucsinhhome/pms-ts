@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button, Modal, Spinner } from "flowbite-react";
-import { formatISODate, formatVND } from "../Service/Utils";
+import { beginOfMonth, formatISODate, formatVND } from "../Service/Utils";
 import { calculateTaxableInvoices, listTaxableInvoices, TaxCalculationResult } from "../db/tax";
 import { Pagination } from "./ProfitReport";
 import { HiArrowLeft, HiEye, HiFastForward, HiOutlineArrowCircleRight, HiOutlineArrowLeft, HiOutlineArrowRight } from "react-icons/hi";
@@ -47,8 +47,9 @@ const guestValue = (invoice: TaxableInvoice) => invoice.guestName || invoice.nam
 const subtotalValue = (invoice: TaxableInvoice) => invoice.subTotal ?? invoice.subtotal ?? 0;
 
 export const TaxableInvoiceManager = (props: TaxableInvoiceManagerProps) => {
+    const beginingOfMonth = formatISODate(beginOfMonth(new Date()));
     const today = formatISODate(new Date());
-    const [fromDate, setFromDate] = useState(today);
+    const [fromDate, setFromDate] = useState(beginingOfMonth);
     const [toDate, setToDate] = useState(today);
     const [invoices, setInvoices] = useState<TaxableInvoice[]>([]);
     const [pagination, setPagination] = useState<Pagination>(emptyPage);

@@ -12,6 +12,8 @@ export type ImmigrationGuest = {
 export type ImmigrationRegistration = {
   invoiceId: string;
   status: string;
+  checkInDate: string;
+  checkOutDate: string;
   guests: ImmigrationGuest[];
 };
 

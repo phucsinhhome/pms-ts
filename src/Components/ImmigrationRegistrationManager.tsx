@@ -15,6 +15,7 @@ import {
 import { Pagination } from "./ProfitReport";
 import { HiOutlineArrowLeft, HiOutlineArrowRight, HiPlus, HiTrash } from "react-icons/hi";
 import { Invoice } from "./InvoiceManager";
+import Moment from "react-moment";
 
 type Props = {
   activeMenu: () => void;
@@ -173,25 +174,6 @@ export const ImmigrationRegistrationManager = ({ activeMenu, handleUnauthorized 
   const removeGuest = (registration: ImmigrationRegistration, guestId: string) =>
     request(() => removeImmigrationGuest(registration.invoiceId, guestId));
 
-  const registrationContent = loading
-    ? <div className="flex justify-center p-8"><Spinner /></div>
-    : registrations.length === 0
-      ? <div className="p-8 text-center text-gray-500">No immigration registrations found.</div>
-      : registrations.map((registration) => (
-        <div key={registration.invoiceId} className="border-b p-3">
-          <div className="flex items-center gap-3">
-            <button type="button" className="flex-1 text-left" onClick={() => { setSelectedRegistration(registration); setGuest(emptyGuest); }}>
-              <div className="font-medium text-green-900">{registration.invoiceId}</div>
-              <div className="text-sm text-gray-600">Status: {registration.status} · Guests: {registration.guests?.length || 0}</div>
-            </button>
-            <Button size="xs" color="failure" disabled={saving} onClick={() => request(() => removeImmigrationRegistration(registration.invoiceId))}><HiTrash /></Button>
-          </div>
-          {(registration.guests || []).map((item) => <div key={item.id} className="ml-4 mt-2 flex items-center justify-between rounded bg-gray-50 px-3 py-2 text-sm">
-            <span>{item.name} · {item.dateOfBirth} · {item.country} · {item.id}</span>
-            <Button size="xs" color="failure" disabled={saving} onClick={() => removeGuest(registration, item.id)}><HiTrash /></Button>
-          </div>)}
-        </div>
-      ));
 
   const invoiceSelectorContent = loadingInvoices
     ? <div className="flex justify-center p-8"><Spinner /></div>
@@ -217,8 +199,31 @@ export const ImmigrationRegistrationManager = ({ activeMenu, handleUnauthorized 
         <Button type="button" size="sm" color="blue" onClick={openInvoiceSelector} disabled={saving || loadingInvoices}><HiPlus className="mr-1" /> Add registration</Button>
       </div>
       {error && <div className="p-3 text-sm text-red-700">{error}</div>}
-      <div className="flex-1 overflow-y-auto">
-        {registrationContent}
+      <div className="flex flex-col divide-y space-y-2 flex-1 overflow-y-auto">
+        {
+          loading
+            ? <div className="flex justify-center p-8"><Spinner /></div>
+            : registrations.length === 0
+              ? <div className="p-8 text-center text-gray-500">No immigration registrations found.</div>
+              : registrations.map((registration) => (
+                <div key={registration.invoiceId} className="flex flex-col">
+                  <div className="w-full text-sm font-semibold text-green-900">
+                    <Moment format="DD.MM.YYYY">{new Date(registration.checkInDate)}</Moment>
+                  </div>
+                  <div className="flex flex-row border-b relative items-center">
+                    {
+                      (registration.guests || []).map((item) =>
+                        <div key={item.id} className="flex items-center w-10/12 justify-between rounded bg-gray-200 px-3 py-1 text-sm">
+                          <span>{item.name}</span>
+                        </div>)
+                    }
+                    <div className="flex absolute right-1 items-center justify-end rounded ">
+                      <Button size="xs" color="failure" disabled={saving} onClick={() => request(() => removeImmigrationRegistration(registration.invoiceId))}><HiTrash /></Button>
+                    </div>
+                  </div>
+                </div>
+              ))
+        }
       </div>
       <div className="flex justify-center gap-2 border-t bg-slate-100 p-1">
         <Button size="xs" color="light" disabled={pagination.pageNumber === 0} onClick={() => setPagination({ ...pagination, pageNumber: pagination.pageNumber - 1 })}><HiOutlineArrowLeft /></Button>

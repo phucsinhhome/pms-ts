@@ -35,7 +35,7 @@ type TaxableInvoiceManagerProps = {
 
 const emptyPage: Pagination = {
     pageNumber: 0,
-    pageSize: Number(process.env.REACT_APP_DEFAULT_PAGE_SIZE) || 10,
+    pageSize: 500,
     totalElements: 0,
     totalPages: 0,
 };
@@ -168,8 +168,9 @@ export const TaxableInvoiceManager = (props: TaxableInvoiceManagerProps) => {
                         ))}
                     </div>
                 )}
+                <div className="h-14"></div>
             </div>
-            <div className="flex justify-center gap-2 border-t bg-slate-100 p-1">
+            <div className="absolute bottom-1 left-1/2 flex w-11/12 -translate-x-1/2 flex-row items-center justify-center space-x-2 rounded-3xl bg-slate-300 opacity-90 shadow-sm">
                 <Button size="xs" color="light" disabled={pagination.pageNumber === 0} onClick={() => changePage(pagination.pageNumber - 1)}><HiOutlineArrowLeft /></Button>
                 <span className="px-2 py-1 text-sm">{pagination.totalPages ? pagination.pageNumber + 1 : 0} of {pagination.totalPages}</span>
                 <Button size="xs" color="light" disabled={pagination.pageNumber >= pagination.totalPages - 1} onClick={() => changePage(pagination.pageNumber + 1)}><HiOutlineArrowRight /></Button>

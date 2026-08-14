@@ -153,8 +153,6 @@ export const TaxableInvoiceManager = (props: TaxableInvoiceManagerProps) => {
                     To date
                     <input className="rounded border border-green-700 px-2 py-1 text-sm" type="date" value={toDate} onChange={(e) => { setToDate(e.target.value); setPagination(emptyPage); }} />
                 </label>
-                <Button size="sm" color="green" onClick={fetchInvoices}>Search</Button>
-
             </div>
 
             {error && <div className="p-3 text-sm text-red-700">{error}</div>}
@@ -176,19 +174,16 @@ export const TaxableInvoiceManager = (props: TaxableInvoiceManagerProps) => {
                 )}
                 <div className="h-14"></div>
             </div>
-            <div className="absolute bottom-1 left-1/2 flex w-11/12 -translate-x-1/2 flex-row items-center justify-center space-x-2 rounded-3xl bg-slate-300 opacity-90 shadow-sm">
+            <div className="absolute bottom-1 left-1/2 flex w-11/12 -translate-x-1/2 flex-row items-center justify-center py-1 space-x-2 rounded-3xl bg-slate-300 opacity-90 shadow-sm">
                 <Button size="xs" color="light" disabled={pagination.pageNumber === 0} onClick={() => changePage(pagination.pageNumber - 1)}><HiOutlineArrowLeft /></Button>
-                <span className="px-2 py-1 text-sm">{pagination.totalPages ? pagination.pageNumber + 1 : 0} of {pagination.totalPages}</span>
+                <span className="px-0 py-1 text-sm">{pagination.totalPages ? pagination.pageNumber + 1 : 0} of {pagination.totalPages}</span>
                 <Button size="xs" color="light" disabled={pagination.pageNumber >= pagination.totalPages - 1} onClick={() => changePage(pagination.pageNumber + 1)}><HiOutlineArrowRight /></Button>
 
-                <div className="flex flex-row items-center gap-2">
-                    <Button size="sm" color="green" disabled={calculating || loading} onClick={calculateTax}>
-                        {calculating ? <><Spinner size="sm" className="mr-2" /> Calculating...</> : "Calculate"}
-                    </Button>
-                    <label className="flex items-center gap-2 pb-1 text-sm">
-                        <input type="checkbox" checked={preview} onChange={(e) => setPreview(e.target.checked)} />
-                    </label>
-                </div>
+                <Button size="xs" color="green" onClick={fetchInvoices}>Refresh</Button>
+                <Button size="xs" color="green" disabled={calculating || loading} onClick={calculateTax}>
+                    {calculating ? <><Spinner size="sm" className="mr-1" /> Calculating</> : "Calculate"}
+                </Button>
+                <input type="checkbox" checked={preview} onChange={(e) => setPreview(e.target.checked)} />
 
             </div>
 

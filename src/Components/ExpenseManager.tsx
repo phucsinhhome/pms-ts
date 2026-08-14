@@ -590,7 +590,7 @@ export const ExpenseManager = memo((props: ExpenseProps) => {
         <div className="h-14"></div>
       </div>
 
-      <div className="absolute bottom-1 left-1/2 flex w-11/12 -translate-x-1/2 flex-row items-center justify-center space-x-2 rounded-3xl bg-slate-300 opacity-70 shadow-sm">
+      <div className="absolute bottom-1 left-1/2 flex w-11/12 -translate-x-1/2 flex-row items-center justify-center py-1 space-x-2 rounded-3xl bg-slate-300 opacity-90 shadow-sm">
         <nav
           className="flex items-center justify-between"
           aria-label="Table navigation"

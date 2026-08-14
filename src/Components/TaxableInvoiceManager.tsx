@@ -112,6 +112,8 @@ export const TaxableInvoiceManager = (props: TaxableInvoiceManagerProps) => {
         setPagination({ ...pagination, pageNumber: Math.max(0, Math.min(pageNumber, Math.max(0, pagination.totalPages - 1))) });
     };
 
+    const totalSubtotal = invoices.reduce((total, invoice) => total + subtotalValue(invoice), 0);
+
     const calculateTax = async () => {
         if (fromDate > toDate || calculating) {
             setError("The from date must not be after the to date.");
@@ -156,6 +158,10 @@ export const TaxableInvoiceManager = (props: TaxableInvoiceManagerProps) => {
             </div>
 
             {error && <div className="p-3 text-sm text-red-700">{error}</div>}
+            <div className="flex items-center justify-between border-b bg-green-50 px-3 py-2 font-semibold text-green-900">
+                <span>Total</span>
+                <span className="font-mono">{formatVND(totalSubtotal)}</span>
+            </div>
             <div className="flex-1 overflow-y-auto">
                 {loading ? <div className="flex justify-center p-8"><Spinner /></div> : invoices.length === 0 ? <div className="p-8 text-center text-gray-500">No taxable invoices found.</div> : (
                     <div className="divide-y">

@@ -25,7 +25,7 @@ type GuestForm = Omit<ImmigrationGuest, "id"> & { id: string };
 
 const emptyPagination: Pagination = {
   pageNumber: 0,
-  pageSize: Number(process.env.REACT_APP_DEFAULT_PAGE_SIZE) || 10,
+  pageSize: 500,
   totalElements: 0,
   totalPages: 0,
 };
@@ -48,6 +48,10 @@ export const ImmigrationRegistrationManager = ({ activeMenu, handleUnauthorized 
   const [selectedInvoice, setSelectedInvoice] = useState<Invoice>();
   const [selectedRegistration, setSelectedRegistration] = useState<ImmigrationRegistration>();
   const [guest, setGuest] = useState<GuestForm>(emptyGuest);
+
+  const changePage = (pageNumber: number) => {
+    setPagination({ ...pagination, pageNumber: Math.max(0, Math.min(pageNumber, Math.max(0, pagination.totalPages - 1))) });
+  };
 
   const loadRegistrations = async () => {
     if (fromDate > toDate) {
@@ -190,8 +194,7 @@ export const ImmigrationRegistrationManager = ({ activeMenu, handleUnauthorized 
         <label className="flex flex-col text-xs font-semibold text-green-900">To date
           <input className="rounded border border-green-700 px-2 py-1 text-sm" type="date" value={toDate} onChange={(e) => { setToDate(e.target.value); setPagination(emptyPagination); }} />
         </label>
-        <Button size="sm" color="green" onClick={loadRegistrations} disabled={loading}>Refresh</Button>
-        <Button type="button" size="sm" color="blue" onClick={openInvoiceSelector} disabled={saving || loadingInvoices}><HiPlus className="mr-1" /> Add registration</Button>
+
       </div>
       {error && <div className="p-3 text-sm text-red-700">{error}</div>}
       <div className="flex flex-col divide-y space-y-2 flex-1 overflow-y-auto">
@@ -219,12 +222,20 @@ export const ImmigrationRegistrationManager = ({ activeMenu, handleUnauthorized 
                 </div>
               ))
         }
+        <div className="h-14"></div>
       </div>
-      <div className="flex justify-center gap-2 border-t bg-slate-100 p-1">
-        <Button size="xs" color="light" disabled={pagination.pageNumber === 0} onClick={() => setPagination({ ...pagination, pageNumber: pagination.pageNumber - 1 })}><HiOutlineArrowLeft /></Button>
-        <span className="px-2 py-1 text-sm">{pagination.totalPages ? pagination.pageNumber + 1 : 0} of {pagination.totalPages}</span>
-        <Button size="xs" color="light" disabled={pagination.pageNumber >= pagination.totalPages - 1} onClick={() => setPagination({ ...pagination, pageNumber: pagination.pageNumber + 1 })}><HiOutlineArrowRight /></Button>
+      <div className="absolute bottom-1 left-1/2 flex w-11/12 -translate-x-1/2 flex-row items-center justify-center py-1 space-x-2 rounded-3xl bg-slate-300 opacity-90 shadow-sm">
+        <Button size="xs" color="light" disabled={pagination.pageNumber === 0} onClick={() => changePage(pagination.pageNumber - 1)}><HiOutlineArrowLeft /></Button>
+        <span className="px-0 py-1 text-sm">{pagination.totalPages ? pagination.pageNumber + 1 : 0} of {pagination.totalPages}</span>
+        <Button size="xs" color="light" disabled={pagination.pageNumber >= pagination.totalPages - 1} onClick={() => changePage(pagination.pageNumber + 1)}><HiOutlineArrowRight /></Button>
+
+        <Button size="xs" color="green" onClick={loadRegistrations} disabled={loading}>Refresh</Button>
+        <Button size="xs" color="green" onClick={openInvoiceSelector} disabled={saving || loadingInvoices}>
+          <HiPlus/>
+          <span>Register</span>
+        </Button>
       </div>
+
       <Modal show={showInvoiceModal} onClose={() => setShowInvoiceModal(false)}>
         <Modal.Header>Select invoice for registration</Modal.Header>
         <Modal.Body>

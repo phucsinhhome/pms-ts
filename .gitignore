@@ -25,3 +25,4 @@ yarn-error.log*
 .env.development
 .env.development
 build.log
+/.gsd

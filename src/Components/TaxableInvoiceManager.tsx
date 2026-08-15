@@ -35,7 +35,7 @@ type TaxableInvoiceManagerProps = {
 
 const emptyPage: Pagination = {
     pageNumber: 0,
-    pageSize: Number(process.env.REACT_APP_DEFAULT_PAGE_SIZE) || 10,
+    pageSize: 500,
     totalElements: 0,
     totalPages: 0,
 };
@@ -112,6 +112,8 @@ export const TaxableInvoiceManager = (props: TaxableInvoiceManagerProps) => {
         setPagination({ ...pagination, pageNumber: Math.max(0, Math.min(pageNumber, Math.max(0, pagination.totalPages - 1))) });
     };
 
+    const totalSubtotal = invoices.reduce((total, invoice) => total + subtotalValue(invoice), 0);
+
     const calculateTax = async () => {
         if (fromDate > toDate || calculating) {
             setError("The from date must not be after the to date.");
@@ -151,11 +153,13 @@ export const TaxableInvoiceManager = (props: TaxableInvoiceManagerProps) => {
                     To date
                     <input className="rounded border border-green-700 px-2 py-1 text-sm" type="date" value={toDate} onChange={(e) => { setToDate(e.target.value); setPagination(emptyPage); }} />
                 </label>
-                <Button size="sm" color="green" onClick={fetchInvoices}>Search</Button>
-
             </div>
 
             {error && <div className="p-3 text-sm text-red-700">{error}</div>}
+            <div className="flex items-center justify-between border-b bg-green-50 px-3 py-2 font-semibold text-green-900">
+                <span>Total</span>
+                <span className="font-mono">{formatVND(totalSubtotal)}</span>
+            </div>
             <div className="flex-1 overflow-y-auto">
                 {loading ? <div className="flex justify-center p-8"><Spinner /></div> : invoices.length === 0 ? <div className="p-8 text-center text-gray-500">No taxable invoices found.</div> : (
                     <div className="divide-y">
@@ -168,20 +172,18 @@ export const TaxableInvoiceManager = (props: TaxableInvoiceManagerProps) => {
                         ))}
                     </div>
                 )}
+                <div className="h-14"></div>
             </div>
-            <div className="flex justify-center gap-2 border-t bg-slate-100 p-1">
+            <div className="absolute bottom-1 left-1/2 flex w-11/12 -translate-x-1/2 flex-row items-center justify-center py-1 space-x-2 rounded-3xl bg-slate-300 opacity-90 shadow-sm">
                 <Button size="xs" color="light" disabled={pagination.pageNumber === 0} onClick={() => changePage(pagination.pageNumber - 1)}><HiOutlineArrowLeft /></Button>
-                <span className="px-2 py-1 text-sm">{pagination.totalPages ? pagination.pageNumber + 1 : 0} of {pagination.totalPages}</span>
+                <span className="px-0 py-1 text-sm">{pagination.totalPages ? pagination.pageNumber + 1 : 0} of {pagination.totalPages}</span>
                 <Button size="xs" color="light" disabled={pagination.pageNumber >= pagination.totalPages - 1} onClick={() => changePage(pagination.pageNumber + 1)}><HiOutlineArrowRight /></Button>
 
-                <div className="flex flex-row items-center gap-2">
-                    <Button size="sm" color="green" disabled={calculating || loading} onClick={calculateTax}>
-                        {calculating ? <><Spinner size="sm" className="mr-2" /> Calculating...</> : "Calculate"}
-                    </Button>
-                    <label className="flex items-center gap-2 pb-1 text-sm">
-                        <input type="checkbox" checked={preview} onChange={(e) => setPreview(e.target.checked)} />
-                    </label>
-                </div>
+                <Button size="xs" color="green" onClick={fetchInvoices}>Refresh</Button>
+                <Button size="xs" color="green" disabled={calculating || loading} onClick={calculateTax}>
+                    {calculating ? <><Spinner size="sm" className="mr-1" /> Calculating</> : "Calculate"}
+                </Button>
+                <input type="checkbox" checked={preview} onChange={(e) => setPreview(e.target.checked)} />
 
             </div>
 

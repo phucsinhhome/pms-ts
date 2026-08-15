@@ -261,12 +261,6 @@ export const InvoiceManager = (props: InvoiceManagerProps) => {
   return (
     <>
       <div className="flex flex-row items-center space-x-4 pb-2">
-        <Link to="../invoice/new" relative="route">
-          <Button size="xs" color="green">
-            <IoMdPersonAdd size="1.5em" className="mr-2" />
-            Add{" "}
-          </Button>
-        </Link>
         <TextInput
           sizing="xs"
           id="filteredName"
@@ -422,6 +416,12 @@ export const InvoiceManager = (props: InvoiceManagerProps) => {
             </li>
           </ul>
         </nav>
+        <Link to="../invoice/new" relative="route">
+          <Button size="xs" color="green">
+            <IoMdPersonAdd size="1.5em" className="mr-2" />
+            Add{" "}
+          </Button>
+        </Link>
         <Button size="xs" color="green">
           <IoMdMap size="1.5em" className="mr-2" />
           <Link to="/invoice-map" relative="route">

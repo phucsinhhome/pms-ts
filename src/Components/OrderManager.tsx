@@ -2,7 +2,7 @@ import React, { useState, useEffect, ChangeEvent } from "react";
 import { formatISODate, formatISODateTime, formatRooms } from "../Service/Utils";
 import { Chat } from "../App";
 import { confirmOrder, getPotentialInvoices, listOrderByStatuses, listOrders, rejectOrder, saveOrder, serveOrder } from "../db/order";
-import { Button, Modal, TextInput } from "flowbite-react";
+import { Button, Checkbox, Modal, TextInput } from "flowbite-react";
 import { getInvoice, listInvoiceByGuestName } from "../db/invoice";
 import { Invoice } from "./InvoiceManager";
 import { HiOutlineClock, HiRefresh, HiX } from "react-icons/hi";
@@ -69,6 +69,7 @@ export const OrderManager = (props: OrderManagerProps) => {
   const [filteredInvoices, setFilteredInvoices] = useState<Invoice[]>([])
   const [potentialInvoices, setPotentialInvoices] = useState<Invoice[]>([])
   const [selectedInvoice, setSelectedInvoice] = useState<Invoice>()
+  const [unlinkInvoice, setUnlinkInvoice] = useState(false)
   const [selectedOrder, setSelectedOrder] = useState<Order>()
   const [showInvoices, setShowInvoices] = useState(false)
   const [activeStatuses, setActiveStatuses] = useState(["CONFIRMED", "SENT"])
@@ -144,6 +145,7 @@ export const OrderManager = (props: OrderManagerProps) => {
   const selectOrder = (order: Order) => {
     setSelectedOrder(order)
     setSelectedInvoice(undefined)
+    setUnlinkInvoice(false)
     setFilteredName('')
     setFilteredInvoices([])
     if (order.orderId) {
@@ -187,6 +189,7 @@ export const OrderManager = (props: OrderManagerProps) => {
     setFilteredName('')
     setFilteredInvoices([])
     setSelectedInvoice(undefined)
+    setUnlinkInvoice(false)
     setShowInvoices(true)
   }
 
@@ -199,19 +202,29 @@ export const OrderManager = (props: OrderManagerProps) => {
   }
 
   const confirmChangeInvoice = async () => {
-    if (!selectedOrder || !selectedInvoice) return
-    if (selectedOrder.invoiceId === selectedInvoice.id) { setShowInvoices(false); return }
-    await updateOrder({ ...selectedOrder, invoiceId: selectedInvoice.id },
-      () => saveOrder({ ...selectedOrder, invoiceId: selectedInvoice.id }))
+    if (!selectedOrder) return
+
+    if (unlinkInvoice) {
+      await updateOrder({ ...selectedOrder, invoiceId: '' },
+        () => saveOrder({ ...selectedOrder, invoiceId: '' }))
+    } else if (selectedInvoice) {
+      if (selectedOrder.invoiceId === selectedInvoice.id) {
+        setShowInvoices(false)
+        return
+      }
+      await updateOrder({ ...selectedOrder, invoiceId: selectedInvoice.id },
+        () => saveOrder({ ...selectedOrder, invoiceId: selectedInvoice.id }))
+    } else {
+      return
+    }
     setShowInvoices(false)
   }
-
-  const unlinkSelected = () => selectedOrder && updateOrder({ ...selectedOrder, invoiceId: '' },
-    () => saveOrder({ ...selectedOrder, invoiceId: '' }))
 
   const hideInvoices = () => {
     setFilteredName('')
     setFilteredInvoices([])
+    setSelectedInvoice(undefined)
+    setUnlinkInvoice(false)
     setShowInvoices(false)
   }
 
@@ -256,7 +269,7 @@ export const OrderManager = (props: OrderManagerProps) => {
           }
         </div>
       </div>
-      <div className="flex flex-col px-2 overflow-y-auto space-y-1.5">
+      <div className="flex flex-col px-2 overflow-y-auto space-y-1.5 pb-16">
         {orders?.map((order) => {
           return (
             <div
@@ -308,24 +321,12 @@ export const OrderManager = (props: OrderManagerProps) => {
           )
         })}
       </div>
-      {/* <div className="absolute bottom-12 left-0 right-0 flex items-center justify-between px-2 py-2 bg-white dark:bg-slate-800 border-t">
-        <span className="font-mono text-xs truncate">{selectedOrder ? `${selectedOrder.guestName} (${selectedOrder.status})` : "Select an order"}</span>
-        <div className="flex space-x-2">
-          <Button size="xs" onClick={rejectSelected} disabled={!selectedOrder || selectedOrder.status !== 'SENT'}>Reject</Button>
-          <Button size="xs" onClick={openInvoiceModal} disabled={!selectedOrder}>{selectedOrder?.invoiceId ? "Change Invoice" : "Link Invoice"}</Button>
-          {selectedOrder?.invoiceId ? <Button size="xs" color="failure" onClick={unlinkSelected}>Unlink</Button> : null}
-          {selectedOrder?.status === 'SENT' && selectedOrder.invoiceId ? <Button size="xs" color="success" onClick={confirmSelected}>Confirm</Button> : null}
-          {selectedOrder?.status === 'CONFIRMED' ? <Button size="xs" color="success" onClick={serveSelected}>Served</Button> : null}
-        </div>
-      </div> */}
       <div className="absolute bottom-1 left-1/2 flex w-11/12 -translate-x-1/2 flex-row items-center justify-center py-1 space-x-2 rounded-3xl bg-slate-300 opacity-90 shadow-sm">
         <Button size="xs" color="green" onClick={fetchOrders}><div className="flex flex-col items-center"><HiRefresh />Refresh</div></Button>
         {selectedOrder && selectedOrder.status === 'SENT' ? <Button size="xs" color="warning" onClick={rejectSelected} >Reject</Button> : <></>}
-        {/* <Button size="xs" color="green" onClick={openInvoiceModal} disabled={!selectedOrder}>{selectedOrder?.invoiceId ? "Change Invoice" : "Link Invoice"}</Button> */}
         {selectedOrder ? <Button size="xs" color="green" onClick={openInvoiceModal}>{selectedOrder?.invoiceId ? "Change Invoice" : "Link Invoice"}</Button> : <></>}
-        {selectedOrder?.invoiceId ? <Button size="xs" color="failure" onClick={unlinkSelected}>Unlink</Button> : null}
-        {selectedOrder?.status === 'SENT' && selectedOrder.invoiceId ? <Button size="xs" color="success" onClick={confirmSelected}>Confirm</Button> : null}
-        {selectedOrder?.status === 'CONFIRMED' ? <Button size="xs" color="success" onClick={serveSelected}>Served</Button> : null}
+        {selectedOrder?.status === 'SENT' && selectedOrder.invoiceId ? <Button size="xs" color="success" onClick={confirmSelected}>Confirm</Button> : <></>}
+        {selectedOrder?.status === 'CONFIRMED' ? <Button size="xs" color="success" onClick={serveSelected}>Served</Button> : <></>}
       </div>
 
       <Modal show={showInvoices} popup={true} onClose={hideInvoices}>
@@ -346,11 +347,15 @@ export const OrderManager = (props: OrderManagerProps) => {
               <div className="flex justify-between font-bold text-sm"><span>{invoice.guestName}</span><span>{formatRooms(invoice.rooms)}</span></div>
               <span className="text-xs text-gray-500">{invoice.checkInDate}</span>
             </button>)}
+            <label className="flex items-center gap-2 pt-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+              <Checkbox checked={unlinkInvoice} onChange={(event) => setUnlinkInvoice(event.target.checked)} />
+              Unlink invoice from this order
+            </label>
           </div>
         </Modal.Body>
-        <Modal.Footer className="flex justify-end space-x-2">
+        <Modal.Footer className="flex justify-center space-x-2">
           <Button color="gray" onClick={hideInvoices}>Cancel</Button>
-          <Button color="green" onClick={confirmChangeInvoice} disabled={!selectedInvoice}>Link Selected</Button>
+          <Button color="green" onClick={confirmChangeInvoice} disabled={!unlinkInvoice && !selectedInvoice}>Confirm</Button>
         </Modal.Footer>
       </Modal>
     </div >

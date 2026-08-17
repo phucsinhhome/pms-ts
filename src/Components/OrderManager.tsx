@@ -1,9 +1,9 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
-import { formatISODate, formatISODateTime, formatRooms } from "../Service/Utils";
+import { addDays, formatISODate, formatISODateTime, formatRooms } from "../Service/Utils";
 import { Chat } from "../App";
-import { confirmOrder, getPotentialInvoices, listOrderByStatuses, listOrders, rejectOrder, saveOrder, serveOrder } from "../db/order";
+import { confirmOrder, listOrderByStatuses, listOrders, rejectOrder, saveOrder, serveOrder } from "../db/order";
 import { Button, Checkbox, Modal, TextInput } from "flowbite-react";
-import { getInvoice, listInvoiceByGuestName } from "../db/invoice";
+import { getInvoice, listInvoiceByGuestName, listByCheckIn } from "../db/invoice";
 import { Invoice } from "./InvoiceManager";
 import { HiOutlineClock, HiRefresh, HiX } from "react-icons/hi";
 import { GiHouse, GiMeal } from "react-icons/gi";
@@ -67,7 +67,7 @@ export const OrderManager = (props: OrderManagerProps) => {
   const [orders, setOrders] = useState<Order[]>([])
   const [filteredName, setFilteredName] = useState('')
   const [filteredInvoices, setFilteredInvoices] = useState<Invoice[]>([])
-  const [potentialInvoices, setPotentialInvoices] = useState<Invoice[]>([])
+  // const [potentialInvoices, setPotentialInvoices] = useState<Invoice[]>([])
   const [selectedInvoice, setSelectedInvoice] = useState<Invoice>()
   const [unlinkInvoice, setUnlinkInvoice] = useState(false)
   const [selectedOrder, setSelectedOrder] = useState<Order>()
@@ -142,17 +142,12 @@ export const OrderManager = (props: OrderManagerProps) => {
   }, [activeStatuses]);
 
 
-  const selectOrder = (order: Order) => {
+  const selectOrder = async (order: Order) => {
     setSelectedOrder(order)
     setSelectedInvoice(undefined)
     setUnlinkInvoice(false)
     setFilteredName('')
     setFilteredInvoices([])
-    if (order.orderId) {
-      getPotentialInvoices(order.orderId).then(rsp => {
-        if (rsp.status === 200) setPotentialInvoices(rsp.data)
-      }).catch(e => console.warn("Failed to fetch potential invoices", e))
-    }
   }
 
   const updateOrder = async (order: Order, action: () => Promise<any>) => {
@@ -184,13 +179,21 @@ export const OrderManager = (props: OrderManagerProps) => {
     servedAt: formatISODateTime(new Date())
   }, () => serveOrder({ ...selectedOrder, servedAt: formatISODateTime(new Date()) }))
 
-  const openInvoiceModal = () => {
+  const openInvoiceModal = async () => {
     if (!selectedOrder) return
-    setFilteredName('')
     setFilteredInvoices([])
+    setFilteredName('')
     setSelectedInvoice(undefined)
+
+    let toDate = formatISODate(new Date())
+    let fromDate = formatISODate(addDays(new Date(), -7))
+    const rsp = await listByCheckIn(fromDate, toDate, 0, 500)
+    if (rsp.status === 200) {
+      setFilteredInvoices(rsp.data.content || [])
+    }
     setUnlinkInvoice(false)
     setShowInvoices(true)
+
   }
 
   const changeFilteredName = (e: ChangeEvent<HTMLInputElement>) => {
@@ -333,20 +336,16 @@ export const OrderManager = (props: OrderManagerProps) => {
         <Modal.Header>Link Order to Invoice</Modal.Header>
         <Modal.Body>
           <div className="space-y-2">
-            {potentialInvoices.map(invoice => <button type="button" key={invoice.id}
-              className={(selectedInvoice?.id === invoice.id ? "border-2 border-green-500 bg-green-50 " : "border border-gray-300 ") + "w-full text-left rounded-lg px-3 py-2"}
-              onClick={() => setSelectedInvoice(invoice)}>
-              <div className="flex justify-between font-bold text-sm"><span>{invoice.guestName}</span><span>{formatRooms(invoice.rooms)}</span></div>
-              <span className="text-xs text-gray-500">{invoice.checkInDate} - {invoice.checkOutDate}</span>
-            </button>)}
             <TextInput id="filteredName" placeholder="Enter guest name to search" value={filteredName}
               onChange={changeFilteredName} rightIcon={() => <HiX onClick={() => { setFilteredName(''); setFilteredInvoices([]) }} />} />
-            {filteredInvoices.map(invoice => <button type="button" key={invoice.id}
-              className={(selectedInvoice?.id === invoice.id ? "border-2 border-blue-500 bg-blue-50 " : "border border-gray-300 ") + "w-full text-left rounded-lg px-3 py-2"}
-              onClick={() => setSelectedInvoice(invoice)}>
-              <div className="flex justify-between font-bold text-sm"><span>{invoice.guestName}</span><span>{formatRooms(invoice.rooms)}</span></div>
-              <span className="text-xs text-gray-500">{invoice.checkInDate}</span>
-            </button>)}
+            {
+              filteredInvoices.map(invoice => <button type="button" key={invoice.id}
+                className={(selectedInvoice?.id === invoice.id ? "border-2 border-blue-500 bg-blue-50 " : "border border-gray-300 ") + "w-full text-left rounded-lg px-3 py-2"}
+                onClick={() => setSelectedInvoice(invoice)}>
+                <div className="flex justify-between font-bold text-sm"><span>{invoice.guestName}</span><span>{formatRooms(invoice.rooms)}</span></div>
+                <span className="text-xs text-gray-500">{invoice.checkInDate}</span>
+              </button>)
+            }
             <label className="flex items-center gap-2 pt-2 text-sm font-medium text-gray-900 dark:text-gray-300">
               <Checkbox checked={unlinkInvoice} onChange={(event) => setUnlinkInvoice(event.target.checked)} />
               Unlink invoice from this order

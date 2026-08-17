@@ -33,6 +33,14 @@ export const deleteInvoice = (invoiceId: string) => {
   );
 }
 
+export const listByCheckIn = (fromDate: string, toDate: string, page: number = 0, size: number = 500) => {
+  console.info(`Fetching invoices from ${fromDate} to ${toDate}`);
+  return invoiceApi.get(
+    `/list/check-in`,
+    { params: { fromDate, toDate, page, size, sort: 'checkInDate,desc' } }
+  );
+}
+
 export const listStayingAndComingInvoices = (fromDate: string, pageNumber: number, pageSize: number) => {
   console.info("Fetching invoices from backend include prepaid")
   return listStayingAndComingInvoicesAndPrepaid(fromDate, true, pageNumber, pageSize)
@@ -48,7 +56,7 @@ export function listStayingAndComingInvoicesAndPrepaid(fromDate: string, include
 
 export const listInvoiceByGuestName = async (fromDate: string, guestName: string, pageNumber: number, pageSize: number) => {
   console.info("Fetching invoices by guest name")
-  
+
   return await invoiceApi.get(
     `/search/name`,
     { params: { fromDate, guestName, page: pageNumber, size: pageSize } }
@@ -57,7 +65,7 @@ export const listInvoiceByGuestName = async (fromDate: string, guestName: string
 
 export const getInvoice = (invoiceId: string) => {
   console.info("Fetching invoice from backend")
-  
+
   return invoiceApi.get(`/${invoiceId}`);
 }
 

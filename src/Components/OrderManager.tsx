@@ -1,17 +1,13 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
-import { Link } from "react-router-dom";
-import { formatISODate, formatISODateTime } from "../Service/Utils";
+import { formatISODate, formatISODateTime, formatRooms } from "../Service/Utils";
 import { Chat, DEFAULT_PAGE_SIZE } from "../App";
-import { listOrderByStatuses, listOrders } from "../db/order";
+import { confirmOrder, getPotentialInvoices, listOrderByStatuses, listOrders, rejectOrder, saveOrder, serveOrder } from "../db/order";
 import { Button, Modal, TextInput } from "flowbite-react";
-import { getInvoice, listInvoiceByGuestName, listStayingAndComingInvoicesAndPrepaid } from "../db/invoice";
+import { getInvoice, listInvoiceByGuestName } from "../db/invoice";
 import { Invoice } from "./InvoiceManager";
-import { HiClipboardCopy, HiOutlineClock, HiX } from "react-icons/hi";
+import { HiOutlineClock, HiX } from "react-icons/hi";
 import { GiHouse, GiMeal } from "react-icons/gi";
-import { listAllPGroups } from "../db/pgroup";
-import { PGroup } from "./PGroupManager";
 import { AppConfig } from "../db/configs";
-import { activeGroupStyle } from "./Inventory";
 import { PiCalendarCheckThin } from "react-icons/pi";
 import { IoMdArrowBack } from "react-icons/io";
 
@@ -54,6 +50,8 @@ export type Order = {
   items: OrderItem[],
   expectedTime: string,
   servedAt: string,
+  confirmedAt?: string,
+  confirmedBy?: string,
   group: string,
   rooms: string[]
 }
@@ -71,11 +69,11 @@ export const OrderManager = (props: OrderManagerProps) => {
   const [orders, setOrders] = useState<Order[]>([])
   const [filteredName, setFilteredName] = useState('')
   const [filteredInvoices, setFilteredInvoices] = useState<Invoice[]>([])
+  const [potentialInvoices, setPotentialInvoices] = useState<Invoice[]>([])
+  const [selectedInvoice, setSelectedInvoice] = useState<Invoice>()
+  const [selectedOrder, setSelectedOrder] = useState<Order>()
   const [showInvoices, setShowInvoices] = useState(false)
   const [activeStatuses, setActiveStatuses] = useState(["CONFIRMED", "SENT"])
-
-  const [pGroups, setPGroups] = useState<PGroup[]>([])
-  const [activeGroup, setActiveGroup] = useState<PGroup | undefined>()
 
   const [pagination, setPagination] = useState({
     pageNumber: 0,
@@ -170,19 +168,6 @@ export const OrderManager = (props: OrderManagerProps) => {
     // eslint-disable-next-line
   }, [activeStatuses]);
 
-  useEffect(() => {
-
-    if (pGroups.length === 0) {
-      return
-    }
-    let pGroup = pGroups.find(pg => pg.groupId === props.configs?.orderManagement.copyLink.defaultGroup)
-    if (pGroup !== undefined) {
-      setActiveGroup(pGroup || undefined)
-    }
-    findTheInvoice()
-
-    // eslint-disable-next-line
-  }, [pGroups]);
 
   const pageClass = (pageNum: number) => {
     var noHighlight = "px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
@@ -191,92 +176,78 @@ export const OrderManager = (props: OrderManagerProps) => {
     return pagination.pageNumber === pageNum ? highlight : noHighlight
   }
 
-  const fetchPGroups = () => {
-    listAllPGroups()
-      .then(rsp => {
-        // Axios response: data is in rsp.data, status is rsp.status
-        if (rsp.status === 200) {
-          setPGroups(rsp.data.content)
-        }
-      })
-      .catch((e) => {
-        setPGroups([])
-        console.error("Error while fetching product groups", e)
-        if (e instanceof Error) {
-          alert(e.message)
-        }
-      });
-  }
-
-  const chooseCopyOpts = () => {
-    if (pGroups.length === 0) {
-      fetchPGroups()
-      return
+  const selectOrder = (order: Order) => {
+    setSelectedOrder(order)
+    setSelectedInvoice(undefined)
+    setFilteredName('')
+    setFilteredInvoices([])
+    if (order.orderId) {
+      getPotentialInvoices(order.orderId).then(rsp => {
+        if (rsp.status === 200) setPotentialInvoices(rsp.data)
+      }).catch(e => console.warn("Failed to fetch potential invoices", e))
     }
-    findTheInvoice()
   }
 
-  const findTheInvoice = () => {
-    let fromDate = formatISODate(new Date())
-    listStayingAndComingInvoicesAndPrepaid(fromDate, false, 0, 7)
-      .then(rsp => {
-        if (rsp.status === 200) {
-          const data = rsp.data
-          setFilteredInvoices(data.content)
-        }
-      }).finally(() => {
-        setShowInvoices(true)
-      })
+  const updateOrder = async (order: Order, action: () => Promise<any>) => {
+    try {
+      const rsp = await action()
+      if (rsp.status === 400) alert(rsp.data.message)
+      if (rsp.status === 200) {
+        setSelectedOrder(rsp.data)
+        await fetchOrders()
+      }
+    } catch (e) {
+      console.error("Failed to update order", e)
+    }
   }
+
+  const rejectSelected = () => selectedOrder && updateOrder(selectedOrder,
+    () => rejectOrder(selectedOrder.orderId, props.chat.username))
+
+  const confirmSelected = () => selectedOrder && updateOrder({
+    ...selectedOrder,
+    confirmedAt: formatISODateTime(new Date()), confirmedBy: props.chat.username, status: 'CONFIRMED'
+  }, () => confirmOrder({
+    ...selectedOrder,
+    confirmedAt: formatISODateTime(new Date()), confirmedBy: props.chat.username, status: 'CONFIRMED'
+  }))
+
+  const serveSelected = () => selectedOrder && updateOrder({
+    ...selectedOrder,
+    servedAt: formatISODateTime(new Date())
+  }, () => serveOrder({ ...selectedOrder, servedAt: formatISODateTime(new Date()) }))
+
+  const openInvoiceModal = () => {
+    if (!selectedOrder) return
+    setFilteredName('')
+    setFilteredInvoices([])
+    setSelectedInvoice(undefined)
+    setShowInvoices(true)
+  }
+
+  const changeFilteredName = (e: ChangeEvent<HTMLInputElement>) => {
+    const name = e.target.value
+    setFilteredName(name)
+    if (!name) { setFilteredInvoices([]); return }
+    listInvoiceByGuestName(formatISODate(new Date()), name, 0, DEFAULT_PAGE_SIZE)
+      .then(rsp => { if (rsp.status === 200) setFilteredInvoices(rsp.data.content) })
+  }
+
+  const confirmChangeInvoice = async () => {
+    if (!selectedOrder || !selectedInvoice) return
+    if (selectedOrder.invoiceId === selectedInvoice.id) { setShowInvoices(false); return }
+    await updateOrder({ ...selectedOrder, invoiceId: selectedInvoice.id },
+      () => saveOrder({ ...selectedOrder, invoiceId: selectedInvoice.id }))
+    setShowInvoices(false)
+  }
+
+  const unlinkSelected = () => selectedOrder && updateOrder({ ...selectedOrder, invoiceId: '' },
+    () => saveOrder({ ...selectedOrder, invoiceId: '' }))
 
   const hideInvoices = () => {
     setFilteredName('')
-    setShowInvoices(false)
-  }
-  const changeFilteredName = (e: ChangeEvent<HTMLInputElement>) => {
-    let fN = e.target.value
-    setFilteredName(fN)
-    if (fN === '') {
-      findTheInvoice()
-      return
-    }
-    let fromDate = formatISODate(new Date())
-
-    listInvoiceByGuestName(fromDate, fN, 0, DEFAULT_PAGE_SIZE)
-      .then(rsp => {
-        if (rsp.status === 200) {
-          const data = rsp.data
-          setFilteredInvoices(data.content)
-          if (data.content.length <= 0) {
-            console.warn("No invoice found for guest name %s", fN)
-          }
-        }
-      })
-  }
-
-  const emptyFilteredName = () => {
-    setFilteredName('')
-    findTheInvoice()
-  }
-
-  const copyOrderLink = (invoice: Invoice) => {
-    let resolvedMenuApp = props.configs?.orderManagement.copyLink.defaultMenuApp
-    props.configs?.orderManagement.copyLink.menuAppMappings.forEach(m => {
-      if (activeGroup?.name.startsWith(m.startWiths)) {
-        resolvedMenuApp = m.app
-        console.info("Resolved menu app %s", resolvedMenuApp)
-      }
-    })
-    if (resolvedMenuApp === undefined) {
-      console.error("No menu app found for group %s", activeGroup?.name)
-      return
-    }
-    let url = `${process.env[resolvedMenuApp]}/menu/${activeGroup?.name}/${invoice.id}`
-    navigator.clipboard.writeText(url)
-    console.info("Url %s has been copied", url)
     setFilteredInvoices([])
     setShowInvoices(false)
-    setFilteredName('')
   }
 
   const changeListOpt = (sts: string) => {
@@ -308,9 +279,6 @@ export const OrderManager = (props: OrderManagerProps) => {
   return (
     <div className="h-full pt-3 relative">
       <div className="flex flex-row items-center w-full pb-4 px-1 space-x-3">
-        <Button size="xs" color="green" onClick={chooseCopyOpts}>
-          <HiClipboardCopy size="1.5em" className="mr-2" /> Copy Link
-        </Button>
         <div className="flex flex-row space-x-1">
           {
             filterables.map(sts => <div onClick={() => changeListOpt(sts)}
@@ -331,13 +299,13 @@ export const OrderManager = (props: OrderManagerProps) => {
               key={order.orderId}
             >
               <div className="flex flex-row w-full relative">
-                <Link
-                  to={order.id + "/" + props.chat.id}
-                  state={{ pageNumber: pagination.pageNumber, pageSize: pagination.pageSize }}
-                  className="font-sans font-semibold text-green-800 hover:underline dark:text-gray-100 overflow-hidden"
+                <button
+                  type="button"
+                  onClick={() => selectOrder(order)}
+                  className={(selectedOrder?.orderId === order.orderId ? "underline " : "") + "font-sans font-semibold text-green-800 hover:underline dark:text-gray-100 overflow-hidden text-left"}
                 >
                   {order.guestName}
-                </Link>
+                </button>
                 {order.invoiceId ? <div className="flex flex-row items-center rounded-sm pl-2">
                   <GiHouse />
                   <span className="font font-mono text-[12px]">{order.rooms}
@@ -373,6 +341,16 @@ export const OrderManager = (props: OrderManagerProps) => {
           )
         })}
       </div>
+      <div className="absolute bottom-12 left-0 right-0 flex items-center justify-between px-2 py-2 bg-white dark:bg-slate-800 border-t">
+        <span className="font-mono text-xs truncate">{selectedOrder ? `${selectedOrder.guestName} (${selectedOrder.status})` : "Select an order"}</span>
+        <div className="flex space-x-2">
+          <Button size="xs" onClick={rejectSelected} disabled={!selectedOrder || selectedOrder.status !== 'SENT'}>Reject</Button>
+          <Button size="xs" onClick={openInvoiceModal} disabled={!selectedOrder}>{selectedOrder?.invoiceId ? "Change Invoice" : "Link Invoice"}</Button>
+          {selectedOrder?.invoiceId ? <Button size="xs" color="failure" onClick={unlinkSelected}>Unlink</Button> : null}
+          {selectedOrder?.status === 'SENT' && selectedOrder.invoiceId ? <Button size="xs" color="success" onClick={confirmSelected}>Confirm</Button> : null}
+          {selectedOrder?.status === 'CONFIRMED' ? <Button size="xs" color="success" onClick={serveSelected}>Served</Button> : null}
+        </div>
+      </div>
       <nav className="flex items-center justify-between mt-2 px-2 absolute bottom-1" aria-label="Table navigation">
         <ul className="inline-flex items-center -space-x-px">
           <li onClick={() => handlePaginationClick(pagination.pageNumber - 1)} className="block px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
@@ -394,84 +372,29 @@ export const OrderManager = (props: OrderManagerProps) => {
       </nav>
 
 
-      <Modal
-        show={showInvoices}
-        popup={true}
-        onClose={hideInvoices}
-      >
-        <Modal.Header />
+      <Modal show={showInvoices} popup={true} onClose={hideInvoices}>
+        <Modal.Header>Link Order to Invoice</Modal.Header>
         <Modal.Body>
-          <div className="flex flex-row items-center px-0 pb-2 space-x-1 overflow-scroll">
-            {
-              pGroups.map((pg) => {
-                return (
-                  <div
-                    key={pg.groupId}
-                    className={activeGroupStyle(pg.groupId === activeGroup?.groupId)}
-                    onClick={() => setActiveGroup(pg)}
-                  >
-                    {pg.displayName}
-                  </div>
-                )
-              }
-              )
-            }
-          </div>
-          <span className="font italic">Choose guest's invoice OR...</span>
-          <div className="pb-2">
-            <TextInput
-              id="filteredName"
-              placeholder="Enter guest name to search"
-              type="text"
-              required={true}
-              value={filteredName}
-              onChange={changeFilteredName}
-              className="w-full"
-              rightIcon={() => <HiX onClick={emptyFilteredName} />}
-            />
-          </div>
-          <div className="flex flex-col space-y-6pb-4 sm:pb-6 lg:px-8 xl:pb-8">
-            {filteredInvoices.map((invoice) => {
-              return (
-                <div
-                  className="flex flex-row items-center border rounded-md px-2 border-gray-300 bg-white dark:bg-slate-500 relative"
-                  key={invoice.id}
-                >
-                  <div className="px-0 w-full">
-                    <div className="grid grid-cols-1">
-                      <div className="flex flex-row">
-                        <span
-                          className="font-medium text-green-800 overflow-hidden"
-                        >
-                          {invoice.guestName}
-                        </span>
-                      </div>
-                      <div className="flex flex-row text-sm space-x-1">
-                        <div className="flex flex-row items-center">
-                          <PiCalendarCheckThin />
-                          <span className="font font-mono text-gray-500 text-[10px]">{invoice.checkInDate}</span>
-                        </div>
-                        <div className="flex flex-row items-center">
-                          <GiHouse />
-                          <span className="font font-mono text-[10px]">{invoice.rooms}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex flex-row items-center rounded-xl bg-slate-300 absolute right-1 px-1 space-x-1">
-                    <HiClipboardCopy />
-                    <span className="font-sans text-sm text-amber-900 py-1 hover:underline"
-                      onClick={() => copyOrderLink(invoice)}>{activeGroup?.displayName}</span>
-                  </div>
-                </div>
-              )
-            })}
+          <div className="space-y-2">
+            {potentialInvoices.map(invoice => <button type="button" key={invoice.id}
+              className={(selectedInvoice?.id === invoice.id ? "border-2 border-green-500 bg-green-50 " : "border border-gray-300 ") + "w-full text-left rounded-lg px-3 py-2"}
+              onClick={() => setSelectedInvoice(invoice)}>
+              <div className="flex justify-between font-bold text-sm"><span>{invoice.guestName}</span><span>{formatRooms(invoice.rooms)}</span></div>
+              <span className="text-xs text-gray-500">{invoice.checkInDate} - {invoice.checkOutDate}</span>
+            </button>)}
+            <TextInput id="filteredName" placeholder="Enter guest name to search" value={filteredName}
+              onChange={changeFilteredName} rightIcon={() => <HiX onClick={() => { setFilteredName(''); setFilteredInvoices([]) }} />} />
+            {filteredInvoices.map(invoice => <button type="button" key={invoice.id}
+              className={(selectedInvoice?.id === invoice.id ? "border-2 border-blue-500 bg-blue-50 " : "border border-gray-300 ") + "w-full text-left rounded-lg px-3 py-2"}
+              onClick={() => setSelectedInvoice(invoice)}>
+              <div className="flex justify-between font-bold text-sm"><span>{invoice.guestName}</span><span>{formatRooms(invoice.rooms)}</span></div>
+              <span className="text-xs text-gray-500">{invoice.checkInDate}</span>
+            </button>)}
           </div>
         </Modal.Body>
-        <Modal.Footer className="flex justify-center">
-          <Button size="xs" color="green" onClick={hideInvoices}>
-            <IoMdArrowBack size="1.5em" className="mr-2" /> Cancel
-          </Button>
+        <Modal.Footer className="flex justify-end space-x-2">
+          <Button color="gray" onClick={hideInvoices}>Cancel</Button>
+          <Button color="green" onClick={confirmChangeInvoice} disabled={!selectedInvoice}>Link Selected</Button>
         </Modal.Footer>
       </Modal>
     </div >

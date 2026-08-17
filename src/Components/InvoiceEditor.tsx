@@ -1017,7 +1017,7 @@ export const InvoiceEditor = (props: InvoiceProps) => {
 
   return (
     <>
-      <div className="h-full pt-3">
+      <div className="flex h-[calc(100dvh-3rem)] flex-col pt-3 relative">
         <form className="mx-1 flex flex-wrap">
           <div className="mb-1 w-full px-1">
             <div className="-mx-3 mb-1 flex flex-wrap">
@@ -1232,7 +1232,41 @@ export const InvoiceEditor = (props: InvoiceProps) => {
           </div>
         </form>
 
-        <div className="flex w-full flex-row justify-center space-x-3">
+        <div className="flex flex-col space-y-1.5 divide-y px-2 pt-2 pb-16 overflow-y-auto">
+          {invoice.items.map((item) => {
+            return (
+              <div
+                key={item.id}
+                className="relative flex w-full flex-col space-y-1 px-1"
+              >
+                <div className="font text-sm text-green-600">
+                  {item.itemName}
+                </div>
+                <div className="flex flex-row space-x-1 text-[10px]">
+                  <span className="w-6">{"x" + item.quantity}</span>
+                  <span className="w-24">{formatVND(item.amount)}</span>
+                  <span className="font font-mono font-black">
+                    {item.service}
+                  </span>
+                </div>
+                <div className="absolute right-1 top-2 flex flex-row space-x-2">
+                  <IoMdRemoveCircle
+                    size="1.5em"
+                    className="mr-2 cursor-pointer text-red-800"
+                    onClick={() => askForDelItemConfirmation(item)}
+                  />
+                  <CiEdit
+                    size="1.5em"
+                    className="mr-2 cursor-pointer text-green-800"
+                    onClick={() => editItem(item)}
+                  />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="absolute bottom-1 left-1/2 flex w-11/12 -translate-x-1/2 flex-row items-center justify-center py-1 space-x-2 rounded-3xl bg-slate-300 opacity-90 shadow-sm">
           <Button
             size="xs"
             color="green"
@@ -1273,337 +1307,303 @@ export const InvoiceEditor = (props: InvoiceProps) => {
             </div>
           </Button>
         </div>
+      </div>
 
-        <div className="flex flex-col space-y-1.5 divide-y px-2 pt-2">
-          {invoice.items.map((item) => {
-            return (
-              <div
-                key={item.id}
-                className="relative flex w-full flex-col space-y-1 px-1"
-              >
-                <div className="font text-sm text-green-600">
-                  {item.itemName}
-                </div>
-                <div className="flex flex-row space-x-1 text-[10px]">
-                  <span className="w-6">{"x" + item.quantity}</span>
-                  <span className="w-24">{formatVND(item.amount)}</span>
-                  <span className="font font-mono font-black">
-                    {item.service}
-                  </span>
-                </div>
-                <div className="absolute right-1 top-2 flex flex-row space-x-2">
-                  <IoMdRemoveCircle
-                    size="1.5em"
-                    className="mr-2 cursor-pointer text-red-800"
-                    onClick={() => askForDelItemConfirmation(item)}
-                  />
-                  <CiEdit
-                    size="1.5em"
-                    className="mr-2 cursor-pointer text-green-800"
-                    onClick={() => editItem(item)}
-                  />
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        <Modal
-          show={openGuestNameModal}
-          onClose={cancelEditGuestName}
-          initialFocus={guestNameTextInput}
-        >
-          <Modal.Header>Guest name</Modal.Header>
-          <Modal.Body>
-            <div className="text-center">
-              <div className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-                <TextInput
-                  value={editingGuestName}
-                  onChange={changeGuestName}
-                  ref={guestNameTextInput}
-                />
-              </div>
-            </div>
-          </Modal.Body>
-          <Modal.Footer className="flex justify-center gap-4">
-            <Button onClick={confirmEditGuestName}>Done</Button>
-            <Button color="gray" onClick={cancelEditGuestName}>
-              Cancel
-            </Button>
-          </Modal.Footer>
-        </Modal>
-
-        <Modal show={openEditDateModal} onClose={cancelEditDate} popup>
-          <Modal.Header />
-          <Modal.Body>
-            <div className="text-center">
-              <div className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-                Current value{" "}
-                <span className="font font-bold">
-                  {editingDate ? formatISODate(editingDate.value) : ""}
-                </span>
-              </div>
-              <Datepicker
-                onSelectedDateChanged={(date) => changeEditingDate(date)}
-                id="checkInDate"
-                inline
+      <Modal
+        show={openGuestNameModal}
+        onClose={cancelEditGuestName}
+        initialFocus={guestNameTextInput}
+      >
+        <Modal.Header>Guest name</Modal.Header>
+        <Modal.Body>
+          <div className="text-center">
+            <div className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+              <TextInput
+                value={editingGuestName}
+                onChange={changeGuestName}
+                ref={guestNameTextInput}
               />
             </div>
-          </Modal.Body>
-          <Modal.Footer className="flex justify-center gap-4"></Modal.Footer>
-        </Modal>
+          </div>
+        </Modal.Body>
+        <Modal.Footer className="flex justify-center gap-4">
+          <Button onClick={confirmEditGuestName}>Done</Button>
+          <Button color="gray" onClick={cancelEditGuestName}>
+            Cancel
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
-        <Modal show={openDelItemModal} onClose={cancelDelItem}>
-          <Modal.Body>
-            <div>
-              <span>
-                {deletingItem === null || deletingItem === undefined
-                  ? ""
-                  : "Are you sure to remove [" + deletingItem.itemName + "]?"}
+      <Modal show={openEditDateModal} onClose={cancelEditDate} popup>
+        <Modal.Header />
+        <Modal.Body>
+          <div className="text-center">
+            <div className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+              Current value{" "}
+              <span className="font font-bold">
+                {editingDate ? formatISODate(editingDate.value) : ""}
               </span>
             </div>
-          </Modal.Body>
-          <Modal.Footer className="flex justify-center gap-4">
-            <Button onClick={confirmDelItem}>Remove</Button>
-            <Button color="gray" onClick={cancelDelItem}>
-              Cancel
-            </Button>
-          </Modal.Footer>
-        </Modal>
+            <Datepicker
+              onSelectedDateChanged={(date) => changeEditingDate(date)}
+              id="checkInDate"
+              inline
+            />
+          </div>
+        </Modal.Body>
+        <Modal.Footer className="flex justify-center gap-4"></Modal.Footer>
+      </Modal>
 
-        <Modal
-          show={openUsersModal}
-          onClose={cancelSelectIssuer}
-          popup
-          dismissible
-        >
-          <Modal.Header></Modal.Header>
-          <Modal.Body>
-            <div className="flex w-full flex-row items-center gap-2 space-x-2 ">
-              {issuers.map((user) => {
-                return (
-                  <div
-                    key={user.id}
-                    className="flex border-spacing-1 flex-col items-center rounded-lg shadow-sm hover:shadow-lg "
-                    onClick={() => changeIssuer(user)}
-                  >
-                    {userIcons.find((u) => u.id === user.id)?.src}
-                    <span className="text text-center">{user.displayName}</span>
-                  </div>
-                );
-              })}
-            </div>
-          </Modal.Body>
-          <Modal.Footer className="flex justify-center gap-4">
-            <Button color="gray" onClick={cancelSelectIssuer}>
-              Cancel
-            </Button>
-          </Modal.Footer>
-        </Modal>
+      <Modal show={openDelItemModal} onClose={cancelDelItem}>
+        <Modal.Body>
+          <div>
+            <span>
+              {deletingItem === null || deletingItem === undefined
+                ? ""
+                : "Are you sure to remove [" + deletingItem.itemName + "]?"}
+            </span>
+          </div>
+        </Modal.Body>
+        <Modal.Footer className="flex justify-center gap-4">
+          <Button onClick={confirmDelItem}>Remove</Button>
+          <Button color="gray" onClick={cancelDelItem}>
+            Cancel
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
-        <Modal show={openPaymentModal} onClose={cancelSelectPaymentMethod}>
-          <Modal.Header>Payment</Modal.Header>
-          <Modal.Body>
-            <div className="flex w-full flex-row items-center space-x-2">
-              {pMethods.map((pM) => {
-                return (
-                  <div className="block w-1/5" key={pM.id}>
-                    <img
-                      src={pM.srcLargeImg}
-                      alt=""
-                      id={pM.id}
-                      onClick={changePaymentMethod}
-                    />
-                  </div>
-                );
-              })}
-            </div>
-          </Modal.Body>
-          <Modal.Footer className="flex justify-center gap-4">
-            <Button color="gray" onClick={cancelSelectPaymentMethod}>
-              Cancel
-            </Button>
-          </Modal.Footer>
-        </Modal>
+      <Modal
+        show={openUsersModal}
+        onClose={cancelSelectIssuer}
+        popup
+        dismissible
+      >
+        <Modal.Header></Modal.Header>
+        <Modal.Body>
+          <div className="flex w-full flex-row items-center gap-2 space-x-2 ">
+            {issuers.map((user) => {
+              return (
+                <div
+                  key={user.id}
+                  className="flex border-spacing-1 flex-col items-center rounded-lg shadow-sm hover:shadow-lg "
+                  onClick={() => changeIssuer(user)}
+                >
+                  {userIcons.find((u) => u.id === user.id)?.src}
+                  <span className="text text-center">{user.displayName}</span>
+                </div>
+              );
+            })}
+          </div>
+        </Modal.Body>
+        <Modal.Footer className="flex justify-center gap-4">
+          <Button color="gray" onClick={cancelSelectIssuer}>
+            Cancel
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
-        <Modal
-          show={openEditingItemModal}
-          size="md"
-          popup={true}
-          onClose={cancelEditingItem}
-        >
-          <Modal.Header />
-          <Modal.Body>
-            <div className="space-y-6 px-6 pb-4 sm:pb-6 lg:px-8 xl:pb-8">
-              <div>
-                <TextInput
-                  id="itemName"
-                  placeholder="Item name"
-                  required={true}
-                  value={editingItem.origin.itemName}
-                  onChange={changeItemName}
-                  rightIcon={() => <HiX onClick={emptyItemName} />}
-                />
-                <Table hoverable>
-                  <Table.Body className="divide-y">
-                    {lookupItems.map((item) => {
-                      return (
-                        <Table.Row
-                          className=" bg-gray-200 dark:border-gray-700 dark:bg-gray-800"
-                          key={item.id}
-                          onClick={() => confirmSelectItem(item)}
-                        >
-                          <Table.Cell className="px-1 py-0.5 sm:px-1">
-                            <div className="grid grid-cols-1">
-                              <span
-                                className={
-                                  "font-medium text-blue-600 hover:underline dark:text-blue-500"
-                                }
-                              >
-                                {item.name}
-                              </span>
-                              <div className="flex flex-row space-x-1 text-[10px]">
-                                <div className="w-24">
-                                  <span>{formatVND(item.unitPrice)}</span>
-                                </div>
+      <Modal show={openPaymentModal} onClose={cancelSelectPaymentMethod}>
+        <Modal.Header>Payment</Modal.Header>
+        <Modal.Body>
+          <div className="flex w-full flex-row items-center space-x-2">
+            {pMethods.map((pM) => {
+              return (
+                <div className="block w-1/5" key={pM.id}>
+                  <img
+                    src={pM.srcLargeImg}
+                    alt=""
+                    id={pM.id}
+                    onClick={changePaymentMethod}
+                  />
+                </div>
+              );
+            })}
+          </div>
+        </Modal.Body>
+        <Modal.Footer className="flex justify-center gap-4">
+          <Button color="gray" onClick={cancelSelectPaymentMethod}>
+            Cancel
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal
+        show={openEditingItemModal}
+        size="md"
+        popup={true}
+        onClose={cancelEditingItem}
+      >
+        <Modal.Header />
+        <Modal.Body>
+          <div className="space-y-6 px-6 pb-4 sm:pb-6 lg:px-8 xl:pb-8">
+            <div>
+              <TextInput
+                id="itemName"
+                placeholder="Item name"
+                required={true}
+                value={editingItem.origin.itemName}
+                onChange={changeItemName}
+                rightIcon={() => <HiX onClick={emptyItemName} />}
+              />
+              <Table hoverable>
+                <Table.Body className="divide-y">
+                  {lookupItems.map((item) => {
+                    return (
+                      <Table.Row
+                        className=" bg-gray-200 dark:border-gray-700 dark:bg-gray-800"
+                        key={item.id}
+                        onClick={() => confirmSelectItem(item)}
+                      >
+                        <Table.Cell className="px-1 py-0.5 sm:px-1">
+                          <div className="grid grid-cols-1">
+                            <span
+                              className={
+                                "font-medium text-blue-600 hover:underline dark:text-blue-500"
+                              }
+                            >
+                              {item.name}
+                            </span>
+                            <div className="flex flex-row space-x-1 text-[10px]">
+                              <div className="w-24">
+                                <span>{formatVND(item.unitPrice)}</span>
                               </div>
                             </div>
-                          </Table.Cell>
-                        </Table.Row>
-                      );
-                    })}
-                  </Table.Body>
-                </Table>
+                          </div>
+                        </Table.Cell>
+                      </Table.Row>
+                    );
+                  })}
+                </Table.Body>
+              </Table>
+            </div>
+            <div className="flex w-full flex-row align-middle">
+              <div className="flex w-2/5 items-center">
+                <Label htmlFor="unitPrice" value="Unit Price" />
               </div>
-              <div className="flex w-full flex-row align-middle">
-                <div className="flex w-2/5 items-center">
-                  <Label htmlFor="unitPrice" value="Unit Price" />
-                </div>
-                <TextInput
-                  id="unitPrice"
-                  placeholder="Enter amount here"
-                  type="currency"
-                  step={5000}
-                  required={true}
-                  value={editingItem.formattedUnitPrice}
-                  onChange={changeUnitPrice}
-                  rightIcon={HiOutlineCash}
-                  className="w-full"
+              <TextInput
+                id="unitPrice"
+                placeholder="Enter amount here"
+                type="currency"
+                step={5000}
+                required={true}
+                value={editingItem.formattedUnitPrice}
+                onChange={changeUnitPrice}
+                rightIcon={HiOutlineCash}
+                className="w-full"
+              />
+            </div>
+            <div className="flex w-full flex-row align-middle">
+              <div className="flex w-2/5 items-center">
+                <Label htmlFor="quantity" value="Quantity" />
+              </div>
+              <div className="relative flex w-full items-center">
+                <button
+                  type="button"
+                  id="decrement-button"
+                  data-input-counter-decrement="quantity-input"
+                  className="h-11 rounded-s-lg border border-gray-300 bg-gray-100 p-3 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700"
+                  onClick={() => changeQuantity(-1)}
+                >
+                  <svg
+                    className="h-3 w-3 text-gray-900 dark:text-white"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 18 2"
+                  >
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M1 1h16"
+                    />
+                  </svg>
+                </button>
+                <input
+                  type="number"
+                  id="quantity-input"
+                  data-input-counter
+                  aria-describedby="helper-text-explanation"
+                  className="block h-11 w-full border-x-0 border-gray-300 bg-gray-50 py-2.5 text-center text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                  placeholder="999"
+                  required
+                  value={editingItem.origin.quantity}
+                  readOnly
                 />
-              </div>
-              <div className="flex w-full flex-row align-middle">
-                <div className="flex w-2/5 items-center">
-                  <Label htmlFor="quantity" value="Quantity" />
-                </div>
-                <div className="relative flex w-full items-center">
-                  <button
-                    type="button"
-                    id="decrement-button"
-                    data-input-counter-decrement="quantity-input"
-                    className="h-11 rounded-s-lg border border-gray-300 bg-gray-100 p-3 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700"
-                    onClick={() => changeQuantity(-1)}
+                <button
+                  type="button"
+                  id="increment-button"
+                  data-input-counter-increment="quantity-input"
+                  className="h-11 rounded-e-lg border border-gray-300 bg-gray-100 p-3 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700"
+                  onClick={() => changeQuantity(1)}
+                >
+                  <svg
+                    className="h-3 w-3 text-gray-900 dark:text-white"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 18 18"
                   >
-                    <svg
-                      className="h-3 w-3 text-gray-900 dark:text-white"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 18 2"
-                    >
-                      <path
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M1 1h16"
-                      />
-                    </svg>
-                  </button>
-                  <input
-                    type="number"
-                    id="quantity-input"
-                    data-input-counter
-                    aria-describedby="helper-text-explanation"
-                    className="block h-11 w-full border-x-0 border-gray-300 bg-gray-50 py-2.5 text-center text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-                    placeholder="999"
-                    required
-                    value={editingItem.origin.quantity}
-                    readOnly
-                  />
-                  <button
-                    type="button"
-                    id="increment-button"
-                    data-input-counter-increment="quantity-input"
-                    className="h-11 rounded-e-lg border border-gray-300 bg-gray-100 p-3 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700"
-                    onClick={() => changeQuantity(1)}
-                  >
-                    <svg
-                      className="h-3 w-3 text-gray-900 dark:text-white"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 18 18"
-                    >
-                      <path
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M9 1v16M1 9h16"
-                      />
-                    </svg>
-                  </button>
-                </div>
-              </div>
-              <div className="flex w-full flex-row align-middle">
-                <div className="flex w-2/5 items-center">
-                  <Label htmlFor="amount" value="Amount" />
-                </div>
-                <span className="w-full">
-                  {formatVND(editingItem.origin.amount)}
-                </span>
-              </div>
-              <div className="flex w-full flex-row align-middle">
-                <div className="flex w-2/5 items-center">
-                  <Label htmlFor="service" value="Service" />
-                </div>
-                <span className="w-full">{editingItem.origin.service}</span>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  stroke="currentColor"
-                  className="h-8 w-8"
-                  onClick={blurItemName}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"
-                  />
-                </svg>
-              </div>
-              <div className="flex w-full justify-center">
-                <Button
-                  onClick={createOrUpdateItem}
-                  className="mx-2"
-                  disabled={editingItem.origin.service === ""}
-                >
-                  Save
-                </Button>
-                <Button
-                  color="gray"
-                  onClick={cancelEditingItem}
-                  className="mx-2"
-                >
-                  Cancel
-                </Button>
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M9 1v16M1 9h16"
+                    />
+                  </svg>
+                </button>
               </div>
             </div>
-          </Modal.Body>
-        </Modal>
-      </div>
+            <div className="flex w-full flex-row align-middle">
+              <div className="flex w-2/5 items-center">
+                <Label htmlFor="amount" value="Amount" />
+              </div>
+              <span className="w-full">
+                {formatVND(editingItem.origin.amount)}
+              </span>
+            </div>
+            <div className="flex w-full flex-row align-middle">
+              <div className="flex w-2/5 items-center">
+                <Label htmlFor="service" value="Service" />
+              </div>
+              <span className="w-full">{editingItem.origin.service}</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                className="h-8 w-8"
+                onClick={blurItemName}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"
+                />
+              </svg>
+            </div>
+            <div className="flex w-full justify-center">
+              <Button
+                onClick={createOrUpdateItem}
+                className="mx-2"
+                disabled={editingItem.origin.service === ""}
+              >
+                Save
+              </Button>
+              <Button
+                color="gray"
+                onClick={cancelEditingItem}
+                className="mx-2"
+              >
+                Cancel
+              </Button>
+            </div>
+          </div>
+        </Modal.Body>
+      </Modal>
 
       <Modal show={openViewInvModal} popup onClose={closeViewInv}>
         <Modal.Header />
@@ -1708,7 +1708,7 @@ export const InvoiceEditor = (props: InvoiceProps) => {
                     <Table.Cell className="px-1 py-0 text-right text-red-800">
                       {formatVND(
                         invoice.subTotal +
-                          invoice.subTotal * selectedPaymentMethod.feeRate,
+                        invoice.subTotal * selectedPaymentMethod.feeRate,
                       )}
                     </Table.Cell>
                   </Table.Row>
@@ -1841,7 +1841,7 @@ export const InvoiceEditor = (props: InvoiceProps) => {
                       <Table.Cell className="px-1 py-0 pb-3 text-right text-red-800">
                         {formatVND(
                           invoice.subTotal +
-                            invoice.subTotal * selectedPaymentMethod.feeRate,
+                          invoice.subTotal * selectedPaymentMethod.feeRate,
                         )}
                       </Table.Cell>
                     </Table.Row>
@@ -1963,8 +1963,8 @@ export const InvoiceEditor = (props: InvoiceProps) => {
           <div className="flex w-full flex-col overflow-y-auto max-h-96">
             <div className="divide-y divide-gray-100">
               {rooms.map((room) => (
-                <div 
-                  key={room.id} 
+                <div
+                  key={room.id}
                   className="flex items-center justify-between p-4 bg-white hover:bg-green-50 cursor-pointer transition-colors"
                   onClick={() => selectRoom(room.id)}
                 >
@@ -1977,9 +1977,9 @@ export const InvoiceEditor = (props: InvoiceProps) => {
                       <span className="text-xs text-gray-500 font-mono">{room.internalName}</span>
                     </div>
                   </div>
-                  <Checkbox 
+                  <Checkbox
                     checked={selectedRooms.includes(room.id)}
-                    onChange={() => {}} // Controlled by Row onClick
+                    onChange={() => { }} // Controlled by Row onClick
                     className="h-5 w-5 text-green-600 focus:ring-green-500"
                   />
                 </div>

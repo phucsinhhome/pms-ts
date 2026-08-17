@@ -5,7 +5,7 @@ import { confirmOrder, getPotentialInvoices, listOrderByStatuses, listOrders, re
 import { Button, Modal, TextInput } from "flowbite-react";
 import { getInvoice, listInvoiceByGuestName } from "../db/invoice";
 import { Invoice } from "./InvoiceManager";
-import { HiOutlineClock, HiX } from "react-icons/hi";
+import { HiOutlineClock, HiRefresh, HiX } from "react-icons/hi";
 import { GiHouse, GiMeal } from "react-icons/gi";
 import { AppConfig } from "../db/configs";
 
@@ -260,7 +260,9 @@ export const OrderManager = (props: OrderManagerProps) => {
         {orders?.map((order) => {
           return (
             <div
-              className={'flex flex-col w-full border border-gray-300 shadow-sm rounded-md px-2 ' + orderStyle(order.status)}
+              className={'flex flex-col w-full border border-gray-300 rounded-md px-2 ' +
+                (selectedOrder?.orderId === order.orderId ? 'shadow-2xl ring-2 ring-blue-400 ' : 'shadow-sm ') +
+                orderStyle(order.status)}
               key={order.orderId}
             >
               <div className="flex flex-row w-full relative">
@@ -317,11 +319,13 @@ export const OrderManager = (props: OrderManagerProps) => {
         </div>
       </div> */}
       <div className="absolute bottom-1 left-1/2 flex w-11/12 -translate-x-1/2 flex-row items-center justify-center py-1 space-x-2 rounded-3xl bg-slate-300 opacity-90 shadow-sm">
-        <Button size="xs" color="warning" onClick={rejectSelected} disabled={!selectedOrder || selectedOrder.status !== 'SENT'}>Reject</Button>
+        <Button size="xs" color="green" onClick={fetchOrders}><div className="flex flex-col items-center"><HiRefresh />Refresh</div></Button>
+        {selectedOrder && selectedOrder.status === 'SENT' ? <Button size="xs" color="warning" onClick={rejectSelected} >Reject</Button> : <></>}
         {/* <Button size="xs" color="green" onClick={openInvoiceModal} disabled={!selectedOrder}>{selectedOrder?.invoiceId ? "Change Invoice" : "Link Invoice"}</Button> */}
-        {/* {selectedOrder?.invoiceId ? <Button size="xs" color="failure" onClick={unlinkSelected}>Unlink</Button> : null} */}
-          {selectedOrder?.status === 'SENT' && selectedOrder.invoiceId ? <Button size="xs" color="success" onClick={confirmSelected}>Confirm</Button> : null}
-          {selectedOrder?.status === 'CONFIRMED' ? <Button size="xs" color="success" onClick={serveSelected}>Served</Button> : null}
+        {selectedOrder ? <Button size="xs" color="green" onClick={openInvoiceModal}>{selectedOrder?.invoiceId ? "Change Invoice" : "Link Invoice"}</Button> : <></>}
+        {selectedOrder?.invoiceId ? <Button size="xs" color="failure" onClick={unlinkSelected}>Unlink</Button> : null}
+        {selectedOrder?.status === 'SENT' && selectedOrder.invoiceId ? <Button size="xs" color="success" onClick={confirmSelected}>Confirm</Button> : null}
+        {selectedOrder?.status === 'CONFIRMED' ? <Button size="xs" color="success" onClick={serveSelected}>Served</Button> : null}
       </div>
 
       <Modal show={showInvoices} popup={true} onClose={hideInvoices}>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
 import { formatISODate, formatISODateTime, formatRooms } from "../Service/Utils";
-import { Chat, DEFAULT_PAGE_SIZE } from "../App";
+import { Chat } from "../App";
 import { confirmOrder, getPotentialInvoices, listOrderByStatuses, listOrders, rejectOrder, saveOrder, serveOrder } from "../db/order";
 import { Button, Modal, TextInput } from "flowbite-react";
 import { getInvoice, listInvoiceByGuestName } from "../db/invoice";
@@ -8,8 +8,6 @@ import { Invoice } from "./InvoiceManager";
 import { HiOutlineClock, HiX } from "react-icons/hi";
 import { GiHouse, GiMeal } from "react-icons/gi";
 import { AppConfig } from "../db/configs";
-import { PiCalendarCheckThin } from "react-icons/pi";
-import { IoMdArrowBack } from "react-icons/io";
 
 export const OrderStatus = {
   SENT: 'text-orange-400',
@@ -75,21 +73,9 @@ export const OrderManager = (props: OrderManagerProps) => {
   const [showInvoices, setShowInvoices] = useState(false)
   const [activeStatuses, setActiveStatuses] = useState(["CONFIRMED", "SENT"])
 
-  const [pagination, setPagination] = useState({
-    pageNumber: 0,
-    pageSize: DEFAULT_PAGE_SIZE,
-    totalElements: 0,
-    totalPages: 0
-  })
+  const ORDER_PAGE = 0
+  const ORDER_PAGE_SIZE = 500
 
-  const handlePaginationClick = (pageNumber: number) => {
-    console.log("Pagination nav bar click to page %s", pageNumber)
-    var pNum = pageNumber < 0 ? 0 : pageNumber > pagination.totalPages - 1 ? pagination.totalPages - 1 : pageNumber;
-    setPagination({
-      ...pagination,
-      pageNumber: pNum
-    })
-  }
 
   const fetchOrders = async () => {
     var today = new Date()
@@ -98,9 +84,9 @@ export const OrderManager = (props: OrderManagerProps) => {
     var fromTime = formatISODateTime(today)
     console.info(`Fetch upcoming order after ${fromTime}`)
 
-    let ordersData = { content: [], totalPages: 0, number: 0, size: 0, totalElements: 0 }
+    let ordersData = { content: [] }
     if (activeStatuses.length === 0) {
-      const rsp = await listOrders(fromTime, pagination.pageNumber, pagination.pageSize);
+      const rsp = await listOrders(fromTime, ORDER_PAGE, ORDER_PAGE_SIZE);
       if (rsp.status === 401 || rsp.status === 403) {
         props.handleUnauthorized()
         return
@@ -108,7 +94,7 @@ export const OrderManager = (props: OrderManagerProps) => {
       ordersData = rsp.data
     }
     if (activeStatuses.length > 0) {
-      const rsp = await listOrderByStatuses(fromTime, activeStatuses, pagination.pageNumber, pagination.pageSize);
+      const rsp = await listOrderByStatuses(fromTime, activeStatuses, ORDER_PAGE, ORDER_PAGE_SIZE);
       if (rsp.status === 401 || rsp.status === 403) {
         props.handleUnauthorized()
         return
@@ -137,15 +123,6 @@ export const OrderManager = (props: OrderManagerProps) => {
           .map(s => ords.filter(o => o.status === s))
           .forEach((ors: Order[]) => sortedOrders.push(...ors))
         setOrders(sortedOrders)
-        if (ordersData.totalPages !== pagination.totalPages) {
-          var page = {
-            pageNumber: ordersData.number,
-            pageSize: ordersData.size,
-            totalElements: ordersData.totalElements,
-            totalPages: ordersData.totalPages
-          }
-          setPagination(page)
-        }
       })
 
   }
@@ -158,23 +135,11 @@ export const OrderManager = (props: OrderManagerProps) => {
   }
 
   useEffect(() => {
-    fetchOrders();
-    props.activeMenu()
-    // eslint-disable-next-line
-  }, [pagination.pageNumber]);
-
-  useEffect(() => {
     fetchOrders()
+    props.activeMenu()
     // eslint-disable-next-line
   }, [activeStatuses]);
 
-
-  const pageClass = (pageNum: number) => {
-    var noHighlight = "px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-    var highlight = "px-3 py-2 leading-tight text-bold text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"
-
-    return pagination.pageNumber === pageNum ? highlight : noHighlight
-  }
 
   const selectOrder = (order: Order) => {
     setSelectedOrder(order)
@@ -229,7 +194,7 @@ export const OrderManager = (props: OrderManagerProps) => {
     const name = e.target.value
     setFilteredName(name)
     if (!name) { setFilteredInvoices([]); return }
-    listInvoiceByGuestName(formatISODate(new Date()), name, 0, DEFAULT_PAGE_SIZE)
+    listInvoiceByGuestName(formatISODate(new Date()), name, 0, 500)
       .then(rsp => { if (rsp.status === 200) setFilteredInvoices(rsp.data.content) })
   }
 
@@ -351,6 +316,8 @@ export const OrderManager = (props: OrderManagerProps) => {
           {selectedOrder?.status === 'CONFIRMED' ? <Button size="xs" color="success" onClick={serveSelected}>Served</Button> : null}
         </div>
       </div>
+      {/* Pagination removed: all orders are loaded with a fixed page and size. */}
+      {/*
       <nav className="flex items-center justify-between mt-2 px-2 absolute bottom-1" aria-label="Table navigation">
         <ul className="inline-flex items-center -space-x-px">
           <li onClick={() => handlePaginationClick(pagination.pageNumber - 1)} className="block px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
@@ -370,7 +337,7 @@ export const OrderManager = (props: OrderManagerProps) => {
           </li>
         </ul>
       </nav>
-
+      */}
 
       <Modal show={showInvoices} popup={true} onClose={hideInvoices}>
         <Modal.Header>Link Order to Invoice</Modal.Header>

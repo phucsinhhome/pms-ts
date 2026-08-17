@@ -5,7 +5,7 @@ import { confirmOrder, listOrderByStatuses, listOrders, rejectOrder, saveOrder, 
 import { Button, Checkbox, Modal, TextInput } from "flowbite-react";
 import { getInvoice, listInvoiceByGuestName, listByCheckIn } from "../db/invoice";
 import { Invoice } from "./InvoiceManager";
-import { HiOutlineClock, HiRefresh, HiX } from "react-icons/hi";
+import { HiCheck, HiCheckCircle, HiLink, HiOutlineClock, HiRefresh, HiStop, HiX } from "react-icons/hi";
 import { GiHouse, GiMeal } from "react-icons/gi";
 import { AppConfig } from "../db/configs";
 
@@ -280,15 +280,15 @@ export const OrderManager = (props: OrderManagerProps) => {
                 (selectedOrder?.orderId === order.orderId ? 'shadow-2xl ring-2 ring-blue-400 ' : 'shadow-sm ') +
                 orderStyle(order.status)}
               key={order.orderId}
+              onClick={() => selectOrder(order)}
             >
               <div className="flex flex-row w-full relative">
-                <button
-                  type="button"
-                  onClick={() => selectOrder(order)}
+                <div
+
                   className={(selectedOrder?.orderId === order.orderId ? "underline " : "") + "font-sans font-semibold text-green-800 hover:underline dark:text-gray-100 overflow-hidden text-left"}
                 >
                   {order.guestName}
-                </button>
+                </div>
                 {order.invoiceId ? <div className="flex flex-row items-center rounded-sm pl-2">
                   <GiHouse />
                   <span className="font font-mono text-[12px]">{order.rooms}
@@ -326,10 +326,10 @@ export const OrderManager = (props: OrderManagerProps) => {
       </div>
       <div className="absolute bottom-1 left-1/2 flex w-11/12 -translate-x-1/2 flex-row items-center justify-center py-1 space-x-2 rounded-3xl bg-slate-300 opacity-90 shadow-sm">
         <Button size="xs" color="green" onClick={fetchOrders}><div className="flex flex-col items-center"><HiRefresh />Refresh</div></Button>
-        {selectedOrder && selectedOrder.status === 'SENT' ? <Button size="xs" color="warning" onClick={rejectSelected} >Reject</Button> : <></>}
-        {selectedOrder ? <Button size="xs" color="green" onClick={openInvoiceModal}>{selectedOrder?.invoiceId ? "Change Invoice" : "Link Invoice"}</Button> : <></>}
-        {selectedOrder?.status === 'SENT' && selectedOrder.invoiceId ? <Button size="xs" color="success" onClick={confirmSelected}>Confirm</Button> : <></>}
-        {selectedOrder?.status === 'CONFIRMED' ? <Button size="xs" color="success" onClick={serveSelected}>Served</Button> : <></>}
+        {selectedOrder && selectedOrder.status === 'SENT' ? <Button size="xs" color="warning" onClick={rejectSelected} ><div className="flex flex-col items-center"><HiStop />Reject</div></Button> : <></>}
+        {selectedOrder && selectedOrder?.status === 'SENT' ?<Button size="xs" color="green" onClick={openInvoiceModal}><div className="flex flex-col items-center"><HiLink />{selectedOrder.invoiceId? "Link Invoice": "Change Invoice"}</div></Button> : <></>}
+        {selectedOrder?.status === 'SENT' && selectedOrder.invoiceId ? <Button size="xs" color="success" onClick={confirmSelected}><div className="flex flex-col items-center"><HiCheck />Confirm</div></Button> : <></>}
+        {selectedOrder?.status === 'CONFIRMED' ? <Button size="xs" color="success" onClick={serveSelected}><div className="flex flex-col items-center"><HiCheckCircle />Served</div></Button> : <></>}
       </div>
 
       <Modal show={showInvoices} popup={true} onClose={hideInvoices}>

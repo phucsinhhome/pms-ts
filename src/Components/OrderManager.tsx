@@ -335,17 +335,21 @@ export const OrderManager = (props: OrderManagerProps) => {
       <Modal show={showInvoices} popup={true} onClose={hideInvoices}>
         <Modal.Header>Link Order to Invoice</Modal.Header>
         <Modal.Body>
-          <div className="space-y-2">
+          <div className="flex flex-col space-y-2">
             <TextInput id="filteredName" placeholder="Enter guest name to search" value={filteredName}
               onChange={changeFilteredName} rightIcon={() => <HiX onClick={() => { setFilteredName(''); setFilteredInvoices([]) }} />} />
-            {
-              filteredInvoices.map(invoice => <button type="button" key={invoice.id}
-                className={(selectedInvoice?.id === invoice.id ? "border-2 border-blue-500 bg-blue-50 " : "border border-gray-300 ") + "w-full text-left rounded-lg px-3 py-2"}
-                onClick={() => setSelectedInvoice(invoice)}>
-                <div className="flex justify-between font-bold text-sm"><span>{invoice.guestName}</span><span>{formatRooms(invoice.rooms)}</span></div>
-                <span className="text-xs text-gray-500">{invoice.checkInDate}</span>
-              </button>)
-            }
+            <div className="flex flex-col overflow-y-auto space-y-2">
+              {
+                filteredInvoices.map(invoice =>
+                  <div key={invoice.id}
+                    className={(selectedInvoice?.id === invoice.id ? "border-2 border-blue-500 bg-blue-50 " : "border border-gray-300 ") + "w-full text-left rounded-lg px-3 py-2"}
+                    onClick={() => setSelectedInvoice(invoice)}>
+                    <div className="flex justify-between font-bold text-sm"><span>{invoice.guestName}</span><span>{formatRooms(invoice.rooms)}</span></div>
+                    <span className="text-xs text-gray-500">{invoice.checkInDate}</span>
+                  </div>
+                )
+              }
+            </div>
             <label className="flex items-center gap-2 pt-2 text-sm font-medium text-gray-900 dark:text-gray-300">
               <Checkbox checked={unlinkInvoice} onChange={(event) => setUnlinkInvoice(event.target.checked)} />
               Unlink invoice from this order

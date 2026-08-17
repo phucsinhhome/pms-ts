@@ -242,7 +242,7 @@ export const OrderManager = (props: OrderManagerProps) => {
   }
 
   return (
-    <div className="h-full pt-3 relative">
+    <div className="relative flex h-[calc(100dvh-3rem)] flex-col pt-3">
       <div className="flex flex-row items-center w-full pb-4 px-1 space-x-3">
         <div className="flex flex-row space-x-1">
           {
@@ -256,7 +256,7 @@ export const OrderManager = (props: OrderManagerProps) => {
           }
         </div>
       </div>
-      <div className="flex flex-col px-2 overflow-hidden space-y-1.5">
+      <div className="flex flex-col px-2 overflow-y-auto space-y-1.5">
         {orders?.map((order) => {
           return (
             <div
@@ -306,7 +306,7 @@ export const OrderManager = (props: OrderManagerProps) => {
           )
         })}
       </div>
-      <div className="absolute bottom-12 left-0 right-0 flex items-center justify-between px-2 py-2 bg-white dark:bg-slate-800 border-t">
+      {/* <div className="absolute bottom-12 left-0 right-0 flex items-center justify-between px-2 py-2 bg-white dark:bg-slate-800 border-t">
         <span className="font-mono text-xs truncate">{selectedOrder ? `${selectedOrder.guestName} (${selectedOrder.status})` : "Select an order"}</span>
         <div className="flex space-x-2">
           <Button size="xs" onClick={rejectSelected} disabled={!selectedOrder || selectedOrder.status !== 'SENT'}>Reject</Button>
@@ -315,29 +315,14 @@ export const OrderManager = (props: OrderManagerProps) => {
           {selectedOrder?.status === 'SENT' && selectedOrder.invoiceId ? <Button size="xs" color="success" onClick={confirmSelected}>Confirm</Button> : null}
           {selectedOrder?.status === 'CONFIRMED' ? <Button size="xs" color="success" onClick={serveSelected}>Served</Button> : null}
         </div>
+      </div> */}
+      <div className="absolute bottom-1 left-1/2 flex w-11/12 -translate-x-1/2 flex-row items-center justify-center py-1 space-x-2 rounded-3xl bg-slate-300 opacity-90 shadow-sm">
+        <Button size="xs" color="warning" onClick={rejectSelected} disabled={!selectedOrder || selectedOrder.status !== 'SENT'}>Reject</Button>
+        {/* <Button size="xs" color="green" onClick={openInvoiceModal} disabled={!selectedOrder}>{selectedOrder?.invoiceId ? "Change Invoice" : "Link Invoice"}</Button> */}
+        {/* {selectedOrder?.invoiceId ? <Button size="xs" color="failure" onClick={unlinkSelected}>Unlink</Button> : null} */}
+          {selectedOrder?.status === 'SENT' && selectedOrder.invoiceId ? <Button size="xs" color="success" onClick={confirmSelected}>Confirm</Button> : null}
+          {selectedOrder?.status === 'CONFIRMED' ? <Button size="xs" color="success" onClick={serveSelected}>Served</Button> : null}
       </div>
-      {/* Pagination removed: all orders are loaded with a fixed page and size. */}
-      {/*
-      <nav className="flex items-center justify-between mt-2 px-2 absolute bottom-1" aria-label="Table navigation">
-        <ul className="inline-flex items-center -space-x-px">
-          <li onClick={() => handlePaginationClick(pagination.pageNumber - 1)} className="block px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-            <svg className="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd"></path></svg>
-          </li>
-          <li onClick={() => handlePaginationClick(0)} className={pageClass(0)}>
-            1
-          </li>
-          <li hidden={pagination.pageNumber + 1 <= 1 || pagination.pageNumber + 1 >= pagination.totalPages} aria-current="page" className={pageClass(pagination.pageNumber)}>
-            {pagination.pageNumber + 1}
-          </li>
-          <li hidden={pagination.totalPages <= 1} onClick={() => handlePaginationClick(pagination.totalPages - 1)} className={pageClass(pagination.totalPages - 1)}>
-            {pagination.totalPages}
-          </li>
-          <li onClick={() => handlePaginationClick(pagination.pageNumber + 1)} className="block px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-            <svg className="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
-          </li>
-        </ul>
-      </nav>
-      */}
 
       <Modal show={showInvoices} popup={true} onClose={hideInvoices}>
         <Modal.Header>Link Order to Invoice</Modal.Header>

@@ -335,10 +335,9 @@ export const OrderManager = (props: OrderManagerProps) => {
       <Modal show={showInvoices} popup={true} onClose={hideInvoices}>
         <Modal.Header>Link Order to Invoice</Modal.Header>
         <Modal.Body>
-          <div className="flex flex-col space-y-2">
-            <TextInput id="filteredName" placeholder="Enter guest name to search" value={filteredName}
-              onChange={changeFilteredName} rightIcon={() => <HiX onClick={() => { setFilteredName(''); setFilteredInvoices([]) }} />} />
-            <div className="flex flex-col overflow-y-auto space-y-2">
+          <div className="flex h-[60vh] min-h-0 flex-col">
+            <span className="text-sm text-gray-500">Select an invoice to link to this order</span>
+            <div className="min-h-0 flex-1 overflow-y-auto space-y-2 pr-1">
               {
                 filteredInvoices.map(invoice =>
                   <div key={invoice.id}
@@ -350,10 +349,14 @@ export const OrderManager = (props: OrderManagerProps) => {
                 )
               }
             </div>
-            <label className="flex items-center gap-2 pt-2 text-sm font-medium text-gray-900 dark:text-gray-300">
-              <Checkbox checked={unlinkInvoice} onChange={(event) => setUnlinkInvoice(event.target.checked)} />
-              Unlink invoice from this order
-            </label>
+            <div className="shrink-0 space-y-2 border-t pt-3">
+              <TextInput id="filteredName" placeholder="Enter guest name to search" value={filteredName}
+                onChange={changeFilteredName} rightIcon={() => <HiX onClick={() => { setFilteredName(''); openInvoiceModal() }} />} />
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                <Checkbox checked={unlinkInvoice} onChange={(event) => setUnlinkInvoice(event.target.checked)} />
+                Unlink invoice from this order
+              </label>
+            </div>
           </div>
         </Modal.Body>
         <Modal.Footer className="flex justify-center space-x-2">

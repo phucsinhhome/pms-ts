@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button, Label, Modal, Spinner, TextInput } from "flowbite-react";
 import { FaCheckCircle, FaEdit, FaPlus, FaTimesCircle } from "react-icons/fa";
 import { createTaxPolicy, listTaxPolicies, reorderTaxPolicies, TaxPolicy, updateTaxPolicy } from "../db/taxPolicy";
+import { FaArrowDown, FaArrowUp } from "react-icons/fa6";
 
 type TaxPolicyManagerProps = {
     activeMenu: () => void;
@@ -143,9 +144,6 @@ export const TaxPolicyManager = (props: TaxPolicyManagerProps) => {
     return (
         <div className="relative flex h-[calc(100dvh-3rem)] flex-col">
             <div className="flex items-center justify-end border-b p-2">
-                <Button size="sm" color="green" disabled={!props.hasAuthority("tax-policy:create") || loading || saving} onClick={openCreateModal}>
-                    <FaPlus className="mr-2" /> Add tax policy
-                </Button>
             </div>
             {error && <div className="p-2 text-sm text-red-700">{error}</div>}
             <div className="flex-1 overflow-y-auto pb-20">
@@ -169,9 +167,12 @@ export const TaxPolicyManager = (props: TaxPolicyManagerProps) => {
                     </div>
                 )}
             </div>
-            <div className="absolute bottom-1 left-1/2 flex -translate-x-1/2 items-center gap-2 rounded-3xl bg-slate-200 p-2 shadow">
-                <Button size="sm" color="light" disabled={saving || !selectedId || policies.findIndex((policy) => policy.id === selectedId) <= 0} onClick={() => moveSelected(-1)}>Move up</Button>
-                <Button size="sm" color="light" disabled={saving || !selectedId || policies.findIndex((policy) => policy.id === selectedId) === -1 || policies.findIndex((policy) => policy.id === selectedId) >= policies.length - 1} onClick={() => moveSelected(1)}>Move down</Button>
+            <div className="absolute bottom-1 left-1/2 flex w-11/12 -translate-x-1/2 flex-row items-center justify-center py-1 space-x-2 rounded-3xl bg-slate-300 opacity-90 shadow-sm">
+                <Button size="xs" color="green" disabled={saving || !selectedId || policies.findIndex((policy) => policy.id === selectedId) <= 0} onClick={() => moveSelected(-1)}><FaArrowUp className="mr-1" /> Move up</Button>
+                <Button size="xs" color="green" disabled={saving || !selectedId || policies.findIndex((policy) => policy.id === selectedId) === -1 || policies.findIndex((policy) => policy.id === selectedId) >= policies.length - 1} onClick={() => moveSelected(1)}><FaArrowDown className="mr-1" /> Move down</Button>
+                <Button size="xs" color="green" disabled={!props.hasAuthority("tax-policy:create") || loading || saving} onClick={openCreateModal}>
+                    <FaPlus className="mr-1" /> Add policy
+                </Button>
             </div>
             <Modal show={!!editingPolicy} onClose={closePolicyModal}>
                 <Modal.Header>{isCreating ? "Add tax policy" : "Edit tax policy"}</Modal.Header>

@@ -1,0 +1,465 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 7,
+  "filesSkipped": [],
+  "analysisOutcomes": {
+    "structure": {
+      "succeeded": 7,
+      "failed": 0
+    },
+    "callGraph": {
+      "succeeded": 0,
+      "failed": 0,
+      "skipped": 7
+    }
+  },
+  "results": [
+    {
+      "path": ".planning/codebase/ARCHITECTURE.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 26,
+      "nonEmptyLines": 21,
+      "sections": [
+        {
+          "heading": "Architecture - PMS-TS (Property Management System)",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "Patterns",
+          "level": 2,
+          "line": 3
+        },
+        {
+          "heading": "State Management",
+          "level": 2,
+          "line": 8
+        },
+        {
+          "heading": "Routing",
+          "level": 2,
+          "line": 13
+        },
+        {
+          "heading": "Authentication & Security",
+          "level": 2,
+          "line": 18
+        },
+        {
+          "heading": "UI & Styling",
+          "level": 2,
+          "line": 23
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 6
+      }
+    },
+    {
+      "path": ".planning/codebase/CONCERNS.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 87,
+      "nonEmptyLines": 63,
+      "sections": [
+        {
+          "heading": "PMS-TS: Areas of Concern & Technical Debt",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "1. Technical Debt",
+          "level": 2,
+          "line": 5
+        },
+        {
+          "heading": "1.1 Over-usage of `any`",
+          "level": 3,
+          "line": 7
+        },
+        {
+          "heading": "1.2 Monolithic Components",
+          "level": 3,
+          "line": 12
+        },
+        {
+          "heading": "1.3 Hardcoded Business Data",
+          "level": 3,
+          "line": 18
+        },
+        {
+          "heading": "1.4 Absence of Automated Tests",
+          "level": 3,
+          "line": 25
+        },
+        {
+          "heading": "1.5 State Management",
+          "level": 3,
+          "line": 29
+        },
+        {
+          "heading": "1.6 SPA Anti-patterns",
+          "level": 3,
+          "line": 33
+        },
+        {
+          "heading": "1.7 Dependency Version Mismatches",
+          "level": 3,
+          "line": 37
+        },
+        {
+          "heading": "2. Security Risks",
+          "level": 2,
+          "line": 43
+        },
+        {
+          "heading": "2.1 Hardcoded API Keys",
+          "level": 3,
+          "line": 45
+        },
+        {
+          "heading": "2.2 Plaintext Credentials in `.env`",
+          "level": 3,
+          "line": 50
+        },
+        {
+          "heading": "2.3 Fragile Authentication Logic",
+          "level": 3,
+          "line": 55
+        },
+        {
+          "heading": "2.4 Commented-out Auth Interceptors",
+          "level": 3,
+          "line": 60
+        },
+        {
+          "heading": "3. Potential Bottlenecks",
+          "level": 2,
+          "line": 66
+        },
+        {
+          "heading": "3.1 Rendering Performance",
+          "level": 3,
+          "line": 68
+        },
+        {
+          "heading": "3.2 Unbounded API Requests",
+          "level": 3,
+          "line": 71
+        },
+        {
+          "heading": "4. Missing Features",
+          "level": 2,
+          "line": 77
+        },
+        {
+          "heading": "4.1 Input Validation",
+          "level": 3,
+          "line": 79
+        },
+        {
+          "heading": "4.2 Error Boundaries & Logging",
+          "level": 3,
+          "line": 82
+        },
+        {
+          "heading": "4.3 UI/UX Polish",
+          "level": 3,
+          "line": 85
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 21
+      }
+    },
+    {
+      "path": ".planning/codebase/CONVENTIONS.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 55,
+      "nonEmptyLines": 42,
+      "sections": [
+        {
+          "heading": "Coding Conventions - pms-ts",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "1. Naming Conventions",
+          "level": 2,
+          "line": 5
+        },
+        {
+          "heading": "1.1 Files and Directories",
+          "level": 3,
+          "line": 7
+        },
+        {
+          "heading": "1.2 Symbols",
+          "level": 3,
+          "line": 14
+        },
+        {
+          "heading": "2. Formatting and Linting",
+          "level": 2,
+          "line": 20
+        },
+        {
+          "heading": "2.1 Formatting",
+          "level": 3,
+          "line": 22
+        },
+        {
+          "heading": "2.2 Linting",
+          "level": 3,
+          "line": 27
+        },
+        {
+          "heading": "3. Architectural Rules",
+          "level": 2,
+          "line": 31
+        },
+        {
+          "heading": "3.1 Component Structure",
+          "level": 3,
+          "line": 33
+        },
+        {
+          "heading": "3.2 Data Management",
+          "level": 3,
+          "line": 38
+        },
+        {
+          "heading": "3.3 Multi-tenancy and Authorization",
+          "level": 3,
+          "line": 43
+        },
+        {
+          "heading": "3.4 Configuration",
+          "level": 3,
+          "line": 47
+        },
+        {
+          "heading": "4. Directory Structure",
+          "level": 2,
+          "line": 51
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 13
+      }
+    },
+    {
+      "path": ".planning/codebase/INTEGRATIONS.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 31,
+      "nonEmptyLines": 26,
+      "sections": [
+        {
+          "heading": "External Integrations - PMS TS",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "Authentication & Identity Management",
+          "level": 2,
+          "line": 3
+        },
+        {
+          "heading": "Backend Services (Microservices)",
+          "level": 2,
+          "line": 8
+        },
+        {
+          "heading": "AI & Data Processing",
+          "level": 2,
+          "line": 22
+        },
+        {
+          "heading": "Object Storage",
+          "level": 2,
+          "line": 26
+        },
+        {
+          "heading": "Cloud & Third-party Integrations",
+          "level": 2,
+          "line": 29
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 6
+      }
+    },
+    {
+      "path": ".planning/codebase/STACK.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 26,
+      "nonEmptyLines": 23,
+      "sections": [
+        {
+          "heading": "Technology Stack - PMS TS",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "Language",
+          "level": 2,
+          "line": 3
+        },
+        {
+          "heading": "Frameworks and Libraries",
+          "level": 2,
+          "line": 6
+        },
+        {
+          "heading": "Build and Development Tools",
+          "level": 2,
+          "line": 19
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 4
+      }
+    },
+    {
+      "path": ".planning/codebase/STRUCTURE.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 25,
+      "nonEmptyLines": 24,
+      "sections": [
+        {
+          "heading": "Directory Structure - PMS-TS",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "High-Level Tree",
+          "level": 2,
+          "line": 3
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 2
+      }
+    },
+    {
+      "path": ".planning/codebase/TESTING.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 54,
+      "nonEmptyLines": 38,
+      "sections": [
+        {
+          "heading": "Testing Strategies - pms-ts",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "1. Test Frameworks",
+          "level": 2,
+          "line": 5
+        },
+        {
+          "heading": "1.1 Jest",
+          "level": 3,
+          "line": 7
+        },
+        {
+          "heading": "1.2 React Testing Library (RTL)",
+          "level": 3,
+          "line": 11
+        },
+        {
+          "heading": "1.3 Testing Utilities",
+          "level": 3,
+          "line": 15
+        },
+        {
+          "heading": "2. Test Types",
+          "level": 2,
+          "line": 19
+        },
+        {
+          "heading": "2.1 Unit Tests",
+          "level": 3,
+          "line": 21
+        },
+        {
+          "heading": "2.2 Component Tests",
+          "level": 3,
+          "line": 25
+        },
+        {
+          "heading": "2.3 End-to-End (E2E) Tests",
+          "level": 3,
+          "line": 29
+        },
+        {
+          "heading": "3. How to Run Tests",
+          "level": 2,
+          "line": 33
+        },
+        {
+          "heading": "4. Testing Guidelines",
+          "level": 2,
+          "line": 39
+        },
+        {
+          "heading": "4.1 Mocking Strategy",
+          "level": 3,
+          "line": 41
+        },
+        {
+          "heading": "4.2 Coverage Goals",
+          "level": 3,
+          "line": 45
+        },
+        {
+          "heading": "4.3 Adding New Tests",
+          "level": 3,
+          "line": 49
+        },
+        {
+          "heading": "5. Continuous Integration (CI)",
+          "level": 2,
+          "line": 53
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 15
+      }
+    }
+  ]
+}

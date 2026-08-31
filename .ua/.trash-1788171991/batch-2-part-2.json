@@ -1,0 +1,1551 @@
+{
+  "nodes": [
+    {
+      "id": "file:src/Components/OrderManager.tsx",
+      "type": "file",
+      "name": "OrderManager.tsx",
+      "filePath": "src/Components/OrderManager.tsx",
+      "summary": "Order list/board screen with status-based filtering (OrderStatus), invoice linking, and lifecycle actions (confirm, serve, reject orders).",
+      "tags": [
+        "component",
+        "order",
+        "status",
+        "dashboard"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/Components/OrderManager.tsx:OrderManager",
+      "type": "function",
+      "name": "OrderManager",
+      "filePath": "src/Components/OrderManager.tsx",
+      "lineRange": [
+        66,
+        369
+      ],
+      "summary": "React component listing orders with status-based filtering, invoice linking, and order lifecycle actions (confirm/serve/reject).",
+      "tags": [
+        "component",
+        "order",
+        "filtering"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/Components/ProfitReport.tsx",
+      "type": "file",
+      "name": "ProfitReport.tsx",
+      "filePath": "src/Components/ProfitReport.tsx",
+      "summary": "Profit reporting dashboard aggregating revenue/cost breakdowns by aspect and time period, computing profit margin and formatted currency figures.",
+      "tags": [
+        "component",
+        "reporting",
+        "finance",
+        "dashboard"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/Components/ProfitReport.tsx:optionStyle",
+      "type": "function",
+      "name": "optionStyle",
+      "filePath": "src/Components/ProfitReport.tsx",
+      "lineRange": [
+        82,
+        85
+      ],
+      "summary": "Returns a CSS class name string based on whether a filter/select option is currently focused.",
+      "tags": [
+        "utility",
+        "styling"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/Components/ProfitReport.tsx:ProfitReport",
+      "type": "function",
+      "name": "ProfitReport",
+      "filePath": "src/Components/ProfitReport.tsx",
+      "lineRange": [
+        87,
+        290
+      ],
+      "summary": "React component (default export) rendering the profit report dashboard: period selection, aspect filtering, and a formatted profit/revenue/cost breakdown table.",
+      "tags": [
+        "component",
+        "reporting",
+        "finance"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/Components/TaxableInvoiceManager.tsx",
+      "type": "file",
+      "name": "TaxableInvoiceManager.tsx",
+      "filePath": "src/Components/TaxableInvoiceManager.tsx",
+      "summary": "Screen for listing taxable invoices within a date range, triggering tax calculation, and previewing calculation results per invoice.",
+      "tags": [
+        "component",
+        "invoice",
+        "tax",
+        "finance"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/Components/TaxableInvoiceManager.tsx:TaxableInvoiceManager",
+      "type": "function",
+      "name": "TaxableInvoiceManager",
+      "filePath": "src/Components/TaxableInvoiceManager.tsx",
+      "lineRange": [
+        48,
+        223
+      ],
+      "summary": "React component for listing taxable invoices, triggering tax calculation, and displaying calculation result previews.",
+      "tags": [
+        "component",
+        "tax",
+        "invoice"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/Service/Utils.ts",
+      "type": "file",
+      "name": "Utils.ts",
+      "filePath": "src/Service/Utils.ts",
+      "summary": "Shared utility module of date/time formatting, VND currency formatting, and numeric-string parsing helpers used throughout the UI components.",
+      "tags": [
+        "utility",
+        "formatting",
+        "date",
+        "currency"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Barrel of ~28 small, pure formatting functions with no internal imports; widely fanned-in across nearly every screen component."
+    },
+    {
+      "id": "function:src/Service/Utils.ts:formatVND",
+      "type": "function",
+      "name": "formatVND",
+      "filePath": "src/Service/Utils.ts",
+      "lineRange": [
+        1,
+        3
+      ],
+      "summary": "Formats a numeric amount as a Vietnamese Dong currency string.",
+      "tags": [
+        "utility",
+        "currency",
+        "formatting"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/Service/Utils.ts:randomId",
+      "type": "function",
+      "name": "randomId",
+      "filePath": "src/Service/Utils.ts",
+      "lineRange": [
+        5,
+        8
+      ],
+      "summary": "Generates a short random identifier using crypto.randomUUID.",
+      "tags": [
+        "utility",
+        "id-generation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/Service/Utils.ts:formatMoneyAmount",
+      "type": "function",
+      "name": "formatMoneyAmount",
+      "filePath": "src/Service/Utils.ts",
+      "lineRange": [
+        10,
+        16
+      ],
+      "summary": "Parses and reformats a money input string into a normalized numeric display.",
+      "tags": [
+        "utility",
+        "currency",
+        "parsing"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/Service/Utils.ts:formatLocaleNumber",
+      "type": "function",
+      "name": "formatLocaleNumber",
+      "filePath": "src/Service/Utils.ts",
+      "lineRange": [
+        18,
+        23
+      ],
+      "summary": "Parses and reformats a locale-formatted number string.",
+      "tags": [
+        "utility",
+        "number",
+        "parsing"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/Service/Utils.ts:lastDateOf",
+      "type": "function",
+      "name": "lastDateOf",
+      "filePath": "src/Service/Utils.ts",
+      "lineRange": [
+        25,
+        27
+      ],
+      "summary": "Returns the last day-of-month number for a given date.",
+      "tags": [
+        "utility",
+        "date"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/Service/Utils.ts:lastDateOfMonth",
+      "type": "function",
+      "name": "lastDateOfMonth",
+      "filePath": "src/Service/Utils.ts",
+      "lineRange": [
+        29,
+        31
+      ],
+      "summary": "Returns a Date set to the last day of the given date's month.",
+      "tags": [
+        "utility",
+        "date"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/Service/Utils.ts:beginOfDay",
+      "type": "function",
+      "name": "beginOfDay",
+      "filePath": "src/Service/Utils.ts",
+      "lineRange": [
+        33,
+        36
+      ],
+      "summary": "Returns a Date reset to midnight (start of day).",
+      "tags": [
+        "utility",
+        "date"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/Service/Utils.ts:endOfDay",
+      "type": "function",
+      "name": "endOfDay",
+      "filePath": "src/Service/Utils.ts",
+      "lineRange": [
+        38,
+        43
+      ],
+      "summary": "Returns a Date set to the last moment of the day (23:59:59).",
+      "tags": [
+        "utility",
+        "date"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/Service/Utils.ts:addDays",
+      "type": "function",
+      "name": "addDays",
+      "filePath": "src/Service/Utils.ts",
+      "lineRange": [
+        45,
+        47
+      ],
+      "summary": "Returns a new Date offset by a number of days.",
+      "tags": [
+        "utility",
+        "date"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/Service/Utils.ts:adjustMonths",
+      "type": "function",
+      "name": "adjustMonths",
+      "filePath": "src/Service/Utils.ts",
+      "lineRange": [
+        49,
+        51
+      ],
+      "summary": "Returns a new Date offset by a number of months.",
+      "tags": [
+        "utility",
+        "date"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/Service/Utils.ts:beginOfMonth",
+      "type": "function",
+      "name": "beginOfMonth",
+      "filePath": "src/Service/Utils.ts",
+      "lineRange": [
+        53,
+        57
+      ],
+      "summary": "Returns a Date set to the first day of the month at midnight.",
+      "tags": [
+        "utility",
+        "date"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/Service/Utils.ts:formatShortDate",
+      "type": "function",
+      "name": "formatShortDate",
+      "filePath": "src/Service/Utils.ts",
+      "lineRange": [
+        59,
+        62
+      ],
+      "summary": "Formats a Date as a short locale date string.",
+      "tags": [
+        "utility",
+        "date",
+        "formatting"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/Service/Utils.ts:formatISODate",
+      "type": "function",
+      "name": "formatISODate",
+      "filePath": "src/Service/Utils.ts",
+      "lineRange": [
+        64,
+        70
+      ],
+      "summary": "Formats a Date as an ISO 8601 date string (YYYY-MM-DD).",
+      "tags": [
+        "utility",
+        "date",
+        "formatting"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/Service/Utils.ts:formatISODateTime",
+      "type": "function",
+      "name": "formatISODateTime",
+      "filePath": "src/Service/Utils.ts",
+      "lineRange": [
+        72,
+        78
+      ],
+      "summary": "Formats a Date as an ISO 8601 date-time string.",
+      "tags": [
+        "utility",
+        "date",
+        "formatting"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/Service/Utils.ts:formatLocaleDate",
+      "type": "function",
+      "name": "formatLocaleDate",
+      "filePath": "src/Service/Utils.ts",
+      "lineRange": [
+        80,
+        96
+      ],
+      "summary": "Formats a Date into a locale-aware display string with validation against invalid dates.",
+      "tags": [
+        "utility",
+        "date",
+        "formatting"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/Service/Utils.ts:formatDatePartition",
+      "type": "function",
+      "name": "formatDatePartition",
+      "filePath": "src/Service/Utils.ts",
+      "lineRange": [
+        98,
+        102
+      ],
+      "summary": "Formats a date into a partition-key string derived from its ISO date.",
+      "tags": [
+        "utility",
+        "date",
+        "formatting"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/Service/Utils.ts:formatMonthPartition",
+      "type": "function",
+      "name": "formatMonthPartition",
+      "filePath": "src/Service/Utils.ts",
+      "lineRange": [
+        104,
+        109
+      ],
+      "summary": "Formats a date into a year-month partition-key string.",
+      "tags": [
+        "utility",
+        "date",
+        "formatting"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/Service/Utils.ts:format2DigitDate",
+      "type": "function",
+      "name": "format2DigitDate",
+      "filePath": "src/Service/Utils.ts",
+      "lineRange": [
+        111,
+        114
+      ],
+      "summary": "Formats a Date as a 2-digit locale date string.",
+      "tags": [
+        "utility",
+        "date",
+        "formatting"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/Service/Utils.ts:formatDateMonthDate",
+      "type": "function",
+      "name": "formatDateMonthDate",
+      "filePath": "src/Service/Utils.ts",
+      "lineRange": [
+        116,
+        119
+      ],
+      "summary": "Formats a Date as a month/date locale string.",
+      "tags": [
+        "utility",
+        "date",
+        "formatting"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/Service/Utils.ts:formatVNDateTime",
+      "type": "function",
+      "name": "formatVNDateTime",
+      "filePath": "src/Service/Utils.ts",
+      "lineRange": [
+        121,
+        132
+      ],
+      "summary": "Formats a Date as a Vietnamese locale date-time string.",
+      "tags": [
+        "utility",
+        "date",
+        "formatting"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/Service/Utils.ts:formatLocalTime",
+      "type": "function",
+      "name": "formatLocalTime",
+      "filePath": "src/Service/Utils.ts",
+      "lineRange": [
+        134,
+        145
+      ],
+      "summary": "Converts a UTC hour:minute string to a locally formatted time string.",
+      "tags": [
+        "utility",
+        "time",
+        "formatting"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/Service/Utils.ts:formatISOTime",
+      "type": "function",
+      "name": "formatISOTime",
+      "filePath": "src/Service/Utils.ts",
+      "lineRange": [
+        147,
+        155
+      ],
+      "summary": "Formats a Date as a locale time string.",
+      "tags": [
+        "utility",
+        "time",
+        "formatting"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/Service/Utils.ts:utcToHourMinute",
+      "type": "function",
+      "name": "utcToHourMinute",
+      "filePath": "src/Service/Utils.ts",
+      "lineRange": [
+        157,
+        164
+      ],
+      "summary": "Converts a UTC date string to a local hour:minute time string.",
+      "tags": [
+        "utility",
+        "time",
+        "conversion"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/Service/Utils.ts:utcToDate",
+      "type": "function",
+      "name": "utcToDate",
+      "filePath": "src/Service/Utils.ts",
+      "lineRange": [
+        166,
+        171
+      ],
+      "summary": "Converts a UTC date string to a formatted local date string.",
+      "tags": [
+        "utility",
+        "date",
+        "conversion"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/Service/Utils.ts:utcToDateTime",
+      "type": "function",
+      "name": "utcToDateTime",
+      "filePath": "src/Service/Utils.ts",
+      "lineRange": [
+        173,
+        178
+      ],
+      "summary": "Converts a UTC date string to a formatted local date-time string.",
+      "tags": [
+        "utility",
+        "date",
+        "conversion"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/Service/Utils.ts:formatISOHourMinute",
+      "type": "function",
+      "name": "formatISOHourMinute",
+      "filePath": "src/Service/Utils.ts",
+      "lineRange": [
+        180,
+        184
+      ],
+      "summary": "Formats a Date as an ISO hour:minute substring.",
+      "tags": [
+        "utility",
+        "time",
+        "formatting"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/Service/Utils.ts:formatRooms",
+      "type": "function",
+      "name": "formatRooms",
+      "filePath": "src/Service/Utils.ts",
+      "lineRange": [
+        186,
+        188
+      ],
+      "summary": "Joins an array of room names into a single display string.",
+      "tags": [
+        "utility",
+        "rooms",
+        "formatting"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/Service/Utils.ts:formatLongDateTime",
+      "type": "function",
+      "name": "formatLongDateTime",
+      "filePath": "src/Service/Utils.ts",
+      "lineRange": [
+        190,
+        200
+      ],
+      "summary": "Formats a Date into a zero-padded long date-time string (YYYY-MM-DD HH:MM:SS).",
+      "tags": [
+        "utility",
+        "date",
+        "formatting"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/db/immigrationRegistration.ts",
+      "type": "file",
+      "name": "immigrationRegistration.ts",
+      "filePath": "src/db/immigrationRegistration.ts",
+      "summary": "API client wrapper for immigration registration endpoints: list registrations, list eligible invoices, and add/remove registrations and guests.",
+      "tags": [
+        "api-client",
+        "immigration",
+        "service"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/db/immigrationRegistration.ts:unwrapPage",
+      "type": "function",
+      "name": "unwrapPage",
+      "filePath": "src/db/immigrationRegistration.ts",
+      "lineRange": [
+        28,
+        30
+      ],
+      "summary": "Extracts the content array from a paginated API response.",
+      "tags": [
+        "utility",
+        "api",
+        "pagination"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/db/immigrationRegistration.ts:listImmigrationRegistrations",
+      "type": "function",
+      "name": "listImmigrationRegistrations",
+      "filePath": "src/db/immigrationRegistration.ts",
+      "lineRange": [
+        32,
+        41
+      ],
+      "summary": "Fetches immigration registrations within a date range with pagination.",
+      "tags": [
+        "api-handler",
+        "immigration"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/db/immigrationRegistration.ts:listInvoicesForImmigration",
+      "type": "function",
+      "name": "listInvoicesForImmigration",
+      "filePath": "src/db/immigrationRegistration.ts",
+      "lineRange": [
+        43,
+        50
+      ],
+      "summary": "Fetches invoices eligible for immigration registration within a date range.",
+      "tags": [
+        "api-handler",
+        "immigration",
+        "invoice"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/db/immigrationRegistration.ts:addImmigrationRegistration",
+      "type": "function",
+      "name": "addImmigrationRegistration",
+      "filePath": "src/db/immigrationRegistration.ts",
+      "lineRange": [
+        52,
+        58
+      ],
+      "summary": "Creates an immigration registration for an invoice with a list of guests.",
+      "tags": [
+        "api-handler",
+        "immigration"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/db/immigrationRegistration.ts:removeImmigrationRegistration",
+      "type": "function",
+      "name": "removeImmigrationRegistration",
+      "filePath": "src/db/immigrationRegistration.ts",
+      "lineRange": [
+        60,
+        61
+      ],
+      "summary": "Deletes an immigration registration by invoice id.",
+      "tags": [
+        "api-handler",
+        "immigration"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/db/immigrationRegistration.ts:addImmigrationGuest",
+      "type": "function",
+      "name": "addImmigrationGuest",
+      "filePath": "src/db/immigrationRegistration.ts",
+      "lineRange": [
+        63,
+        69
+      ],
+      "summary": "Adds a guest to an existing immigration registration.",
+      "tags": [
+        "api-handler",
+        "immigration"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/db/immigrationRegistration.ts:removeImmigrationGuest",
+      "type": "function",
+      "name": "removeImmigrationGuest",
+      "filePath": "src/db/immigrationRegistration.ts",
+      "lineRange": [
+        71,
+        72
+      ],
+      "summary": "Removes a guest from an immigration registration.",
+      "tags": [
+        "api-handler",
+        "immigration"
+      ],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:src/Components/OrderManager.tsx",
+      "target": "function:src/Components/OrderManager.tsx:OrderManager",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/Components/OrderManager.tsx",
+      "target": "function:src/Components/OrderManager.tsx:OrderManager",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/Components/ProfitReport.tsx",
+      "target": "function:src/Components/ProfitReport.tsx:optionStyle",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/Components/ProfitReport.tsx",
+      "target": "function:src/Components/ProfitReport.tsx:optionStyle",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/Components/ProfitReport.tsx",
+      "target": "function:src/Components/ProfitReport.tsx:ProfitReport",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/Components/ProfitReport.tsx",
+      "target": "function:src/Components/ProfitReport.tsx:ProfitReport",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/Components/TaxableInvoiceManager.tsx",
+      "target": "function:src/Components/TaxableInvoiceManager.tsx:TaxableInvoiceManager",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/Components/TaxableInvoiceManager.tsx",
+      "target": "function:src/Components/TaxableInvoiceManager.tsx:TaxableInvoiceManager",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/Service/Utils.ts",
+      "target": "function:src/Service/Utils.ts:formatVND",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/Service/Utils.ts",
+      "target": "function:src/Service/Utils.ts:formatVND",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/Service/Utils.ts",
+      "target": "function:src/Service/Utils.ts:randomId",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/Service/Utils.ts",
+      "target": "function:src/Service/Utils.ts:randomId",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/Service/Utils.ts",
+      "target": "function:src/Service/Utils.ts:formatMoneyAmount",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/Service/Utils.ts",
+      "target": "function:src/Service/Utils.ts:formatMoneyAmount",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/Service/Utils.ts",
+      "target": "function:src/Service/Utils.ts:formatLocaleNumber",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/Service/Utils.ts",
+      "target": "function:src/Service/Utils.ts:formatLocaleNumber",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/Service/Utils.ts",
+      "target": "function:src/Service/Utils.ts:lastDateOf",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/Service/Utils.ts",
+      "target": "function:src/Service/Utils.ts:lastDateOf",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/Service/Utils.ts",
+      "target": "function:src/Service/Utils.ts:lastDateOfMonth",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/Service/Utils.ts",
+      "target": "function:src/Service/Utils.ts:lastDateOfMonth",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/Service/Utils.ts",
+      "target": "function:src/Service/Utils.ts:beginOfDay",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/Service/Utils.ts",
+      "target": "function:src/Service/Utils.ts:beginOfDay",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/Service/Utils.ts",
+      "target": "function:src/Service/Utils.ts:endOfDay",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/Service/Utils.ts",
+      "target": "function:src/Service/Utils.ts:endOfDay",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/Service/Utils.ts",
+      "target": "function:src/Service/Utils.ts:addDays",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/Service/Utils.ts",
+      "target": "function:src/Service/Utils.ts:addDays",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/Service/Utils.ts",
+      "target": "function:src/Service/Utils.ts:adjustMonths",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/Service/Utils.ts",
+      "target": "function:src/Service/Utils.ts:adjustMonths",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/Service/Utils.ts",
+      "target": "function:src/Service/Utils.ts:beginOfMonth",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/Service/Utils.ts",
+      "target": "function:src/Service/Utils.ts:beginOfMonth",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/Service/Utils.ts",
+      "target": "function:src/Service/Utils.ts:formatShortDate",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/Service/Utils.ts",
+      "target": "function:src/Service/Utils.ts:formatShortDate",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/Service/Utils.ts",
+      "target": "function:src/Service/Utils.ts:formatISODate",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/Service/Utils.ts",
+      "target": "function:src/Service/Utils.ts:formatISODate",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/Service/Utils.ts",
+      "target": "function:src/Service/Utils.ts:formatISODateTime",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/Service/Utils.ts",
+      "target": "function:src/Service/Utils.ts:formatISODateTime",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/Service/Utils.ts",
+      "target": "function:src/Service/Utils.ts:formatLocaleDate",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/Service/Utils.ts",
+      "target": "function:src/Service/Utils.ts:formatLocaleDate",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/Service/Utils.ts",
+      "target": "function:src/Service/Utils.ts:formatDatePartition",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/Service/Utils.ts",
+      "target": "function:src/Service/Utils.ts:formatDatePartition",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/Service/Utils.ts",
+      "target": "function:src/Service/Utils.ts:formatMonthPartition",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/Service/Utils.ts",
+      "target": "function:src/Service/Utils.ts:formatMonthPartition",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/Service/Utils.ts",
+      "target": "function:src/Service/Utils.ts:format2DigitDate",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/Service/Utils.ts",
+      "target": "function:src/Service/Utils.ts:format2DigitDate",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/Service/Utils.ts",
+      "target": "function:src/Service/Utils.ts:formatDateMonthDate",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/Service/Utils.ts",
+      "target": "function:src/Service/Utils.ts:formatDateMonthDate",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/Service/Utils.ts",
+      "target": "function:src/Service/Utils.ts:formatVNDateTime",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/Service/Utils.ts",
+      "target": "function:src/Service/Utils.ts:formatVNDateTime",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/Service/Utils.ts",
+      "target": "function:src/Service/Utils.ts:formatLocalTime",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/Service/Utils.ts",
+      "target": "function:src/Service/Utils.ts:formatLocalTime",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/Service/Utils.ts",
+      "target": "function:src/Service/Utils.ts:formatISOTime",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/Service/Utils.ts",
+      "target": "function:src/Service/Utils.ts:formatISOTime",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/Service/Utils.ts",
+      "target": "function:src/Service/Utils.ts:utcToHourMinute",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/Service/Utils.ts",
+      "target": "function:src/Service/Utils.ts:utcToHourMinute",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/Service/Utils.ts",
+      "target": "function:src/Service/Utils.ts:utcToDate",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/Service/Utils.ts",
+      "target": "function:src/Service/Utils.ts:utcToDate",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/Service/Utils.ts",
+      "target": "function:src/Service/Utils.ts:utcToDateTime",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/Service/Utils.ts",
+      "target": "function:src/Service/Utils.ts:utcToDateTime",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/Service/Utils.ts",
+      "target": "function:src/Service/Utils.ts:formatISOHourMinute",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/Service/Utils.ts",
+      "target": "function:src/Service/Utils.ts:formatISOHourMinute",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/Service/Utils.ts",
+      "target": "function:src/Service/Utils.ts:formatRooms",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/Service/Utils.ts",
+      "target": "function:src/Service/Utils.ts:formatRooms",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/Service/Utils.ts",
+      "target": "function:src/Service/Utils.ts:formatLongDateTime",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/Service/Utils.ts",
+      "target": "function:src/Service/Utils.ts:formatLongDateTime",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/db/immigrationRegistration.ts",
+      "target": "function:src/db/immigrationRegistration.ts:unwrapPage",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/db/immigrationRegistration.ts",
+      "target": "function:src/db/immigrationRegistration.ts:unwrapPage",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/db/immigrationRegistration.ts",
+      "target": "function:src/db/immigrationRegistration.ts:listImmigrationRegistrations",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/db/immigrationRegistration.ts",
+      "target": "function:src/db/immigrationRegistration.ts:listImmigrationRegistrations",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/db/immigrationRegistration.ts",
+      "target": "function:src/db/immigrationRegistration.ts:listInvoicesForImmigration",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/db/immigrationRegistration.ts",
+      "target": "function:src/db/immigrationRegistration.ts:listInvoicesForImmigration",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/db/immigrationRegistration.ts",
+      "target": "function:src/db/immigrationRegistration.ts:addImmigrationRegistration",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/db/immigrationRegistration.ts",
+      "target": "function:src/db/immigrationRegistration.ts:addImmigrationRegistration",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/db/immigrationRegistration.ts",
+      "target": "function:src/db/immigrationRegistration.ts:removeImmigrationRegistration",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/db/immigrationRegistration.ts",
+      "target": "function:src/db/immigrationRegistration.ts:removeImmigrationRegistration",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/db/immigrationRegistration.ts",
+      "target": "function:src/db/immigrationRegistration.ts:addImmigrationGuest",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/db/immigrationRegistration.ts",
+      "target": "function:src/db/immigrationRegistration.ts:addImmigrationGuest",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/db/immigrationRegistration.ts",
+      "target": "function:src/db/immigrationRegistration.ts:removeImmigrationGuest",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/db/immigrationRegistration.ts",
+      "target": "function:src/db/immigrationRegistration.ts:removeImmigrationGuest",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/Components/OrderManager.tsx",
+      "target": "file:src/App.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/OrderManager.tsx",
+      "target": "file:src/Components/InvoiceManager.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/OrderManager.tsx",
+      "target": "file:src/Service/Utils.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/OrderManager.tsx",
+      "target": "file:src/db/configs.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/OrderManager.tsx",
+      "target": "file:src/db/invoice.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/OrderManager.tsx",
+      "target": "file:src/db/order.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/ProfitReport.tsx",
+      "target": "file:src/Service/Utils.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/ProfitReport.tsx",
+      "target": "file:src/db/profit.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/TaxableInvoiceManager.tsx",
+      "target": "file:src/Components/ProfitReport.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/TaxableInvoiceManager.tsx",
+      "target": "file:src/Service/Utils.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/TaxableInvoiceManager.tsx",
+      "target": "file:src/db/tax.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/db/immigrationRegistration.ts",
+      "target": "file:src/Components/InvoiceManager.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/db/immigrationRegistration.ts",
+      "target": "file:src/db/apis.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "function:src/Components/OrderManager.tsx:OrderManager",
+      "target": "function:src/Service/Utils.ts:formatISODateTime",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Components/OrderManager.tsx:OrderManager",
+      "target": "function:src/Service/Utils.ts:formatISODate",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Components/OrderManager.tsx:OrderManager",
+      "target": "function:src/Service/Utils.ts:formatRooms",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Components/OrderManager.tsx:OrderManager",
+      "target": "function:src/db/invoice.ts:getInvoice",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Components/OrderManager.tsx:OrderManager",
+      "target": "function:src/db/invoice.ts:listInvoiceByGuestName",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Components/OrderManager.tsx:OrderManager",
+      "target": "function:src/db/invoice.ts:listByCheckIn",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Components/OrderManager.tsx:OrderManager",
+      "target": "function:src/db/order.ts:listOrders",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Components/OrderManager.tsx:OrderManager",
+      "target": "function:src/db/order.ts:listOrderByStatuses",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Components/OrderManager.tsx:OrderManager",
+      "target": "function:src/db/order.ts:confirmOrder",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Components/OrderManager.tsx:OrderManager",
+      "target": "function:src/db/order.ts:serveOrder",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Components/OrderManager.tsx:OrderManager",
+      "target": "function:src/db/order.ts:rejectOrder",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Components/OrderManager.tsx:OrderManager",
+      "target": "function:src/db/order.ts:saveOrder",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Components/ProfitReport.tsx:ProfitReport",
+      "target": "function:src/Service/Utils.ts:formatDateMonthDate",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Components/ProfitReport.tsx:ProfitReport",
+      "target": "function:src/Service/Utils.ts:lastDateOfMonth",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Components/ProfitReport.tsx:ProfitReport",
+      "target": "function:src/Service/Utils.ts:beginOfMonth",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Components/ProfitReport.tsx:ProfitReport",
+      "target": "function:src/Service/Utils.ts:adjustMonths",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Components/ProfitReport.tsx:ProfitReport",
+      "target": "function:src/Service/Utils.ts:formatISODate",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Components/ProfitReport.tsx:ProfitReport",
+      "target": "function:src/Service/Utils.ts:formatVND",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Components/ProfitReport.tsx:ProfitReport",
+      "target": "function:src/db/profit.ts:fetchPReportThisMonth",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Components/TaxableInvoiceManager.tsx:TaxableInvoiceManager",
+      "target": "function:src/Service/Utils.ts:formatISODate",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Components/TaxableInvoiceManager.tsx:TaxableInvoiceManager",
+      "target": "function:src/Service/Utils.ts:beginOfMonth",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Components/TaxableInvoiceManager.tsx:TaxableInvoiceManager",
+      "target": "function:src/Service/Utils.ts:formatVND",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Components/TaxableInvoiceManager.tsx:TaxableInvoiceManager",
+      "target": "function:src/db/tax.ts:listTaxableInvoices",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Components/TaxableInvoiceManager.tsx:TaxableInvoiceManager",
+      "target": "function:src/db/tax.ts:calculateTaxableInvoices",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Service/Utils.ts:beginOfMonth",
+      "target": "function:src/Service/Utils.ts:beginOfDay",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Service/Utils.ts:formatDatePartition",
+      "target": "function:src/Service/Utils.ts:formatISODate",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Service/Utils.ts:formatMonthPartition",
+      "target": "function:src/Service/Utils.ts:formatISODate",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    }
+  ]
+}

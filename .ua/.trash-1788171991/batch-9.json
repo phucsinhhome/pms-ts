@@ -1,0 +1,112 @@
+{
+  "nodes": [
+    {
+      "id": "config:.env.development",
+      "type": "config",
+      "name": ".env.development",
+      "filePath": ".env.development",
+      "summary": "Development environment configuration defining local backend service endpoints (expense, invoice, reservation, profit, tax, order, room, supplier, user, immigration registration, etc.), file-storage (MinIO) credentials, and dev server settings for the PMS app, with a block of legacy staging URLs kept as comments.",
+      "tags": ["configuration", "environment-variables", "api-endpoints", "development"],
+      "complexity": "moderate",
+      "languageNotes": "Defines ~30 REACT_APP_* endpoint variables consumed via process.env across the React app's service layer; commented-out lines preserve an alternate staging configuration."
+    },
+    {
+      "id": "document:PLAN.md",
+      "type": "document",
+      "name": "PLAN.md",
+      "filePath": "PLAN.md",
+      "summary": "Internal improvement-tracking document for the PMS project, listing completed bug fixes and refactors for order management, tour management save persistence, and dynamic room-name fetching in the reservation and invoice maps.",
+      "tags": ["documentation", "planning", "technical-debt", "project-management"],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:README.md",
+      "type": "document",
+      "name": "README.md",
+      "filePath": "README.md",
+      "summary": "Project overview for the PMS web app describing its expense tracking, invoicing, reservation status, and profit reporting features, plus setup instructions for the required .env service-endpoint variables and how to run the dev server.",
+      "tags": ["documentation", "entry-point", "setup-guide", "overview"],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:Subscribe.txt",
+      "type": "document",
+      "name": "Subscribe.txt",
+      "filePath": "Subscribe.txt",
+      "summary": "Plain-text file containing a single YouTube channel URL; unrelated to application functionality.",
+      "tags": ["documentation", "misc", "external-link"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:package.json",
+      "type": "config",
+      "name": "package.json",
+      "filePath": "package.json",
+      "summary": "NPM manifest for the my-webpack-project PMS app, declaring React 18 + TypeScript dependencies (Firebase, Axios, Flowbite, react-router-dom, MinIO client, OIDC client, html2canvas) alongside Node.js browser polyfills, and defining react-app-rewired start/build/test/eject scripts.",
+      "tags": ["configuration", "build-system", "dependencies", "npm"],
+      "complexity": "moderate",
+      "languageNotes": "Uses react-app-rewired to override Create React App's webpack config, and devDependency aliases to polyfill Node core modules (buffer, crypto, stream, https, zlib) for browser bundling."
+    },
+    {
+      "id": "config:tsconfig.json",
+      "type": "config",
+      "name": "tsconfig.json",
+      "filePath": "tsconfig.json",
+      "summary": "TypeScript compiler configuration for the React app, targeting ES2016 with classic React JSX transform, CommonJS modules, strict type-checking, esModuleInterop, and forced consistent file-name casing.",
+      "tags": ["configuration", "typescript", "build-system", "compiler-options"],
+      "complexity": "moderate",
+      "languageNotes": "Mostly the default CRA-generated template with commented-out optional flags; only a handful of options (target, jsx, module, esModuleInterop, strict, skipLibCheck) are actually enabled."
+    }
+  ],
+  "edges": [
+    {
+      "source": "document:README.md",
+      "target": "file:src/index.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:README.md",
+      "target": "file:src/App.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "config:package.json",
+      "target": "file:src/index.tsx",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:package.json",
+      "target": "file:src/App.tsx",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:tsconfig.json",
+      "target": "file:src/index.tsx",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:tsconfig.json",
+      "target": "file:src/App.tsx",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:.env.development",
+      "target": "file:src/index.tsx",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    }
+  ]
+}

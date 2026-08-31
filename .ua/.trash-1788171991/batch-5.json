@@ -1,0 +1,222 @@
+{
+  "nodes": [
+    {
+      "id": "file:src/Components/CounterInput.tsx",
+      "type": "file",
+      "name": "CounterInput.tsx",
+      "filePath": "src/Components/CounterInput.tsx",
+      "summary": "Generic numeric stepper input component with increment/decrement buttons, bounded by configurable min/max/step values.",
+      "tags": ["component", "utility", "form-control", "reusable"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/Components/RatePlanManager.tsx",
+      "type": "file",
+      "name": "RatePlanManager.tsx",
+      "filePath": "src/Components/RatePlanManager.tsx",
+      "summary": "CRUD management screen for hotel rate plans, handling listing with pagination, room association, meal inclusion, applied date/time ranges, and create/edit/delete modals.",
+      "tags": ["component", "crud", "rate-plans", "pagination", "reservation-status"],
+      "complexity": "complex",
+      "languageNotes": "Component is wrapped in React.memo() and defines its state, handlers, and JSX all in a single large functional component; nested handlers (fetchRatePlans, processSave, etc.) are not separately exported."
+    },
+    {
+      "id": "file:src/Components/RoomManager.tsx",
+      "type": "file",
+      "name": "RoomManager.tsx",
+      "filePath": "src/Components/RoomManager.tsx",
+      "summary": "CRUD management screen for hotel rooms, providing search/filter, pagination, and add/edit/delete modal workflows backed by the room API.",
+      "tags": ["component", "crud", "rooms", "pagination"],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/db/rate_plan.ts",
+      "type": "file",
+      "name": "rate_plan.ts",
+      "filePath": "src/db/rate_plan.ts",
+      "summary": "Data-access layer wrapping the rate plan REST API with list, get, save, create, and delete operations.",
+      "tags": ["service", "api-handler", "data-model", "rate-plans"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/db/room.ts",
+      "type": "file",
+      "name": "room.ts",
+      "filePath": "src/db/room.ts",
+      "summary": "Data-access layer wrapping the room REST API with list, create, update, and delete operations, and defines the Room type.",
+      "tags": ["service", "api-handler", "data-model", "rooms"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/Components/CounterInput.tsx:CounterInput",
+      "type": "function",
+      "name": "CounterInput",
+      "filePath": "src/Components/CounterInput.tsx",
+      "lineRange": [15, 72],
+      "summary": "Generic React component rendering a labeled numeric input with decrement/increment buttons that clamp the value between min and max.",
+      "tags": ["component", "form-control", "utility"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/Components/RatePlanManager.tsx:RatePlanManager",
+      "type": "function",
+      "name": "RatePlanManager",
+      "filePath": "src/Components/RatePlanManager.tsx",
+      "lineRange": [77, 678],
+      "summary": "Memoized React component that fetches, paginates, and renders rate plans, and manages create/edit/delete modals including meal, date/time, and quantity editing for a rate plan.",
+      "tags": ["component", "crud", "rate-plans", "state-management"],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/Components/RoomManager.tsx:RoomManager",
+      "type": "function",
+      "name": "RoomManager",
+      "filePath": "src/Components/RoomManager.tsx",
+      "lineRange": [25, 346],
+      "summary": "React component that lists rooms with search filtering and pagination, and manages add/edit/delete modal workflows via the room API.",
+      "tags": ["component", "crud", "rooms", "state-management"],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/db/rate_plan.ts:list",
+      "type": "function",
+      "name": "list",
+      "filePath": "src/db/rate_plan.ts",
+      "lineRange": [5, 8],
+      "summary": "Fetches a paginated list of rate plans from the rate plan API.",
+      "tags": ["api-handler", "rate-plans"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/db/rate_plan.ts:get",
+      "type": "function",
+      "name": "get",
+      "filePath": "src/db/rate_plan.ts",
+      "lineRange": [10, 13],
+      "summary": "Fetches a single rate plan by id from the rate plan API.",
+      "tags": ["api-handler", "rate-plans"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/db/rate_plan.ts:save",
+      "type": "function",
+      "name": "save",
+      "filePath": "src/db/rate_plan.ts",
+      "lineRange": [15, 20],
+      "summary": "Persists updates to an existing rate plan via a POST request to the rate plan API.",
+      "tags": ["api-handler", "rate-plans"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/db/rate_plan.ts:create",
+      "type": "function",
+      "name": "create",
+      "filePath": "src/db/rate_plan.ts",
+      "lineRange": [22, 27],
+      "summary": "Creates a new rate plan via a PUT request to the rate plan API.",
+      "tags": ["api-handler", "rate-plans"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/db/rate_plan.ts:deleteObject",
+      "type": "function",
+      "name": "deleteObject",
+      "filePath": "src/db/rate_plan.ts",
+      "lineRange": [29, 32],
+      "summary": "Deletes a rate plan by id via the rate plan API.",
+      "tags": ["api-handler", "rate-plans"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/db/room.ts:listRoom",
+      "type": "function",
+      "name": "listRoom",
+      "filePath": "src/db/room.ts",
+      "lineRange": [12, 14],
+      "summary": "Fetches a paginated list of rooms from the room API.",
+      "tags": ["api-handler", "rooms"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/db/room.ts:createRoom",
+      "type": "function",
+      "name": "createRoom",
+      "filePath": "src/db/room.ts",
+      "lineRange": [16, 18],
+      "summary": "Creates a new room via a PUT request to the room API.",
+      "tags": ["api-handler", "rooms"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/db/room.ts:updateRoom",
+      "type": "function",
+      "name": "updateRoom",
+      "filePath": "src/db/room.ts",
+      "lineRange": [20, 22],
+      "summary": "Updates an existing room via a POST request to the room API.",
+      "tags": ["api-handler", "rooms"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/db/room.ts:deleteRoom",
+      "type": "function",
+      "name": "deleteRoom",
+      "filePath": "src/db/room.ts",
+      "lineRange": [24, 26],
+      "summary": "Deletes a room by id via the room API.",
+      "tags": ["api-handler", "rooms"],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    { "source": "file:src/Components/CounterInput.tsx", "target": "function:src/Components/CounterInput.tsx:CounterInput", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/Components/RatePlanManager.tsx", "target": "function:src/Components/RatePlanManager.tsx:RatePlanManager", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/Components/RoomManager.tsx", "target": "function:src/Components/RoomManager.tsx:RoomManager", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/db/rate_plan.ts", "target": "function:src/db/rate_plan.ts:list", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/db/rate_plan.ts", "target": "function:src/db/rate_plan.ts:get", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/db/rate_plan.ts", "target": "function:src/db/rate_plan.ts:save", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/db/rate_plan.ts", "target": "function:src/db/rate_plan.ts:create", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/db/rate_plan.ts", "target": "function:src/db/rate_plan.ts:deleteObject", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/db/room.ts", "target": "function:src/db/room.ts:listRoom", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/db/room.ts", "target": "function:src/db/room.ts:createRoom", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/db/room.ts", "target": "function:src/db/room.ts:updateRoom", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/db/room.ts", "target": "function:src/db/room.ts:deleteRoom", "type": "contains", "direction": "forward", "weight": 1.0 },
+
+    { "source": "file:src/Components/CounterInput.tsx", "target": "function:src/Components/CounterInput.tsx:CounterInput", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/Components/RatePlanManager.tsx", "target": "function:src/Components/RatePlanManager.tsx:RatePlanManager", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/Components/RoomManager.tsx", "target": "function:src/Components/RoomManager.tsx:RoomManager", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/db/rate_plan.ts", "target": "function:src/db/rate_plan.ts:list", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/db/rate_plan.ts", "target": "function:src/db/rate_plan.ts:get", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/db/rate_plan.ts", "target": "function:src/db/rate_plan.ts:save", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/db/rate_plan.ts", "target": "function:src/db/rate_plan.ts:create", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/db/rate_plan.ts", "target": "function:src/db/rate_plan.ts:deleteObject", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/db/room.ts", "target": "function:src/db/room.ts:listRoom", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/db/room.ts", "target": "function:src/db/room.ts:createRoom", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/db/room.ts", "target": "function:src/db/room.ts:updateRoom", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/db/room.ts", "target": "function:src/db/room.ts:deleteRoom", "type": "exports", "direction": "forward", "weight": 0.8 },
+
+    { "source": "file:src/Components/RatePlanManager.tsx", "target": "file:src/App.tsx", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/Components/RatePlanManager.tsx", "target": "file:src/Components/CounterInput.tsx", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/Components/RatePlanManager.tsx", "target": "file:src/Components/ProfitReport.tsx", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/Components/RatePlanManager.tsx", "target": "file:src/Service/Utils.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/Components/RatePlanManager.tsx", "target": "file:src/db/rate_plan.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/Components/RatePlanManager.tsx", "target": "file:src/db/room.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/Components/RoomManager.tsx", "target": "file:src/App.tsx", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/Components/RoomManager.tsx", "target": "file:src/Components/ProfitReport.tsx", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/Components/RoomManager.tsx", "target": "file:src/db/room.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/db/rate_plan.ts", "target": "file:src/Components/RatePlanManager.tsx", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/db/rate_plan.ts", "target": "file:src/db/apis.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/db/room.ts", "target": "file:src/db/apis.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+
+    { "source": "function:src/Components/RatePlanManager.tsx:RatePlanManager", "target": "function:src/Components/CounterInput.tsx:CounterInput", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "function:src/Components/RatePlanManager.tsx:RatePlanManager", "target": "function:src/db/rate_plan.ts:list", "type": "calls", "direction": "forward", "weight": 0.8 },
+    { "source": "function:src/Components/RatePlanManager.tsx:RatePlanManager", "target": "function:src/db/rate_plan.ts:create", "type": "calls", "direction": "forward", "weight": 0.8 },
+    { "source": "function:src/Components/RatePlanManager.tsx:RatePlanManager", "target": "function:src/db/rate_plan.ts:save", "type": "calls", "direction": "forward", "weight": 0.8 },
+    { "source": "function:src/Components/RatePlanManager.tsx:RatePlanManager", "target": "function:src/db/rate_plan.ts:deleteObject", "type": "calls", "direction": "forward", "weight": 0.8 },
+    { "source": "function:src/Components/RatePlanManager.tsx:RatePlanManager", "target": "function:src/db/room.ts:listRoom", "type": "calls", "direction": "forward", "weight": 0.8 },
+
+    { "source": "function:src/Components/RoomManager.tsx:RoomManager", "target": "function:src/db/room.ts:listRoom", "type": "calls", "direction": "forward", "weight": 0.8 },
+    { "source": "function:src/Components/RoomManager.tsx:RoomManager", "target": "function:src/db/room.ts:createRoom", "type": "calls", "direction": "forward", "weight": 0.8 },
+    { "source": "function:src/Components/RoomManager.tsx:RoomManager", "target": "function:src/db/room.ts:updateRoom", "type": "calls", "direction": "forward", "weight": 0.8 },
+    { "source": "function:src/Components/RoomManager.tsx:RoomManager", "target": "function:src/db/room.ts:deleteRoom", "type": "calls", "direction": "forward", "weight": 0.8 }
+  ]
+}

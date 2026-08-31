@@ -1,0 +1,600 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 14,
+  "filesSkipped": [
+    ".babelrc",
+    ".ua/.understandignore",
+    "public/_redirects",
+    "src/App.css",
+    "src/index.css"
+  ],
+  "analysisOutcomes": {
+    "structure": {
+      "succeeded": 14,
+      "failed": 0
+    },
+    "callGraph": {
+      "succeeded": 4,
+      "failed": 0,
+      "skipped": 10
+    }
+  },
+  "results": [
+    {
+      "path": ".bg-shell/manifest.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 1,
+      "nonEmptyLines": 1,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 0
+      }
+    },
+    {
+      "path": ".github/copilot-instructions.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 1,
+      "nonEmptyLines": 1,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 0
+      }
+    },
+    {
+      "path": ".planning/phases/01-foundation-refactoring/01-PLAN.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 45,
+      "nonEmptyLines": 37,
+      "sections": [
+        {
+          "heading": "Phase 1: Foundation & Refactoring",
+          "level": 2,
+          "line": 1
+        },
+        {
+          "heading": "Task 1: Type Refactoring & Config Expansion",
+          "level": 3,
+          "line": 3
+        },
+        {
+          "heading": "Task 2: Root Config Distribution",
+          "level": 3,
+          "line": 13
+        },
+        {
+          "heading": "Task 3: Dynamic InvoiceEditor Refactoring",
+          "level": 3,
+          "line": 17
+        },
+        {
+          "heading": "Task 4: API Factory Consolidation",
+          "level": 3,
+          "line": 23
+        },
+        {
+          "heading": "Task 5: Map Verification",
+          "level": 3,
+          "line": 27
+        },
+        {
+          "heading": "Task 6: Consolidate Payment Method Configuration",
+          "level": 3,
+          "line": 31
+        },
+        {
+          "heading": "Verification",
+          "level": 3,
+          "line": 36
+        },
+        {
+          "heading": "Automated Tests",
+          "level": 4,
+          "line": 37
+        },
+        {
+          "heading": "Manual Verification",
+          "level": 4,
+          "line": 40
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 10
+      }
+    },
+    {
+      "path": ".planning/phases/01-foundation-refactoring/01-RESEARCH.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 43,
+      "nonEmptyLines": 37,
+      "sections": [
+        {
+          "heading": "01-RESEARCH.md: Foundation & Refactoring",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "Standard Stack",
+          "level": 2,
+          "line": 3
+        },
+        {
+          "heading": "Architecture Patterns",
+          "level": 2,
+          "line": 9
+        },
+        {
+          "heading": "Don't Hand-Roll",
+          "level": 2,
+          "line": 15
+        },
+        {
+          "heading": "Common Pitfalls",
+          "level": 2,
+          "line": 20
+        },
+        {
+          "heading": "Code Examples",
+          "level": 2,
+          "line": 25
+        },
+        {
+          "heading": "RESEARCH COMPLETE",
+          "level": 2,
+          "line": 42
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 7
+      }
+    },
+    {
+      "path": ".planning/phases/02-configuration-caching-resilience/02-PLAN.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 57,
+      "nonEmptyLines": 52,
+      "sections": [
+        {
+          "heading": "Phase 2: Configuration Caching & Resilience",
+          "level": 2,
+          "line": 1
+        },
+        {
+          "heading": "Task 1: Refactor appConfigs with Cache-First Strategy",
+          "level": 3,
+          "line": 3
+        },
+        {
+          "heading": "Task 2: Implement Async Retry Mechanism",
+          "level": 3,
+          "line": 13
+        },
+        {
+          "heading": "Task 3: Update App.tsx Loading & Error States",
+          "level": 3,
+          "line": 24
+        },
+        {
+          "heading": "Task 4: UI/UX Refinement",
+          "level": 3,
+          "line": 35
+        },
+        {
+          "heading": "Verification",
+          "level": 3,
+          "line": 39
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 6
+      }
+    },
+    {
+      "path": ".planning/phases/02-configuration-caching-resilience/02-RESEARCH.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 82,
+      "nonEmptyLines": 70,
+      "sections": [
+        {
+          "heading": "Research: Phase 2 — Configuration Caching & Resilience",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "Standard Stack",
+          "level": 2,
+          "line": 3
+        },
+        {
+          "heading": "Architecture Patterns",
+          "level": 2,
+          "line": 9
+        },
+        {
+          "heading": "1. Cache-First with Background Refresh",
+          "level": 3,
+          "line": 11
+        },
+        {
+          "heading": "2. Idempotent Background Refresh",
+          "level": 3,
+          "line": 19
+        },
+        {
+          "heading": "3. Asynchronous Retry Mechanism",
+          "level": 3,
+          "line": 23
+        },
+        {
+          "heading": "Don't Hand-Roll",
+          "level": 2,
+          "line": 30
+        },
+        {
+          "heading": "Common Pitfalls",
+          "level": 2,
+          "line": 34
+        },
+        {
+          "heading": "Code Examples",
+          "level": 2,
+          "line": 40
+        },
+        {
+          "heading": "Simple Retry Wrapper",
+          "level": 3,
+          "line": 42
+        },
+        {
+          "heading": "Integrated `appConfigs` logic",
+          "level": 3,
+          "line": 58
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 11
+      }
+    },
+    {
+      "path": ".planning/phases/04-CONTEXT.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 17,
+      "nonEmptyLines": 14,
+      "sections": [
+        {
+          "heading": "Phase 4 Context: Dynamic Room Integration",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "Decisions",
+          "level": 2,
+          "line": 3
+        },
+        {
+          "heading": "Code Context",
+          "level": 2,
+          "line": 9
+        },
+        {
+          "heading": "Gray Areas Resolved",
+          "level": 2,
+          "line": 15
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 4
+      }
+    },
+    {
+      "path": ".planning/phases/06-room-invoice-map-optimization/06-PLAN.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 24,
+      "nonEmptyLines": 19,
+      "sections": [
+        {
+          "heading": "Phase 6: Room Manager and Invoice Map Optimization",
+          "level": 2,
+          "line": 1
+        },
+        {
+          "heading": "Task 1: Refactor RoomManager Data Mapping",
+          "level": 3,
+          "line": 3
+        },
+        {
+          "heading": "Task 2: Optimize RoomManager Component Lifecycle",
+          "level": 3,
+          "line": 8
+        },
+        {
+          "heading": "Task 3: Improve InvoiceMap Room-Centric View",
+          "level": 3,
+          "line": 12
+        },
+        {
+          "heading": "Task 4: UI/UX Synchronization",
+          "level": 3,
+          "line": 17
+        },
+        {
+          "heading": "Verification",
+          "level": 3,
+          "line": 21
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 6
+      }
+    },
+    {
+      "path": ".planning/phases/06-room-invoice-map-optimization/06-RESEARCH.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 15,
+      "nonEmptyLines": 12,
+      "sections": [
+        {
+          "heading": "Research: Room and Invoice Map Optimization",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "Current State Analysis",
+          "level": 2,
+          "line": 3
+        },
+        {
+          "heading": "Proposed Improvements",
+          "level": 2,
+          "line": 8
+        },
+        {
+          "heading": "Technical Notes",
+          "level": 2,
+          "line": 13
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 4
+      }
+    },
+    {
+      "path": ".planning/todos/01-bugs/fix-the-compile-error.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 16,
+      "nonEmptyLines": 14,
+      "sections": [
+        {
+          "heading": "Description",
+          "level": 2,
+          "line": 9
+        },
+        {
+          "heading": "Tasks",
+          "level": 2,
+          "line": 12
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 2
+      }
+    },
+    {
+      "path": "config-overrides.js",
+      "language": "javascript",
+      "fileCategory": "code",
+      "totalLines": 27,
+      "nonEmptyLines": 26,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/db/gcs.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 31,
+      "nonEmptyLines": 26,
+      "functions": [
+        {
+          "name": "putObject",
+          "startLine": 1,
+          "endLine": 14,
+          "params": [
+            "object",
+            "filename",
+            "bucket",
+            "key"
+          ]
+        },
+        {
+          "name": "putBlob",
+          "startLine": 17,
+          "endLine": 30,
+          "params": [
+            "object",
+            "filename",
+            "bucket",
+            "key"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "putObject",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "putBlob",
+          "line": 17,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "putObject",
+          "callee": "form.append",
+          "lineNumber": 3
+        },
+        {
+          "caller": "putObject",
+          "callee": "form.append",
+          "lineNumber": 4
+        },
+        {
+          "caller": "putObject",
+          "callee": "form.append",
+          "lineNumber": 5
+        },
+        {
+          "caller": "putObject",
+          "callee": "crypto.randomUUID().toString",
+          "lineNumber": 5
+        },
+        {
+          "caller": "putObject",
+          "callee": "crypto.randomUUID",
+          "lineNumber": 5
+        },
+        {
+          "caller": "putObject",
+          "callee": "form.append",
+          "lineNumber": 6
+        },
+        {
+          "caller": "putObject",
+          "callee": "console.info",
+          "lineNumber": 8
+        },
+        {
+          "caller": "putObject",
+          "callee": "fetch",
+          "lineNumber": 13
+        },
+        {
+          "caller": "putBlob",
+          "callee": "form.append",
+          "lineNumber": 19
+        },
+        {
+          "caller": "putBlob",
+          "callee": "form.append",
+          "lineNumber": 20
+        },
+        {
+          "caller": "putBlob",
+          "callee": "form.append",
+          "lineNumber": 21
+        },
+        {
+          "caller": "putBlob",
+          "callee": "crypto.randomUUID().toString",
+          "lineNumber": 21
+        },
+        {
+          "caller": "putBlob",
+          "callee": "crypto.randomUUID",
+          "lineNumber": 21
+        },
+        {
+          "caller": "putBlob",
+          "callee": "form.append",
+          "lineNumber": 22
+        },
+        {
+          "caller": "putBlob",
+          "callee": "console.info",
+          "lineNumber": 24
+        },
+        {
+          "caller": "putBlob",
+          "callee": "fetch",
+          "lineNumber": 29
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 2,
+        "functionCount": 2,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "tailwind.config.js",
+      "language": "javascript",
+      "fileCategory": "code",
+      "totalLines": 15,
+      "nonEmptyLines": 15,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "webpack.config.js",
+      "language": "javascript",
+      "fileCategory": "code",
+      "totalLines": 48,
+      "nonEmptyLines": 43,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    }
+  ]
+}

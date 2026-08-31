@@ -1,0 +1,959 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 5,
+  "filesSkipped": [],
+  "analysisOutcomes": {
+    "structure": {
+      "succeeded": 5,
+      "failed": 0
+    },
+    "callGraph": {
+      "succeeded": 5,
+      "failed": 0,
+      "skipped": 0
+    }
+  },
+  "results": [
+    {
+      "path": "src/Components/CounterInput.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 74,
+      "nonEmptyLines": 66,
+      "functions": [
+        {
+          "name": "CounterInput",
+          "startLine": 15,
+          "endLine": 72,
+          "params": [
+            "{\r\n    label,\r\n    name,\r\n    value = 0,\r\n    min = 0,\r\n    max = 9999999999999,\r\n    step = 1,\r\n    onChange,\r\n}"
+          ]
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "handleDecrement",
+          "callee": "onChange",
+          "lineNumber": 27
+        },
+        {
+          "caller": "handleIncrement",
+          "callee": "onChange",
+          "lineNumber": 33
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/Components/RatePlanManager.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 678,
+      "nonEmptyLines": 638,
+      "exports": [
+        {
+          "name": "RatePlanManager",
+          "line": 77,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "handlePaginationClick",
+          "callee": "console.log",
+          "lineNumber": 99
+        },
+        {
+          "caller": "handlePaginationClick",
+          "callee": "setPagination",
+          "lineNumber": 100
+        },
+        {
+          "caller": "fetchRatePlans",
+          "callee": "formatISODate",
+          "lineNumber": 113
+        },
+        {
+          "caller": "fetchRatePlans",
+          "callee": "list",
+          "lineNumber": 115
+        },
+        {
+          "caller": "fetchRatePlans",
+          "callee": "props.handleUnauthorized",
+          "lineNumber": 117
+        },
+        {
+          "caller": "fetchRatePlans",
+          "callee": "console.warn",
+          "lineNumber": 121
+        },
+        {
+          "caller": "fetchRatePlans",
+          "callee": "console.info",
+          "lineNumber": 125
+        },
+        {
+          "caller": "fetchRatePlans",
+          "callee": "data.content.map",
+          "lineNumber": 126
+        },
+        {
+          "caller": "fetchRatePlans",
+          "callee": "setRatePlans",
+          "lineNumber": 131
+        },
+        {
+          "caller": "fetchRatePlans",
+          "callee": "setPagination",
+          "lineNumber": 132
+        },
+        {
+          "caller": "fetchRatePlans",
+          "callee": "console.error",
+          "lineNumber": 139
+        },
+        {
+          "caller": "fetchRooms",
+          "callee": "listRoom",
+          "lineNumber": 145
+        },
+        {
+          "caller": "fetchRooms",
+          "callee": "props.handleUnauthorized",
+          "lineNumber": 147
+        },
+        {
+          "caller": "fetchRooms",
+          "callee": "console.warn",
+          "lineNumber": 151
+        },
+        {
+          "caller": "fetchRooms",
+          "callee": "console.info",
+          "lineNumber": 155
+        },
+        {
+          "caller": "fetchRooms",
+          "callee": "setRooms",
+          "lineNumber": 156
+        },
+        {
+          "caller": "fetchRooms",
+          "callee": "console.error",
+          "lineNumber": 158
+        },
+        {
+          "caller": "deleletConfirmation",
+          "callee": "setEditingRatePlan",
+          "lineNumber": 187
+        },
+        {
+          "caller": "deleletConfirmation",
+          "callee": "setOpenDelModal",
+          "lineNumber": 188
+        },
+        {
+          "caller": "cancelDelExpense",
+          "callee": "setOpenDelModal",
+          "lineNumber": 192
+        },
+        {
+          "caller": "cancelDelExpense",
+          "callee": "setEditingRatePlan",
+          "lineNumber": 193
+        },
+        {
+          "caller": "confirmDelExpense",
+          "callee": "deleteObject",
+          "lineNumber": 201
+        },
+        {
+          "caller": "confirmDelExpense",
+          "callee": "props.handleUnauthorized",
+          "lineNumber": 203
+        },
+        {
+          "caller": "confirmDelExpense",
+          "callee": "console.warn",
+          "lineNumber": 207
+        },
+        {
+          "caller": "confirmDelExpense",
+          "callee": "fetchRatePlans",
+          "lineNumber": 210
+        },
+        {
+          "caller": "confirmDelExpense",
+          "callee": "console.error",
+          "lineNumber": 212
+        },
+        {
+          "caller": "confirmDelExpense",
+          "callee": "setOpenDelModal",
+          "lineNumber": 214
+        },
+        {
+          "caller": "confirmDelExpense",
+          "callee": "setEditingRatePlan",
+          "lineNumber": 215
+        },
+        {
+          "caller": "editRatePlan",
+          "callee": "setEditingRatePlan",
+          "lineNumber": 221
+        },
+        {
+          "caller": "editRatePlan",
+          "callee": "setOpenEditingModal",
+          "lineNumber": 222
+        },
+        {
+          "caller": "cancelEditing",
+          "callee": "setEditingRatePlan",
+          "lineNumber": 226
+        },
+        {
+          "caller": "cancelEditing",
+          "callee": "setOpenEditingModal",
+          "lineNumber": 227
+        },
+        {
+          "caller": "cancelEditing",
+          "callee": "fetchRatePlans",
+          "lineNumber": 228
+        },
+        {
+          "caller": "emptyTextInput",
+          "callee": "setEditingRatePlan",
+          "lineNumber": 232
+        },
+        {
+          "caller": "handleTextChange",
+          "callee": "setEditingRatePlan",
+          "lineNumber": 241
+        },
+        {
+          "caller": "handleDateChange",
+          "callee": "console.info",
+          "lineNumber": 248
+        },
+        {
+          "caller": "handleDateChange",
+          "callee": "console.info",
+          "lineNumber": 250
+        },
+        {
+          "caller": "handleDateChange",
+          "callee": "formatLocaleDate",
+          "lineNumber": 250
+        },
+        {
+          "caller": "handleDateChange",
+          "callee": "nD.setHours",
+          "lineNumber": 253
+        },
+        {
+          "caller": "handleDateChange",
+          "callee": "eD.getHours",
+          "lineNumber": 253
+        },
+        {
+          "caller": "handleDateChange",
+          "callee": "nD.setMinutes",
+          "lineNumber": 254
+        },
+        {
+          "caller": "handleDateChange",
+          "callee": "nD.setSeconds",
+          "lineNumber": 255
+        },
+        {
+          "caller": "handleDateChange",
+          "callee": "nD.setMilliseconds",
+          "lineNumber": 256
+        },
+        {
+          "caller": "handleDateChange",
+          "callee": "setEditingRatePlan",
+          "lineNumber": 257
+        },
+        {
+          "caller": "handleTimeChange",
+          "callee": "parseInt",
+          "lineNumber": 265
+        },
+        {
+          "caller": "handleTimeChange",
+          "callee": "isNaN",
+          "lineNumber": 266
+        },
+        {
+          "caller": "handleTimeChange",
+          "callee": "date.setHours",
+          "lineNumber": 274
+        },
+        {
+          "caller": "handleTimeChange",
+          "callee": "date.setMinutes",
+          "lineNumber": 275
+        },
+        {
+          "caller": "handleTimeChange",
+          "callee": "date.setSeconds",
+          "lineNumber": 276
+        },
+        {
+          "caller": "handleTimeChange",
+          "callee": "date.setMilliseconds",
+          "lineNumber": 277
+        },
+        {
+          "caller": "handleTimeChange",
+          "callee": "setEditingRatePlan",
+          "lineNumber": 278
+        },
+        {
+          "caller": "handleMealChange",
+          "callee": "includedMeals.includes",
+          "lineNumber": 286
+        },
+        {
+          "caller": "handleMealChange",
+          "callee": "includedMeals.push",
+          "lineNumber": 287
+        },
+        {
+          "caller": "handleMealChange",
+          "callee": "includedMeals.filter",
+          "lineNumber": 289
+        },
+        {
+          "caller": "handleMealChange",
+          "callee": "setEditingRatePlan",
+          "lineNumber": 291
+        },
+        {
+          "caller": "handleSelectChange",
+          "callee": "rooms.find",
+          "lineNumber": 299
+        },
+        {
+          "caller": "handleSelectChange",
+          "callee": "setEditingRatePlan",
+          "lineNumber": 300
+        },
+        {
+          "caller": "changeQuantity",
+          "callee": "setEditingRatePlan",
+          "lineNumber": 307
+        },
+        {
+          "caller": "processSave",
+          "callee": "console.info",
+          "lineNumber": 314
+        },
+        {
+          "caller": "processSave",
+          "callee": "create",
+          "lineNumber": 318
+        },
+        {
+          "caller": "processSave",
+          "callee": "save",
+          "lineNumber": 321
+        },
+        {
+          "caller": "processSave",
+          "callee": "props.handleUnauthorized",
+          "lineNumber": 324
+        },
+        {
+          "caller": "processSave",
+          "callee": "console.warn",
+          "lineNumber": 328
+        },
+        {
+          "caller": "processSave",
+          "callee": "setOpenEditingModal",
+          "lineNumber": 332
+        },
+        {
+          "caller": "processSave",
+          "callee": "fetchRatePlans",
+          "lineNumber": 333
+        },
+        {
+          "caller": "handleSave",
+          "callee": "processSave",
+          "lineNumber": 337
+        }
+      ],
+      "metrics": {
+        "importCount": 6,
+        "exportCount": 1,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/Components/RoomManager.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 346,
+      "nonEmptyLines": 326,
+      "functions": [
+        {
+          "name": "RoomManager",
+          "startLine": 25,
+          "endLine": 346,
+          "params": [
+            "props"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "RoomManager",
+          "line": 25,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "RoomManager",
+          "callee": "useState",
+          "lineNumber": 26
+        },
+        {
+          "caller": "RoomManager",
+          "callee": "useState",
+          "lineNumber": 27
+        },
+        {
+          "caller": "RoomManager",
+          "callee": "useState",
+          "lineNumber": 28
+        },
+        {
+          "caller": "RoomManager",
+          "callee": "useState",
+          "lineNumber": 35
+        },
+        {
+          "caller": "RoomManager",
+          "callee": "useState",
+          "lineNumber": 36
+        },
+        {
+          "caller": "RoomManager",
+          "callee": "useState",
+          "lineNumber": 37
+        },
+        {
+          "caller": "RoomManager",
+          "callee": "useState",
+          "lineNumber": 38
+        },
+        {
+          "caller": "RoomManager",
+          "callee": "useState",
+          "lineNumber": 39
+        },
+        {
+          "caller": "RoomManager",
+          "callee": "(rooms || []).filter",
+          "lineNumber": 41
+        },
+        {
+          "caller": "RoomManager",
+          "callee": "(room.name || \"\").toLowerCase().includes",
+          "lineNumber": 42
+        },
+        {
+          "caller": "RoomManager",
+          "callee": "(room.name || \"\").toLowerCase",
+          "lineNumber": 42
+        },
+        {
+          "caller": "RoomManager",
+          "callee": "searchTerm.toLowerCase",
+          "lineNumber": 42
+        },
+        {
+          "caller": "RoomManager",
+          "callee": "(room.internalName || \"\").toLowerCase().includes",
+          "lineNumber": 43
+        },
+        {
+          "caller": "RoomManager",
+          "callee": "(room.internalName || \"\").toLowerCase",
+          "lineNumber": 43
+        },
+        {
+          "caller": "RoomManager",
+          "callee": "searchTerm.toLowerCase",
+          "lineNumber": 43
+        },
+        {
+          "caller": "fetchRooms",
+          "callee": "setLoading",
+          "lineNumber": 47
+        },
+        {
+          "caller": "fetchRooms",
+          "callee": "listRoom",
+          "lineNumber": 49
+        },
+        {
+          "caller": "fetchRooms",
+          "callee": "setRooms",
+          "lineNumber": 51
+        },
+        {
+          "caller": "fetchRooms",
+          "callee": "setPagination",
+          "lineNumber": 52
+        },
+        {
+          "caller": "fetchRooms",
+          "callee": "console.error",
+          "lineNumber": 60
+        },
+        {
+          "caller": "fetchRooms",
+          "callee": "setLoading",
+          "lineNumber": 62
+        },
+        {
+          "caller": "RoomManager",
+          "callee": "useEffect",
+          "lineNumber": 66
+        },
+        {
+          "caller": "RoomManager",
+          "callee": "fetchRooms",
+          "lineNumber": 67
+        },
+        {
+          "caller": "RoomManager",
+          "callee": "props.activeMenu",
+          "lineNumber": 68
+        },
+        {
+          "caller": "handleAddClick",
+          "callee": "setEditingRoom",
+          "lineNumber": 73
+        },
+        {
+          "caller": "handleAddClick",
+          "callee": "setOpenModal",
+          "lineNumber": 74
+        },
+        {
+          "caller": "handleEditClick",
+          "callee": "setEditingRoom",
+          "lineNumber": 78
+        },
+        {
+          "caller": "handleEditClick",
+          "callee": "setOpenModal",
+          "lineNumber": 79
+        },
+        {
+          "caller": "handleDeleteClick",
+          "callee": "setDeletingRoom",
+          "lineNumber": 83
+        },
+        {
+          "caller": "handleDeleteClick",
+          "callee": "setOpenDeleteModal",
+          "lineNumber": 84
+        },
+        {
+          "caller": "handleSaveRoom",
+          "callee": "updateRoom",
+          "lineNumber": 90
+        },
+        {
+          "caller": "handleSaveRoom",
+          "callee": "createRoom",
+          "lineNumber": 92
+        },
+        {
+          "caller": "handleSaveRoom",
+          "callee": "setOpenModal",
+          "lineNumber": 94
+        },
+        {
+          "caller": "handleSaveRoom",
+          "callee": "fetchRooms",
+          "lineNumber": 95
+        },
+        {
+          "caller": "handleSaveRoom",
+          "callee": "console.error",
+          "lineNumber": 97
+        },
+        {
+          "caller": "handleSaveRoom",
+          "callee": "alert",
+          "lineNumber": 98
+        },
+        {
+          "caller": "confirmDelete",
+          "callee": "deleteRoom",
+          "lineNumber": 105
+        },
+        {
+          "caller": "confirmDelete",
+          "callee": "setOpenDeleteModal",
+          "lineNumber": 106
+        },
+        {
+          "caller": "confirmDelete",
+          "callee": "fetchRooms",
+          "lineNumber": 107
+        },
+        {
+          "caller": "confirmDelete",
+          "callee": "console.error",
+          "lineNumber": 109
+        },
+        {
+          "caller": "confirmDelete",
+          "callee": "alert",
+          "lineNumber": 110
+        },
+        {
+          "caller": "RoomManager",
+          "callee": "setSearchTerm",
+          "lineNumber": 129
+        },
+        {
+          "caller": "RoomManager",
+          "callee": "filteredRooms.map",
+          "lineNumber": 144
+        },
+        {
+          "caller": "RoomManager",
+          "callee": "handleEditClick",
+          "lineNumber": 152
+        },
+        {
+          "caller": "RoomManager",
+          "callee": "handleDeleteClick",
+          "lineNumber": 155
+        },
+        {
+          "caller": "RoomManager",
+          "callee": "filteredRooms.map",
+          "lineNumber": 202
+        },
+        {
+          "caller": "RoomManager",
+          "callee": "handleEditClick",
+          "lineNumber": 230
+        },
+        {
+          "caller": "RoomManager",
+          "callee": "handleDeleteClick",
+          "lineNumber": 233
+        },
+        {
+          "caller": "RoomManager",
+          "callee": "setOpenModal",
+          "lineNumber": 246
+        },
+        {
+          "caller": "RoomManager",
+          "callee": "setEditingRoom",
+          "lineNumber": 259
+        },
+        {
+          "caller": "RoomManager",
+          "callee": "setEditingRoom",
+          "lineNumber": 270
+        },
+        {
+          "caller": "RoomManager",
+          "callee": "setEditingRoom",
+          "lineNumber": 285
+        },
+        {
+          "caller": "RoomManager",
+          "callee": "setEditingRoom",
+          "lineNumber": 300
+        },
+        {
+          "caller": "RoomManager",
+          "callee": "parseInt",
+          "lineNumber": 300
+        },
+        {
+          "caller": "RoomManager",
+          "callee": "setEditingRoom",
+          "lineNumber": 312
+        },
+        {
+          "caller": "RoomManager",
+          "callee": "parseInt",
+          "lineNumber": 312
+        },
+        {
+          "caller": "RoomManager",
+          "callee": "setOpenModal",
+          "lineNumber": 320
+        },
+        {
+          "caller": "RoomManager",
+          "callee": "setOpenDeleteModal",
+          "lineNumber": 325
+        },
+        {
+          "caller": "RoomManager",
+          "callee": "setOpenDeleteModal",
+          "lineNumber": 337
+        }
+      ],
+      "metrics": {
+        "importCount": 3,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/db/rate_plan.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 32,
+      "nonEmptyLines": 26,
+      "functions": [
+        {
+          "name": "list",
+          "startLine": 5,
+          "endLine": 8,
+          "params": [
+            "page",
+            "size"
+          ]
+        },
+        {
+          "name": "get",
+          "startLine": 10,
+          "endLine": 13,
+          "params": [
+            "ratePlanId"
+          ]
+        },
+        {
+          "name": "save",
+          "startLine": 15,
+          "endLine": 20,
+          "params": [
+            "ratePlan"
+          ]
+        },
+        {
+          "name": "create",
+          "startLine": 22,
+          "endLine": 27,
+          "params": [
+            "ratePlan"
+          ]
+        },
+        {
+          "name": "deleteObject",
+          "startLine": 29,
+          "endLine": 32,
+          "params": [
+            "ratePlanId"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "list",
+          "line": 5,
+          "isDefault": false
+        },
+        {
+          "name": "get",
+          "line": 10,
+          "isDefault": false
+        },
+        {
+          "name": "save",
+          "line": 15,
+          "isDefault": false
+        },
+        {
+          "name": "create",
+          "line": 22,
+          "isDefault": false
+        },
+        {
+          "name": "deleteObject",
+          "line": 29,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "list",
+          "callee": "console.info",
+          "lineNumber": 6
+        },
+        {
+          "caller": "list",
+          "callee": "ratePlanApi.get",
+          "lineNumber": 7
+        },
+        {
+          "caller": "get",
+          "callee": "console.info",
+          "lineNumber": 11
+        },
+        {
+          "caller": "get",
+          "callee": "ratePlanApi.get",
+          "lineNumber": 12
+        },
+        {
+          "caller": "save",
+          "callee": "console.info",
+          "lineNumber": 16
+        },
+        {
+          "caller": "save",
+          "callee": "ratePlanApi.post",
+          "lineNumber": 17
+        },
+        {
+          "caller": "create",
+          "callee": "console.info",
+          "lineNumber": 23
+        },
+        {
+          "caller": "create",
+          "callee": "ratePlanApi.put",
+          "lineNumber": 24
+        },
+        {
+          "caller": "deleteObject",
+          "callee": "console.info",
+          "lineNumber": 30
+        },
+        {
+          "caller": "deleteObject",
+          "callee": "ratePlanApi.delete",
+          "lineNumber": 31
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 5,
+        "functionCount": 5,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/db/room.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 26,
+      "nonEmptyLines": 21,
+      "functions": [
+        {
+          "name": "listRoom",
+          "startLine": 12,
+          "endLine": 14,
+          "params": [
+            "page",
+            "size"
+          ]
+        },
+        {
+          "name": "createRoom",
+          "startLine": 16,
+          "endLine": 18,
+          "params": [
+            "room"
+          ]
+        },
+        {
+          "name": "updateRoom",
+          "startLine": 20,
+          "endLine": 22,
+          "params": [
+            "room"
+          ]
+        },
+        {
+          "name": "deleteRoom",
+          "startLine": 24,
+          "endLine": 26,
+          "params": [
+            "id"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "listRoom",
+          "line": 12,
+          "isDefault": false
+        },
+        {
+          "name": "createRoom",
+          "line": 16,
+          "isDefault": false
+        },
+        {
+          "name": "updateRoom",
+          "line": 20,
+          "isDefault": false
+        },
+        {
+          "name": "deleteRoom",
+          "line": 24,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "listRoom",
+          "callee": "roomApi.get",
+          "lineNumber": 13
+        },
+        {
+          "caller": "createRoom",
+          "callee": "roomApi.put",
+          "lineNumber": 17
+        },
+        {
+          "caller": "updateRoom",
+          "callee": "roomApi.post",
+          "lineNumber": 21
+        },
+        {
+          "caller": "deleteRoom",
+          "callee": "roomApi.delete",
+          "lineNumber": 25
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 4,
+        "functionCount": 4,
+        "classCount": 0
+      }
+    }
+  ]
+}

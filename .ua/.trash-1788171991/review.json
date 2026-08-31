@@ -1,0 +1,41 @@
+{
+  "issues": [],
+  "warnings": [
+    "Node 'document:PLAN.md' has no edges (orphan)",
+    "Node 'document:Subscribe.txt' has no edges (orphan)",
+    "Node 'document:.planning/codebase/INTEGRATIONS.md' has no edges (orphan)",
+    "Node 'document:.planning/codebase/STACK.md' has no edges (orphan)",
+    "Node 'config:public/robots.txt' has no edges (orphan)",
+    "Node 'config:.bg-shell/manifest.json' has no edges (orphan)",
+    "Node 'document:.github/copilot-instructions.md' has no edges (orphan)",
+    "Node 'document:.planning/phases/01-foundation-refactoring/01-RESEARCH.md' has no edges (orphan)",
+    "Node 'file:.ua/.understandignore' has no edges (orphan)",
+    "Node 'file:public/_redirects' has no edges (orphan)"
+  ],
+  "stats": {
+    "totalNodes": 270,
+    "totalEdges": 767,
+    "totalLayers": 6,
+    "tourSteps": 14,
+    "nodeTypes": {
+      "file": 63,
+      "function": 167,
+      "service": 1,
+      "config": 7,
+      "pipeline": 1,
+      "document": 31
+    },
+    "edgeTypes": {
+      "imports": 176,
+      "contains": 190,
+      "exports": 165,
+      "calls": 151,
+      "configures": 12,
+      "deploys": 1,
+      "triggers": 1,
+      "depends_on": 1,
+      "documents": 62,
+      "related": 8
+    }
+  }
+}

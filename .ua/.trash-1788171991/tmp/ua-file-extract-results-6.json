@@ -1,0 +1,874 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 4,
+  "filesSkipped": [],
+  "analysisOutcomes": {
+    "structure": {
+      "succeeded": 4,
+      "failed": 0
+    },
+    "callGraph": {
+      "succeeded": 4,
+      "failed": 0,
+      "skipped": 0
+    }
+  },
+  "results": [
+    {
+      "path": "src/Components/ReservationManager.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 235,
+      "nonEmptyLines": 217,
+      "functions": [
+        {
+          "name": "ReservationManager",
+          "startLine": 40,
+          "endLine": 235,
+          "params": [
+            "props"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "ReservationManager",
+          "line": 40,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "ReservationManager",
+          "callee": "useState",
+          "lineNumber": 41
+        },
+        {
+          "caller": "ReservationManager",
+          "callee": "useState",
+          "lineNumber": 43
+        },
+        {
+          "caller": "ReservationManager",
+          "callee": "useState",
+          "lineNumber": 44
+        },
+        {
+          "caller": "ReservationManager",
+          "callee": "useState",
+          "lineNumber": 46
+        },
+        {
+          "caller": "ReservationManager",
+          "callee": "Number",
+          "lineNumber": 48
+        },
+        {
+          "caller": "ReservationManager",
+          "callee": "useState",
+          "lineNumber": 53
+        },
+        {
+          "caller": "filterDay",
+          "callee": "addDays",
+          "lineNumber": 56
+        },
+        {
+          "caller": "filterDay",
+          "callee": "console.info",
+          "lineNumber": 57
+        },
+        {
+          "caller": "filterDay",
+          "callee": "newDD.toISOString",
+          "lineNumber": 57
+        },
+        {
+          "caller": "filterDay",
+          "callee": "setFromDate",
+          "lineNumber": 58
+        },
+        {
+          "caller": "filterDay",
+          "callee": "setDeltaDays",
+          "lineNumber": 59
+        },
+        {
+          "caller": "filterDay",
+          "callee": "fetchReservations",
+          "lineNumber": 60
+        },
+        {
+          "caller": "handlePaginationClick",
+          "callee": "console.log",
+          "lineNumber": 64
+        },
+        {
+          "caller": "handlePaginationClick",
+          "callee": "fetchReservations",
+          "lineNumber": 67
+        },
+        {
+          "caller": "fetchReservations",
+          "callee": "addDays",
+          "lineNumber": 71
+        },
+        {
+          "caller": "fetchReservations",
+          "callee": "formatISODate",
+          "lineNumber": 72
+        },
+        {
+          "caller": "fetchReservations",
+          "callee": "formatISODate",
+          "lineNumber": 73
+        },
+        {
+          "caller": "fetchReservations",
+          "callee": "console.info",
+          "lineNumber": 74
+        },
+        {
+          "caller": "fetchReservations",
+          "callee": "listLatestReservations",
+          "lineNumber": 76
+        },
+        {
+          "caller": "fetchReservations",
+          "callee": "props.handleUnauthorized",
+          "lineNumber": 78
+        },
+        {
+          "caller": "fetchReservations",
+          "callee": "setReservations",
+          "lineNumber": 83
+        },
+        {
+          "caller": "fetchReservations",
+          "callee": "setPagination",
+          "lineNumber": 90
+        },
+        {
+          "caller": "fetchReservations",
+          "callee": "setReservations",
+          "lineNumber": 92
+        },
+        {
+          "caller": "ReservationManager",
+          "callee": "useEffect",
+          "lineNumber": 96
+        },
+        {
+          "caller": "ReservationManager",
+          "callee": "fetchReservations",
+          "lineNumber": 97
+        },
+        {
+          "caller": "ReservationManager",
+          "callee": "Number",
+          "lineNumber": 97
+        },
+        {
+          "caller": "ReservationManager",
+          "callee": "props.activeMenu",
+          "lineNumber": 98
+        },
+        {
+          "caller": "ReservationManager",
+          "callee": "new Date().getDate",
+          "lineNumber": 116
+        },
+        {
+          "caller": "handleUpdateClick",
+          "callee": "setIsUpdating",
+          "lineNumber": 128
+        },
+        {
+          "caller": "handleUpdateClick",
+          "callee": "formatISODate",
+          "lineNumber": 130
+        },
+        {
+          "caller": "handleUpdateClick",
+          "callee": "formatISODate",
+          "lineNumber": 131
+        },
+        {
+          "caller": "handleUpdateClick",
+          "callee": "addDays",
+          "lineNumber": 131
+        },
+        {
+          "caller": "handleUpdateClick",
+          "callee": "collectRes",
+          "lineNumber": 132
+        },
+        {
+          "caller": "handleUpdateClick",
+          "callee": "setTimeout",
+          "lineNumber": 133
+        },
+        {
+          "caller": "handleUpdateClick",
+          "callee": "fetchReservations",
+          "lineNumber": 134
+        },
+        {
+          "caller": "handleUpdateClick",
+          "callee": "console.error",
+          "lineNumber": 138
+        },
+        {
+          "caller": "handleUpdateClick",
+          "callee": "setIsUpdating",
+          "lineNumber": 141
+        },
+        {
+          "caller": "ReservationManager",
+          "callee": "handleUpdateClick",
+          "lineNumber": 150
+        },
+        {
+          "caller": "ReservationManager",
+          "callee": "filterOpts.map",
+          "lineNumber": 157
+        },
+        {
+          "caller": "ReservationManager",
+          "callee": "filterDay",
+          "lineNumber": 161
+        },
+        {
+          "caller": "ReservationManager",
+          "callee": "optionStyle",
+          "lineNumber": 163
+        },
+        {
+          "caller": "ReservationManager",
+          "callee": "reservations?.map",
+          "lineNumber": 180
+        },
+        {
+          "caller": "ReservationManager",
+          "callee": "internalRooms(res.rooms).join",
+          "lineNumber": 204
+        },
+        {
+          "caller": "ReservationManager",
+          "callee": "internalRooms",
+          "lineNumber": 204
+        },
+        {
+          "caller": "ReservationManager",
+          "callee": "handlePaginationClick",
+          "lineNumber": 216
+        },
+        {
+          "caller": "ReservationManager",
+          "callee": "handlePaginationClick",
+          "lineNumber": 219
+        },
+        {
+          "caller": "ReservationManager",
+          "callee": "pageClass",
+          "lineNumber": 219
+        },
+        {
+          "caller": "ReservationManager",
+          "callee": "pageClass",
+          "lineNumber": 222
+        },
+        {
+          "caller": "ReservationManager",
+          "callee": "handlePaginationClick",
+          "lineNumber": 225
+        },
+        {
+          "caller": "ReservationManager",
+          "callee": "pageClass",
+          "lineNumber": 225
+        },
+        {
+          "caller": "ReservationManager",
+          "callee": "handlePaginationClick",
+          "lineNumber": 228
+        }
+      ],
+      "metrics": {
+        "importCount": 6,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/Components/ReservationMap.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 232,
+      "nonEmptyLines": 218,
+      "functions": [
+        {
+          "name": "ReservationMap",
+          "startLine": 18,
+          "endLine": 232,
+          "params": [
+            "props"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "ReservationMap",
+          "line": 18,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "ReservationMap",
+          "callee": "useState",
+          "lineNumber": 19
+        },
+        {
+          "caller": "ReservationMap",
+          "callee": "useState",
+          "lineNumber": 20
+        },
+        {
+          "caller": "ReservationMap",
+          "callee": "useMemo",
+          "lineNumber": 21
+        },
+        {
+          "caller": "ReservationMap",
+          "callee": "rooms.map",
+          "lineNumber": 21
+        },
+        {
+          "caller": "ReservationMap",
+          "callee": "useState",
+          "lineNumber": 24
+        },
+        {
+          "caller": "ReservationMap",
+          "callee": "addDays",
+          "lineNumber": 24
+        },
+        {
+          "caller": "ReservationMap",
+          "callee": "useState",
+          "lineNumber": 25
+        },
+        {
+          "caller": "ReservationMap",
+          "callee": "useState",
+          "lineNumber": 26
+        },
+        {
+          "caller": "ReservationMap",
+          "callee": "useState",
+          "lineNumber": 32
+        },
+        {
+          "caller": "ReservationMap",
+          "callee": "useMemo",
+          "lineNumber": 38
+        },
+        {
+          "caller": "ReservationMap",
+          "callee": "cols.push",
+          "lineNumber": 41
+        },
+        {
+          "caller": "ReservationMap",
+          "callee": "addDays",
+          "lineNumber": 41
+        },
+        {
+          "caller": "ReservationMap",
+          "callee": "useMemo",
+          "lineNumber": 47
+        },
+        {
+          "caller": "ReservationMap",
+          "callee": "roomNames.forEach",
+          "lineNumber": 50
+        },
+        {
+          "caller": "ReservationMap",
+          "callee": "dateColumns.forEach",
+          "lineNumber": 52
+        },
+        {
+          "caller": "ReservationMap",
+          "callee": "formatISODate",
+          "lineNumber": 52
+        },
+        {
+          "caller": "ReservationMap",
+          "callee": "reservations?.forEach",
+          "lineNumber": 54
+        },
+        {
+          "caller": "ReservationMap",
+          "callee": "res.rooms.forEach",
+          "lineNumber": 56
+        },
+        {
+          "caller": "ReservationMap",
+          "callee": "roomNames.includes",
+          "lineNumber": 58
+        },
+        {
+          "caller": "ReservationMap",
+          "callee": "d.setDate",
+          "lineNumber": 61
+        },
+        {
+          "caller": "ReservationMap",
+          "callee": "d.getDate",
+          "lineNumber": 61
+        },
+        {
+          "caller": "ReservationMap",
+          "callee": "formatISODate",
+          "lineNumber": 62
+        },
+        {
+          "caller": "ReservationMap",
+          "callee": "map[roomName][key].push",
+          "lineNumber": 64
+        },
+        {
+          "caller": "filterDay",
+          "callee": "addDays",
+          "lineNumber": 73
+        },
+        {
+          "caller": "filterDay",
+          "callee": "setFromDate",
+          "lineNumber": 74
+        },
+        {
+          "caller": "filterDay",
+          "callee": "setDeltaDays",
+          "lineNumber": 75
+        },
+        {
+          "caller": "filterDay",
+          "callee": "fetchReservations",
+          "lineNumber": 76
+        },
+        {
+          "caller": "fetchRooms",
+          "callee": "listRoom",
+          "lineNumber": 81
+        },
+        {
+          "caller": "fetchRooms",
+          "callee": "setRooms",
+          "lineNumber": 83
+        },
+        {
+          "caller": "fetchRooms",
+          "callee": "console.error",
+          "lineNumber": 86
+        },
+        {
+          "caller": "fetchReservations",
+          "callee": "formatISODate",
+          "lineNumber": 91
+        },
+        {
+          "caller": "fetchReservations",
+          "callee": "listStayingAndComingReservations",
+          "lineNumber": 92
+        },
+        {
+          "caller": "fetchReservations",
+          "callee": "props.handleUnauthorized",
+          "lineNumber": 94
+        },
+        {
+          "caller": "fetchReservations",
+          "callee": "setReservations",
+          "lineNumber": 99
+        },
+        {
+          "caller": "fetchReservations",
+          "callee": "setPagination",
+          "lineNumber": 106
+        },
+        {
+          "caller": "fetchReservations",
+          "callee": "setReservations",
+          "lineNumber": 108
+        },
+        {
+          "caller": "ReservationMap",
+          "callee": "useEffect",
+          "lineNumber": 112
+        },
+        {
+          "caller": "ReservationMap",
+          "callee": "fetchRooms",
+          "lineNumber": 113
+        },
+        {
+          "caller": "ReservationMap",
+          "callee": "fetchReservations",
+          "lineNumber": 114
+        },
+        {
+          "caller": "ReservationMap",
+          "callee": "Number",
+          "lineNumber": 114
+        },
+        {
+          "caller": "ReservationMap",
+          "callee": "props.activeMenu",
+          "lineNumber": 115
+        },
+        {
+          "caller": "handleUpdateClick",
+          "callee": "setIsUpdating",
+          "lineNumber": 120
+        },
+        {
+          "caller": "handleUpdateClick",
+          "callee": "formatISODate",
+          "lineNumber": 122
+        },
+        {
+          "caller": "handleUpdateClick",
+          "callee": "formatISODate",
+          "lineNumber": 123
+        },
+        {
+          "caller": "handleUpdateClick",
+          "callee": "addDays",
+          "lineNumber": 123
+        },
+        {
+          "caller": "handleUpdateClick",
+          "callee": "collectRes",
+          "lineNumber": 124
+        },
+        {
+          "caller": "handleUpdateClick",
+          "callee": "setTimeout",
+          "lineNumber": 125
+        },
+        {
+          "caller": "handleUpdateClick",
+          "callee": "fetchReservations",
+          "lineNumber": 126
+        },
+        {
+          "caller": "handleUpdateClick",
+          "callee": "addDays",
+          "lineNumber": 126
+        },
+        {
+          "caller": "handleUpdateClick",
+          "callee": "console.error",
+          "lineNumber": 130
+        },
+        {
+          "caller": "handleUpdateClick",
+          "callee": "setIsUpdating",
+          "lineNumber": 133
+        },
+        {
+          "caller": "handlePrevDates",
+          "callee": "addDays",
+          "lineNumber": 139
+        },
+        {
+          "caller": "handlePrevDates",
+          "callee": "setFromDate",
+          "lineNumber": 140
+        },
+        {
+          "caller": "handlePrevDates",
+          "callee": "fetchReservations",
+          "lineNumber": 141
+        },
+        {
+          "caller": "handleNextDates",
+          "callee": "addDays",
+          "lineNumber": 146
+        },
+        {
+          "caller": "handleNextDates",
+          "callee": "setFromDate",
+          "lineNumber": 147
+        },
+        {
+          "caller": "handleNextDates",
+          "callee": "fetchReservations",
+          "lineNumber": 148
+        },
+        {
+          "caller": "ReservationMap",
+          "callee": "[\r\n          { days: 0, label: 'Today' },\r\n          { days: -1, label: 'Yesterday' },\r\n          { days: -5, label: '5 days' },\r\n          { days: -1 * new Date().getDate(), label: '1st' }\r\n        ].map",
+          "lineNumber": 166
+        },
+        {
+          "caller": "ReservationMap",
+          "callee": "new Date().getDate",
+          "lineNumber": 170
+        },
+        {
+          "caller": "ReservationMap",
+          "callee": "filterDay",
+          "lineNumber": 176
+        },
+        {
+          "caller": "ReservationMap",
+          "callee": "optionStyle",
+          "lineNumber": 177
+        },
+        {
+          "caller": "ReservationMap",
+          "callee": "dateColumns.map",
+          "lineNumber": 191
+        },
+        {
+          "caller": "ReservationMap",
+          "callee": "date.toISOString",
+          "lineNumber": 192
+        },
+        {
+          "caller": "ReservationMap",
+          "callee": "date.toLocaleDateString",
+          "lineNumber": 193
+        },
+        {
+          "caller": "ReservationMap",
+          "callee": "roomNames.map",
+          "lineNumber": 199
+        },
+        {
+          "caller": "ReservationMap",
+          "callee": "dateColumns.map",
+          "lineNumber": 202
+        },
+        {
+          "caller": "ReservationMap",
+          "callee": "formatISODate",
+          "lineNumber": 203
+        },
+        {
+          "caller": "ReservationMap",
+          "callee": "resList.map",
+          "lineNumber": 208
+        },
+        {
+          "caller": "ReservationMap",
+          "callee": "formatISODate",
+          "lineNumber": 209
+        },
+        {
+          "caller": "ReservationMap",
+          "callee": "formatISODate",
+          "lineNumber": 209
+        }
+      ],
+      "metrics": {
+        "importCount": 7,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/db/reservation.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 39,
+      "nonEmptyLines": 34,
+      "functions": [
+        {
+          "name": "updateReservation",
+          "startLine": 4,
+          "endLine": 11,
+          "params": [
+            "reservation"
+          ]
+        },
+        {
+          "name": "listLatestReservations",
+          "startLine": 13,
+          "endLine": 19,
+          "params": [
+            "fromDate",
+            "toDate",
+            "pageNumber",
+            "pageSize"
+          ]
+        },
+        {
+          "name": "listStayingAndComingReservations",
+          "startLine": 21,
+          "endLine": 27,
+          "params": [
+            "fromDate",
+            "pageNumber",
+            "pageSize"
+          ]
+        },
+        {
+          "name": "getReservation",
+          "startLine": 29,
+          "endLine": 34,
+          "params": [
+            "reservationId"
+          ]
+        },
+        {
+          "name": "syncReservationFromMailbox",
+          "startLine": 36,
+          "endLine": 39,
+          "params": [
+            "code"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "updateReservation",
+          "line": 4,
+          "isDefault": false
+        },
+        {
+          "name": "listLatestReservations",
+          "line": 13,
+          "isDefault": false
+        },
+        {
+          "name": "listStayingAndComingReservations",
+          "line": 21,
+          "isDefault": false
+        },
+        {
+          "name": "getReservation",
+          "line": 29,
+          "isDefault": false
+        },
+        {
+          "name": "syncReservationFromMailbox",
+          "line": 36,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "updateReservation",
+          "callee": "console.info",
+          "lineNumber": 5
+        },
+        {
+          "caller": "updateReservation",
+          "callee": "reservationApi.post",
+          "lineNumber": 6
+        },
+        {
+          "caller": "listLatestReservations",
+          "callee": "console.info",
+          "lineNumber": 14
+        },
+        {
+          "caller": "listLatestReservations",
+          "callee": "reservationApi.get",
+          "lineNumber": 15
+        },
+        {
+          "caller": "listStayingAndComingReservations",
+          "callee": "console.info",
+          "lineNumber": 22
+        },
+        {
+          "caller": "listStayingAndComingReservations",
+          "callee": "reservationApi.get",
+          "lineNumber": 23
+        },
+        {
+          "caller": "getReservation",
+          "callee": "console.info",
+          "lineNumber": 30
+        },
+        {
+          "caller": "getReservation",
+          "callee": "reservationApi.get",
+          "lineNumber": 31
+        },
+        {
+          "caller": "syncReservationFromMailbox",
+          "callee": "console.info",
+          "lineNumber": 37
+        },
+        {
+          "caller": "syncReservationFromMailbox",
+          "callee": "reservationApi.put",
+          "lineNumber": 38
+        },
+        {
+          "caller": "syncReservationFromMailbox",
+          "callee": "JSON.stringify",
+          "lineNumber": 38
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 5,
+        "functionCount": 5,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/db/reservation_extractor.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 15,
+      "nonEmptyLines": 14,
+      "functions": [
+        {
+          "name": "collectRes",
+          "startLine": 3,
+          "endLine": 15,
+          "params": [
+            "fromDate",
+            "toDate"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "collectRes",
+          "line": 3,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "collectRes",
+          "callee": "console.info",
+          "lineNumber": 4
+        },
+        {
+          "caller": "collectRes",
+          "callee": "reservationExtractApi.get",
+          "lineNumber": 5
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    }
+  ]
+}

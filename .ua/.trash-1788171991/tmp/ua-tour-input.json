@@ -1,0 +1,3309 @@
+{
+  "nodes": [
+    {
+      "id": "file:src/Components/ExpenseManager.tsx",
+      "type": "file",
+      "name": "ExpenseManager.tsx",
+      "filePath": "src/Components/ExpenseManager.tsx",
+      "summary": "React component providing the full expense-management UI: paginated expense listing, creation/editing of expense line items, AI-assisted expense generation from receipt text, and expenser assignment workflows.",
+      "tags": [
+        "component",
+        "expense-tracking",
+        "api-handler",
+        "crud",
+        "react"
+      ],
+      "complexity": "complex",
+      "languageNotes": "Large single-component file that keeps all event handlers as inline closures rather than extracted top-level functions."
+    },
+    {
+      "id": "file:src/Components/Settings.tsx",
+      "type": "file",
+      "name": "Settings.tsx",
+      "filePath": "src/Components/Settings.tsx",
+      "summary": "Settings screen component for application configuration: inventory auto-update toggles, monthly status sync, reservation mailbox sync, and Telegram bot registration.",
+      "tags": [
+        "component",
+        "configuration",
+        "settings",
+        "integration"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/Components/SupplierManager.tsx",
+      "type": "file",
+      "name": "SupplierManager.tsx",
+      "filePath": "src/Components/SupplierManager.tsx",
+      "summary": "React component managing supplier invoices: filtering by status, AI-assisted invoice generation from text, line-item editing, and invoice lifecycle actions (confirm, mark taken-place, mark paid, reject).",
+      "tags": [
+        "component",
+        "supplier",
+        "invoicing",
+        "crud",
+        "react"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/db/apis.ts",
+      "type": "file",
+      "name": "apis.ts",
+      "filePath": "src/db/apis.ts",
+      "summary": "Central Axios client factory that constructs and exports every backend API instance used throughout the app (expenses, invoices, orders, reservations, suppliers, tours, configs, and more).",
+      "tags": [
+        "api-client",
+        "factory",
+        "http",
+        "entry-point"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "A single createApiInstance factory produces consistently configured Axios instances (baseURL, withCredentials) reused across ~24 exported API clients."
+    },
+    {
+      "id": "file:src/db/bot.ts",
+      "type": "file",
+      "name": "bot.ts",
+      "filePath": "src/db/bot.ts",
+      "summary": "Data-access module for registering a Telegram bot (id and token) with the backend.",
+      "tags": [
+        "api-handler",
+        "integration",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/db/classification.ts",
+      "type": "file",
+      "name": "classification.ts",
+      "filePath": "src/db/classification.ts",
+      "summary": "Data-access module that classifies expense/invoice item names into predefined service categories via a backend classification API.",
+      "tags": [
+        "api-handler",
+        "classification",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/db/configs.ts",
+      "type": "file",
+      "name": "configs.ts",
+      "filePath": "src/db/configs.ts",
+      "summary": "Data-access module managing application configuration: cached app configs with a localStorage-backed, retry-based fetch; config CRUD; auto-update-availability toggling; and Firebase config export.",
+      "tags": [
+        "config",
+        "api-handler",
+        "caching",
+        "utility"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/db/expense.ts",
+      "type": "file",
+      "name": "expense.ts",
+      "filePath": "src/db/expense.ts",
+      "summary": "Data-access module for expense records: listing (by date, by expenser), fetching, saving, assigning, deleting, and AI-assisted generation of expenses from free text.",
+      "tags": [
+        "api-handler",
+        "expense-tracking",
+        "crud"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/db/profit.ts",
+      "type": "file",
+      "name": "profit.ts",
+      "filePath": "src/db/profit.ts",
+      "summary": "Data-access module for fetching monthly profit report data by date range and report key.",
+      "tags": [
+        "api-handler",
+        "reporting",
+        "profit"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/db/status.ts",
+      "type": "file",
+      "name": "status.ts",
+      "filePath": "src/db/status.ts",
+      "summary": "Data-access module that triggers a backend sync of status data (e.g. inventory/reservation) for a given month partition.",
+      "tags": [
+        "api-handler",
+        "synchronization",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/db/supplier.ts",
+      "type": "file",
+      "name": "supplier.ts",
+      "filePath": "src/db/supplier.ts",
+      "summary": "Data-access module for supplier invoices: listing (all, by status, by time and status), AI-assisted generation, saving, and lifecycle transitions (taken-place, paid, rejected).",
+      "tags": [
+        "api-handler",
+        "supplier",
+        "invoicing",
+        "crud"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/db/tax.ts",
+      "type": "file",
+      "name": "tax.ts",
+      "filePath": "src/db/tax.ts",
+      "summary": "Data-access module for taxable invoices: listing by date range, calculating tax totals, and fetching a single taxable invoice.",
+      "tags": [
+        "api-handler",
+        "tax",
+        "invoicing"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/db/users.ts",
+      "type": "file",
+      "name": "users.ts",
+      "filePath": "src/db/users.ts",
+      "summary": "Data-access module for fetching user accounts, used for assigning expenses and invoices to specific users.",
+      "tags": [
+        "api-handler",
+        "users",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/Components/Immigration.tsx",
+      "type": "file",
+      "name": "Immigration.tsx",
+      "filePath": "src/Components/Immigration.tsx",
+      "summary": "Invoice management screen scoped to the Immigration menu: lists staying/coming invoices, filters by date range and guest name, paginates results, and supports authority-checked invoice deletion.",
+      "tags": [
+        "component",
+        "invoice",
+        "immigration",
+        "pagination"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/Components/ImmigrationRegistrationManager.tsx",
+      "type": "file",
+      "name": "ImmigrationRegistrationManager.tsx",
+      "filePath": "src/Components/ImmigrationRegistrationManager.tsx",
+      "summary": "Manages immigration guest registrations tied to invoices: lists registrations by date range, lets staff pick an eligible invoice, add/remove registered guests, and submit registration data to the backend.",
+      "tags": [
+        "component",
+        "immigration",
+        "crud",
+        "form"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/Components/InvoiceManager.tsx",
+      "type": "file",
+      "name": "InvoiceManager.tsx",
+      "filePath": "src/Components/InvoiceManager.tsx",
+      "summary": "Primary invoice management screen listing staying/incoming invoices with date and guest-name filters, pagination, and authority-gated invoice deletion.",
+      "tags": [
+        "component",
+        "invoice",
+        "crud",
+        "pagination"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/Components/InvoiceMap.tsx",
+      "type": "file",
+      "name": "InvoiceMap.tsx",
+      "filePath": "src/Components/InvoiceMap.tsx",
+      "summary": "Visual room-grid map showing invoices and guests per room for a selectable work date, with date navigation and manual room-occupancy updates via reservation extraction.",
+      "tags": [
+        "component",
+        "visualization",
+        "rooms",
+        "invoice"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/Components/OrderEditor.tsx",
+      "type": "file",
+      "name": "OrderEditor.tsx",
+      "filePath": "src/Components/OrderEditor.tsx",
+      "summary": "Order detail/edit screen that loads an order and its linked invoice, manages product-group items, and drives the order lifecycle (send to preparation, mark served, stop preparation, link/unlink invoice).",
+      "tags": [
+        "component",
+        "order",
+        "workflow",
+        "invoice"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/Components/OrderManager.tsx",
+      "type": "file",
+      "name": "OrderManager.tsx",
+      "filePath": "src/Components/OrderManager.tsx",
+      "summary": "Order list/board screen with status-based filtering (OrderStatus), invoice linking, and lifecycle actions (confirm, serve, reject orders).",
+      "tags": [
+        "component",
+        "order",
+        "status",
+        "dashboard"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/Components/ProfitReport.tsx",
+      "type": "file",
+      "name": "ProfitReport.tsx",
+      "filePath": "src/Components/ProfitReport.tsx",
+      "summary": "Profit reporting dashboard aggregating revenue/cost breakdowns by aspect and time period, computing profit margin and formatted currency figures.",
+      "tags": [
+        "component",
+        "reporting",
+        "finance",
+        "dashboard"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/Components/TaxableInvoiceManager.tsx",
+      "type": "file",
+      "name": "TaxableInvoiceManager.tsx",
+      "filePath": "src/Components/TaxableInvoiceManager.tsx",
+      "summary": "Screen for listing taxable invoices within a date range, triggering tax calculation, and previewing calculation results per invoice.",
+      "tags": [
+        "component",
+        "invoice",
+        "tax",
+        "finance"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/Service/Utils.ts",
+      "type": "file",
+      "name": "Utils.ts",
+      "filePath": "src/Service/Utils.ts",
+      "summary": "Shared utility module of date/time formatting, VND currency formatting, and numeric-string parsing helpers used throughout the UI components.",
+      "tags": [
+        "utility",
+        "formatting",
+        "date",
+        "currency"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Barrel of ~28 small, pure formatting functions with no internal imports; widely fanned-in across nearly every screen component."
+    },
+    {
+      "id": "file:src/db/immigrationRegistration.ts",
+      "type": "file",
+      "name": "immigrationRegistration.ts",
+      "filePath": "src/db/immigrationRegistration.ts",
+      "summary": "API client wrapper for immigration registration endpoints: list registrations, list eligible invoices, and add/remove registrations and guests.",
+      "tags": [
+        "api-client",
+        "immigration",
+        "service"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/db/invoice.ts",
+      "type": "file",
+      "name": "invoice.ts",
+      "filePath": "src/db/invoice.ts",
+      "summary": "API client wrapper for invoice CRUD and querying endpoints (create, update, delete, list by check-in date or guest name).",
+      "tags": [
+        "api-client",
+        "invoice",
+        "service"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/db/order.ts",
+      "type": "file",
+      "name": "order.ts",
+      "filePath": "src/db/order.ts",
+      "summary": "API client wrapper for order lifecycle endpoints: listing, creating, confirming, serving, and rejecting orders, plus fetching linked invoices and availability.",
+      "tags": [
+        "api-client",
+        "order",
+        "service"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/db/permission.ts",
+      "type": "file",
+      "name": "permission.ts",
+      "filePath": "src/db/permission.ts",
+      "summary": "Defines permission constant identifiers used for invoice deletion and assignment authority checks.",
+      "tags": [
+        "constants",
+        "permission",
+        "authorization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/App.tsx",
+      "type": "file",
+      "name": "App.tsx",
+      "filePath": "src/App.tsx",
+      "summary": "Root application component that authenticates the user, fetches the profile and app config, builds an authority-filtered navigation menu, and conditionally renders every business-domain manager screen (expenses, invoices, orders, reservations, tours, suppliers, rooms, settings, etc.) based on the active menu selection.",
+      "tags": [
+        "root-component",
+        "authorization",
+        "navigation",
+        "orchestration",
+        "state-management"
+      ],
+      "complexity": "complex",
+      "languageNotes": "Single large functional component (~360 lines) combining routing state, side-effect-driven data fetching, and a large conditional render tree keyed off an activeMenu string."
+    },
+    {
+      "id": "file:src/Components/TaxPolicyManager.tsx",
+      "type": "file",
+      "name": "TaxPolicyManager.tsx",
+      "filePath": "src/Components/TaxPolicyManager.tsx",
+      "summary": "Admin screen for managing tax policies: lists policies in order, supports creating, editing, reordering (via move up/down), and deleting through the tax policy API.",
+      "tags": [
+        "component",
+        "crud",
+        "tax-policy",
+        "admin-panel",
+        "state-management"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/Components/TourEditor.tsx",
+      "type": "file",
+      "name": "TourEditor.tsx",
+      "filePath": "src/Components/TourEditor.tsx",
+      "summary": "Detail/edit screen for a single tour, supporting inline field editing, feature-image upload, and managing lists of time slots and price tiers before saving changes back to the tour API.",
+      "tags": [
+        "component",
+        "editor",
+        "tour",
+        "form",
+        "crud"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/Components/TourManager.tsx",
+      "type": "file",
+      "name": "TourManager.tsx",
+      "filePath": "src/Components/TourManager.tsx",
+      "summary": "List/management screen for tours with pagination, delete actions, and navigation into the tour editor; also defines the TourStatus enum used across tour features.",
+      "tags": [
+        "component",
+        "list-view",
+        "pagination",
+        "tour",
+        "crud"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/Components/UserProfile.tsx",
+      "type": "file",
+      "name": "UserProfile.tsx",
+      "filePath": "src/Components/UserProfile.tsx",
+      "summary": "User account screen showing display name, first/last name, roles, and organizations, with an inline edit mode for updating profile fields and a sign-out action.",
+      "tags": [
+        "component",
+        "user-profile",
+        "form",
+        "account-settings"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/Components/Welcome.tsx",
+      "type": "file",
+      "name": "Welcome.tsx",
+      "filePath": "src/Components/Welcome.tsx",
+      "summary": "Simple landing/home screen shown when the user has no active menu selected, notifying the parent App of the active menu via an effect.",
+      "tags": [
+        "component",
+        "landing-page",
+        "home-screen",
+        "simple"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/db/profile.ts",
+      "type": "file",
+      "name": "profile.ts",
+      "filePath": "src/db/profile.ts",
+      "summary": "Thin API client wrapper that fetches the current user's profile from the backend profile endpoint.",
+      "tags": [
+        "api-client",
+        "profile",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/db/taxPolicy.ts",
+      "type": "file",
+      "name": "taxPolicy.ts",
+      "filePath": "src/db/taxPolicy.ts",
+      "summary": "API client wrapper exposing list, create, update, and reorder operations for tax policies, backing the TaxPolicyManager screen.",
+      "tags": [
+        "api-client",
+        "tax-policy",
+        "crud",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/db/tour-request.ts",
+      "type": "file",
+      "name": "tour-request.ts",
+      "filePath": "src/db/tour-request.ts",
+      "summary": "API client wrapper for listing and saving tour requests against the backend tour-request endpoint.",
+      "tags": [
+        "api-client",
+        "tour",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/db/tour.ts",
+      "type": "file",
+      "name": "tour.ts",
+      "filePath": "src/db/tour.ts",
+      "summary": "API client wrapper exposing list, get, save, and quantity-adjustment operations for tours, used by TourManager and TourEditor.",
+      "tags": [
+        "api-client",
+        "tour",
+        "inventory",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/index.tsx",
+      "type": "file",
+      "name": "index.tsx",
+      "filePath": "src/index.tsx",
+      "summary": "Application entry point that creates the React root and mounts App into the DOM, pulling in global styles from index.css.",
+      "tags": [
+        "entry-point",
+        "bootstrap",
+        "react"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/Components/Inventory.tsx",
+      "type": "file",
+      "name": "Inventory.tsx",
+      "filePath": "src/Components/Inventory.tsx",
+      "summary": "React component that renders the inventory/product catalog screen for the PMS, supporting listing, filtering by group or name, pagination, availability scheduling, and full product editing including image uploads via MinIO.",
+      "tags": [
+        "component",
+        "inventory",
+        "product-management",
+        "crud",
+        "pagination"
+      ],
+      "complexity": "complex",
+      "languageNotes": "Single 1100+ line component holding many useState hooks and nested handler functions rather than being split into subcomponents."
+    },
+    {
+      "id": "file:src/Components/InvoiceEditor.tsx",
+      "type": "file",
+      "name": "InvoiceEditor.tsx",
+      "filePath": "src/Components/InvoiceEditor.tsx",
+      "summary": "Large React component providing the full invoice creation/editing workflow for the PMS -- guest details, reservation linking, room assignment, line items, payment method, and issuer selection -- backed by multiple db modules.",
+      "tags": [
+        "component",
+        "invoicing",
+        "reservation",
+        "payment",
+        "crud"
+      ],
+      "complexity": "complex",
+      "languageNotes": "Very large single component (~2000 lines) combining state management, API orchestration, and rendering in one function body."
+    },
+    {
+      "id": "file:src/Components/PGroupManager.tsx",
+      "type": "file",
+      "name": "PGroupManager.tsx",
+      "filePath": "src/Components/PGroupManager.tsx",
+      "summary": "React component for managing product groups (categories) in the PMS -- creating, editing, deleting, and listing the groups used to organize inventory products.",
+      "tags": [
+        "component",
+        "product-group",
+        "crud",
+        "inventory"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/Service/FileMinio.ts",
+      "type": "file",
+      "name": "FileMinio.ts",
+      "filePath": "src/Service/FileMinio.ts",
+      "summary": "MinIO object-storage service wrapper providing presigned URL generation and file upload helpers used for product and invoice image storage.",
+      "tags": [
+        "service",
+        "file-storage",
+        "minio",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/db/inventory.ts",
+      "type": "file",
+      "name": "inventory.ts",
+      "filePath": "src/db/inventory.ts",
+      "summary": "Data-access module wrapping the inventory REST API -- listing, filtering, and paginating product items, adjusting stock quantities, changing item status, and planning availability windows.",
+      "tags": [
+        "data-access",
+        "api-client",
+        "inventory"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/db/pgroup.ts",
+      "type": "file",
+      "name": "pgroup.ts",
+      "filePath": "src/db/pgroup.ts",
+      "summary": "Data-access module wrapping the product-group REST API for listing, deleting, and saving product groups.",
+      "tags": [
+        "data-access",
+        "api-client",
+        "product-group"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/db/product.ts",
+      "type": "file",
+      "name": "product.ts",
+      "filePath": "src/db/product.ts",
+      "summary": "Data-access module wrapping the product REST API -- listing, searching, fetching, and saving managed product records.",
+      "tags": [
+        "data-access",
+        "api-client",
+        "product"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/Components/CounterInput.tsx",
+      "type": "file",
+      "name": "CounterInput.tsx",
+      "filePath": "src/Components/CounterInput.tsx",
+      "summary": "Generic numeric stepper input component with increment/decrement buttons, bounded by configurable min/max/step values.",
+      "tags": [
+        "component",
+        "utility",
+        "form-control",
+        "reusable"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/Components/RatePlanManager.tsx",
+      "type": "file",
+      "name": "RatePlanManager.tsx",
+      "filePath": "src/Components/RatePlanManager.tsx",
+      "summary": "CRUD management screen for hotel rate plans, handling listing with pagination, room association, meal inclusion, applied date/time ranges, and create/edit/delete modals.",
+      "tags": [
+        "component",
+        "crud",
+        "rate-plans",
+        "pagination",
+        "reservation-status"
+      ],
+      "complexity": "complex",
+      "languageNotes": "Component is wrapped in React.memo() and defines its state, handlers, and JSX all in a single large functional component; nested handlers (fetchRatePlans, processSave, etc.) are not separately exported."
+    },
+    {
+      "id": "file:src/Components/RoomManager.tsx",
+      "type": "file",
+      "name": "RoomManager.tsx",
+      "filePath": "src/Components/RoomManager.tsx",
+      "summary": "CRUD management screen for hotel rooms, providing search/filter, pagination, and add/edit/delete modal workflows backed by the room API.",
+      "tags": [
+        "component",
+        "crud",
+        "rooms",
+        "pagination"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/db/rate_plan.ts",
+      "type": "file",
+      "name": "rate_plan.ts",
+      "filePath": "src/db/rate_plan.ts",
+      "summary": "Data-access layer wrapping the rate plan REST API with list, get, save, create, and delete operations.",
+      "tags": [
+        "service",
+        "api-handler",
+        "data-model",
+        "rate-plans"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/db/room.ts",
+      "type": "file",
+      "name": "room.ts",
+      "filePath": "src/db/room.ts",
+      "summary": "Data-access layer wrapping the room REST API with list, create, update, and delete operations, and defines the Room type.",
+      "tags": [
+        "service",
+        "api-handler",
+        "data-model",
+        "rooms"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/Components/ReservationManager.tsx",
+      "type": "file",
+      "name": "ReservationManager.tsx",
+      "filePath": "src/Components/ReservationManager.tsx",
+      "summary": "React component that displays a paginated, filterable table of hotel reservations fetched from the backend, with quick date filters and a manual sync-from-mailbox action.",
+      "tags": [
+        "component",
+        "api-handler",
+        "reservation",
+        "pagination",
+        "react"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/Components/ReservationMap.tsx",
+      "type": "file",
+      "name": "ReservationMap.tsx",
+      "filePath": "src/Components/ReservationMap.tsx",
+      "summary": "React component rendering a room-by-date occupancy grid (map view) of staying and upcoming reservations, built from room and reservation data with date-range navigation controls.",
+      "tags": [
+        "component",
+        "reservation",
+        "room-map",
+        "react",
+        "data-grid"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/db/reservation.ts",
+      "type": "file",
+      "name": "reservation.ts",
+      "filePath": "src/db/reservation.ts",
+      "summary": "Data-access module exposing API calls for reservations: update, list latest, list staying/coming, get by id, and sync from mailbox.",
+      "tags": [
+        "api-handler",
+        "data-access",
+        "reservation",
+        "service"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/db/reservation_extractor.ts",
+      "type": "file",
+      "name": "reservation_extractor.ts",
+      "filePath": "src/db/reservation_extractor.ts",
+      "summary": "Thin API wrapper that triggers backend collection/extraction of reservations for a given date range from an external mailbox/topic source.",
+      "tags": [
+        "api-handler",
+        "utility",
+        "reservation",
+        "data-pipeline"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "service:Dockerfile",
+      "type": "service",
+      "name": "Dockerfile",
+      "filePath": "Dockerfile",
+      "summary": "Single-stage Docker build for the PMS React web app: copies the full source tree, installs dependencies with npm ci, runs npm run build, then starts the app via npm run start on port 3000. Numerous build ARGs inject service endpoint URLs (invoice, inventory, expense, profit, service-classification, reservation, and file-service) as runtime ENV vars.",
+      "tags": [
+        "containerization",
+        "infrastructure",
+        "deployment",
+        "docker",
+        "build-system"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Uses ARG/ENV pairs to thread numerous REACT_APP_* microservice endpoint URLs from build-time arguments into the container's runtime environment, a common pattern for injecting environment-specific config into Create React App builds at image-build time."
+    },
+    {
+      "id": "config:.dockerignore",
+      "type": "config",
+      "name": ".dockerignore",
+      "filePath": ".dockerignore",
+      "summary": "Excludes node_modules and build directories from the Docker build context, keeping image builds fast and avoiding stale artifacts being copied into the container.",
+      "tags": [
+        "configuration",
+        "infrastructure",
+        "containerization",
+        "build-system"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "pipeline:.github/workflows/nodejs.yml",
+      "type": "pipeline",
+      "name": "nodejs.yml",
+      "filePath": ".github/workflows/nodejs.yml",
+      "summary": "GitHub Actions workflow (\"Containerize PMS\") that builds the Node.js application and publishes a multi-platform Docker image of the PMS app to Docker Hub whenever a semantic-version tag (e.g. 1.2.3) is pushed.",
+      "tags": [
+        "ci-cd",
+        "deployment",
+        "containerization",
+        "docker",
+        "github-actions"
+      ],
+      "complexity": "simple",
+      "languageNotes": "Single-job workflow triggered on tag push; installs dependencies with `npm ci`, runs `npm run build --if-present`, sets up Docker Buildx, logs into Docker Hub, derives image tags/labels via docker/metadata-action, and builds+pushes a multi-arch image (linux/amd64, linux/arm64/v8) for digitalsaleron/pms using pinned third-party action SHAs."
+    },
+    {
+      "id": "config:.env.development",
+      "type": "config",
+      "name": ".env.development",
+      "filePath": ".env.development",
+      "summary": "Development environment configuration defining local backend service endpoints (expense, invoice, reservation, profit, tax, order, room, supplier, user, immigration registration, etc.), file-storage (MinIO) credentials, and dev server settings for the PMS app, with a block of legacy staging URLs kept as comments.",
+      "tags": [
+        "configuration",
+        "environment-variables",
+        "api-endpoints",
+        "development"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Defines ~30 REACT_APP_* endpoint variables consumed via process.env across the React app's service layer; commented-out lines preserve an alternate staging configuration."
+    },
+    {
+      "id": "document:PLAN.md",
+      "type": "document",
+      "name": "PLAN.md",
+      "filePath": "PLAN.md",
+      "summary": "Internal improvement-tracking document for the PMS project, listing completed bug fixes and refactors for order management, tour management save persistence, and dynamic room-name fetching in the reservation and invoice maps.",
+      "tags": [
+        "documentation",
+        "planning",
+        "technical-debt",
+        "project-management"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:README.md",
+      "type": "document",
+      "name": "README.md",
+      "filePath": "README.md",
+      "summary": "Project overview for the PMS web app describing its expense tracking, invoicing, reservation status, and profit reporting features, plus setup instructions for the required .env service-endpoint variables and how to run the dev server.",
+      "tags": [
+        "documentation",
+        "entry-point",
+        "setup-guide",
+        "overview"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:Subscribe.txt",
+      "type": "document",
+      "name": "Subscribe.txt",
+      "filePath": "Subscribe.txt",
+      "summary": "Plain-text file containing a single YouTube channel URL; unrelated to application functionality.",
+      "tags": [
+        "documentation",
+        "misc",
+        "external-link"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:package.json",
+      "type": "config",
+      "name": "package.json",
+      "filePath": "package.json",
+      "summary": "NPM manifest for the my-webpack-project PMS app, declaring React 18 + TypeScript dependencies (Firebase, Axios, Flowbite, react-router-dom, MinIO client, OIDC client, html2canvas) alongside Node.js browser polyfills, and defining react-app-rewired start/build/test/eject scripts.",
+      "tags": [
+        "configuration",
+        "build-system",
+        "dependencies",
+        "npm"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Uses react-app-rewired to override Create React App's webpack config, and devDependency aliases to polyfill Node core modules (buffer, crypto, stream, https, zlib) for browser bundling."
+    },
+    {
+      "id": "config:tsconfig.json",
+      "type": "config",
+      "name": "tsconfig.json",
+      "filePath": "tsconfig.json",
+      "summary": "TypeScript compiler configuration for the React app, targeting ES2016 with classic React JSX transform, CommonJS modules, strict type-checking, esModuleInterop, and forced consistent file-name casing.",
+      "tags": [
+        "configuration",
+        "typescript",
+        "build-system",
+        "compiler-options"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Mostly the default CRA-generated template with commented-out optional flags; only a handful of options (target, jsx, module, esModuleInterop, strict, skipLibCheck) are actually enabled."
+    },
+    {
+      "id": "document:.planning/PROJECT.md",
+      "type": "document",
+      "name": "PROJECT.md",
+      "filePath": ".planning/PROJECT.md",
+      "summary": "Project charter for the PMS frontend: defines the goal of completing a modular React/TypeScript property management system for homestay/resort operators, its tech stack (React 18, TypeScript, Tailwind CSS, Flowbite, Axios), constraints around existing microservice APIs, and lessons learned from prior work on invoices, reservations, and orders.",
+      "tags": [
+        "documentation",
+        "planning",
+        "project-overview",
+        "requirements"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:.planning/REQUIREMENTS.md",
+      "type": "document",
+      "name": "REQUIREMENTS.md",
+      "filePath": ".planning/REQUIREMENTS.md",
+      "summary": "Functional and non-functional requirements for the PMS improvement effort, covering order-invoice integration, tour management persistence, dynamic room maps, advanced filtering, user stories, and success criteria for verifying completion.",
+      "tags": [
+        "documentation",
+        "planning",
+        "requirements",
+        "user-stories"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:.planning/ROADMAP.md",
+      "type": "document",
+      "name": "ROADMAP.md",
+      "filePath": ".planning/ROADMAP.md",
+      "summary": "Phased delivery roadmap for the PMS improvement project, tracking completed phases (foundation/refactoring, config caching, feature persistence, dynamic room integration, room/invoice map optimization), the current phase (advanced UX & optimization), and future phases like a mobile companion app and reporting dashboard.",
+      "tags": [
+        "documentation",
+        "planning",
+        "roadmap",
+        "milestones"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:.planning/STATE.md",
+      "type": "document",
+      "name": "STATE.md",
+      "filePath": ".planning/STATE.md",
+      "summary": "Living project-state log tracking the current roadmap phase, recent completed quick tasks and phase work (e.g. rate-plan menu fix, TLS config, room API refactor, ID-based room mapping), and pending tasks for the PMS project.",
+      "tags": [
+        "documentation",
+        "planning",
+        "project-status",
+        "changelog"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:.planning/codebase/ARCHITECTURE.md",
+      "type": "document",
+      "name": "ARCHITECTURE.md",
+      "filePath": ".planning/codebase/ARCHITECTURE.md",
+      "summary": "Describes the PMS-TS frontend architecture: functional React components with hooks, a Service-Repository split between UI (src/Components/) and data access (src/db/), lifted state in App.tsx with no global state library, React Router v6 routing with RBAC-driven menu filtering, OIDC/JWT-based authentication, and a Tailwind CSS + Flowbite UI layer.",
+      "tags": [
+        "documentation",
+        "architecture",
+        "state-management",
+        "planning"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:.planning/codebase/CONCERNS.md",
+      "type": "document",
+      "name": "CONCERNS.md",
+      "filePath": ".planning/codebase/CONCERNS.md",
+      "summary": "Catalogs technical debt, security risks, performance bottlenecks, and missing features in pms-ts, including overuse of `any`, monolithic components like InvoiceEditor.tsx and App.tsx, hardcoded API keys and business data, fragile auth logic, and the complete absence of automated tests.",
+      "tags": [
+        "documentation",
+        "technical-debt",
+        "security",
+        "planning"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:.planning/codebase/CONVENTIONS.md",
+      "type": "document",
+      "name": "CONVENTIONS.md",
+      "filePath": ".planning/codebase/CONVENTIONS.md",
+      "summary": "Defines pms-ts coding standards: PascalCase for components and services, mixed snake_case/kebab-case for db modules, Prettier with the Tailwind plugin, ESLint react-app rules, and architectural rules for component structure, data access via db/apis.ts, multi-tenancy via tenantId, and env-based configuration.",
+      "tags": [
+        "documentation",
+        "conventions",
+        "coding-standards",
+        "planning"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:.planning/codebase/INTEGRATIONS.md",
+      "type": "document",
+      "name": "INTEGRATIONS.md",
+      "filePath": ".planning/codebase/INTEGRATIONS.md",
+      "summary": "Lists external integrations used by pms-ts, including OIDC/Keycloak authentication with RBAC, a suite of Phuc Sinh Assistant backend microservices (expense, inventory, invoice, profit, reservation, order, supplier, tour), Google Gemini AI for data extraction, MinIO object storage, and Firebase/GCS cloud integrations.",
+      "tags": [
+        "documentation",
+        "integrations",
+        "microservices",
+        "planning"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:.planning/codebase/STACK.md",
+      "type": "document",
+      "name": "STACK.md",
+      "filePath": ".planning/codebase/STACK.md",
+      "summary": "Summarizes the pms-ts technology stack: TypeScript on React 18 with React Router v6, Tailwind CSS with Flowbite components, Axios for HTTP, Moment.js for dates, Google Generative AI, MinIO SDK, and a Webpack/react-app-rewired/Babel/PostCSS/Prettier build toolchain.",
+      "tags": [
+        "documentation",
+        "tech-stack",
+        "dependencies",
+        "planning"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:.planning/codebase/STRUCTURE.md",
+      "type": "document",
+      "name": "STRUCTURE.md",
+      "filePath": ".planning/codebase/STRUCTURE.md",
+      "summary": "Maps the pms-ts directory layout, explaining the roles of src/Components/ (Manager, Editor, and Map components), src/db/ (API repositories), src/Service/ (utilities like FileMinio.ts and Utils.ts), the App.tsx/index.tsx entry points, public/ static assets, and top-level config files.",
+      "tags": [
+        "documentation",
+        "directory-structure",
+        "planning"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:.planning/codebase/TESTING.md",
+      "type": "document",
+      "name": "TESTING.md",
+      "filePath": ".planning/codebase/TESTING.md",
+      "summary": "Defines the intended testing strategy for pms-ts using Jest and React Testing Library, covering unit tests for src/Service/ and src/db/, component tests for src/Components/, the absence of E2E tooling, mocking guidance for API calls, and coverage goals for critical domain logic.",
+      "tags": [
+        "documentation",
+        "testing",
+        "planning"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:.planning/phases/04-dynamic-room-integration/01-RESEARCH.md",
+      "type": "document",
+      "name": "01-RESEARCH.md",
+      "filePath": ".planning/phases/04-dynamic-room-integration/01-RESEARCH.md",
+      "summary": "Research notes analyzing the redundant `roomIcons` mapping in src/db/room.tsx, tracing its usage to InvoiceEditor.tsx, and recommending removal in favor of a single standardized icon since other room components (RoomManager, ReservationMap, InvoiceMap) already avoid it.",
+      "tags": [
+        "documentation",
+        "planning",
+        "technical-debt",
+        "research"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:.planning/phases/04-dynamic-room-integration/04-PLAN.md",
+      "type": "document",
+      "name": "04-PLAN.md",
+      "filePath": ".planning/phases/04-dynamic-room-integration/04-PLAN.md",
+      "summary": "Implementation plan for Phase 4 (Dynamic Room Integration refinement), detailing tasks to remove the static roomIcons mapping, standardize the room selection UI in InvoiceEditor with a single icon, finalize elimination of static room data, and verify the build with tsc.",
+      "tags": [
+        "documentation",
+        "planning",
+        "task-list"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:.planning/phases/04-dynamic-room-integration/04-SUMMARY.md",
+      "type": "document",
+      "name": "04-SUMMARY.md",
+      "filePath": ".planning/phases/04-dynamic-room-integration/04-SUMMARY.md",
+      "summary": "Completion summary for Phase 4, confirming removal of the roomIcons mapping and src/db/staticdata.ts, standardization of InvoiceEditor's room selection icons, and full transition to dynamic backend-driven room data via the listRoom API.",
+      "tags": [
+        "documentation",
+        "planning",
+        "summary"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:.planning/quick/configure-tls-port.md",
+      "type": "document",
+      "name": "configure-tls-port.md",
+      "filePath": ".planning/quick/configure-tls-port.md",
+      "summary": "Quick-fix note describing how to enable HTTPS on port 3001 for local development by adding HTTPS=true to .env.development alongside the existing PORT=3001 setting.",
+      "tags": [
+        "documentation",
+        "quick-fix",
+        "configuration",
+        "environment"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:.planning/quick/fix-menu-path-error.md",
+      "type": "document",
+      "name": "fix-menu-path-error.md",
+      "filePath": ".planning/quick/fix-menu-path-error.md",
+      "summary": "Quick-fix note for a startup TypeError in App.tsx caused by a mismatch between the 'rate-plan' key in menuOrder and the 'ratePlan' key in the menus object, resolved by aligning the keys and adding a safety filter in filterMenus.",
+      "tags": [
+        "documentation",
+        "bugfix",
+        "quick-fix",
+        "navigation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:.planning/quick/fix-rate-plan-visibility.md",
+      "type": "document",
+      "name": "fix-rate-plan-visibility.md",
+      "filePath": ".planning/quick/fix-rate-plan-visibility.md",
+      "summary": "Quick-fix note explaining why the Rate Plan menu item was hidden due to a camelCase/kebab-case mismatch between the 'ratePlan' menu key and the backend-provided 'rate-plan' authority string, fixed by standardizing on 'rate-plan' throughout App.tsx.",
+      "tags": [
+        "documentation",
+        "bugfix",
+        "quick-fix",
+        "authorization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:.planning/quick/fix-room-preselection.md",
+      "type": "document",
+      "name": "fix-room-preselection.md",
+      "filePath": ".planning/quick/fix-room-preselection.md",
+      "summary": "Quick-fix note for InvoiceEditor's chooseRoom function, which failed to pre-select rooms in the modal because it matched invoice.rooms values against room.name instead of the correct room.internalName field.",
+      "tags": [
+        "documentation",
+        "bugfix",
+        "quick-fix",
+        "invoicing"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:.planning/quick/rename-room-to-ts.md",
+      "type": "document",
+      "name": "rename-room-to-ts.md",
+      "filePath": ".planning/quick/rename-room-to-ts.md",
+      "summary": "Quick-fix note documenting the rename of src/db/room.tsx to src/db/room.ts, since the file no longer contains JSX and a .ts extension better reflects its pure TypeScript content.",
+      "tags": [
+        "documentation",
+        "quick-fix",
+        "refactor",
+        "typescript"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:public/index.html",
+      "type": "file",
+      "name": "index.html",
+      "filePath": "public/index.html",
+      "summary": "HTML shell for the Create React App build that provides the #root div the React application mounts into, and wires up the favicon, viewport meta tags, and PWA manifest link.",
+      "tags": [
+        "entry-point",
+        "html-shell",
+        "static-asset",
+        "cra-template"
+      ],
+      "complexity": "simple",
+      "languageNotes": "Uses the CRA %PUBLIC_URL% placeholder, which is replaced with the public folder URL at build time; this is the mount target where src/index.tsx renders the React root."
+    },
+    {
+      "id": "config:public/manifest.json",
+      "type": "config",
+      "name": "manifest.json",
+      "filePath": "public/manifest.json",
+      "summary": "Progressive Web App manifest defining the PMS (Phuc Sinh Home) app's short name, icons, start URL, and standalone display mode used when the app is installed on a mobile or desktop device.",
+      "tags": [
+        "pwa",
+        "configuration",
+        "web-manifest",
+        "static-asset"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:public/robots.txt",
+      "type": "config",
+      "name": "robots.txt",
+      "filePath": "public/robots.txt",
+      "summary": "Robots exclusion file that allows all web crawlers unrestricted access to the site, with no disallowed paths configured.",
+      "tags": [
+        "configuration",
+        "seo",
+        "crawler-directives",
+        "static-asset"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:.babelrc",
+      "type": "file",
+      "name": ".babelrc",
+      "filePath": ".babelrc",
+      "summary": "Babel compiler configuration enabling dynamic import syntax and preset-env with ES module transpilation disabled so webpack can handle module bundling itself.",
+      "tags": [
+        "configuration",
+        "build-system",
+        "babel",
+        "transpilation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:.bg-shell/manifest.json",
+      "type": "config",
+      "name": "manifest.json",
+      "filePath": ".bg-shell/manifest.json",
+      "summary": "Empty manifest file for the .bg-shell tooling directory, currently containing no registered entries.",
+      "tags": [
+        "configuration",
+        "manifest",
+        "empty"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:.github/copilot-instructions.md",
+      "type": "document",
+      "name": "copilot-instructions.md",
+      "filePath": ".github/copilot-instructions.md",
+      "summary": "GitHub Copilot custom instructions directing the AI assistant to invoke Azure best-practice tooling when generating Azure-related code or running Azure commands.",
+      "tags": [
+        "documentation",
+        "ai-tooling",
+        "azure",
+        "copilot"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:.planning/phases/01-foundation-refactoring/01-PLAN.md",
+      "type": "document",
+      "name": "01-PLAN.md",
+      "filePath": ".planning/phases/01-foundation-refactoring/01-PLAN.md",
+      "summary": "Implementation plan for Phase 1 covering PaymentMethod type refactoring into configs.ts, dynamic AppConfig distribution to InvoiceEditor, API factory consolidation in apis.ts, and verification of room/map data.",
+      "tags": [
+        "documentation",
+        "planning",
+        "refactoring",
+        "roadmap"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:.planning/phases/01-foundation-refactoring/01-RESEARCH.md",
+      "type": "document",
+      "name": "01-RESEARCH.md",
+      "filePath": ".planning/phases/01-foundation-refactoring/01-RESEARCH.md",
+      "summary": "Research notes for Phase 1 documenting the standard stack (Axios, flowbite-react), the configuration-provider and API-factory architecture patterns, and pitfalls to avoid when refactoring payment methods and config loading.",
+      "tags": [
+        "documentation",
+        "planning",
+        "research",
+        "architecture"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:.planning/phases/02-configuration-caching-resilience/02-PLAN.md",
+      "type": "document",
+      "name": "02-PLAN.md",
+      "filePath": ".planning/phases/02-configuration-caching-resilience/02-PLAN.md",
+      "summary": "Implementation plan for Phase 2 adding a cache-first localStorage strategy and a 3-attempt async retry mechanism to appConfigs, plus App.tsx loading/error state handling for offline resilience.",
+      "tags": [
+        "documentation",
+        "planning",
+        "caching",
+        "resilience"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:.planning/phases/02-configuration-caching-resilience/02-RESEARCH.md",
+      "type": "document",
+      "name": "02-RESEARCH.md",
+      "filePath": ".planning/phases/02-configuration-caching-resilience/02-RESEARCH.md",
+      "summary": "Research notes for Phase 2 detailing the cache-first-with-background-refresh pattern, idempotent background refresh, and asynchronous retry mechanism for loading app.json configuration, with sample retry-wrapper and appConfigs code.",
+      "tags": [
+        "documentation",
+        "planning",
+        "research",
+        "caching"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:.planning/phases/04-CONTEXT.md",
+      "type": "document",
+      "name": "04-CONTEXT.md",
+      "filePath": ".planning/phases/04-CONTEXT.md",
+      "summary": "Context notes for Phase 4 defining the scope of dynamic room integration, targeting room.ts and invoice.ts to remove hardcoded room identifiers, with UX enhancements deferred to Phase 5.",
+      "tags": [
+        "documentation",
+        "planning",
+        "context",
+        "rooms"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:.planning/phases/06-room-invoice-map-optimization/06-PLAN.md",
+      "type": "document",
+      "name": "06-PLAN.md",
+      "filePath": ".planning/phases/06-room-invoice-map-optimization/06-PLAN.md",
+      "summary": "Implementation plan for Phase 6 refactoring RoomManager and InvoiceMap to use room IDs for consistent mapping, optimizing component lifecycle, and synchronizing UI between the two map views.",
+      "tags": [
+        "documentation",
+        "planning",
+        "rooms",
+        "invoicing"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:.planning/phases/06-room-invoice-map-optimization/06-RESEARCH.md",
+      "type": "document",
+      "name": "06-RESEARCH.md",
+      "filePath": ".planning/phases/06-room-invoice-map-optimization/06-RESEARCH.md",
+      "summary": "Research notes for Phase 6 analyzing data inconsistencies between RoomManager and InvoiceMap (name-based vs ID-based mapping) and proposing an ID-based, static-grid rendering approach.",
+      "tags": [
+        "documentation",
+        "planning",
+        "research",
+        "rooms"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:.planning/todos/01-bugs/fix-the-compile-error.md",
+      "type": "document",
+      "name": "fix-the-compile-error.md",
+      "filePath": ".planning/todos/01-bugs/fix-the-compile-error.md",
+      "summary": "Completed bug-fix todo tracking the resolution of TypeScript compile errors introduced during Phase 4, primarily in InvoiceEditor.tsx.",
+      "tags": [
+        "documentation",
+        "bugfix",
+        "todo",
+        "completed"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:.ua/.understandignore",
+      "type": "file",
+      "name": ".understandignore",
+      "filePath": ".ua/.understandignore",
+      "summary": "Ignore-pattern configuration for the Understand-Anything analysis tool, listing commented-out gitignore-style and per-language test-file exclusion patterns available for activation.",
+      "tags": [
+        "configuration",
+        "tooling",
+        "ignore-patterns"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:config-overrides.js",
+      "type": "file",
+      "name": "config-overrides.js",
+      "filePath": "config-overrides.js",
+      "summary": "react-app-rewired override that patches webpack's module resolution fallbacks for Node core modules (crypto, stream, buffer, etc.) and injects Buffer/process polyfills so the browser build works without Node APIs.",
+      "tags": [
+        "configuration",
+        "build-system",
+        "webpack",
+        "polyfill"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:public/_redirects",
+      "type": "file",
+      "name": "_redirects",
+      "filePath": "public/_redirects",
+      "summary": "Static-host redirect rule rewriting all paths to index.html with a 200 status, enabling client-side routing for the single-page app on platforms like Netlify.",
+      "tags": [
+        "configuration",
+        "routing",
+        "deployment",
+        "spa"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/App.css",
+      "type": "file",
+      "name": "App.css",
+      "filePath": "src/App.css",
+      "summary": "Global stylesheet for the App component defining the card container flex layout, centered heading alignment, and a pointer-events override for a right-icon test element.",
+      "tags": [
+        "styling",
+        "layout",
+        "css",
+        "component-style"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/db/gcs.ts",
+      "type": "file",
+      "name": "gcs.ts",
+      "filePath": "src/db/gcs.ts",
+      "summary": "Google Cloud Storage upload client providing putObject and putBlob helpers that POST files/blobs with bucket and event metadata to the GCS-syncer microservice endpoint via FormData.",
+      "tags": [
+        "data-access",
+        "file-upload",
+        "api-client",
+        "storage"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/index.css",
+      "type": "file",
+      "name": "index.css",
+      "filePath": "src/index.css",
+      "summary": "Root application stylesheet applying Tailwind's base/components/utilities layers, the global body font stack, code font family, and a Telegram viewport-height utility class.",
+      "tags": [
+        "styling",
+        "tailwind",
+        "global-styles",
+        "css"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:tailwind.config.js",
+      "type": "file",
+      "name": "tailwind.config.js",
+      "filePath": "tailwind.config.js",
+      "summary": "Tailwind CSS configuration scanning the src directory and Flowbite/tailwind-datepicker packages for class usage, and registering the Flowbite plugin for pre-built UI components.",
+      "tags": [
+        "configuration",
+        "tailwind",
+        "styling",
+        "build-system"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:webpack.config.js",
+      "type": "file",
+      "name": "webpack.config.js",
+      "filePath": "webpack.config.js",
+      "summary": "Base webpack configuration (generated by webpack-cli) defining src/index.tsx as the app entry point, the dist output directory, asset-loading rules for fonts/images, and production/development mode switching.",
+      "tags": [
+        "configuration",
+        "webpack",
+        "build-system",
+        "bundler"
+      ],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:src/Components/ExpenseManager.tsx",
+      "target": "file:src/App.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/ExpenseManager.tsx",
+      "target": "file:src/Components/ProfitReport.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/ExpenseManager.tsx",
+      "target": "file:src/Service/Utils.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/ExpenseManager.tsx",
+      "target": "file:src/db/classification.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/ExpenseManager.tsx",
+      "target": "file:src/db/expense.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/ExpenseManager.tsx",
+      "target": "file:src/db/users.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/Settings.tsx",
+      "target": "file:src/App.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/Settings.tsx",
+      "target": "file:src/Service/Utils.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/Settings.tsx",
+      "target": "file:src/db/bot.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/Settings.tsx",
+      "target": "file:src/db/configs.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/Settings.tsx",
+      "target": "file:src/db/reservation.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/Settings.tsx",
+      "target": "file:src/db/status.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/SupplierManager.tsx",
+      "target": "file:src/App.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/SupplierManager.tsx",
+      "target": "file:src/Components/InvoiceManager.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/SupplierManager.tsx",
+      "target": "file:src/Service/Utils.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/SupplierManager.tsx",
+      "target": "file:src/db/classification.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/SupplierManager.tsx",
+      "target": "file:src/db/supplier.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/db/bot.ts",
+      "target": "file:src/db/apis.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/db/classification.ts",
+      "target": "file:src/db/apis.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/db/configs.ts",
+      "target": "file:src/App.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/db/configs.ts",
+      "target": "file:src/db/apis.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/db/expense.ts",
+      "target": "file:src/Components/ExpenseManager.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/db/expense.ts",
+      "target": "file:src/db/apis.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/db/profit.ts",
+      "target": "file:src/Components/ProfitReport.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/db/profit.ts",
+      "target": "file:src/db/apis.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/db/status.ts",
+      "target": "file:src/db/apis.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/db/supplier.ts",
+      "target": "file:src/Components/SupplierManager.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/db/supplier.ts",
+      "target": "file:src/db/apis.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/db/tax.ts",
+      "target": "file:src/Components/TaxableInvoiceManager.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/db/tax.ts",
+      "target": "file:src/db/apis.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/db/users.ts",
+      "target": "file:src/Components/InvoiceManager.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/db/users.ts",
+      "target": "file:src/db/apis.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/Immigration.tsx",
+      "target": "file:src/App.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/Immigration.tsx",
+      "target": "file:src/Components/InvoiceManager.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/Immigration.tsx",
+      "target": "file:src/Components/ProfitReport.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/Immigration.tsx",
+      "target": "file:src/Service/Utils.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/Immigration.tsx",
+      "target": "file:src/db/invoice.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/Immigration.tsx",
+      "target": "file:src/db/permission.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/ImmigrationRegistrationManager.tsx",
+      "target": "file:src/Components/InvoiceManager.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/ImmigrationRegistrationManager.tsx",
+      "target": "file:src/Components/ProfitReport.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/ImmigrationRegistrationManager.tsx",
+      "target": "file:src/Service/Utils.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/ImmigrationRegistrationManager.tsx",
+      "target": "file:src/db/immigrationRegistration.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/InvoiceManager.tsx",
+      "target": "file:src/App.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/InvoiceManager.tsx",
+      "target": "file:src/Components/ProfitReport.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/InvoiceManager.tsx",
+      "target": "file:src/Service/Utils.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/InvoiceManager.tsx",
+      "target": "file:src/db/invoice.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/InvoiceManager.tsx",
+      "target": "file:src/db/permission.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/InvoiceMap.tsx",
+      "target": "file:src/Components/InvoiceEditor.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/InvoiceMap.tsx",
+      "target": "file:src/Components/InvoiceManager.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/InvoiceMap.tsx",
+      "target": "file:src/Components/ProfitReport.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/InvoiceMap.tsx",
+      "target": "file:src/Service/Utils.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/InvoiceMap.tsx",
+      "target": "file:src/db/invoice.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/InvoiceMap.tsx",
+      "target": "file:src/db/reservation_extractor.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/InvoiceMap.tsx",
+      "target": "file:src/db/room.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/OrderEditor.tsx",
+      "target": "file:src/App.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/OrderEditor.tsx",
+      "target": "file:src/Components/InvoiceManager.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/OrderEditor.tsx",
+      "target": "file:src/Components/OrderManager.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/OrderEditor.tsx",
+      "target": "file:src/Components/PGroupManager.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/OrderEditor.tsx",
+      "target": "file:src/Service/Utils.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/OrderEditor.tsx",
+      "target": "file:src/db/invoice.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/OrderEditor.tsx",
+      "target": "file:src/db/order.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/OrderEditor.tsx",
+      "target": "file:src/db/pgroup.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/OrderManager.tsx",
+      "target": "file:src/App.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/OrderManager.tsx",
+      "target": "file:src/Components/InvoiceManager.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/OrderManager.tsx",
+      "target": "file:src/Service/Utils.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/OrderManager.tsx",
+      "target": "file:src/db/configs.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/OrderManager.tsx",
+      "target": "file:src/db/invoice.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/OrderManager.tsx",
+      "target": "file:src/db/order.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/ProfitReport.tsx",
+      "target": "file:src/Service/Utils.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/ProfitReport.tsx",
+      "target": "file:src/db/profit.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/TaxableInvoiceManager.tsx",
+      "target": "file:src/Components/ProfitReport.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/TaxableInvoiceManager.tsx",
+      "target": "file:src/Service/Utils.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/TaxableInvoiceManager.tsx",
+      "target": "file:src/db/tax.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/db/immigrationRegistration.ts",
+      "target": "file:src/Components/InvoiceManager.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/db/immigrationRegistration.ts",
+      "target": "file:src/db/apis.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/db/invoice.ts",
+      "target": "file:src/Components/InvoiceManager.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/db/invoice.ts",
+      "target": "file:src/db/apis.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/db/order.ts",
+      "target": "file:src/Components/OrderManager.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/db/order.ts",
+      "target": "file:src/db/apis.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/App.tsx",
+      "target": "file:src/App.css",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/App.tsx",
+      "target": "file:src/Components/ExpenseManager.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/App.tsx",
+      "target": "file:src/Components/ImmigrationRegistrationManager.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/App.tsx",
+      "target": "file:src/Components/Inventory.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/App.tsx",
+      "target": "file:src/Components/InvoiceEditor.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/App.tsx",
+      "target": "file:src/Components/InvoiceManager.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/App.tsx",
+      "target": "file:src/Components/InvoiceMap.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/App.tsx",
+      "target": "file:src/Components/OrderEditor.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/App.tsx",
+      "target": "file:src/Components/OrderManager.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/App.tsx",
+      "target": "file:src/Components/PGroupManager.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/App.tsx",
+      "target": "file:src/Components/ProfitReport.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/App.tsx",
+      "target": "file:src/Components/RatePlanManager.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/App.tsx",
+      "target": "file:src/Components/ReservationManager.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/App.tsx",
+      "target": "file:src/Components/ReservationMap.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/App.tsx",
+      "target": "file:src/Components/RoomManager.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/App.tsx",
+      "target": "file:src/Components/Settings.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/App.tsx",
+      "target": "file:src/Components/SupplierManager.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/App.tsx",
+      "target": "file:src/Components/TaxPolicyManager.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/App.tsx",
+      "target": "file:src/Components/TaxableInvoiceManager.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/App.tsx",
+      "target": "file:src/Components/TourEditor.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/App.tsx",
+      "target": "file:src/Components/TourManager.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/App.tsx",
+      "target": "file:src/Components/UserProfile.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/App.tsx",
+      "target": "file:src/Components/Welcome.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/App.tsx",
+      "target": "file:src/db/configs.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/App.tsx",
+      "target": "file:src/db/profile.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/TaxPolicyManager.tsx",
+      "target": "file:src/db/taxPolicy.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/TourEditor.tsx",
+      "target": "file:src/App.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/TourEditor.tsx",
+      "target": "file:src/Components/TourManager.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/TourEditor.tsx",
+      "target": "file:src/db/tour.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/TourManager.tsx",
+      "target": "file:src/App.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/TourManager.tsx",
+      "target": "file:src/db/tour.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/db/profile.ts",
+      "target": "file:src/db/apis.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/db/taxPolicy.ts",
+      "target": "file:src/db/apis.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/db/tour-request.ts",
+      "target": "file:src/Components/TourManager.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/db/tour-request.ts",
+      "target": "file:src/db/apis.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/db/tour.ts",
+      "target": "file:src/Components/TourManager.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/db/tour.ts",
+      "target": "file:src/db/apis.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/index.tsx",
+      "target": "file:src/App.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/index.tsx",
+      "target": "file:src/index.css",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/Inventory.tsx",
+      "target": "file:src/App.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/Inventory.tsx",
+      "target": "file:src/Components/PGroupManager.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/Inventory.tsx",
+      "target": "file:src/Components/ProfitReport.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/Inventory.tsx",
+      "target": "file:src/Service/FileMinio.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/Inventory.tsx",
+      "target": "file:src/Service/Utils.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/Inventory.tsx",
+      "target": "file:src/db/inventory.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/Inventory.tsx",
+      "target": "file:src/db/pgroup.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/Inventory.tsx",
+      "target": "file:src/db/product.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/InvoiceEditor.tsx",
+      "target": "file:src/App.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/InvoiceEditor.tsx",
+      "target": "file:src/Components/Inventory.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/InvoiceEditor.tsx",
+      "target": "file:src/Components/InvoiceManager.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/InvoiceEditor.tsx",
+      "target": "file:src/Components/PGroupManager.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/InvoiceEditor.tsx",
+      "target": "file:src/Components/ReservationManager.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/InvoiceEditor.tsx",
+      "target": "file:src/Service/Utils.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/InvoiceEditor.tsx",
+      "target": "file:src/db/classification.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/InvoiceEditor.tsx",
+      "target": "file:src/db/configs.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/InvoiceEditor.tsx",
+      "target": "file:src/db/inventory.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/InvoiceEditor.tsx",
+      "target": "file:src/db/invoice.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/InvoiceEditor.tsx",
+      "target": "file:src/db/permission.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/InvoiceEditor.tsx",
+      "target": "file:src/db/pgroup.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/InvoiceEditor.tsx",
+      "target": "file:src/db/reservation.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/InvoiceEditor.tsx",
+      "target": "file:src/db/room.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/InvoiceEditor.tsx",
+      "target": "file:src/db/users.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/PGroupManager.tsx",
+      "target": "file:src/db/pgroup.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/db/inventory.ts",
+      "target": "file:src/Components/Inventory.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/db/inventory.ts",
+      "target": "file:src/db/apis.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/db/pgroup.ts",
+      "target": "file:src/Components/PGroupManager.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/db/pgroup.ts",
+      "target": "file:src/db/apis.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/db/product.ts",
+      "target": "file:src/Components/Inventory.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/db/product.ts",
+      "target": "file:src/db/apis.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/RatePlanManager.tsx",
+      "target": "file:src/App.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/RatePlanManager.tsx",
+      "target": "file:src/Components/CounterInput.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/RatePlanManager.tsx",
+      "target": "file:src/Components/ProfitReport.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/RatePlanManager.tsx",
+      "target": "file:src/Service/Utils.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/RatePlanManager.tsx",
+      "target": "file:src/db/rate_plan.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/RatePlanManager.tsx",
+      "target": "file:src/db/room.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/RoomManager.tsx",
+      "target": "file:src/App.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/RoomManager.tsx",
+      "target": "file:src/Components/ProfitReport.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/RoomManager.tsx",
+      "target": "file:src/db/room.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/db/rate_plan.ts",
+      "target": "file:src/Components/RatePlanManager.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/db/rate_plan.ts",
+      "target": "file:src/db/apis.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/db/room.ts",
+      "target": "file:src/db/apis.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/ReservationManager.tsx",
+      "target": "file:src/App.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/ReservationManager.tsx",
+      "target": "file:src/Components/InvoiceEditor.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/ReservationManager.tsx",
+      "target": "file:src/Components/ProfitReport.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/ReservationManager.tsx",
+      "target": "file:src/Service/Utils.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/ReservationManager.tsx",
+      "target": "file:src/db/reservation.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/ReservationManager.tsx",
+      "target": "file:src/db/reservation_extractor.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/ReservationMap.tsx",
+      "target": "file:src/App.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/ReservationMap.tsx",
+      "target": "file:src/Components/ProfitReport.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/ReservationMap.tsx",
+      "target": "file:src/Components/ReservationManager.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/ReservationMap.tsx",
+      "target": "file:src/Service/Utils.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/ReservationMap.tsx",
+      "target": "file:src/db/reservation.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/ReservationMap.tsx",
+      "target": "file:src/db/reservation_extractor.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/ReservationMap.tsx",
+      "target": "file:src/db/room.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/db/reservation.ts",
+      "target": "file:src/Components/ReservationManager.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/db/reservation.ts",
+      "target": "file:src/db/apis.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/db/reservation_extractor.ts",
+      "target": "file:src/db/apis.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "config:.dockerignore",
+      "target": "service:Dockerfile",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "service:Dockerfile",
+      "target": "file:src/index.tsx",
+      "type": "deploys",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "pipeline:.github/workflows/nodejs.yml",
+      "target": "service:Dockerfile",
+      "type": "triggers",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "pipeline:.github/workflows/nodejs.yml",
+      "target": "config:package.json",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "document:README.md",
+      "target": "file:src/index.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:README.md",
+      "target": "file:src/App.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "config:package.json",
+      "target": "file:src/index.tsx",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:package.json",
+      "target": "file:src/App.tsx",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:tsconfig.json",
+      "target": "file:src/index.tsx",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:tsconfig.json",
+      "target": "file:src/App.tsx",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:.env.development",
+      "target": "file:src/index.tsx",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "document:.planning/PROJECT.md",
+      "target": "document:.planning/REQUIREMENTS.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/REQUIREMENTS.md",
+      "target": "document:.planning/ROADMAP.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/ROADMAP.md",
+      "target": "document:.planning/STATE.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/STATE.md",
+      "target": "document:.planning/PROJECT.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/ARCHITECTURE.md",
+      "target": "file:src/App.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/ARCHITECTURE.md",
+      "target": "file:src/Components/InvoiceManager.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/ARCHITECTURE.md",
+      "target": "file:src/Components/OrderManager.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/ARCHITECTURE.md",
+      "target": "file:src/Components/RoomManager.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/CONCERNS.md",
+      "target": "file:src/Components/InvoiceEditor.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/CONCERNS.md",
+      "target": "file:src/Components/ReservationManager.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/CONCERNS.md",
+      "target": "file:src/App.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/CONCERNS.md",
+      "target": "file:src/db/users.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/CONCERNS.md",
+      "target": "file:src/db/configs.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/CONCERNS.md",
+      "target": "file:src/db/apis.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/CONCERNS.md",
+      "target": "config:package.json",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/CONVENTIONS.md",
+      "target": "file:src/Components/InvoiceEditor.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/CONVENTIONS.md",
+      "target": "file:src/Components/ReservationManager.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/CONVENTIONS.md",
+      "target": "file:src/Service/FileMinio.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/CONVENTIONS.md",
+      "target": "file:src/Service/Utils.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/CONVENTIONS.md",
+      "target": "file:src/db/apis.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/CONVENTIONS.md",
+      "target": "file:src/db/rate_plan.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/CONVENTIONS.md",
+      "target": "file:src/db/tour-request.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/STRUCTURE.md",
+      "target": "file:src/Components/InvoiceManager.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/STRUCTURE.md",
+      "target": "file:src/Components/RoomManager.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/STRUCTURE.md",
+      "target": "file:src/Components/OrderEditor.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/STRUCTURE.md",
+      "target": "file:src/Components/InvoiceEditor.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/STRUCTURE.md",
+      "target": "file:src/db/apis.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/STRUCTURE.md",
+      "target": "file:src/db/invoice.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/STRUCTURE.md",
+      "target": "file:src/db/reservation.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/STRUCTURE.md",
+      "target": "file:src/db/inventory.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/STRUCTURE.md",
+      "target": "file:src/Service/FileMinio.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/STRUCTURE.md",
+      "target": "file:src/Service/Utils.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/STRUCTURE.md",
+      "target": "file:src/App.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/STRUCTURE.md",
+      "target": "file:src/index.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/STRUCTURE.md",
+      "target": "config:package.json",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/STRUCTURE.md",
+      "target": "config:tsconfig.json",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/TESTING.md",
+      "target": "file:src/Components/InvoiceEditor.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/TESTING.md",
+      "target": "file:src/Components/ReservationManager.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/TESTING.md",
+      "target": "file:src/Components/Inventory.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/TESTING.md",
+      "target": "file:src/Service/Utils.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/phases/04-dynamic-room-integration/01-RESEARCH.md",
+      "target": "document:.planning/phases/04-dynamic-room-integration/04-PLAN.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/phases/04-dynamic-room-integration/04-PLAN.md",
+      "target": "document:.planning/phases/04-dynamic-room-integration/04-SUMMARY.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/quick/configure-tls-port.md",
+      "target": "config:.env.development",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/quick/fix-menu-path-error.md",
+      "target": "file:src/App.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/quick/fix-rate-plan-visibility.md",
+      "target": "file:src/App.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/quick/fix-room-preselection.md",
+      "target": "file:src/Components/InvoiceEditor.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/quick/rename-room-to-ts.md",
+      "target": "file:src/db/room.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "config:public/manifest.json",
+      "target": "file:src/index.tsx",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:public/index.html",
+      "target": "file:src/index.tsx",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:public/index.html",
+      "target": "config:public/manifest.json",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:webpack.config.js",
+      "target": "file:src/index.tsx",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:config-overrides.js",
+      "target": "file:src/index.tsx",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:.babelrc",
+      "target": "file:src/index.tsx",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:tailwind.config.js",
+      "target": "file:src/index.css",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:tailwind.config.js",
+      "target": "file:src/App.css",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "document:.planning/phases/01-foundation-refactoring/01-PLAN.md",
+      "target": "file:src/Components/InvoiceEditor.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/phases/01-foundation-refactoring/01-PLAN.md",
+      "target": "file:src/db/configs.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/phases/01-foundation-refactoring/01-PLAN.md",
+      "target": "file:src/db/apis.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/phases/01-foundation-refactoring/01-PLAN.md",
+      "target": "file:src/App.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/phases/01-foundation-refactoring/01-PLAN.md",
+      "target": "file:src/Components/RoomManager.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/phases/01-foundation-refactoring/01-PLAN.md",
+      "target": "file:src/Components/InvoiceMap.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/phases/02-configuration-caching-resilience/02-PLAN.md",
+      "target": "file:src/db/configs.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/phases/02-configuration-caching-resilience/02-PLAN.md",
+      "target": "file:src/App.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/phases/02-configuration-caching-resilience/02-RESEARCH.md",
+      "target": "file:src/db/configs.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/phases/04-CONTEXT.md",
+      "target": "file:src/db/room.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/phases/04-CONTEXT.md",
+      "target": "file:src/db/invoice.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/phases/04-CONTEXT.md",
+      "target": "file:src/Components/InvoiceMap.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/phases/04-CONTEXT.md",
+      "target": "file:src/Components/ReservationMap.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/phases/06-room-invoice-map-optimization/06-PLAN.md",
+      "target": "file:src/Components/RoomManager.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/phases/06-room-invoice-map-optimization/06-PLAN.md",
+      "target": "file:src/Components/InvoiceMap.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/phases/06-room-invoice-map-optimization/06-RESEARCH.md",
+      "target": "file:src/Components/RoomManager.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/phases/06-room-invoice-map-optimization/06-RESEARCH.md",
+      "target": "file:src/Components/InvoiceMap.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/todos/01-bugs/fix-the-compile-error.md",
+      "target": "file:src/Components/InvoiceEditor.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/STRUCTURE.md",
+      "target": "file:tailwind.config.js",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    }
+  ],
+  "layers": [
+    {
+      "id": "layer:ui",
+      "name": "UI Components & Application Shell",
+      "description": "React/TypeScript components implementing the PMS screens for expense tracking, invoicing, reservations, inventory, tours, rate plans, immigration registration, and profit reporting, together with the App/index bootstrap files that assemble and route between them."
+    },
+    {
+      "id": "layer:data",
+      "name": "Data Access Layer",
+      "description": "Database access modules under src/db exposing CRUD and query functions for each business entity (orders, invoices, reservations, rooms, taxes, suppliers, users, profit) that the UI components call directly."
+    },
+    {
+      "id": "layer:service",
+      "name": "Shared Services & Utilities",
+      "description": "Cross-cutting helper logic (Utils.ts, imported across most of the app) and the FileMinio.ts integration for uploading/retrieving files, sitting beneath the UI and data layers."
+    },
+    {
+      "id": "layer:infrastructure",
+      "name": "Infrastructure & CI/CD",
+      "description": "Container build definition, Docker ignore rules, the GitHub Actions workflow, and the static-host redirect rules used to build, test, and deploy the application."
+    },
+    {
+      "id": "layer:config",
+      "name": "Project Configuration",
+      "description": "Build-tool and runtime configuration (package.json, tsconfig, tailwind, webpack, babel, environment variables) plus the public app manifest and HTML entry point that wire the toolchain and static assets together."
+    },
+    {
+      "id": "layer:documentation",
+      "name": "Documentation & Planning",
+      "description": "README, project planning notes, phase research/plan/summary documents, quick-fix notes, and contributor instructions describing the codebase, its architecture, and its roadmap."
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "src/Components/CounterInput.tsx": [],
+  "src/Components/RatePlanManager.tsx": [
+    "src/App.tsx",
+    "src/Components/CounterInput.tsx",
+    "src/Components/ProfitReport.tsx",
+    "src/Service/Utils.ts",
+    "src/db/rate_plan.ts",
+    "src/db/room.ts"
+  ],
+  "src/Components/RoomManager.tsx": [
+    "src/App.tsx",
+    "src/Components/ProfitReport.tsx",
+    "src/db/room.ts"
+  ],
+  "src/db/rate_plan.ts": [
+    "src/Components/RatePlanManager.tsx",
+    "src/db/apis.ts"
+  ],
+  "src/db/room.ts": [
+    "src/db/apis.ts"
+  ]
+}

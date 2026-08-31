@@ -1,0 +1,19 @@
+{
+  "projectRoot": "C:/apps/ps/pms-ts",
+  "batchFiles": [
+    {"path": ".env.development", "language": "config", "sizeLines": 54, "fileCategory": "config"},
+    {"path": "PLAN.md", "language": "markdown", "sizeLines": 21, "fileCategory": "docs"},
+    {"path": "README.md", "language": "markdown", "sizeLines": 30, "fileCategory": "docs"},
+    {"path": "Subscribe.txt", "language": "txt", "sizeLines": 0, "fileCategory": "docs"},
+    {"path": "package.json", "language": "json", "sizeLines": 87, "fileCategory": "config"},
+    {"path": "tsconfig.json", "language": "json", "sizeLines": 112, "fileCategory": "config"}
+  ],
+  "batchImportData": {
+    ".env.development": [],
+    "PLAN.md": [],
+    "README.md": [],
+    "Subscribe.txt": [],
+    "package.json": [],
+    "tsconfig.json": []
+  }
+}

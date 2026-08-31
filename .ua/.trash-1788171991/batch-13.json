@@ -1,0 +1,86 @@
+{
+  "nodes": [
+    {
+      "id": "document:.planning/quick/configure-tls-port.md",
+      "type": "document",
+      "name": "configure-tls-port.md",
+      "filePath": ".planning/quick/configure-tls-port.md",
+      "summary": "Quick-fix note describing how to enable HTTPS on port 3001 for local development by adding HTTPS=true to .env.development alongside the existing PORT=3001 setting.",
+      "tags": ["documentation", "quick-fix", "configuration", "environment"],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:.planning/quick/fix-menu-path-error.md",
+      "type": "document",
+      "name": "fix-menu-path-error.md",
+      "filePath": ".planning/quick/fix-menu-path-error.md",
+      "summary": "Quick-fix note for a startup TypeError in App.tsx caused by a mismatch between the 'rate-plan' key in menuOrder and the 'ratePlan' key in the menus object, resolved by aligning the keys and adding a safety filter in filterMenus.",
+      "tags": ["documentation", "bugfix", "quick-fix", "navigation"],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:.planning/quick/fix-rate-plan-visibility.md",
+      "type": "document",
+      "name": "fix-rate-plan-visibility.md",
+      "filePath": ".planning/quick/fix-rate-plan-visibility.md",
+      "summary": "Quick-fix note explaining why the Rate Plan menu item was hidden due to a camelCase/kebab-case mismatch between the 'ratePlan' menu key and the backend-provided 'rate-plan' authority string, fixed by standardizing on 'rate-plan' throughout App.tsx.",
+      "tags": ["documentation", "bugfix", "quick-fix", "authorization"],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:.planning/quick/fix-room-preselection.md",
+      "type": "document",
+      "name": "fix-room-preselection.md",
+      "filePath": ".planning/quick/fix-room-preselection.md",
+      "summary": "Quick-fix note for InvoiceEditor's chooseRoom function, which failed to pre-select rooms in the modal because it matched invoice.rooms values against room.name instead of the correct room.internalName field.",
+      "tags": ["documentation", "bugfix", "quick-fix", "invoicing"],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:.planning/quick/rename-room-to-ts.md",
+      "type": "document",
+      "name": "rename-room-to-ts.md",
+      "filePath": ".planning/quick/rename-room-to-ts.md",
+      "summary": "Quick-fix note documenting the rename of src/db/room.tsx to src/db/room.ts, since the file no longer contains JSX and a .ts extension better reflects its pure TypeScript content.",
+      "tags": ["documentation", "quick-fix", "refactor", "typescript"],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "document:.planning/quick/configure-tls-port.md",
+      "target": "config:.env.development",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/quick/fix-menu-path-error.md",
+      "target": "file:src/App.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/quick/fix-rate-plan-visibility.md",
+      "target": "file:src/App.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/quick/fix-room-preselection.md",
+      "target": "file:src/Components/InvoiceEditor.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/quick/rename-room-to-ts.md",
+      "target": "file:src/db/room.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    }
+  ]
+}

@@ -1,0 +1,5079 @@
+{
+  "version": "1.0.0",
+  "gitCommitHash": "431eb3cf5297a42956dae62b518aab011ff86e4b",
+  "generatedAt": "2026-08-31T10:26:21.105Z",
+  "files": {
+    ".babelrc": {
+      "filePath": ".babelrc",
+      "contentHash": "37af64eeee3367ebee975131c547947b0704834e5c73b232ddc9e0c1d33a4108",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 12,
+      "hasStructuralAnalysis": false
+    },
+    ".bg-shell/manifest.json": {
+      "filePath": ".bg-shell/manifest.json",
+      "contentHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1,
+      "hasStructuralAnalysis": true
+    },
+    ".dockerignore": {
+      "filePath": ".dockerignore",
+      "contentHash": "fafb159c83d3abf9b693e1b917ea9f013dd174f616d6812763fb9e395ffdfef0",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": false
+    },
+    ".env.development": {
+      "filePath": ".env.development",
+      "contentHash": "efc6b770b8b4d0e327e3f947b60a9c69e4ff3574a02b9f9823fe002cc3167c79",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 55,
+      "hasStructuralAnalysis": true
+    },
+    ".github/copilot-instructions.md": {
+      "filePath": ".github/copilot-instructions.md",
+      "contentHash": "e2fa34e6c2889d1b4c3e8f9de8c9db1a492572f0693ed84900f42f6f42e239a0",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1,
+      "hasStructuralAnalysis": true
+    },
+    ".github/workflows/nodejs.yml": {
+      "filePath": ".github/workflows/nodejs.yml",
+      "contentHash": "fa66803d310a6d02eac31d70b5037ef79b730eff5636f63da342661ca61b5fa4",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 55,
+      "hasStructuralAnalysis": true
+    },
+    ".planning/PROJECT.md": {
+      "filePath": ".planning/PROJECT.md",
+      "contentHash": "729422ac99ece6a0337c59249be62eddb5a21de27fca5c6ed3620d9318a66e23",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 23,
+      "hasStructuralAnalysis": true
+    },
+    ".planning/REQUIREMENTS.md": {
+      "filePath": ".planning/REQUIREMENTS.md",
+      "contentHash": "6807ea0721d7321c5b4fc6674be666ae0f01f2d9226e0701af76ee170f6bd49e",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 28,
+      "hasStructuralAnalysis": true
+    },
+    ".planning/ROADMAP.md": {
+      "filePath": ".planning/ROADMAP.md",
+      "contentHash": "8735e0c67de9e0d825cdfb0eca92b68c77b89ff015ac24892c3987c764c33b22",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 37,
+      "hasStructuralAnalysis": true
+    },
+    ".planning/STATE.md": {
+      "filePath": ".planning/STATE.md",
+      "contentHash": "2944d989f095918f9275bccfd2a0b6d58f4cd65a9fd4cfb71b23be3b64f3f630",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 45,
+      "hasStructuralAnalysis": true
+    },
+    ".planning/codebase/ARCHITECTURE.md": {
+      "filePath": ".planning/codebase/ARCHITECTURE.md",
+      "contentHash": "0e851c4eca9db177f327ef2a8d8cf461018d8ca2d8c31208dfa60405bad78575",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 27,
+      "hasStructuralAnalysis": true
+    },
+    ".planning/codebase/CONCERNS.md": {
+      "filePath": ".planning/codebase/CONCERNS.md",
+      "contentHash": "f690fdbfaa9be4a80f1afbf98f8d1ac7069d88fb73c4db4bb9bd7c28be69f2f7",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 88,
+      "hasStructuralAnalysis": true
+    },
+    ".planning/codebase/CONVENTIONS.md": {
+      "filePath": ".planning/codebase/CONVENTIONS.md",
+      "contentHash": "1053fa48072a2953544e9f21c2e22dc52ba10de2209f5eb81dd4d686af05ff8f",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 56,
+      "hasStructuralAnalysis": true
+    },
+    ".planning/codebase/INTEGRATIONS.md": {
+      "filePath": ".planning/codebase/INTEGRATIONS.md",
+      "contentHash": "a808406190b11f9b5e43962935f0317f3dbcad1ea59fe9429b84eace173bbe3a",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 32,
+      "hasStructuralAnalysis": true
+    },
+    ".planning/codebase/STACK.md": {
+      "filePath": ".planning/codebase/STACK.md",
+      "contentHash": "d26a2a872079ec9b95e8e0bbda0451d3d85916a19d9e2c9032a39016ec0a3f53",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 27,
+      "hasStructuralAnalysis": true
+    },
+    ".planning/codebase/STRUCTURE.md": {
+      "filePath": ".planning/codebase/STRUCTURE.md",
+      "contentHash": "21af9d29c4cdf4c2f910c6d6e30c71286e2397084e3982c31b1c6079c9d8d4ca",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 26,
+      "hasStructuralAnalysis": true
+    },
+    ".planning/codebase/TESTING.md": {
+      "filePath": ".planning/codebase/TESTING.md",
+      "contentHash": "0f5c264188637a49e88fcbc89226914c6387e8ac6c7f5e47913fc7d8fef6a861",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 55,
+      "hasStructuralAnalysis": true
+    },
+    ".planning/phases/01-foundation-refactoring/01-PLAN.md": {
+      "filePath": ".planning/phases/01-foundation-refactoring/01-PLAN.md",
+      "contentHash": "bc57a87820be2e5b3008947ac70bc0bc138fb22ba5498e621bbaea68f5bc75aa",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 46,
+      "hasStructuralAnalysis": true
+    },
+    ".planning/phases/01-foundation-refactoring/01-RESEARCH.md": {
+      "filePath": ".planning/phases/01-foundation-refactoring/01-RESEARCH.md",
+      "contentHash": "346d59abf1cccd26c24524ebf70c84931596b9b3771663758418178ee47ea8b3",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 44,
+      "hasStructuralAnalysis": true
+    },
+    ".planning/phases/02-configuration-caching-resilience/02-PLAN.md": {
+      "filePath": ".planning/phases/02-configuration-caching-resilience/02-PLAN.md",
+      "contentHash": "23acf66bb8a5fcc01558b0c8fd1a79faaf008f72de6cd5d1473de13081d9083a",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 58,
+      "hasStructuralAnalysis": true
+    },
+    ".planning/phases/02-configuration-caching-resilience/02-RESEARCH.md": {
+      "filePath": ".planning/phases/02-configuration-caching-resilience/02-RESEARCH.md",
+      "contentHash": "f1225f059419d243bf67b5a51f3bcf409f89bc4f5043078fffe9e2d7405be263",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 83,
+      "hasStructuralAnalysis": true
+    },
+    ".planning/phases/04-CONTEXT.md": {
+      "filePath": ".planning/phases/04-CONTEXT.md",
+      "contentHash": "96f3b0ea686023b1c259124050e6ceebd41468cce3c4e1436958640828efa197",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 18,
+      "hasStructuralAnalysis": true
+    },
+    ".planning/phases/04-dynamic-room-integration/01-RESEARCH.md": {
+      "filePath": ".planning/phases/04-dynamic-room-integration/01-RESEARCH.md",
+      "contentHash": "c1b2e23e05e09414d0f6401b91c94416b4a7799ef0adb51c9bec7652d93ccd1c",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 25,
+      "hasStructuralAnalysis": true
+    },
+    ".planning/phases/04-dynamic-room-integration/04-PLAN.md": {
+      "filePath": ".planning/phases/04-dynamic-room-integration/04-PLAN.md",
+      "contentHash": "f39dd336283f2a37f1e5f09dcc3603435ff8b7c3f7855a0d687fe0c09d14a3ec",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 26,
+      "hasStructuralAnalysis": true
+    },
+    ".planning/phases/04-dynamic-room-integration/04-SUMMARY.md": {
+      "filePath": ".planning/phases/04-dynamic-room-integration/04-SUMMARY.md",
+      "contentHash": "d95930bf183984a512422436c23dd5223be6da740a1f47f6bc515675e1303f8e",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 23,
+      "hasStructuralAnalysis": true
+    },
+    ".planning/phases/06-room-invoice-map-optimization/06-PLAN.md": {
+      "filePath": ".planning/phases/06-room-invoice-map-optimization/06-PLAN.md",
+      "contentHash": "b3287265754fc0e707574676306355f0e3b5c3d10de9d0d7c9b62a84b3357d59",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 25,
+      "hasStructuralAnalysis": true
+    },
+    ".planning/phases/06-room-invoice-map-optimization/06-RESEARCH.md": {
+      "filePath": ".planning/phases/06-room-invoice-map-optimization/06-RESEARCH.md",
+      "contentHash": "f055c5ba8c246693b905a62dc6d27b8d7178706dec847fc8d965fa28cdd4ec0d",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 16,
+      "hasStructuralAnalysis": true
+    },
+    ".planning/quick/configure-tls-port.md": {
+      "filePath": ".planning/quick/configure-tls-port.md",
+      "contentHash": "cab42f62c6f2e3d1ad2b67f05ae33561101f89ce42b74bca5730b7257d03c677",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 13,
+      "hasStructuralAnalysis": true
+    },
+    ".planning/quick/fix-menu-path-error.md": {
+      "filePath": ".planning/quick/fix-menu-path-error.md",
+      "contentHash": "1f2cf2d5afbc21f47bcbaa30498f03de834724f0d8e7727103f1dc85c8ba6ddc",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 21,
+      "hasStructuralAnalysis": true
+    },
+    ".planning/quick/fix-rate-plan-visibility.md": {
+      "filePath": ".planning/quick/fix-rate-plan-visibility.md",
+      "contentHash": "72402c0dc8ed61a1b45176f6f603e2d23f16ffdd1e02b1396c025c205691d2b7",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 22,
+      "hasStructuralAnalysis": true
+    },
+    ".planning/quick/fix-room-preselection.md": {
+      "filePath": ".planning/quick/fix-room-preselection.md",
+      "contentHash": "e7929983440477145643dd3d0b3b8285a880ce2bd074bc7dc51edd0febdbb291",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 13,
+      "hasStructuralAnalysis": true
+    },
+    ".planning/quick/rename-room-to-ts.md": {
+      "filePath": ".planning/quick/rename-room-to-ts.md",
+      "contentHash": "a6eb96db8ed2dfbec39ca39be01e11b1f2304b8c6f77f1c27dadab2bd704159c",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 12,
+      "hasStructuralAnalysis": true
+    },
+    ".planning/todos/01-bugs/fix-the-compile-error.md": {
+      "filePath": ".planning/todos/01-bugs/fix-the-compile-error.md",
+      "contentHash": "56d1c57ac4bfa3828ad39687b3aa5743e6b24b6962d247c11a06e62504ad1c21",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 17,
+      "hasStructuralAnalysis": true
+    },
+    ".ua/.understandignore": {
+      "filePath": ".ua/.understandignore",
+      "contentHash": "781181e23a8caabebab900414b988adc7beeb4ca718f9481efee3a75637d1bdd",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 81,
+      "hasStructuralAnalysis": false
+    },
+    "Dockerfile": {
+      "filePath": "Dockerfile",
+      "contentHash": "60684fa6762de571c34d321114ea16e4cb7974e488e46cd5b3ee86b54953081b",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 49,
+      "hasStructuralAnalysis": true
+    },
+    "PLAN.md": {
+      "filePath": "PLAN.md",
+      "contentHash": "78120d5cc6b528f60f6ebf650583500a7ebd2235f45b8280f1c258b2a7f2a2e5",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 22,
+      "hasStructuralAnalysis": true
+    },
+    "README.md": {
+      "filePath": "README.md",
+      "contentHash": "0117c2684b5d1716d97b2e99733d3beeb65da519c62a164878600400b129aa2e",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 31,
+      "hasStructuralAnalysis": true
+    },
+    "Subscribe.txt": {
+      "filePath": "Subscribe.txt",
+      "contentHash": "39d13a81b1c37047fbe8a634313aae742eebbeb2035747c751411bfad3ce8031",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1,
+      "hasStructuralAnalysis": false
+    },
+    "config-overrides.js": {
+      "filePath": "config-overrides.js",
+      "contentHash": "c145fb26e4ee2f7094694d82cf116979ab913b86fb83d033226e876a0d7e009a",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 27,
+      "hasStructuralAnalysis": true
+    },
+    "package.json": {
+      "filePath": "package.json",
+      "contentHash": "ffff66ab04666d55f41cbb0106166d92fd6c3bc14c1df45f0983ab26690aee79",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 88,
+      "hasStructuralAnalysis": true
+    },
+    "public/_redirects": {
+      "filePath": "public/_redirects",
+      "contentHash": "6b01dca830505a155fac341eacf5d241852ec91235163202d6ba90339d390719",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1,
+      "hasStructuralAnalysis": false
+    },
+    "public/index.html": {
+      "filePath": "public/index.html",
+      "contentHash": "12a1b162e333264616245d82eae52fd038e32fad9bbc367c01e1660f91ba8c05",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 44,
+      "hasStructuralAnalysis": false
+    },
+    "public/manifest.json": {
+      "filePath": "public/manifest.json",
+      "contentHash": "d126111892efdea71aa63921eceaa0312bead576d9243f18282eecb1a20b9763",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 26,
+      "hasStructuralAnalysis": true
+    },
+    "public/robots.txt": {
+      "filePath": "public/robots.txt",
+      "contentHash": "e5ab0d231eeb01b4a982d1c79a6729cac9797ad15a69247e4f28ba6afc149b4c",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 4,
+      "hasStructuralAnalysis": false
+    },
+    "src/App.css": {
+      "filePath": "src/App.css",
+      "contentHash": "85ae8f94da99d425769ba02c8db69fe8dcbbda6882c921ae2caf27dc66f26c68",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 16,
+      "hasStructuralAnalysis": false
+    },
+    "src/App.tsx": {
+      "filePath": "src/App.tsx",
+      "contentHash": "73ccb29da7f188c6c53f5ad38da0f34fe488bc511a8a3f2434383879c2c864c3",
+      "functions": [
+        {
+          "name": "App",
+          "params": [],
+          "exported": true,
+          "lineCount": 359
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "React",
+            "useEffect",
+            "useState"
+          ]
+        },
+        {
+          "source": "./App.css",
+          "specifiers": []
+        },
+        {
+          "source": "./Components/ProfitReport",
+          "specifiers": [
+            "ProfitReport"
+          ]
+        },
+        {
+          "source": "./Components/InvoiceManager",
+          "specifiers": [
+            "InvoiceManager"
+          ]
+        },
+        {
+          "source": "./Components/InvoiceEditor",
+          "specifiers": [
+            "InvoiceEditor"
+          ]
+        },
+        {
+          "source": "react-router-dom",
+          "specifiers": [
+            "Link",
+            "Route",
+            "Routes",
+            "useNavigate"
+          ]
+        },
+        {
+          "source": "./Components/ExpenseManager",
+          "specifiers": [
+            "ExpenseManager"
+          ]
+        },
+        {
+          "source": "./Components/ReservationManager",
+          "specifiers": [
+            "ReservationManager"
+          ]
+        },
+        {
+          "source": "./Components/Settings",
+          "specifiers": [
+            "Settings"
+          ]
+        },
+        {
+          "source": "react-icons/io",
+          "specifiers": [
+            "IoMdSettings"
+          ]
+        },
+        {
+          "source": "react-icons/fa",
+          "specifiers": [
+            "FaHome",
+            "FaChartLine",
+            "FaFileInvoiceDollar",
+            "FaMoneyCheckAlt",
+            "FaCalendarAlt",
+            "FaClipboardList",
+            "FaBoxes",
+            "FaUserCircle"
+          ]
+        },
+        {
+          "source": "./Components/OrderManager",
+          "specifiers": [
+            "OrderManager"
+          ]
+        },
+        {
+          "source": "./Components/OrderEditor",
+          "specifiers": [
+            "OrderEditor"
+          ]
+        },
+        {
+          "source": "./Components/Inventory",
+          "specifiers": [
+            "Inventory"
+          ]
+        },
+        {
+          "source": "./Components/PGroupManager",
+          "specifiers": [
+            "PGroupManager"
+          ]
+        },
+        {
+          "source": "./Components/SupplierManager",
+          "specifiers": [
+            "SupplierManager"
+          ]
+        },
+        {
+          "source": "./db/configs",
+          "specifiers": [
+            "AppConfig",
+            "appConfigs"
+          ]
+        },
+        {
+          "source": "./Components/TourManager",
+          "specifiers": [
+            "TourManager"
+          ]
+        },
+        {
+          "source": "./Components/TourEditor",
+          "specifiers": [
+            "TourEditor"
+          ]
+        },
+        {
+          "source": "./Components/UserProfile",
+          "specifiers": [
+            "UserProfile"
+          ]
+        },
+        {
+          "source": "./Components/Welcome",
+          "specifiers": [
+            "Welcome"
+          ]
+        },
+        {
+          "source": "flowbite-react",
+          "specifiers": [
+            "Button"
+          ]
+        },
+        {
+          "source": "./Components/ReservationMap",
+          "specifiers": [
+            "ReservationMap"
+          ]
+        },
+        {
+          "source": "./Components/InvoiceMap",
+          "specifiers": [
+            "InvoiceMap"
+          ]
+        },
+        {
+          "source": "./Components/RoomManager",
+          "specifiers": [
+            "RoomManager"
+          ]
+        },
+        {
+          "source": "./Components/RatePlanManager",
+          "specifiers": [
+            "RatePlanManager"
+          ]
+        },
+        {
+          "source": "./db/profile",
+          "specifiers": [
+            "getProfile"
+          ]
+        },
+        {
+          "source": "react-icons/fa",
+          "specifiers": [
+            "FaBed",
+            "FaMoneyBill"
+          ]
+        },
+        {
+          "source": "./Components/TaxableInvoiceManager",
+          "specifiers": [
+            "TaxableInvoiceManager"
+          ]
+        },
+        {
+          "source": "./Components/TaxPolicyManager",
+          "specifiers": [
+            "TaxPolicyManager"
+          ]
+        },
+        {
+          "source": "./Components/ImmigrationRegistrationManager",
+          "specifiers": [
+            "ImmigrationRegistrationManager"
+          ]
+        }
+      ],
+      "exports": [
+        "DEFAULT_PAGE_SIZE",
+        "defaultChat",
+        "App"
+      ],
+      "totalLines": 522,
+      "hasStructuralAnalysis": true
+    },
+    "src/Components/CounterInput.tsx": {
+      "filePath": "src/Components/CounterInput.tsx",
+      "contentHash": "54aaf48c3ff4a6c862899e269ac26c8ce47019b256b949e3ec2bfdcbca99c8d1",
+      "functions": [
+        {
+          "name": "CounterInput",
+          "params": [
+            "{\r\n    label,\r\n    name,\r\n    value = 0,\r\n    min = 0,\r\n    max = 9999999999999,\r\n    step = 1,\r\n    onChange,\r\n}"
+          ],
+          "exported": false,
+          "lineCount": 58
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "React"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 74,
+      "hasStructuralAnalysis": true
+    },
+    "src/Components/ExpenseManager.tsx": {
+      "filePath": "src/Components/ExpenseManager.tsx",
+      "contentHash": "d5e83f00638bc9c4156f5d4bfee22cfce8b61e2840f6055d7aa43bd812c4434b",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "React",
+            "useState",
+            "useEffect",
+            "useRef",
+            "ChangeEvent",
+            "memo"
+          ]
+        },
+        {
+          "source": "flowbite-react",
+          "specifiers": [
+            "TextInput",
+            "Label",
+            "Spinner",
+            "Modal",
+            "Button"
+          ]
+        },
+        {
+          "source": "../db/expense",
+          "specifiers": [
+            "assignExpense",
+            "deleteExpense",
+            "generate",
+            "listExpenseByDate",
+            "newExpId"
+          ]
+        },
+        {
+          "source": "../db/classification",
+          "specifiers": [
+            "classifyServiceByItemName"
+          ]
+        },
+        {
+          "source": "../App",
+          "specifiers": [
+            "Chat",
+            "DEFAULT_PAGE_SIZE"
+          ]
+        },
+        {
+          "source": "react-icons/hi",
+          "specifiers": [
+            "HiOutlineCash",
+            "HiUserCircle",
+            "HiX"
+          ]
+        },
+        {
+          "source": "../Service/Utils",
+          "specifiers": [
+            "formatISODate",
+            "formatISODateTime",
+            "formatMoneyAmount",
+            "formatVND"
+          ]
+        },
+        {
+          "source": "react-icons/pi",
+          "specifiers": [
+            "PiBrainThin"
+          ]
+        },
+        {
+          "source": "react-icons/fa6",
+          "specifiers": [
+            "FaRotate"
+          ]
+        },
+        {
+          "source": "../db/expense",
+          "specifiers": [
+            "listExpenseByExpenserAndDate"
+          ]
+        },
+        {
+          "source": "./ProfitReport",
+          "specifiers": [
+            "Pagination"
+          ]
+        },
+        {
+          "source": "../db/expense",
+          "specifiers": [
+            "saveExpense"
+          ]
+        },
+        {
+          "source": "react-router-dom",
+          "specifiers": [
+            "Link"
+          ]
+        },
+        {
+          "source": "react-icons/md",
+          "specifiers": [
+            "MdAssignmentAdd"
+          ]
+        },
+        {
+          "source": "react-icons/fa",
+          "specifiers": [
+            "FaUmbrellaBeach"
+          ]
+        },
+        {
+          "source": "react-icons/io",
+          "specifiers": [
+            "IoMdRemoveCircle"
+          ]
+        },
+        {
+          "source": "react-icons/ci",
+          "specifiers": [
+            "CiEdit"
+          ]
+        },
+        {
+          "source": "react-moment",
+          "specifiers": [
+            "Moment"
+          ]
+        },
+        {
+          "source": "../db/users",
+          "specifiers": [
+            "listUsers",
+            "UserInfo"
+          ]
+        }
+      ],
+      "exports": [
+        "ExpenseManager"
+      ],
+      "totalLines": 906,
+      "hasStructuralAnalysis": true
+    },
+    "src/Components/Immigration.tsx": {
+      "filePath": "src/Components/Immigration.tsx",
+      "contentHash": "8cf9c54ad2981ac99713a292f4a5646cab351ce45b8b587dc1f890eb27aeffe2",
+      "functions": [
+        {
+          "name": "InvoiceManager",
+          "params": [
+            "props"
+          ],
+          "exported": true,
+          "lineCount": 391
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "React",
+            "useState",
+            "useEffect",
+            "ChangeEvent"
+          ]
+        },
+        {
+          "source": "react-router-dom",
+          "specifiers": [
+            "Link"
+          ]
+        },
+        {
+          "source": "flowbite-react",
+          "specifiers": [
+            "Button",
+            "Modal",
+            "TextInput"
+          ]
+        },
+        {
+          "source": "react-moment",
+          "specifiers": [
+            "Moment"
+          ]
+        },
+        {
+          "source": "../App",
+          "specifiers": [
+            "DEFAULT_PAGE_SIZE"
+          ]
+        },
+        {
+          "source": "react-icons/hi",
+          "specifiers": [
+            "HiOutlineExclamationCircle",
+            "HiX"
+          ]
+        },
+        {
+          "source": "../Service/Utils",
+          "specifiers": [
+            "formatISODate",
+            "formatVND"
+          ]
+        },
+        {
+          "source": "../db/invoice",
+          "specifiers": [
+            "deleteInvoice",
+            "listInvoiceByGuestName",
+            "listStayingAndComingInvoices"
+          ]
+        },
+        {
+          "source": "./ProfitReport",
+          "specifiers": [
+            "optionStyle",
+            "Pagination"
+          ]
+        },
+        {
+          "source": "react-icons/gi",
+          "specifiers": [
+            "GiHouse"
+          ]
+        },
+        {
+          "source": "react-icons/io",
+          "specifiers": [
+            "IoMdMap",
+            "IoMdPersonAdd",
+            "IoMdRemoveCircle"
+          ]
+        },
+        {
+          "source": "react-icons/ci",
+          "specifiers": [
+            "CiEdit"
+          ]
+        },
+        {
+          "source": "../db/permission",
+          "specifiers": [
+            "PERMISSION_INVOICE_DELETE"
+          ]
+        },
+        {
+          "source": "./InvoiceManager",
+          "specifiers": [
+            "Invoice"
+          ]
+        }
+      ],
+      "exports": [
+        "InvoiceManager"
+      ],
+      "totalLines": 422,
+      "hasStructuralAnalysis": true
+    },
+    "src/Components/ImmigrationRegistrationManager.tsx": {
+      "filePath": "src/Components/ImmigrationRegistrationManager.tsx",
+      "contentHash": "72bd6e506e29735163c1185468c3702531cead49086db549215e6cf616164b22",
+      "functions": [
+        {
+          "name": "ImmigrationRegistrationManager",
+          "params": [
+            "{ activeMenu, handleUnauthorized }"
+          ],
+          "exported": true,
+          "lineCount": 231
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "React",
+            "FormEvent",
+            "useEffect",
+            "useState"
+          ]
+        },
+        {
+          "source": "flowbite-react",
+          "specifiers": [
+            "Button",
+            "Label",
+            "Modal",
+            "Spinner",
+            "TextInput"
+          ]
+        },
+        {
+          "source": "../Service/Utils",
+          "specifiers": [
+            "beginOfMonth",
+            "formatISODate"
+          ]
+        },
+        {
+          "source": "../db/immigrationRegistration",
+          "specifiers": [
+            "addImmigrationGuest",
+            "addImmigrationRegistration",
+            "ImmigrationGuest",
+            "ImmigrationRegistration",
+            "listImmigrationRegistrations",
+            "listInvoicesForImmigration",
+            "removeImmigrationRegistration",
+            "unwrapPage"
+          ]
+        },
+        {
+          "source": "./ProfitReport",
+          "specifiers": [
+            "Pagination"
+          ]
+        },
+        {
+          "source": "react-icons/hi",
+          "specifiers": [
+            "HiOutlineArrowLeft",
+            "HiOutlineArrowRight",
+            "HiPlus",
+            "HiTrash"
+          ]
+        },
+        {
+          "source": "./InvoiceManager",
+          "specifiers": [
+            "Invoice"
+          ]
+        },
+        {
+          "source": "react-moment",
+          "specifiers": [
+            "Moment"
+          ]
+        }
+      ],
+      "exports": [
+        "ImmigrationRegistrationManager"
+      ],
+      "totalLines": 266,
+      "hasStructuralAnalysis": true
+    },
+    "src/Components/Inventory.tsx": {
+      "filePath": "src/Components/Inventory.tsx",
+      "contentHash": "8c008cad1e96fb3c5dce3f143bcc8a3842ea4d4d3ae3745d59fb0157c2bd2a31",
+      "functions": [
+        {
+          "name": "activeGroupStyle",
+          "params": [
+            "focus"
+          ],
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "Inventory",
+          "params": [
+            "props"
+          ],
+          "exported": true,
+          "lineCount": 1119
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "React",
+            "useState",
+            "useEffect",
+            "ChangeEvent"
+          ]
+        },
+        {
+          "source": "react-router-dom",
+          "specifiers": [
+            "Link"
+          ]
+        },
+        {
+          "source": "flowbite-react",
+          "specifiers": [
+            "Avatar",
+            "Button",
+            "FileInput",
+            "Label",
+            "Modal",
+            "Textarea",
+            "TextInput",
+            "ToggleSwitch"
+          ]
+        },
+        {
+          "source": "../db/inventory",
+          "specifiers": [
+            "adjustInventoryQuantity",
+            "changeItemStatus",
+            "listProductItems",
+            "listProductItemsByGroup",
+            "listProductItemsWithName",
+            "listProductItemsWithNameAndGroup",
+            "planAvailability"
+          ]
+        },
+        {
+          "source": "react-icons/hi",
+          "specifiers": [
+            "HiArrowCircleUp",
+            "HiDocumentAdd",
+            "HiOutlineCash",
+            "HiSave",
+            "HiX"
+          ]
+        },
+        {
+          "source": "../Service/Utils",
+          "specifiers": [
+            "formatMoneyAmount",
+            "formatVND"
+          ]
+        },
+        {
+          "source": "../App",
+          "specifiers": [
+            "DEFAULT_PAGE_SIZE"
+          ]
+        },
+        {
+          "source": "./ProfitReport",
+          "specifiers": [
+            "optionStyle",
+            "Pagination"
+          ]
+        },
+        {
+          "source": "../db/pgroup",
+          "specifiers": [
+            "listAllPGroups"
+          ]
+        },
+        {
+          "source": "./PGroupManager",
+          "specifiers": [
+            "PGroup"
+          ]
+        },
+        {
+          "source": "../Service/FileMinio",
+          "specifiers": [
+            "putObject"
+          ]
+        },
+        {
+          "source": "../db/product",
+          "specifiers": [
+            "getProduct",
+            "saveProduct"
+          ]
+        },
+        {
+          "source": "react-icons/md",
+          "specifiers": [
+            "MdAssignmentAdd",
+            "MdOutlineBrowserUpdated"
+          ]
+        },
+        {
+          "source": "react-icons/io",
+          "specifiers": [
+            "IoMdArrowBack"
+          ]
+        }
+      ],
+      "exports": [
+        "activeGroupStyle",
+        "Inventory"
+      ],
+      "totalLines": 1240,
+      "hasStructuralAnalysis": true
+    },
+    "src/Components/InvoiceEditor.tsx": {
+      "filePath": "src/Components/InvoiceEditor.tsx",
+      "contentHash": "9122e147173e8f577e5299020e8580023e3cbd03b1648aeb34dd4d7fcda15969",
+      "functions": [
+        {
+          "name": "internalRooms",
+          "params": [
+            "rooms"
+          ],
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "InvoiceEditor",
+          "params": [
+            "props"
+          ],
+          "exported": true,
+          "lineCount": 1894
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "React",
+            "useState",
+            "useEffect",
+            "useRef",
+            "ChangeEvent"
+          ]
+        },
+        {
+          "source": "react-router-dom",
+          "specifiers": [
+            "Link",
+            "useLocation",
+            "useNavigate",
+            "useParams"
+          ]
+        },
+        {
+          "source": "../db/invoice",
+          "specifiers": [
+            "createInvoice",
+            "getInvoice",
+            "updateInvoice"
+          ]
+        },
+        {
+          "source": "flowbite-react",
+          "specifiers": [
+            "Table",
+            "TextInput",
+            "Label",
+            "Datepicker",
+            "Modal",
+            "Button",
+            "Checkbox"
+          ]
+        },
+        {
+          "source": "react-icons/hi",
+          "specifiers": [
+            "HiExternalLink",
+            "HiOutlineCash",
+            "HiOutlineClipboardCopy",
+            "HiSave",
+            "HiUserCircle",
+            "HiX"
+          ]
+        },
+        {
+          "source": "../db/classification",
+          "specifiers": [
+            "classifyServiceByItemName"
+          ]
+        },
+        {
+          "source": "../Service/Utils",
+          "specifiers": [
+            "addDays",
+            "formatISODate",
+            "formatMoneyAmount",
+            "formatShortDate",
+            "formatVND"
+          ]
+        },
+        {
+          "source": "../App",
+          "specifiers": [
+            "Chat",
+            "DEFAULT_PAGE_SIZE"
+          ]
+        },
+        {
+          "source": "../db/users",
+          "specifiers": [
+            "issuers"
+          ]
+        },
+        {
+          "source": "react-moment",
+          "specifiers": [
+            "Moment"
+          ]
+        },
+        {
+          "source": "../db/reservation",
+          "specifiers": [
+            "listLatestReservations"
+          ]
+        },
+        {
+          "source": "html2canvas",
+          "specifiers": [
+            "html2canvas"
+          ]
+        },
+        {
+          "source": "./InvoiceManager",
+          "specifiers": [
+            "Invoice",
+            "InvoiceItem",
+            "Issuer"
+          ]
+        },
+        {
+          "source": "./Inventory",
+          "specifiers": [
+            "Product"
+          ]
+        },
+        {
+          "source": "./ReservationManager",
+          "specifiers": [
+            "Reservation",
+            "ResRoom"
+          ]
+        },
+        {
+          "source": "../db/inventory",
+          "specifiers": [
+            "listAllProductItems"
+          ]
+        },
+        {
+          "source": "react-icons/fa6",
+          "specifiers": [
+            "FaEye"
+          ]
+        },
+        {
+          "source": "react-icons/io",
+          "specifiers": [
+            "IoMdArrowBack",
+            "IoMdRemoveCircle"
+          ]
+        },
+        {
+          "source": "react-icons/ci",
+          "specifiers": [
+            "CiEdit"
+          ]
+        },
+        {
+          "source": "react-icons/md",
+          "specifiers": [
+            "MdAssignmentAdd"
+          ]
+        },
+        {
+          "source": "react-icons/gi",
+          "specifiers": [
+            "GiHouse"
+          ]
+        },
+        {
+          "source": "nanoid",
+          "specifiers": [
+            "nanoid"
+          ]
+        },
+        {
+          "source": "../db/pgroup",
+          "specifiers": [
+            "listAllPGroups"
+          ]
+        },
+        {
+          "source": "./PGroupManager",
+          "specifiers": [
+            "PGroup"
+          ]
+        },
+        {
+          "source": "../db/permission",
+          "specifiers": [
+            "PERMISSION_INVOICE_ASSIGN"
+          ]
+        },
+        {
+          "source": "../db/configs",
+          "specifiers": [
+            "AppConfig",
+            "PaymentMethod",
+            "defaultAppConfigs"
+          ]
+        },
+        {
+          "source": "../db/room",
+          "specifiers": [
+            "listRoom",
+            "Room"
+          ]
+        }
+      ],
+      "exports": [
+        "internalRooms",
+        "Configs",
+        "InvoiceEditor"
+      ],
+      "totalLines": 2028,
+      "hasStructuralAnalysis": true
+    },
+    "src/Components/InvoiceManager.tsx": {
+      "filePath": "src/Components/InvoiceManager.tsx",
+      "contentHash": "3db1bd7d12744e635b20ea40c2fdcc9d0ade6efd418bee4a3f18eee2f651949a",
+      "functions": [
+        {
+          "name": "InvoiceManager",
+          "params": [
+            "props"
+          ],
+          "exported": true,
+          "lineCount": 391
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "React",
+            "useState",
+            "useEffect",
+            "ChangeEvent"
+          ]
+        },
+        {
+          "source": "react-router-dom",
+          "specifiers": [
+            "Link"
+          ]
+        },
+        {
+          "source": "flowbite-react",
+          "specifiers": [
+            "Button",
+            "Modal",
+            "TextInput"
+          ]
+        },
+        {
+          "source": "react-moment",
+          "specifiers": [
+            "Moment"
+          ]
+        },
+        {
+          "source": "../App",
+          "specifiers": [
+            "DEFAULT_PAGE_SIZE"
+          ]
+        },
+        {
+          "source": "react-icons/hi",
+          "specifiers": [
+            "HiOutlineExclamationCircle",
+            "HiX"
+          ]
+        },
+        {
+          "source": "../Service/Utils",
+          "specifiers": [
+            "formatISODate",
+            "formatVND"
+          ]
+        },
+        {
+          "source": "../db/invoice",
+          "specifiers": [
+            "deleteInvoice",
+            "listInvoiceByGuestName",
+            "listStayingAndComingInvoices"
+          ]
+        },
+        {
+          "source": "./ProfitReport",
+          "specifiers": [
+            "optionStyle",
+            "Pagination"
+          ]
+        },
+        {
+          "source": "react-icons/gi",
+          "specifiers": [
+            "GiHouse"
+          ]
+        },
+        {
+          "source": "react-icons/io",
+          "specifiers": [
+            "IoMdMap",
+            "IoMdPersonAdd",
+            "IoMdRemoveCircle"
+          ]
+        },
+        {
+          "source": "react-icons/ci",
+          "specifiers": [
+            "CiEdit"
+          ]
+        },
+        {
+          "source": "../db/permission",
+          "specifiers": [
+            "PERMISSION_INVOICE_DELETE"
+          ]
+        }
+      ],
+      "exports": [
+        "InvoiceManager"
+      ],
+      "totalLines": 454,
+      "hasStructuralAnalysis": true
+    },
+    "src/Components/InvoiceMap.tsx": {
+      "filePath": "src/Components/InvoiceMap.tsx",
+      "contentHash": "7bd7fcde6bc3192cd002cfe2281fd7a3c71fba489bb0ef5e245ad94081b2dc59",
+      "functions": [
+        {
+          "name": "InvoiceMap",
+          "params": [
+            "props"
+          ],
+          "exported": true,
+          "lineCount": 206
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "React",
+            "useState",
+            "useEffect",
+            "useMemo",
+            "useCallback"
+          ]
+        },
+        {
+          "source": "react-router-dom",
+          "specifiers": [
+            "Link",
+            "useNavigate"
+          ]
+        },
+        {
+          "source": "flowbite-react",
+          "specifiers": [
+            "Button",
+            "Spinner"
+          ]
+        },
+        {
+          "source": "../Service/Utils",
+          "specifiers": [
+            "formatISODate",
+            "addDays"
+          ]
+        },
+        {
+          "source": "../db/invoice",
+          "specifiers": [
+            "listStayingAndComingInvoices"
+          ]
+        },
+        {
+          "source": "./ProfitReport",
+          "specifiers": [
+            "Pagination"
+          ]
+        },
+        {
+          "source": "react-icons/gi",
+          "specifiers": [
+            "GiHouse"
+          ]
+        },
+        {
+          "source": "react-icons/io",
+          "specifiers": [
+            "IoMdList"
+          ]
+        },
+        {
+          "source": "./InvoiceManager",
+          "specifiers": [
+            "Invoice"
+          ]
+        },
+        {
+          "source": "react-icons/bi",
+          "specifiers": [
+            "BiLogIn",
+            "BiLogOut"
+          ]
+        },
+        {
+          "source": "react-icons/fa",
+          "specifiers": [
+            "FaChevronLeft",
+            "FaChevronRight"
+          ]
+        },
+        {
+          "source": "../db/reservation_extractor",
+          "specifiers": [
+            "collectRes"
+          ]
+        },
+        {
+          "source": "./InvoiceEditor",
+          "specifiers": [
+            "Configs"
+          ]
+        },
+        {
+          "source": "react-icons/md",
+          "specifiers": [
+            "MdAssignmentAdd"
+          ]
+        },
+        {
+          "source": "../db/room",
+          "specifiers": [
+            "listRoom",
+            "Room"
+          ]
+        }
+      ],
+      "exports": [
+        "InvoiceMap"
+      ],
+      "totalLines": 245,
+      "hasStructuralAnalysis": true
+    },
+    "src/Components/OrderEditor.tsx": {
+      "filePath": "src/Components/OrderEditor.tsx",
+      "contentHash": "902787f53873343eebedbd5d95ca18ee3994b8abfc614a2653f5d05fbd8d0b8f",
+      "functions": [
+        {
+          "name": "OrderEditor",
+          "params": [
+            "props"
+          ],
+          "exported": true,
+          "lineCount": 440
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "React",
+            "useState",
+            "useEffect",
+            "ChangeEvent"
+          ]
+        },
+        {
+          "source": "react-router-dom",
+          "specifiers": [
+            "useParams"
+          ]
+        },
+        {
+          "source": "flowbite-react",
+          "specifiers": [
+            "Avatar",
+            "Button",
+            "Modal",
+            "TextInput"
+          ]
+        },
+        {
+          "source": "../App",
+          "specifiers": [
+            "Chat",
+            "DEFAULT_PAGE_SIZE"
+          ]
+        },
+        {
+          "source": "../Service/Utils",
+          "specifiers": [
+            "formatISODate",
+            "formatISODateTime",
+            "formatRooms",
+            "formatVND"
+          ]
+        },
+        {
+          "source": "../db/order",
+          "specifiers": [
+            "confirmOrder",
+            "fetchOrder",
+            "getPotentialInvoices",
+            "rejectOrder",
+            "saveOrder",
+            "serveOrder"
+          ]
+        },
+        {
+          "source": "../db/invoice",
+          "specifiers": [
+            "getInvoice",
+            "listInvoiceByGuestName"
+          ]
+        },
+        {
+          "source": "./OrderManager",
+          "specifiers": [
+            "Order",
+            "OrderStatus",
+            "SK"
+          ]
+        },
+        {
+          "source": "./InvoiceManager",
+          "specifiers": [
+            "Invoice"
+          ]
+        },
+        {
+          "source": "./PGroupManager",
+          "specifiers": [
+            "PGroup"
+          ]
+        },
+        {
+          "source": "../db/pgroup",
+          "specifiers": [
+            "listAllPGroups"
+          ]
+        }
+      ],
+      "exports": [
+        "OrderEditor"
+      ],
+      "totalLines": 463,
+      "hasStructuralAnalysis": true
+    },
+    "src/Components/OrderManager.tsx": {
+      "filePath": "src/Components/OrderManager.tsx",
+      "contentHash": "ad23512157c0fbdfe4c8ca28ca8fce094aee39397bf211dcdd511a64efb867cb",
+      "functions": [
+        {
+          "name": "OrderManager",
+          "params": [
+            "props"
+          ],
+          "exported": true,
+          "lineCount": 304
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "React",
+            "useState",
+            "useEffect",
+            "ChangeEvent"
+          ]
+        },
+        {
+          "source": "../Service/Utils",
+          "specifiers": [
+            "addDays",
+            "formatISODate",
+            "formatISODateTime",
+            "formatRooms"
+          ]
+        },
+        {
+          "source": "../App",
+          "specifiers": [
+            "Chat"
+          ]
+        },
+        {
+          "source": "../db/order",
+          "specifiers": [
+            "confirmOrder",
+            "listOrderByStatuses",
+            "listOrders",
+            "rejectOrder",
+            "saveOrder",
+            "serveOrder"
+          ]
+        },
+        {
+          "source": "flowbite-react",
+          "specifiers": [
+            "Button",
+            "Checkbox",
+            "Modal",
+            "TextInput"
+          ]
+        },
+        {
+          "source": "../db/invoice",
+          "specifiers": [
+            "getInvoice",
+            "listInvoiceByGuestName",
+            "listByCheckIn"
+          ]
+        },
+        {
+          "source": "./InvoiceManager",
+          "specifiers": [
+            "Invoice"
+          ]
+        },
+        {
+          "source": "react-icons/hi",
+          "specifiers": [
+            "HiCheck",
+            "HiCheckCircle",
+            "HiLink",
+            "HiOutlineClock",
+            "HiRefresh",
+            "HiStop",
+            "HiX"
+          ]
+        },
+        {
+          "source": "react-icons/gi",
+          "specifiers": [
+            "GiHouse",
+            "GiMeal"
+          ]
+        },
+        {
+          "source": "../db/configs",
+          "specifiers": [
+            "AppConfig"
+          ]
+        }
+      ],
+      "exports": [
+        "OrderStatus",
+        "OrderManager"
+      ],
+      "totalLines": 370,
+      "hasStructuralAnalysis": true
+    },
+    "src/Components/PGroupManager.tsx": {
+      "filePath": "src/Components/PGroupManager.tsx",
+      "contentHash": "637f063cbfb87bb9cf7e3949521fcc679a3549dd7691a7f13b02b0abb5e723a1",
+      "functions": [
+        {
+          "name": "PGroupManager",
+          "params": [
+            "props"
+          ],
+          "exported": true,
+          "lineCount": 427
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "React",
+            "useState",
+            "useEffect",
+            "useRef",
+            "ChangeEvent"
+          ]
+        },
+        {
+          "source": "flowbite-react",
+          "specifiers": [
+            "TextInput",
+            "Label",
+            "Modal",
+            "Button",
+            "Textarea",
+            "Checkbox"
+          ]
+        },
+        {
+          "source": "react-icons/hi",
+          "specifiers": [
+            "HiAdjustments",
+            "HiUserRemove",
+            "HiX"
+          ]
+        },
+        {
+          "source": "../db/pgroup",
+          "specifiers": [
+            "deletePGroup",
+            "listAllPGroups",
+            "savePGroup"
+          ]
+        }
+      ],
+      "exports": [
+        "PGroupManager"
+      ],
+      "totalLines": 473,
+      "hasStructuralAnalysis": true
+    },
+    "src/Components/ProfitReport.tsx": {
+      "filePath": "src/Components/ProfitReport.tsx",
+      "contentHash": "09d2dbe2aa945311ebfd839199f828ab7a257013b098ac8e784955da992216b5",
+      "functions": [
+        {
+          "name": "optionStyle",
+          "params": [
+            "focused"
+          ],
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "ProfitReport",
+          "params": [
+            "props"
+          ],
+          "exported": true,
+          "lineCount": 204
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "React",
+            "useState",
+            "useEffect"
+          ]
+        },
+        {
+          "source": "../Service/Utils",
+          "specifiers": [
+            "adjustMonths",
+            "beginOfMonth",
+            "lastDayOfMonth",
+            "formatVND",
+            "formatISODate",
+            "formatDateMonthDate",
+            "lastDateOfMonth"
+          ]
+        },
+        {
+          "source": "../db/profit",
+          "specifiers": [
+            "fetchPReportThisMonth"
+          ]
+        },
+        {
+          "source": "flowbite-react",
+          "specifiers": [
+            "Button"
+          ]
+        },
+        {
+          "source": "react-icons/md",
+          "specifiers": [
+            "MdOutlineBrowserUpdated"
+          ]
+        }
+      ],
+      "exports": [
+        "optionStyle",
+        "ProfitReport"
+      ],
+      "totalLines": 291,
+      "hasStructuralAnalysis": true
+    },
+    "src/Components/RatePlanManager.tsx": {
+      "filePath": "src/Components/RatePlanManager.tsx",
+      "contentHash": "fac42871f831c74a4af945d296fb13cc192d3e09a00999e2e688e0cc99af1f31",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "React",
+            "useState",
+            "useEffect",
+            "useRef",
+            "memo"
+          ]
+        },
+        {
+          "source": "flowbite-react",
+          "specifiers": [
+            "TextInput",
+            "Label",
+            "Modal",
+            "Button",
+            "Datepicker",
+            "Checkbox",
+            "Select"
+          ]
+        },
+        {
+          "source": "../App",
+          "specifiers": [
+            "Chat",
+            "DEFAULT_PAGE_SIZE"
+          ]
+        },
+        {
+          "source": "react-icons/hi",
+          "specifiers": [
+            "HiX"
+          ]
+        },
+        {
+          "source": "../Service/Utils",
+          "specifiers": [
+            "formatISODate",
+            "formatLocaleDate",
+            "formatVND"
+          ]
+        },
+        {
+          "source": "./ProfitReport",
+          "specifiers": [
+            "Pagination"
+          ]
+        },
+        {
+          "source": "react-icons/md",
+          "specifiers": [
+            "MdAssignmentAdd",
+            "MdHouse"
+          ]
+        },
+        {
+          "source": "react-icons/io",
+          "specifiers": [
+            "IoMdRemoveCircle"
+          ]
+        },
+        {
+          "source": "react-icons/ci",
+          "specifiers": [
+            "CiEdit"
+          ]
+        },
+        {
+          "source": "react-icons/fa",
+          "specifiers": [
+            "FaMoneyBill",
+            "FaPlus"
+          ]
+        },
+        {
+          "source": "../db/rate_plan",
+          "specifiers": [
+            "create",
+            "deleteObject",
+            "list",
+            "save"
+          ]
+        },
+        {
+          "source": "./CounterInput",
+          "specifiers": [
+            "CounterInput"
+          ]
+        },
+        {
+          "source": "../db/room",
+          "specifiers": [
+            "Room",
+            "listRoom"
+          ]
+        }
+      ],
+      "exports": [
+        "RatePlanManager"
+      ],
+      "totalLines": 679,
+      "hasStructuralAnalysis": true
+    },
+    "src/Components/ReservationManager.tsx": {
+      "filePath": "src/Components/ReservationManager.tsx",
+      "contentHash": "cae5f3af8c60fd6143ab8c1ece1f19ebbbb68e303ed9f0ddb44fd5386672b624",
+      "functions": [
+        {
+          "name": "ReservationManager",
+          "params": [
+            "props"
+          ],
+          "exported": true,
+          "lineCount": 196
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "React",
+            "useState",
+            "useEffect"
+          ]
+        },
+        {
+          "source": "../db/reservation",
+          "specifiers": [
+            "listLatestReservations"
+          ]
+        },
+        {
+          "source": "react-router-dom",
+          "specifiers": [
+            "Link"
+          ]
+        },
+        {
+          "source": "flowbite-react",
+          "specifiers": [
+            "Button",
+            "Table"
+          ]
+        },
+        {
+          "source": "react-moment",
+          "specifiers": [
+            "Moment"
+          ]
+        },
+        {
+          "source": "./InvoiceEditor",
+          "specifiers": [
+            "Configs",
+            "internalRooms"
+          ]
+        },
+        {
+          "source": "../Service/Utils",
+          "specifiers": [
+            "addDays",
+            "formatISODate"
+          ]
+        },
+        {
+          "source": "../App",
+          "specifiers": [
+            "DEFAULT_PAGE_SIZE"
+          ]
+        },
+        {
+          "source": "./ProfitReport",
+          "specifiers": [
+            "optionStyle",
+            "Pagination"
+          ]
+        },
+        {
+          "source": "../db/reservation_extractor",
+          "specifiers": [
+            "collectRes"
+          ]
+        },
+        {
+          "source": "flowbite-react",
+          "specifiers": [
+            "Spinner"
+          ]
+        },
+        {
+          "source": "react-icons/md",
+          "specifiers": [
+            "MdAssignmentAdd"
+          ]
+        }
+      ],
+      "exports": [
+        "ReservationManager"
+      ],
+      "totalLines": 236,
+      "hasStructuralAnalysis": true
+    },
+    "src/Components/ReservationMap.tsx": {
+      "filePath": "src/Components/ReservationMap.tsx",
+      "contentHash": "4b0957e9bc628ff167ddac778caa8251e3f162252aea8737e4555ac41a2359fa",
+      "functions": [
+        {
+          "name": "ReservationMap",
+          "params": [
+            "props"
+          ],
+          "exported": true,
+          "lineCount": 215
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "React",
+            "useState",
+            "useEffect",
+            "useMemo"
+          ]
+        },
+        {
+          "source": "../db/reservation",
+          "specifiers": [
+            "listStayingAndComingReservations"
+          ]
+        },
+        {
+          "source": "flowbite-react",
+          "specifiers": [
+            "Button",
+            "Spinner"
+          ]
+        },
+        {
+          "source": "../Service/Utils",
+          "specifiers": [
+            "addDays",
+            "formatISODate"
+          ]
+        },
+        {
+          "source": "../App",
+          "specifiers": [
+            "DEFAULT_PAGE_SIZE"
+          ]
+        },
+        {
+          "source": "./ProfitReport",
+          "specifiers": [
+            "optionStyle",
+            "Pagination"
+          ]
+        },
+        {
+          "source": "../db/reservation_extractor",
+          "specifiers": [
+            "collectRes"
+          ]
+        },
+        {
+          "source": "react-icons/md",
+          "specifiers": [
+            "MdAssignmentAdd"
+          ]
+        },
+        {
+          "source": "./ReservationManager",
+          "specifiers": [
+            "Reservation"
+          ]
+        },
+        {
+          "source": "react-icons/fa",
+          "specifiers": [
+            "FaChevronLeft",
+            "FaChevronRight"
+          ]
+        },
+        {
+          "source": "../db/room",
+          "specifiers": [
+            "listRoom",
+            "Room"
+          ]
+        }
+      ],
+      "exports": [
+        "ReservationMap"
+      ],
+      "totalLines": 233,
+      "hasStructuralAnalysis": true
+    },
+    "src/Components/RoomManager.tsx": {
+      "filePath": "src/Components/RoomManager.tsx",
+      "contentHash": "699369bb6d61566ff300a6ddf3bd5ba1ea925dfeeeedb3cb5316be78d890c95e",
+      "functions": [
+        {
+          "name": "RoomManager",
+          "params": [
+            "props"
+          ],
+          "exported": true,
+          "lineCount": 322
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "React",
+            "useState",
+            "useEffect"
+          ]
+        },
+        {
+          "source": "flowbite-react",
+          "specifiers": [
+            "Button",
+            "Modal",
+            "Label",
+            "TextInput",
+            "Table",
+            "Spinner",
+            "Select"
+          ]
+        },
+        {
+          "source": "../App",
+          "specifiers": [
+            "Chat",
+            "DEFAULT_PAGE_SIZE"
+          ]
+        },
+        {
+          "source": "../db/room",
+          "specifiers": [
+            "listRoom",
+            "createRoom",
+            "updateRoom",
+            "deleteRoom",
+            "Room"
+          ]
+        },
+        {
+          "source": "react-icons/hi",
+          "specifiers": [
+            "HiOutlineExclamationCircle",
+            "HiPlus",
+            "HiPencil",
+            "HiTrash",
+            "HiUserGroup",
+            "HiOutlineViewGrid",
+            "HiBadgeCheck"
+          ]
+        },
+        {
+          "source": "./ProfitReport",
+          "specifiers": [
+            "Pagination"
+          ]
+        }
+      ],
+      "exports": [
+        "RoomManager"
+      ],
+      "totalLines": 347,
+      "hasStructuralAnalysis": true
+    },
+    "src/Components/Settings.tsx": {
+      "filePath": "src/Components/Settings.tsx",
+      "contentHash": "2b54c66d45d9be32d191e07257e421a9897f7f09c47af95c9447e2ace8423b14",
+      "functions": [
+        {
+          "name": "Settings",
+          "params": [
+            "props"
+          ],
+          "exported": true,
+          "lineCount": 228
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../Service/Utils",
+          "specifiers": [
+            "formatDatePartition"
+          ]
+        },
+        {
+          "source": "../db/status",
+          "specifiers": [
+            "syncStatusOfMonth"
+          ]
+        },
+        {
+          "source": "react",
+          "specifiers": [
+            "React",
+            "ChangeEvent",
+            "useEffect",
+            "useState",
+            "FormEvent"
+          ]
+        },
+        {
+          "source": "flowbite-react",
+          "specifiers": [
+            "Button",
+            "Checkbox",
+            "Label",
+            "Spinner",
+            "TextInput",
+            "Modal"
+          ]
+        },
+        {
+          "source": "react-router-dom",
+          "specifiers": [
+            "Link"
+          ]
+        },
+        {
+          "source": "../db/configs",
+          "specifiers": [
+            "getConfigs",
+            "setAutoUpdateAvailability"
+          ]
+        },
+        {
+          "source": "../db/reservation",
+          "specifiers": [
+            "syncReservationFromMailbox"
+          ]
+        },
+        {
+          "source": "../App",
+          "specifiers": [
+            "Chat"
+          ]
+        },
+        {
+          "source": "../db/bot",
+          "specifiers": [
+            "registerBot"
+          ]
+        }
+      ],
+      "exports": [
+        "Settings"
+      ],
+      "totalLines": 248,
+      "hasStructuralAnalysis": true
+    },
+    "src/Components/SupplierManager.tsx": {
+      "filePath": "src/Components/SupplierManager.tsx",
+      "contentHash": "ca2003abc0439d161e7e8fc1144bf13335dc16e0769164d503a4da14be286683",
+      "functions": [
+        {
+          "name": "SupplierManager",
+          "params": [
+            "props"
+          ],
+          "exported": true,
+          "lineCount": 785
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "React",
+            "useState",
+            "useEffect",
+            "ChangeEvent"
+          ]
+        },
+        {
+          "source": "../Service/Utils",
+          "specifiers": [
+            "formatISODateTime",
+            "formatMoneyAmount",
+            "formatVND",
+            "randomId",
+            "utcToDate"
+          ]
+        },
+        {
+          "source": "../App",
+          "specifiers": [
+            "Chat",
+            "DEFAULT_PAGE_SIZE"
+          ]
+        },
+        {
+          "source": "flowbite-react",
+          "specifiers": [
+            "Button",
+            "Label",
+            "Modal",
+            "Spinner",
+            "TextInput"
+          ]
+        },
+        {
+          "source": "./InvoiceManager",
+          "specifiers": [
+            "InvoiceItem"
+          ]
+        },
+        {
+          "source": "react-icons/hi",
+          "specifiers": [
+            "HiMail",
+            "HiOutlineCash",
+            "HiX"
+          ]
+        },
+        {
+          "source": "react-icons/gi",
+          "specifiers": [
+            "GiCoinflip",
+            "GiMeal"
+          ]
+        },
+        {
+          "source": "../db/classification",
+          "specifiers": [
+            "SERVICE_NAMES"
+          ]
+        },
+        {
+          "source": "../db/supplier",
+          "specifiers": [
+            "generateSInvoice",
+            "listSupplierInvoices",
+            "listSupplierInvoicesByTimeAndStatus",
+            "paidSInvoice",
+            "rejectSInvoice",
+            "saveSInvoice",
+            "takenPlaceSInvoice"
+          ]
+        },
+        {
+          "source": "react-icons/pi",
+          "specifiers": [
+            "PiBrainThin"
+          ]
+        },
+        {
+          "source": "react-icons/md",
+          "specifiers": [
+            "MdAssignmentAdd"
+          ]
+        },
+        {
+          "source": "react-icons/io",
+          "specifiers": [
+            "IoMdRemoveCircle"
+          ]
+        },
+        {
+          "source": "react-icons/ci",
+          "specifiers": [
+            "CiEdit"
+          ]
+        }
+      ],
+      "exports": [
+        "SInvoiceStatus",
+        "SupplierManager"
+      ],
+      "totalLines": 909,
+      "hasStructuralAnalysis": true
+    },
+    "src/Components/TaxPolicyManager.tsx": {
+      "filePath": "src/Components/TaxPolicyManager.tsx",
+      "contentHash": "5b77509b8455f84f975ca0066b02c543c279c604612904eda281a1078ebf553a",
+      "functions": [
+        {
+          "name": "normalizePolicies",
+          "params": [
+            "policies"
+          ],
+          "exported": false,
+          "lineCount": 2
+        },
+        {
+          "name": "extractPolicies",
+          "params": [
+            "payload"
+          ],
+          "returnType": "TaxPolicy[]",
+          "exported": false,
+          "lineCount": 9
+        },
+        {
+          "name": "TaxPolicyManager",
+          "params": [
+            "props"
+          ],
+          "exported": true,
+          "lineCount": 176
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "React",
+            "useEffect",
+            "useState"
+          ]
+        },
+        {
+          "source": "flowbite-react",
+          "specifiers": [
+            "Button",
+            "Label",
+            "Modal",
+            "Spinner",
+            "TextInput"
+          ]
+        },
+        {
+          "source": "react-icons/fa",
+          "specifiers": [
+            "FaCheckCircle",
+            "FaEdit",
+            "FaPlus",
+            "FaTimesCircle"
+          ]
+        },
+        {
+          "source": "../db/taxPolicy",
+          "specifiers": [
+            "createTaxPolicy",
+            "listTaxPolicies",
+            "reorderTaxPolicies",
+            "TaxPolicy",
+            "updateTaxPolicy"
+          ]
+        },
+        {
+          "source": "react-icons/fa6",
+          "specifiers": [
+            "FaArrowDown",
+            "FaArrowUp"
+          ]
+        }
+      ],
+      "exports": [
+        "TaxPolicyManager"
+      ],
+      "totalLines": 202,
+      "hasStructuralAnalysis": true
+    },
+    "src/Components/TaxableInvoiceManager.tsx": {
+      "filePath": "src/Components/TaxableInvoiceManager.tsx",
+      "contentHash": "0081563bd823b354db65dda7b2dda755716232b9d1fad2a05acbe61570956a3d",
+      "functions": [
+        {
+          "name": "dateValue",
+          "params": [
+            "invoice"
+          ],
+          "exported": false,
+          "lineCount": 2
+        },
+        {
+          "name": "guestValue",
+          "params": [
+            "invoice"
+          ],
+          "exported": false,
+          "lineCount": 1
+        },
+        {
+          "name": "subtotalValue",
+          "params": [
+            "invoice"
+          ],
+          "exported": false,
+          "lineCount": 1
+        },
+        {
+          "name": "TaxableInvoiceManager",
+          "params": [
+            "props"
+          ],
+          "exported": true,
+          "lineCount": 176
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "React",
+            "useEffect",
+            "useState"
+          ]
+        },
+        {
+          "source": "flowbite-react",
+          "specifiers": [
+            "Button",
+            "Modal",
+            "Spinner"
+          ]
+        },
+        {
+          "source": "../Service/Utils",
+          "specifiers": [
+            "beginOfMonth",
+            "formatISODate",
+            "formatVND"
+          ]
+        },
+        {
+          "source": "../db/tax",
+          "specifiers": [
+            "calculateTaxableInvoices",
+            "listTaxableInvoices",
+            "TaxCalculationResult"
+          ]
+        },
+        {
+          "source": "./ProfitReport",
+          "specifiers": [
+            "Pagination"
+          ]
+        },
+        {
+          "source": "react-icons/hi",
+          "specifiers": [
+            "HiOutlineArrowLeft",
+            "HiOutlineArrowRight"
+          ]
+        }
+      ],
+      "exports": [
+        "TaxableInvoiceManager"
+      ],
+      "totalLines": 224,
+      "hasStructuralAnalysis": true
+    },
+    "src/Components/TourEditor.tsx": {
+      "filePath": "src/Components/TourEditor.tsx",
+      "contentHash": "54a5b3e5dc3af5a59568770966279ca96309e1d923028db643962f7d0a386595",
+      "functions": [
+        {
+          "name": "EditField",
+          "params": [
+            "{\r\n  label,\r\n  value,\r\n  field,\r\n  editField,\r\n  onEdit,\r\n  onCancel,\r\n  onChange,\r\n  type = \"text\",\r\n}"
+          ],
+          "exported": false,
+          "lineCount": 77
+        },
+        {
+          "name": "TourEditor",
+          "params": [
+            "props"
+          ],
+          "exported": true,
+          "lineCount": 373
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "React",
+            "useState",
+            "useEffect"
+          ]
+        },
+        {
+          "source": "../App",
+          "specifiers": [
+            "Chat"
+          ]
+        },
+        {
+          "source": "../db/tour",
+          "specifiers": [
+            "getTour",
+            "saveTour"
+          ]
+        },
+        {
+          "source": "./TourManager",
+          "specifiers": [
+            "Tour"
+          ]
+        },
+        {
+          "source": "react-router-dom",
+          "specifiers": [
+            "useParams"
+          ]
+        },
+        {
+          "source": "flowbite-react",
+          "specifiers": [
+            "Label",
+            "TextInput",
+            "Textarea",
+            "Button",
+            "Card",
+            "Spinner"
+          ]
+        },
+        {
+          "source": "react-icons/ci",
+          "specifiers": [
+            "CiEdit"
+          ]
+        },
+        {
+          "source": "react-icons/io",
+          "specifiers": [
+            "IoMdClose"
+          ]
+        },
+        {
+          "source": "react-icons/md",
+          "specifiers": [
+            "MdAdd"
+          ]
+        },
+        {
+          "source": "react-icons/hi",
+          "specifiers": [
+            "HiTrash"
+          ]
+        }
+      ],
+      "exports": [
+        "TourEditor"
+      ],
+      "totalLines": 470,
+      "hasStructuralAnalysis": true
+    },
+    "src/Components/TourManager.tsx": {
+      "filePath": "src/Components/TourManager.tsx",
+      "contentHash": "9980b8afe69012d4c9ff24bcf9f17b396b506b75b2b21afd2b3cd01aa93bbd17",
+      "functions": [
+        {
+          "name": "TourManager",
+          "params": [
+            "props"
+          ],
+          "exported": true,
+          "lineCount": 129
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "React",
+            "useState",
+            "useEffect"
+          ]
+        },
+        {
+          "source": "../App",
+          "specifiers": [
+            "Chat",
+            "DEFAULT_PAGE_SIZE"
+          ]
+        },
+        {
+          "source": "flowbite-react",
+          "specifiers": [
+            "Button"
+          ]
+        },
+        {
+          "source": "react-icons/gi",
+          "specifiers": [
+            "GiCoinflip"
+          ]
+        },
+        {
+          "source": "react-icons/md",
+          "specifiers": [
+            "MdAssignmentAdd"
+          ]
+        },
+        {
+          "source": "react-icons/io",
+          "specifiers": [
+            "IoMdRemoveCircle"
+          ]
+        },
+        {
+          "source": "react-icons/ci",
+          "specifiers": [
+            "CiEdit"
+          ]
+        },
+        {
+          "source": "../db/tour",
+          "specifiers": [
+            "listTour"
+          ]
+        },
+        {
+          "source": "react-router-dom",
+          "specifiers": [
+            "Link"
+          ]
+        }
+      ],
+      "exports": [
+        "TourStatus",
+        "TourManager"
+      ],
+      "totalLines": 183,
+      "hasStructuralAnalysis": true
+    },
+    "src/Components/UserProfile.tsx": {
+      "filePath": "src/Components/UserProfile.tsx",
+      "contentHash": "5b6e5bd78fe8d868045276b7182f487c3500ddc8f1ae22dcdc985ccf9d874a2d",
+      "functions": [
+        {
+          "name": "UserProfile",
+          "params": [
+            "{ userProfile, onSignOut }"
+          ],
+          "exported": false,
+          "lineCount": 128
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "React",
+            "useState"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 137,
+      "hasStructuralAnalysis": true
+    },
+    "src/Components/Welcome.tsx": {
+      "filePath": "src/Components/Welcome.tsx",
+      "contentHash": "bb1ad480ba60d55f68c8dac18381795e0b6e316bb2ccf7d956eca9084e61fd61",
+      "functions": [
+        {
+          "name": "Welcome",
+          "params": [
+            "props"
+          ],
+          "exported": true,
+          "lineCount": 19
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "React",
+            "useEffect"
+          ]
+        }
+      ],
+      "exports": [
+        "Welcome"
+      ],
+      "totalLines": 27,
+      "hasStructuralAnalysis": true
+    },
+    "src/Service/FileMinio.ts": {
+      "filePath": "src/Service/FileMinio.ts",
+      "contentHash": "a7b578242d33d0834f53ff32b5424e8409243afbdcd789ea7e34dd4747fc2206",
+      "functions": [
+        {
+          "name": "getPresignedLink",
+          "params": [
+            "bucket",
+            "key",
+            "durationInSecond",
+            "fnCallback"
+          ],
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "getPresignedLinkWithDefaultDuration",
+          "params": [
+            "bucket",
+            "key",
+            "fnCallback"
+          ],
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "putObject",
+          "params": [
+            "file",
+            "filename",
+            "bucket",
+            "key"
+          ],
+          "exported": true,
+          "lineCount": 14
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "minio",
+          "specifiers": [
+            "* as minio"
+          ]
+        },
+        {
+          "source": "minio/dist/main/internal/type",
+          "specifiers": [
+            "ResultCallback"
+          ]
+        }
+      ],
+      "exports": [
+        "getPresignedLink",
+        "getPresignedLinkWithDefaultDuration",
+        "putObject"
+      ],
+      "totalLines": 37,
+      "hasStructuralAnalysis": true
+    },
+    "src/Service/Utils.ts": {
+      "filePath": "src/Service/Utils.ts",
+      "contentHash": "6a2e74e4f97e11d67d3e9de8b7e16274117837eba7415a21d5d3a25bf1c31081",
+      "functions": [
+        {
+          "name": "formatVND",
+          "params": [
+            "amount"
+          ],
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "randomId",
+          "params": [],
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "formatMoneyAmount",
+          "params": [
+            "value"
+          ],
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "formatLocaleNumber",
+          "params": [
+            "value"
+          ],
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "lastDateOf",
+          "params": [
+            "date"
+          ],
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "lastDateOfMonth",
+          "params": [
+            "date"
+          ],
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "beginOfDay",
+          "params": [
+            "date"
+          ],
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "endOfDay",
+          "params": [
+            "date"
+          ],
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "addDays",
+          "params": [
+            "date",
+            "numOfDays"
+          ],
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "adjustMonths",
+          "params": [
+            "date",
+            "numOfMonths"
+          ],
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "beginOfMonth",
+          "params": [
+            "date"
+          ],
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "formatShortDate",
+          "params": [
+            "date"
+          ],
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "formatISODate",
+          "params": [
+            "date"
+          ],
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "formatISODateTime",
+          "params": [
+            "date"
+          ],
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "formatLocaleDate",
+          "params": [
+            "date"
+          ],
+          "exported": true,
+          "lineCount": 17
+        },
+        {
+          "name": "formatDatePartition",
+          "params": [
+            "date"
+          ],
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "formatMonthPartition",
+          "params": [
+            "date"
+          ],
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "format2DigitDate",
+          "params": [
+            "date"
+          ],
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "formatDateMonthDate",
+          "params": [
+            "date"
+          ],
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "formatVNDateTime",
+          "params": [
+            "date"
+          ],
+          "exported": true,
+          "lineCount": 12
+        },
+        {
+          "name": "formatLocalTime",
+          "params": [
+            "utcHourMinuteTime"
+          ],
+          "exported": true,
+          "lineCount": 12
+        },
+        {
+          "name": "formatISOTime",
+          "params": [
+            "date"
+          ],
+          "exported": true,
+          "lineCount": 9
+        },
+        {
+          "name": "utcToHourMinute",
+          "params": [
+            "dateString"
+          ],
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "utcToDate",
+          "params": [
+            "dateString"
+          ],
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "utcToDateTime",
+          "params": [
+            "dateString"
+          ],
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "formatISOHourMinute",
+          "params": [
+            "date"
+          ],
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "formatRooms",
+          "params": [
+            "rooms"
+          ],
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "formatLongDateTime",
+          "params": [
+            "date"
+          ],
+          "exported": true,
+          "lineCount": 11
+        }
+      ],
+      "classes": [],
+      "imports": [],
+      "exports": [
+        "formatVND",
+        "randomId",
+        "formatMoneyAmount",
+        "formatLocaleNumber",
+        "lastDateOf",
+        "lastDateOfMonth",
+        "beginOfDay",
+        "endOfDay",
+        "addDays",
+        "adjustMonths",
+        "beginOfMonth",
+        "formatShortDate",
+        "formatISODate",
+        "formatISODateTime",
+        "formatLocaleDate",
+        "formatDatePartition",
+        "formatMonthPartition",
+        "format2DigitDate",
+        "formatDateMonthDate",
+        "formatVNDateTime",
+        "formatLocalTime",
+        "formatISOTime",
+        "utcToHourMinute",
+        "utcToDate",
+        "utcToDateTime",
+        "formatISOHourMinute",
+        "formatRooms",
+        "formatLongDateTime"
+      ],
+      "totalLines": 200,
+      "hasStructuralAnalysis": true
+    },
+    "src/db/apis.ts": {
+      "filePath": "src/db/apis.ts",
+      "contentHash": "e7671fa663680877a9083ba353e10b1f1a74d651e418074a1312d1e83fb3f23e",
+      "functions": [
+        {
+          "name": "createApiInstance",
+          "params": [
+            "baseURL",
+            "withCredentials"
+          ],
+          "returnType": "AxiosInstance",
+          "exported": false,
+          "lineCount": 6
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "axios",
+          "specifiers": [
+            "axios",
+            "AxiosInstance"
+          ]
+        }
+      ],
+      "exports": [
+        "reportApi",
+        "expenseApi",
+        "invoiceApi",
+        "taxApi",
+        "taxPolicyApi",
+        "inventoryApi",
+        "productApi",
+        "productGroupApi",
+        "orderApi",
+        "reservationApi",
+        "reservationExtractApi",
+        "supplierApi",
+        "tourApi",
+        "tourRequestApi",
+        "configApi",
+        "classificationApi",
+        "statusApi",
+        "profileApi",
+        "userApi",
+        "botApi",
+        "psBaseApi",
+        "roomApi",
+        "ratePlanApi",
+        "immigrationRegistrationApi"
+      ],
+      "totalLines": 106,
+      "hasStructuralAnalysis": true
+    },
+    "src/db/bot.ts": {
+      "filePath": "src/db/bot.ts",
+      "contentHash": "16dd369958efa7dbbce191d4ff64c8000c059ada6d4b9145e32fa7ea3dfb53af",
+      "functions": [
+        {
+          "name": "registerBot",
+          "params": [
+            "botId",
+            "botToken"
+          ],
+          "returnType": "Promise<any>",
+          "exported": true,
+          "lineCount": 12
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "./apis",
+          "specifiers": [
+            "botApi"
+          ]
+        }
+      ],
+      "exports": [
+        "registerBot"
+      ],
+      "totalLines": 15,
+      "hasStructuralAnalysis": true
+    },
+    "src/db/classification.ts": {
+      "filePath": "src/db/classification.ts",
+      "contentHash": "b6a481ff9d9f01b1fb5214c864d834a4cb7384bfc27d1e3aad577fd8f33ae8d0",
+      "functions": [
+        {
+          "name": "classifyServiceByItemName",
+          "params": [
+            "itemName"
+          ],
+          "exported": true,
+          "lineCount": 4
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "./apis",
+          "specifiers": [
+            "classificationApi"
+          ]
+        }
+      ],
+      "exports": [
+        "SERVICE_NAMES",
+        "classifyServiceByItemName"
+      ],
+      "totalLines": 7,
+      "hasStructuralAnalysis": true
+    },
+    "src/db/configs.ts": {
+      "filePath": "src/db/configs.ts",
+      "contentHash": "8d51868b5d81cb515302eb6cb27bc38885eb0f6a04e937e7564aaace11df867a",
+      "functions": [
+        {
+          "name": "appConfigs",
+          "params": [],
+          "returnType": "Promise<AppConfig>",
+          "exported": true,
+          "lineCount": 26
+        },
+        {
+          "name": "fetchWithRetry",
+          "params": [
+            "url",
+            "retries",
+            "delay"
+          ],
+          "returnType": "Promise<any>",
+          "exported": false,
+          "lineCount": 13
+        },
+        {
+          "name": "getConfigs",
+          "params": [
+            "config"
+          ],
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "setAutoUpdateAvailability",
+          "params": [
+            "enabled"
+          ],
+          "exported": true,
+          "lineCount": 4
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../App",
+          "specifiers": [
+            "Chat"
+          ]
+        },
+        {
+          "source": "./apis",
+          "specifiers": [
+            "configApi"
+          ]
+        }
+      ],
+      "exports": [
+        "defaultAppConfigs",
+        "appConfigs",
+        "getConfigs",
+        "setAutoUpdateAvailability",
+        "firebaseConfig"
+      ],
+      "totalLines": 161,
+      "hasStructuralAnalysis": true
+    },
+    "src/db/expense.ts": {
+      "filePath": "src/db/expense.ts",
+      "contentHash": "3eef433d0c30046f9eb18ca7d47a93390b74dbd8d400e50d3b13360cb6355a6c",
+      "functions": [
+        {
+          "name": "newExpId",
+          "params": [],
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "listLatestExpenses",
+          "params": [
+            "pageNumber",
+            "pageSize"
+          ],
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "listExpenseByDate",
+          "params": [
+            "byDate",
+            "pageNumber",
+            "pageSize"
+          ],
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "listExpenseByExpenserAndDate",
+          "params": [
+            "expenserId",
+            "byDate",
+            "pageNumber",
+            "pageSize"
+          ],
+          "returnType": "Promise<any>",
+          "exported": true,
+          "lineCount": 17
+        },
+        {
+          "name": "getExpense",
+          "params": [
+            "expenseId"
+          ],
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "saveExpense",
+          "params": [
+            "expense"
+          ],
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "assignExpense",
+          "params": [
+            "expenseId",
+            "expenserId"
+          ],
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "deleteExpense",
+          "params": [
+            "expense"
+          ],
+          "exported": true,
+          "lineCount": 10
+        },
+        {
+          "name": "generate",
+          "params": [
+            "expenseTxt"
+          ],
+          "exported": true,
+          "lineCount": 8
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../Components/ExpenseManager",
+          "specifiers": [
+            "Expense"
+          ]
+        },
+        {
+          "source": "./apis",
+          "specifiers": [
+            "expenseApi"
+          ]
+        }
+      ],
+      "exports": [
+        "newExpId",
+        "listLatestExpenses",
+        "listExpenseByDate",
+        "listExpenseByExpenserAndDate",
+        "getExpense",
+        "saveExpense",
+        "assignExpense",
+        "deleteExpense",
+        "generate"
+      ],
+      "totalLines": 86,
+      "hasStructuralAnalysis": true
+    },
+    "src/db/gcs.ts": {
+      "filePath": "src/db/gcs.ts",
+      "contentHash": "dae575700c037d306f625fba758cf90697efb273e4dfbdea13aa791d985bbb76",
+      "functions": [
+        {
+          "name": "putObject",
+          "params": [
+            "object",
+            "filename",
+            "bucket",
+            "key"
+          ],
+          "returnType": "Promise<Response>",
+          "exported": true,
+          "lineCount": 14
+        },
+        {
+          "name": "putBlob",
+          "params": [
+            "object",
+            "filename",
+            "bucket",
+            "key"
+          ],
+          "returnType": "Promise<Response>",
+          "exported": true,
+          "lineCount": 14
+        }
+      ],
+      "classes": [],
+      "imports": [],
+      "exports": [
+        "putObject",
+        "putBlob"
+      ],
+      "totalLines": 32,
+      "hasStructuralAnalysis": true
+    },
+    "src/db/immigrationRegistration.ts": {
+      "filePath": "src/db/immigrationRegistration.ts",
+      "contentHash": "1cb81fcd6c68aafee5c282052c92f093cee0498a7b39e8050c39466cb69b077a",
+      "functions": [
+        {
+          "name": "unwrapPage",
+          "params": [
+            "response"
+          ],
+          "returnType": "ImmigrationRegistrationPage | ImmigrationRegistration[]",
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "listImmigrationRegistrations",
+          "params": [
+            "fromDate",
+            "toDate",
+            "pageNumber",
+            "pageSize"
+          ],
+          "exported": true,
+          "lineCount": 10
+        },
+        {
+          "name": "listInvoicesForImmigration",
+          "params": [
+            "fromDate",
+            "toDate"
+          ],
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "addImmigrationRegistration",
+          "params": [
+            "invoiceId",
+            "guests"
+          ],
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "removeImmigrationRegistration",
+          "params": [
+            "invoiceId"
+          ],
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "addImmigrationGuest",
+          "params": [
+            "invoiceId",
+            "guest"
+          ],
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "removeImmigrationGuest",
+          "params": [
+            "invoiceId",
+            "guestId"
+          ],
+          "exported": true,
+          "lineCount": 2
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "axios",
+          "specifiers": [
+            "AxiosResponse"
+          ]
+        },
+        {
+          "source": "./apis",
+          "specifiers": [
+            "immigrationRegistrationApi"
+          ]
+        },
+        {
+          "source": "../Components/InvoiceManager",
+          "specifiers": [
+            "Invoice"
+          ]
+        }
+      ],
+      "exports": [
+        "listImmigrationRegistrations",
+        "listInvoicesForImmigration",
+        "addImmigrationRegistration",
+        "removeImmigrationRegistration",
+        "addImmigrationGuest",
+        "removeImmigrationGuest",
+        "unwrapPage"
+      ],
+      "totalLines": 75,
+      "hasStructuralAnalysis": true
+    },
+    "src/db/inventory.ts": {
+      "filePath": "src/db/inventory.ts",
+      "contentHash": "94c088f9cbc2bbf485fa3ec76dbc9e1d1467bba81fe2cf903ed7d5af12fe4e2d",
+      "functions": [
+        {
+          "name": "listAllProductItems",
+          "params": [],
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "listProductItems",
+          "params": [
+            "page",
+            "size"
+          ],
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "adjustQuantity",
+          "params": [
+            "adjustment"
+          ],
+          "exported": true,
+          "lineCount": 9
+        },
+        {
+          "name": "changeItemStatus",
+          "params": [
+            "statusChange"
+          ],
+          "exported": true,
+          "lineCount": 9
+        },
+        {
+          "name": "planAvailability",
+          "params": [
+            "change"
+          ],
+          "exported": true,
+          "lineCount": 9
+        },
+        {
+          "name": "listProductItemsWithName",
+          "params": [
+            "name"
+          ],
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "listProductItemsByGroup",
+          "params": [
+            "group",
+            "page",
+            "size"
+          ],
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "listProductItemsWithNameAndGroup",
+          "params": [
+            "name",
+            "group",
+            "page",
+            "size"
+          ],
+          "exported": true,
+          "lineCount": 8
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../Components/Inventory",
+          "specifiers": [
+            "AvailabilityChange",
+            "ItemAdjustment",
+            "ItemStatusChange"
+          ]
+        },
+        {
+          "source": "./apis",
+          "specifiers": [
+            "inventoryApi"
+          ]
+        }
+      ],
+      "exports": [
+        "listAllProductItems",
+        "listProductItems",
+        "adjustQuantity",
+        "changeItemStatus",
+        "planAvailability",
+        "listProductItemsWithName",
+        "listProductItemsByGroup",
+        "listProductItemsWithNameAndGroup"
+      ],
+      "totalLines": 76,
+      "hasStructuralAnalysis": true
+    },
+    "src/db/invoice.ts": {
+      "filePath": "src/db/invoice.ts",
+      "contentHash": "6009436a99475a30ed283c3e28d680043be4b75ab46704dc96b8c42bbb5aa586",
+      "functions": [
+        {
+          "name": "updateInvoice",
+          "params": [
+            "invoice"
+          ],
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "createInvoice",
+          "params": [
+            "invoice"
+          ],
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "deleteInvoice",
+          "params": [
+            "invoiceId"
+          ],
+          "exported": true,
+          "lineCount": 9
+        },
+        {
+          "name": "listByCheckIn",
+          "params": [
+            "fromDate",
+            "toDate",
+            "page",
+            "size"
+          ],
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "listStayingAndComingInvoices",
+          "params": [
+            "fromDate",
+            "pageNumber",
+            "pageSize"
+          ],
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "listStayingAndComingInvoicesAndPrepaid",
+          "params": [
+            "fromDate",
+            "includePrepaid",
+            "pageNumber",
+            "pageSize"
+          ],
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "listInvoiceByGuestName",
+          "params": [
+            "fromDate",
+            "guestName",
+            "pageNumber",
+            "pageSize"
+          ],
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "getInvoice",
+          "params": [
+            "invoiceId"
+          ],
+          "exported": true,
+          "lineCount": 5
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../Components/InvoiceManager",
+          "specifiers": [
+            "Invoice"
+          ]
+        },
+        {
+          "source": "./apis",
+          "specifiers": [
+            "invoiceApi"
+          ]
+        }
+      ],
+      "exports": [
+        "Configs",
+        "updateInvoice",
+        "createInvoice",
+        "deleteInvoice",
+        "listByCheckIn",
+        "listStayingAndComingInvoices",
+        "listStayingAndComingInvoicesAndPrepaid",
+        "listInvoiceByGuestName",
+        "getInvoice"
+      ],
+      "totalLines": 73,
+      "hasStructuralAnalysis": true
+    },
+    "src/db/order.ts": {
+      "filePath": "src/db/order.ts",
+      "contentHash": "fa160db68b189a51a6b07083025c7833d031ba2d4ecff908555332d98e1a3ec5",
+      "functions": [
+        {
+          "name": "listOrders",
+          "params": [
+            "fromTime",
+            "page",
+            "size"
+          ],
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "listOrderByStatuses",
+          "params": [
+            "fromTime",
+            "statuses",
+            "page",
+            "size"
+          ],
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "fetchUpcomingOrders",
+          "params": [
+            "fromTime",
+            "filter",
+            "page",
+            "size"
+          ],
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "startOrder",
+          "params": [
+            "resolverId",
+            "startTime"
+          ],
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "adjustOrderItem",
+          "params": [
+            "orderId",
+            "item"
+          ],
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "saveOrder",
+          "params": [
+            "order"
+          ],
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "fetchAvailability",
+          "params": [
+            "itemIds"
+          ],
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "fetchItems",
+          "params": [
+            "group",
+            "page",
+            "size"
+          ],
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "commitOrder",
+          "params": [
+            "order"
+          ],
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "getPotentialInvoices",
+          "params": [
+            "orderId"
+          ],
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "resolveInvoiceId",
+          "params": [
+            "resolverId"
+          ],
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "fetchOrder",
+          "params": [
+            "orderId"
+          ],
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "confirmOrder",
+          "params": [
+            "order"
+          ],
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "serveOrder",
+          "params": [
+            "order"
+          ],
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "rejectOrder",
+          "params": [
+            "orderId",
+            "staffId"
+          ],
+          "exported": true,
+          "lineCount": 4
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../Components/OrderManager",
+          "specifiers": [
+            "Order",
+            "OrderItem"
+          ]
+        },
+        {
+          "source": "./apis",
+          "specifiers": [
+            "orderApi"
+          ]
+        }
+      ],
+      "exports": [
+        "listOrders",
+        "listOrderByStatuses",
+        "fetchUpcomingOrders",
+        "startOrder",
+        "adjustOrderItem",
+        "saveOrder",
+        "fetchAvailability",
+        "fetchItems",
+        "commitOrder",
+        "getPotentialInvoices",
+        "resolveInvoiceId",
+        "fetchOrder",
+        "confirmOrder",
+        "serveOrder",
+        "rejectOrder"
+      ],
+      "totalLines": 89,
+      "hasStructuralAnalysis": true
+    },
+    "src/db/permission.ts": {
+      "filePath": "src/db/permission.ts",
+      "contentHash": "7c42bcfa73a43ab3a03122eba117b1a9b9a198fe5f698146f5fe30e40f4f3de2",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [
+        "PERMISSION_INVOICE_DELETE",
+        "PERMISSION_INVOICE_ASSIGN"
+      ],
+      "totalLines": 2,
+      "hasStructuralAnalysis": true
+    },
+    "src/db/pgroup.ts": {
+      "filePath": "src/db/pgroup.ts",
+      "contentHash": "6ad5a5702dbb8011dbdc3f74ac8a9a5480cb8970dd3bd9fd318d28214dd0ff24",
+      "functions": [
+        {
+          "name": "listAllPGroups",
+          "params": [],
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "deletePGroup",
+          "params": [
+            "pgroup"
+          ],
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "savePGroup",
+          "params": [
+            "group"
+          ],
+          "exported": true,
+          "lineCount": 9
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../Components/PGroupManager",
+          "specifiers": [
+            "PGroup"
+          ]
+        },
+        {
+          "source": "./apis",
+          "specifiers": [
+            "productGroupApi"
+          ]
+        }
+      ],
+      "exports": [
+        "listAllPGroups",
+        "deletePGroup",
+        "savePGroup"
+      ],
+      "totalLines": 29,
+      "hasStructuralAnalysis": true
+    },
+    "src/db/product.ts": {
+      "filePath": "src/db/product.ts",
+      "contentHash": "fbb10cddedf5eb9d93890f74211b99fc0fcddf4c5fe35b3fabfa00f9c3df3c02",
+      "functions": [
+        {
+          "name": "listAllProducts",
+          "params": [],
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "listProducts",
+          "params": [
+            "page",
+            "size"
+          ],
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "getProduct",
+          "params": [
+            "productId"
+          ],
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "saveProduct",
+          "params": [
+            "product"
+          ],
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "listProductsWithName",
+          "params": [
+            "name"
+          ],
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "listProductsByGroup",
+          "params": [
+            "group",
+            "page",
+            "size"
+          ],
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "listProductsWithNameAndGroup",
+          "params": [
+            "name",
+            "group",
+            "page",
+            "size"
+          ],
+          "exported": true,
+          "lineCount": 4
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../Components/Inventory",
+          "specifiers": [
+            "ManagedProduct"
+          ]
+        },
+        {
+          "source": "./apis",
+          "specifiers": [
+            "productApi"
+          ]
+        }
+      ],
+      "exports": [
+        "listAllProducts",
+        "listProducts",
+        "getProduct",
+        "saveProduct",
+        "listProductsWithName",
+        "listProductsByGroup",
+        "listProductsWithNameAndGroup"
+      ],
+      "totalLines": 39,
+      "hasStructuralAnalysis": true
+    },
+    "src/db/profile.ts": {
+      "filePath": "src/db/profile.ts",
+      "contentHash": "a0745375209a6493661709ddfdbc76cd414eba508531bd9f03cdcc25ef413c84",
+      "functions": [
+        {
+          "name": "getProfile",
+          "params": [],
+          "exported": true,
+          "lineCount": 4
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "./apis",
+          "specifiers": [
+            "profileApi"
+          ]
+        }
+      ],
+      "exports": [
+        "getProfile"
+      ],
+      "totalLines": 6,
+      "hasStructuralAnalysis": true
+    },
+    "src/db/profit.ts": {
+      "filePath": "src/db/profit.ts",
+      "contentHash": "45843e5f7a12a49fbe3f8d380ebf661e28ace63f0fead70986976ff9d39fe927",
+      "functions": [
+        {
+          "name": "getProfitReportThisMonth",
+          "params": [
+            "fromDate",
+            "toDate",
+            "reportKey"
+          ],
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "fetchPReportThisMonth",
+          "params": [
+            "fromDate",
+            "toDate",
+            "reportKey"
+          ],
+          "returnType": "Promise<PReport>",
+          "exported": true,
+          "lineCount": 7
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../Components/ProfitReport",
+          "specifiers": [
+            "PReport"
+          ]
+        },
+        {
+          "source": "./apis",
+          "specifiers": [
+            "reportApi"
+          ]
+        }
+      ],
+      "exports": [
+        "getProfitReportThisMonth",
+        "fetchPReportThisMonth"
+      ],
+      "totalLines": 19,
+      "hasStructuralAnalysis": true
+    },
+    "src/db/rate_plan.ts": {
+      "filePath": "src/db/rate_plan.ts",
+      "contentHash": "44ecd9fdb657af900033a62869145298ad8707444211f624d4c88b44294f64e5",
+      "functions": [
+        {
+          "name": "list",
+          "params": [
+            "page",
+            "size"
+          ],
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "get",
+          "params": [
+            "ratePlanId"
+          ],
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "save",
+          "params": [
+            "ratePlan"
+          ],
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "create",
+          "params": [
+            "ratePlan"
+          ],
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "deleteObject",
+          "params": [
+            "ratePlanId"
+          ],
+          "exported": true,
+          "lineCount": 4
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../Components/RatePlanManager",
+          "specifiers": [
+            "RatePlan"
+          ]
+        },
+        {
+          "source": "./apis",
+          "specifiers": [
+            "ratePlanApi"
+          ]
+        }
+      ],
+      "exports": [
+        "list",
+        "get",
+        "save",
+        "create",
+        "deleteObject"
+      ],
+      "totalLines": 32,
+      "hasStructuralAnalysis": true
+    },
+    "src/db/reservation.ts": {
+      "filePath": "src/db/reservation.ts",
+      "contentHash": "ce9bf301b264d3ff78ecdbdcb281c648ee014504682edad2f61e25ee9550a9d4",
+      "functions": [
+        {
+          "name": "updateReservation",
+          "params": [
+            "reservation"
+          ],
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "listLatestReservations",
+          "params": [
+            "fromDate",
+            "toDate",
+            "pageNumber",
+            "pageSize"
+          ],
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "listStayingAndComingReservations",
+          "params": [
+            "fromDate",
+            "pageNumber",
+            "pageSize"
+          ],
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "getReservation",
+          "params": [
+            "reservationId"
+          ],
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "syncReservationFromMailbox",
+          "params": [
+            "code"
+          ],
+          "exported": true,
+          "lineCount": 4
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../Components/ReservationManager",
+          "specifiers": [
+            "Reservation"
+          ]
+        },
+        {
+          "source": "./apis",
+          "specifiers": [
+            "reservationApi"
+          ]
+        }
+      ],
+      "exports": [
+        "updateReservation",
+        "listLatestReservations",
+        "listStayingAndComingReservations",
+        "getReservation",
+        "syncReservationFromMailbox"
+      ],
+      "totalLines": 39,
+      "hasStructuralAnalysis": true
+    },
+    "src/db/reservation_extractor.ts": {
+      "filePath": "src/db/reservation_extractor.ts",
+      "contentHash": "48cc6e71c4ac02f57a93694abf6999578af1dd407481d5fb59bbb7ed2a19e59b",
+      "functions": [
+        {
+          "name": "collectRes",
+          "params": [
+            "fromDate",
+            "toDate"
+          ],
+          "exported": true,
+          "lineCount": 13
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "./apis",
+          "specifiers": [
+            "reservationExtractApi"
+          ]
+        }
+      ],
+      "exports": [
+        "collectRes"
+      ],
+      "totalLines": 15,
+      "hasStructuralAnalysis": true
+    },
+    "src/db/room.ts": {
+      "filePath": "src/db/room.ts",
+      "contentHash": "41078982faacdc9fb1cbdddf03be584cc6685e82bc1712b5cd283cd6632a7f9b",
+      "functions": [
+        {
+          "name": "listRoom",
+          "params": [
+            "page",
+            "size"
+          ],
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "createRoom",
+          "params": [
+            "room"
+          ],
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "updateRoom",
+          "params": [
+            "room"
+          ],
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "deleteRoom",
+          "params": [
+            "id"
+          ],
+          "exported": true,
+          "lineCount": 3
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "./apis",
+          "specifiers": [
+            "roomApi"
+          ]
+        }
+      ],
+      "exports": [
+        "listRoom",
+        "createRoom",
+        "updateRoom",
+        "deleteRoom"
+      ],
+      "totalLines": 27,
+      "hasStructuralAnalysis": true
+    },
+    "src/db/status.ts": {
+      "filePath": "src/db/status.ts",
+      "contentHash": "64cb1174e4fdfb8ad9b43959203c76be2e7ca9df66e575ec333b20805e5eb78c",
+      "functions": [
+        {
+          "name": "syncStatusOfMonth",
+          "params": [
+            "partition"
+          ],
+          "exported": true,
+          "lineCount": 4
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "./apis",
+          "specifiers": [
+            "statusApi"
+          ]
+        }
+      ],
+      "exports": [
+        "syncStatusOfMonth"
+      ],
+      "totalLines": 7,
+      "hasStructuralAnalysis": true
+    },
+    "src/db/supplier.ts": {
+      "filePath": "src/db/supplier.ts",
+      "contentHash": "243ad16a5f006c11af8313075d5f20fab5dd1a57698ac16aea30d2b3f6b15caf",
+      "functions": [
+        {
+          "name": "listSupplierInvoices",
+          "params": [
+            "createdTime",
+            "page",
+            "size"
+          ],
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "listAllSupplierInvoices",
+          "params": [
+            "page",
+            "size"
+          ],
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "listSupplierInvoicesByStatus",
+          "params": [
+            "statuses",
+            "page",
+            "size"
+          ],
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "listSupplierInvoicesByTimeAndStatus",
+          "params": [
+            "createdTime",
+            "statuses",
+            "page",
+            "size"
+          ],
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "generateSInvoice",
+          "params": [
+            "text"
+          ],
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "saveSInvoice",
+          "params": [
+            "invoice"
+          ],
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "takenPlaceSInvoice",
+          "params": [
+            "invoice"
+          ],
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "paidSInvoice",
+          "params": [
+            "invoice"
+          ],
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "rejectSInvoice",
+          "params": [
+            "invoiceId",
+            "username"
+          ],
+          "exported": true,
+          "lineCount": 4
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../Components/SupplierManager",
+          "specifiers": [
+            "SupplierInvoice"
+          ]
+        },
+        {
+          "source": "./apis",
+          "specifiers": [
+            "supplierApi"
+          ]
+        }
+      ],
+      "exports": [
+        "listSupplierInvoices",
+        "listAllSupplierInvoices",
+        "listSupplierInvoicesByStatus",
+        "listSupplierInvoicesByTimeAndStatus",
+        "generateSInvoice",
+        "saveSInvoice",
+        "takenPlaceSInvoice",
+        "paidSInvoice",
+        "rejectSInvoice"
+      ],
+      "totalLines": 56,
+      "hasStructuralAnalysis": true
+    },
+    "src/db/tax.ts": {
+      "filePath": "src/db/tax.ts",
+      "contentHash": "e33cdca3119ace913fe4047be457e6ec8e80abccf3ef1fe098db194fa68a935d",
+      "functions": [
+        {
+          "name": "listTaxableInvoices",
+          "params": [
+            "fromDate",
+            "toDate",
+            "pageNumber",
+            "pageSize"
+          ],
+          "returnType": "Promise<AxiosResponse<TaxInvoicePage | TaxableInvoice[]>>",
+          "exported": true,
+          "lineCount": 10
+        },
+        {
+          "name": "calculateTaxableInvoices",
+          "params": [
+            "fromDate",
+            "toDate",
+            "storeResult"
+          ],
+          "returnType": "Promise<AxiosResponse<TaxCalculationResult[]>>",
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "getTaxableInvoice",
+          "params": [
+            "invoiceId"
+          ],
+          "exported": true,
+          "lineCount": 2
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "axios",
+          "specifiers": [
+            "AxiosResponse"
+          ]
+        },
+        {
+          "source": "./apis",
+          "specifiers": [
+            "taxApi"
+          ]
+        },
+        {
+          "source": "../Components/TaxableInvoiceManager",
+          "specifiers": [
+            "TaxableInvoice"
+          ]
+        }
+      ],
+      "exports": [
+        "listTaxableInvoices",
+        "calculateTaxableInvoices",
+        "getTaxableInvoice"
+      ],
+      "totalLines": 49,
+      "hasStructuralAnalysis": true
+    },
+    "src/db/taxPolicy.ts": {
+      "filePath": "src/db/taxPolicy.ts",
+      "contentHash": "e6114138cce49cf6fc3fc00f72ec477496afb1ee87e0e6c63a771428a959c27a",
+      "functions": [
+        {
+          "name": "listTaxPolicies",
+          "params": [],
+          "returnType": "Promise<AxiosResponse<TaxPolicy[]>>",
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "createTaxPolicy",
+          "params": [
+            "policy"
+          ],
+          "returnType": "Promise<AxiosResponse<TaxPolicy>>",
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "updateTaxPolicy",
+          "params": [
+            "policy"
+          ],
+          "returnType": "Promise<AxiosResponse<TaxPolicy>>",
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "reorderTaxPolicies",
+          "params": [
+            "policyIds"
+          ],
+          "returnType": "Promise<AxiosResponse<string[]>>",
+          "exported": true,
+          "lineCount": 2
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "axios",
+          "specifiers": [
+            "AxiosResponse"
+          ]
+        },
+        {
+          "source": "./apis",
+          "specifiers": [
+            "taxPolicyApi"
+          ]
+        }
+      ],
+      "exports": [
+        "listTaxPolicies",
+        "createTaxPolicy",
+        "updateTaxPolicy",
+        "reorderTaxPolicies"
+      ],
+      "totalLines": 25,
+      "hasStructuralAnalysis": true
+    },
+    "src/db/tour-request.ts": {
+      "filePath": "src/db/tour-request.ts",
+      "contentHash": "065ba05fe9cb073a8f7849c37e74d3d9454e74be34cd3c04f005c2282027c5d2",
+      "functions": [
+        {
+          "name": "listTourRequest",
+          "params": [],
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "saveTourRequest",
+          "params": [
+            "tour"
+          ],
+          "exported": true,
+          "lineCount": 6
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../Components/TourManager",
+          "specifiers": [
+            "Tour"
+          ]
+        },
+        {
+          "source": "./apis",
+          "specifiers": [
+            "tourRequestApi"
+          ]
+        }
+      ],
+      "exports": [
+        "listTourRequest",
+        "saveTourRequest"
+      ],
+      "totalLines": 14,
+      "hasStructuralAnalysis": true
+    },
+    "src/db/tour.ts": {
+      "filePath": "src/db/tour.ts",
+      "contentHash": "87ee404810f7caa1f3a0e51213d8de9e27f1613de00e3ba14e45400060205de6",
+      "functions": [
+        {
+          "name": "listTour",
+          "params": [],
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "getTour",
+          "params": [
+            "tourId"
+          ],
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "saveTour",
+          "params": [
+            "tour"
+          ],
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "adjustTourQuantity",
+          "params": [
+            "tour"
+          ],
+          "exported": true,
+          "lineCount": 6
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../Components/TourManager",
+          "specifiers": [
+            "Tour"
+          ]
+        },
+        {
+          "source": "./apis",
+          "specifiers": [
+            "tourApi"
+          ]
+        }
+      ],
+      "exports": [
+        "listTour",
+        "getTour",
+        "saveTour",
+        "adjustTourQuantity"
+      ],
+      "totalLines": 27,
+      "hasStructuralAnalysis": true
+    },
+    "src/db/users.ts": {
+      "filePath": "src/db/users.ts",
+      "contentHash": "f24759b83cfed873226725c8bb5828117de0915c411f7a7be5c584375808183d",
+      "functions": [
+        {
+          "name": "listUsers",
+          "params": [
+            "page",
+            "size"
+          ],
+          "exported": true,
+          "lineCount": 4
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../Components/InvoiceManager",
+          "specifiers": [
+            "Issuer"
+          ]
+        },
+        {
+          "source": "./apis",
+          "specifiers": [
+            "userApi"
+          ]
+        }
+      ],
+      "exports": [
+        "getUsers",
+        "listUsers"
+      ],
+      "totalLines": 24,
+      "hasStructuralAnalysis": true
+    },
+    "src/index.css": {
+      "filePath": "src/index.css",
+      "contentHash": "cc47e0a945fe2eaf9f00232b0bbc76da1a10c6cc91d4e9d1b1bb937ddfe57412",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 21,
+      "hasStructuralAnalysis": false
+    },
+    "src/index.tsx": {
+      "filePath": "src/index.tsx",
+      "contentHash": "82ef1fe8f79941e3142f0bf94d893b6f3955a78844488499396624543fac9d76",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "React"
+          ]
+        },
+        {
+          "source": "react-dom/client",
+          "specifiers": [
+            "ReactDOM"
+          ]
+        },
+        {
+          "source": "./index.css",
+          "specifiers": []
+        },
+        {
+          "source": "./App",
+          "specifiers": [
+            "App"
+          ]
+        },
+        {
+          "source": "react-router-dom",
+          "specifiers": [
+            "BrowserRouter"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 13,
+      "hasStructuralAnalysis": true
+    },
+    "tailwind.config.js": {
+      "filePath": "tailwind.config.js",
+      "contentHash": "d2d532a524cd81acb5d6f2ffa321e0c5426728e6373455685305e6894fafbdb1",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 16,
+      "hasStructuralAnalysis": true
+    },
+    "tsconfig.json": {
+      "filePath": "tsconfig.json",
+      "contentHash": "ace2614b32e4ed255c5263e965db44fce80c64a2aa77dbbac1e7f325da007da9",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 113,
+      "hasStructuralAnalysis": true
+    },
+    "webpack.config.js": {
+      "filePath": "webpack.config.js",
+      "contentHash": "2350ea7e8ee516d8673fb035c56957200a38f39ced648cf522567cb0a981fc51",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 49,
+      "hasStructuralAnalysis": true
+    }
+  }
+}

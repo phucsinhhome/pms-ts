@@ -1,0 +1,13 @@
+{
+  "projectRoot": "C:/apps/ps/pms-ts",
+  "batchFiles": [
+    {"path": "public/index.html", "language": "html", "sizeLines": 43, "fileCategory": "markup"},
+    {"path": "public/manifest.json", "language": "json", "sizeLines": 25, "fileCategory": "config"},
+    {"path": "public/robots.txt", "language": "txt", "sizeLines": 3, "fileCategory": "docs"}
+  ],
+  "batchImportData": {
+    "public/index.html": [],
+    "public/manifest.json": [],
+    "public/robots.txt": []
+  }
+}

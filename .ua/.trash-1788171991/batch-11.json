@@ -1,0 +1,328 @@
+{
+  "nodes": [
+    {
+      "id": "document:.planning/codebase/ARCHITECTURE.md",
+      "type": "document",
+      "name": "ARCHITECTURE.md",
+      "filePath": ".planning/codebase/ARCHITECTURE.md",
+      "summary": "Describes the PMS-TS frontend architecture: functional React components with hooks, a Service-Repository split between UI (src/Components/) and data access (src/db/), lifted state in App.tsx with no global state library, React Router v6 routing with RBAC-driven menu filtering, OIDC/JWT-based authentication, and a Tailwind CSS + Flowbite UI layer.",
+      "tags": ["documentation", "architecture", "state-management", "planning"],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:.planning/codebase/CONCERNS.md",
+      "type": "document",
+      "name": "CONCERNS.md",
+      "filePath": ".planning/codebase/CONCERNS.md",
+      "summary": "Catalogs technical debt, security risks, performance bottlenecks, and missing features in pms-ts, including overuse of `any`, monolithic components like InvoiceEditor.tsx and App.tsx, hardcoded API keys and business data, fragile auth logic, and the complete absence of automated tests.",
+      "tags": ["documentation", "technical-debt", "security", "planning"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:.planning/codebase/CONVENTIONS.md",
+      "type": "document",
+      "name": "CONVENTIONS.md",
+      "filePath": ".planning/codebase/CONVENTIONS.md",
+      "summary": "Defines pms-ts coding standards: PascalCase for components and services, mixed snake_case/kebab-case for db modules, Prettier with the Tailwind plugin, ESLint react-app rules, and architectural rules for component structure, data access via db/apis.ts, multi-tenancy via tenantId, and env-based configuration.",
+      "tags": ["documentation", "conventions", "coding-standards", "planning"],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:.planning/codebase/INTEGRATIONS.md",
+      "type": "document",
+      "name": "INTEGRATIONS.md",
+      "filePath": ".planning/codebase/INTEGRATIONS.md",
+      "summary": "Lists external integrations used by pms-ts, including OIDC/Keycloak authentication with RBAC, a suite of Phuc Sinh Assistant backend microservices (expense, inventory, invoice, profit, reservation, order, supplier, tour), Google Gemini AI for data extraction, MinIO object storage, and Firebase/GCS cloud integrations.",
+      "tags": ["documentation", "integrations", "microservices", "planning"],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:.planning/codebase/STACK.md",
+      "type": "document",
+      "name": "STACK.md",
+      "filePath": ".planning/codebase/STACK.md",
+      "summary": "Summarizes the pms-ts technology stack: TypeScript on React 18 with React Router v6, Tailwind CSS with Flowbite components, Axios for HTTP, Moment.js for dates, Google Generative AI, MinIO SDK, and a Webpack/react-app-rewired/Babel/PostCSS/Prettier build toolchain.",
+      "tags": ["documentation", "tech-stack", "dependencies", "planning"],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:.planning/codebase/STRUCTURE.md",
+      "type": "document",
+      "name": "STRUCTURE.md",
+      "filePath": ".planning/codebase/STRUCTURE.md",
+      "summary": "Maps the pms-ts directory layout, explaining the roles of src/Components/ (Manager, Editor, and Map components), src/db/ (API repositories), src/Service/ (utilities like FileMinio.ts and Utils.ts), the App.tsx/index.tsx entry points, public/ static assets, and top-level config files.",
+      "tags": ["documentation", "directory-structure", "planning"],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:.planning/codebase/TESTING.md",
+      "type": "document",
+      "name": "TESTING.md",
+      "filePath": ".planning/codebase/TESTING.md",
+      "summary": "Defines the intended testing strategy for pms-ts using Jest and React Testing Library, covering unit tests for src/Service/ and src/db/, component tests for src/Components/, the absence of E2E tooling, mocking guidance for API calls, and coverage goals for critical domain logic.",
+      "tags": ["documentation", "testing", "planning"],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "document:.planning/codebase/ARCHITECTURE.md",
+      "target": "file:src/App.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/ARCHITECTURE.md",
+      "target": "file:src/Components/InvoiceManager.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/ARCHITECTURE.md",
+      "target": "file:src/Components/OrderManager.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/ARCHITECTURE.md",
+      "target": "file:src/Components/RoomManager.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/CONCERNS.md",
+      "target": "file:src/Components/InvoiceEditor.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/CONCERNS.md",
+      "target": "file:src/Components/ReservationManager.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/CONCERNS.md",
+      "target": "file:src/App.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/CONCERNS.md",
+      "target": "file:src/db/users.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/CONCERNS.md",
+      "target": "file:src/db/configs.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/CONCERNS.md",
+      "target": "file:src/db/apis.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/CONCERNS.md",
+      "target": "config:package.json",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/CONVENTIONS.md",
+      "target": "file:src/Components/InvoiceEditor.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/CONVENTIONS.md",
+      "target": "file:src/Components/ReservationManager.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/CONVENTIONS.md",
+      "target": "file:src/Service/FileMinio.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/CONVENTIONS.md",
+      "target": "file:src/Service/Utils.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/CONVENTIONS.md",
+      "target": "file:src/db/apis.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/CONVENTIONS.md",
+      "target": "file:src/db/rate_plan.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/CONVENTIONS.md",
+      "target": "file:src/db/tour-request.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/STRUCTURE.md",
+      "target": "file:src/Components/InvoiceManager.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/STRUCTURE.md",
+      "target": "file:src/Components/RoomManager.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/STRUCTURE.md",
+      "target": "file:src/Components/OrderEditor.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/STRUCTURE.md",
+      "target": "file:src/Components/InvoiceEditor.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/STRUCTURE.md",
+      "target": "file:src/db/apis.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/STRUCTURE.md",
+      "target": "file:src/db/invoice.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/STRUCTURE.md",
+      "target": "file:src/db/reservation.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/STRUCTURE.md",
+      "target": "file:src/db/inventory.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/STRUCTURE.md",
+      "target": "file:src/Service/FileMinio.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/STRUCTURE.md",
+      "target": "file:src/Service/Utils.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/STRUCTURE.md",
+      "target": "file:src/App.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/STRUCTURE.md",
+      "target": "file:src/index.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/STRUCTURE.md",
+      "target": "config:package.json",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/STRUCTURE.md",
+      "target": "config:tailwind.config.js",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/STRUCTURE.md",
+      "target": "config:tsconfig.json",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/TESTING.md",
+      "target": "file:src/Components/InvoiceEditor.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/TESTING.md",
+      "target": "file:src/Components/ReservationManager.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/TESTING.md",
+      "target": "file:src/Components/Inventory.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/codebase/TESTING.md",
+      "target": "file:src/Service/Utils.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    }
+  ]
+}

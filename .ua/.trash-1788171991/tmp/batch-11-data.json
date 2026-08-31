@@ -1,0 +1,57 @@
+{
+  "batchIndex": 11,
+  "files": [
+    {
+      "path": ".planning/codebase/ARCHITECTURE.md",
+      "language": "markdown",
+      "sizeLines": 26,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".planning/codebase/CONCERNS.md",
+      "language": "markdown",
+      "sizeLines": 87,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".planning/codebase/CONVENTIONS.md",
+      "language": "markdown",
+      "sizeLines": 55,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".planning/codebase/INTEGRATIONS.md",
+      "language": "markdown",
+      "sizeLines": 31,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".planning/codebase/STACK.md",
+      "language": "markdown",
+      "sizeLines": 26,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".planning/codebase/STRUCTURE.md",
+      "language": "markdown",
+      "sizeLines": 25,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".planning/codebase/TESTING.md",
+      "language": "markdown",
+      "sizeLines": 54,
+      "fileCategory": "docs"
+    }
+  ],
+  "batchImportData": {
+    ".planning/codebase/ARCHITECTURE.md": [],
+    ".planning/codebase/CONCERNS.md": [],
+    ".planning/codebase/CONVENTIONS.md": [],
+    ".planning/codebase/INTEGRATIONS.md": [],
+    ".planning/codebase/STACK.md": [],
+    ".planning/codebase/STRUCTURE.md": [],
+    ".planning/codebase/TESTING.md": []
+  },
+  "neighborMap": {}
+}

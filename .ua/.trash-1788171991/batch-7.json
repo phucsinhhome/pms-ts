@@ -1,0 +1,39 @@
+{
+  "nodes": [
+    {
+      "id": "service:Dockerfile",
+      "type": "service",
+      "name": "Dockerfile",
+      "filePath": "Dockerfile",
+      "summary": "Single-stage Docker build for the PMS React web app: copies the full source tree, installs dependencies with npm ci, runs npm run build, then starts the app via npm run start on port 3000. Numerous build ARGs inject service endpoint URLs (invoice, inventory, expense, profit, service-classification, reservation, and file-service) as runtime ENV vars.",
+      "tags": ["containerization", "infrastructure", "deployment", "docker", "build-system"],
+      "complexity": "moderate",
+      "languageNotes": "Uses ARG/ENV pairs to thread numerous REACT_APP_* microservice endpoint URLs from build-time arguments into the container's runtime environment, a common pattern for injecting environment-specific config into Create React App builds at image-build time."
+    },
+    {
+      "id": "config:.dockerignore",
+      "type": "config",
+      "name": ".dockerignore",
+      "filePath": ".dockerignore",
+      "summary": "Excludes node_modules and build directories from the Docker build context, keeping image builds fast and avoiding stale artifacts being copied into the container.",
+      "tags": ["configuration", "infrastructure", "containerization", "build-system"],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "config:.dockerignore",
+      "target": "service:Dockerfile",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "service:Dockerfile",
+      "target": "file:src/index.tsx",
+      "type": "deploys",
+      "direction": "forward",
+      "weight": 0.7
+    }
+  ]
+}

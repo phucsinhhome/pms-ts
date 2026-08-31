@@ -1,0 +1,208 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 1,
+  "filesSkipped": [
+    ".dockerignore"
+  ],
+  "analysisOutcomes": {
+    "structure": {
+      "succeeded": 1,
+      "failed": 0
+    },
+    "callGraph": {
+      "succeeded": 0,
+      "failed": 0,
+      "skipped": 1
+    }
+  },
+  "results": [
+    {
+      "path": "Dockerfile",
+      "language": "dockerfile",
+      "fileCategory": "infra",
+      "totalLines": 49,
+      "nonEmptyLines": 41,
+      "services": [
+        {
+          "name": "node",
+          "image": "node:18-alpine3.16",
+          "ports": [
+            3000
+          ],
+          "startLine": 1,
+          "endLine": 49
+        }
+      ],
+      "steps": [
+        {
+          "name": "FROM node:18-alpine3.16",
+          "startLine": 1,
+          "endLine": 1
+        },
+        {
+          "name": "ARG REACT_APP_INVOICE_SERVICE_ENDPOINT",
+          "startLine": 4,
+          "endLine": 4
+        },
+        {
+          "name": "ARG REACT_APP_INVENTORY_ENDPOINT",
+          "startLine": 5,
+          "endLine": 5
+        },
+        {
+          "name": "ARG REACT_APP_EXPENSE_SERVICE_ENDPOINT",
+          "startLine": 6,
+          "endLine": 6
+        },
+        {
+          "name": "ARG REACT_APP_PROFIT_SERVICE_ENDPOINT",
+          "startLine": 7,
+          "endLine": 7
+        },
+        {
+          "name": "ARG REACT_APP_SERVICE_CLASSIFICATION_ENDPOINT",
+          "startLine": 8,
+          "endLine": 8
+        },
+        {
+          "name": "ARG REACT_APP_RESERVATION_SERVICE_ENDPOINT",
+          "startLine": 9,
+          "endLine": 9
+        },
+        {
+          "name": "ARG WDS_SOCKET_PORT",
+          "startLine": 11,
+          "endLine": 11
+        },
+        {
+          "name": "ARG REACT_APP_FILE_SERVICE_ENDPOINT",
+          "startLine": 14,
+          "endLine": 14
+        },
+        {
+          "name": "ARG REACT_APP_FILE_SERVICE_PORT",
+          "startLine": 15,
+          "endLine": 15
+        },
+        {
+          "name": "ARG REACT_APP_FILE_SERVICE_SSL_ENABLED",
+          "startLine": 16,
+          "endLine": 16
+        },
+        {
+          "name": "ARG REACT_APP_FILE_SERVICE_ACCESS_KEY",
+          "startLine": 17,
+          "endLine": 17
+        },
+        {
+          "name": "ARG REACT_APP_FILE_SERVICE_SECRET_KEY",
+          "startLine": 18,
+          "endLine": 18
+        },
+        {
+          "name": "WORKDIR /app",
+          "startLine": 20,
+          "endLine": 20
+        },
+        {
+          "name": "COPY . .",
+          "startLine": 21,
+          "endLine": 21
+        },
+        {
+          "name": "RUN npm ci",
+          "startLine": 24,
+          "endLine": 24
+        },
+        {
+          "name": "RUN npm run build",
+          "startLine": 26,
+          "endLine": 26
+        },
+        {
+          "name": "ENV NODE_ENV production",
+          "startLine": 30,
+          "endLine": 30
+        },
+        {
+          "name": "ENV REACT_APP_INVOICE_SERVICE_ENDPOINT=$REACT_APP_INVOICE_SERVIC",
+          "startLine": 31,
+          "endLine": 31
+        },
+        {
+          "name": "ENV REACT_APP_INVENTORY_ENDPOINT=$REACT_APP_INVENTORY_ENDPOINT",
+          "startLine": 32,
+          "endLine": 32
+        },
+        {
+          "name": "ENV REACT_APP_PROFIT_SERVICE_ENDPOINT=$REACT_APP_PROFIT_SERVICE_",
+          "startLine": 33,
+          "endLine": 33
+        },
+        {
+          "name": "ENV REACT_APP_EXPENSE_SERVICE_ENDPOINT=$REACT_APP_EXPENSE_SERVIC",
+          "startLine": 34,
+          "endLine": 34
+        },
+        {
+          "name": "ENV REACT_APP_SERVICE_CLASSIFICATION_ENDPOINT=$REACT_APP_SERVICE",
+          "startLine": 35,
+          "endLine": 35
+        },
+        {
+          "name": "ENV REACT_APP_RESERVATION_SERVICE_ENDPOINT=$REACT_APP_RESERVATIO",
+          "startLine": 36,
+          "endLine": 36
+        },
+        {
+          "name": "ENV WDS_SOCKET_PORT=$WDS_SOCKET_PORT",
+          "startLine": 38,
+          "endLine": 38
+        },
+        {
+          "name": "ENV REACT_APP_FILE_SERVICE_ENDPOINT=$REACT_APP_FILE_SERVICE_ENDP",
+          "startLine": 40,
+          "endLine": 40
+        },
+        {
+          "name": "ENV REACT_APP_FILE_SERVICE_PORT=$REACT_APP_FILE_SERVICE_PORT",
+          "startLine": 41,
+          "endLine": 41
+        },
+        {
+          "name": "ENV REACT_APP_FILE_SERVICE_SSL_ENABLED=$REACT_APP_FILE_SERVICE_S",
+          "startLine": 42,
+          "endLine": 42
+        },
+        {
+          "name": "ENV REACT_APP_FILE_SERVICE_ACCESS_KEY=$REACT_APP_FILE_SERVICE_AC",
+          "startLine": 43,
+          "endLine": 43
+        },
+        {
+          "name": "ENV REACT_APP_FILE_SERVICE_SECRET_KEY=$REACT_APP_FILE_SERVICE_SE",
+          "startLine": 44,
+          "endLine": 44
+        },
+        {
+          "name": "EXPOSE 3000",
+          "startLine": 47,
+          "endLine": 47
+        },
+        {
+          "name": "ENTRYPOINT [ \"npm\", \"run\", \"start\" ]",
+          "startLine": 49,
+          "endLine": 49
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "serviceCount": 1,
+        "stepCount": 32
+      }
+    }
+  ]
+}

@@ -1,0 +1,161 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 3,
+  "filesSkipped": [],
+  "analysisOutcomes": {
+    "structure": {
+      "succeeded": 3,
+      "failed": 0
+    },
+    "callGraph": {
+      "succeeded": 0,
+      "failed": 0,
+      "skipped": 3
+    }
+  },
+  "results": [
+    {
+      "path": ".planning/phases/04-dynamic-room-integration/01-RESEARCH.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 24,
+      "nonEmptyLines": 20,
+      "sections": [
+        {
+          "heading": "Phase 4 Research: Dynamic Room Integration (Refinement)",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "Analysis of Room Icon Mapping",
+          "level": 2,
+          "line": 3
+        },
+        {
+          "heading": "Identified Improvements",
+          "level": 2,
+          "line": 11
+        },
+        {
+          "heading": "Code Exploration Results",
+          "level": 2,
+          "line": 16
+        },
+        {
+          "heading": "Conclusion",
+          "level": 2,
+          "line": 23
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 5
+      }
+    },
+    {
+      "path": ".planning/phases/04-dynamic-room-integration/04-PLAN.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 25,
+      "nonEmptyLines": 18,
+      "sections": [
+        {
+          "heading": "Phase 4 Plan: Dynamic Room Integration (Refined)",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "Tasks",
+          "level": 2,
+          "line": 5
+        },
+        {
+          "heading": "1. Remove Room Icon Mapping (Technical Debt)",
+          "level": 3,
+          "line": 7
+        },
+        {
+          "heading": "2. Standardize Room Selection UI in InvoiceEditor",
+          "level": 3,
+          "line": 11
+        },
+        {
+          "heading": "3. Finalize Static Data Elimination",
+          "level": 3,
+          "line": 15
+        },
+        {
+          "heading": "4. Verification and Cleanup",
+          "level": 3,
+          "line": 19
+        },
+        {
+          "heading": "Verification",
+          "level": 2,
+          "line": 23
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 7
+      }
+    },
+    {
+      "path": ".planning/phases/04-dynamic-room-integration/04-SUMMARY.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 22,
+      "nonEmptyLines": 16,
+      "sections": [
+        {
+          "heading": "Phase 4 Summary: Dynamic Room Integration (Refinement)",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "Completed Tasks",
+          "level": 2,
+          "line": 3
+        },
+        {
+          "heading": "1. Remove Room Icon Mapping (Technical Debt)",
+          "level": 3,
+          "line": 5
+        },
+        {
+          "heading": "2. Standardize Room Selection UI in InvoiceEditor",
+          "level": 3,
+          "line": 9
+        },
+        {
+          "heading": "3. Finalize Static Data Elimination",
+          "level": 3,
+          "line": 13
+        },
+        {
+          "heading": "4. Verification and Cleanup",
+          "level": 3,
+          "line": 17
+        },
+        {
+          "heading": "Impact",
+          "level": 2,
+          "line": 21
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 7
+      }
+    }
+  ]
+}

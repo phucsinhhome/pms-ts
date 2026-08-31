@@ -1,0 +1,542 @@
+{
+  "batchIndex": 1,
+  "files": [
+    {
+      "path": "src/Components/ExpenseManager.tsx",
+      "language": "typescript",
+      "sizeLines": 905,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/Components/Settings.tsx",
+      "language": "typescript",
+      "sizeLines": 247,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/Components/SupplierManager.tsx",
+      "language": "typescript",
+      "sizeLines": 908,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/db/apis.ts",
+      "language": "typescript",
+      "sizeLines": 105,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/db/bot.ts",
+      "language": "typescript",
+      "sizeLines": 14,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/db/classification.ts",
+      "language": "typescript",
+      "sizeLines": 6,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/db/configs.ts",
+      "language": "typescript",
+      "sizeLines": 160,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/db/expense.ts",
+      "language": "typescript",
+      "sizeLines": 85,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/db/profit.ts",
+      "language": "typescript",
+      "sizeLines": 18,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/db/status.ts",
+      "language": "typescript",
+      "sizeLines": 6,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/db/supplier.ts",
+      "language": "typescript",
+      "sizeLines": 55,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/db/tax.ts",
+      "language": "typescript",
+      "sizeLines": 48,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/db/users.ts",
+      "language": "typescript",
+      "sizeLines": 23,
+      "fileCategory": "code"
+    }
+  ],
+  "batchImportData": {
+    "src/Components/ExpenseManager.tsx": [
+      "src/App.tsx",
+      "src/Components/ProfitReport.tsx",
+      "src/Service/Utils.ts",
+      "src/db/classification.ts",
+      "src/db/expense.ts",
+      "src/db/users.ts"
+    ],
+    "src/Components/Settings.tsx": [
+      "src/App.tsx",
+      "src/Service/Utils.ts",
+      "src/db/bot.ts",
+      "src/db/configs.ts",
+      "src/db/reservation.ts",
+      "src/db/status.ts"
+    ],
+    "src/Components/SupplierManager.tsx": [
+      "src/App.tsx",
+      "src/Components/InvoiceManager.tsx",
+      "src/Service/Utils.ts",
+      "src/db/classification.ts",
+      "src/db/supplier.ts"
+    ],
+    "src/db/apis.ts": [],
+    "src/db/bot.ts": [
+      "src/db/apis.ts"
+    ],
+    "src/db/classification.ts": [
+      "src/db/apis.ts"
+    ],
+    "src/db/configs.ts": [
+      "src/App.tsx",
+      "src/db/apis.ts"
+    ],
+    "src/db/expense.ts": [
+      "src/Components/ExpenseManager.tsx",
+      "src/db/apis.ts"
+    ],
+    "src/db/profit.ts": [
+      "src/Components/ProfitReport.tsx",
+      "src/db/apis.ts"
+    ],
+    "src/db/status.ts": [
+      "src/db/apis.ts"
+    ],
+    "src/db/supplier.ts": [
+      "src/Components/SupplierManager.tsx",
+      "src/db/apis.ts"
+    ],
+    "src/db/tax.ts": [
+      "src/Components/TaxableInvoiceManager.tsx",
+      "src/db/apis.ts"
+    ],
+    "src/db/users.ts": [
+      "src/Components/InvoiceManager.tsx",
+      "src/db/apis.ts"
+    ]
+  },
+  "neighborMap": {
+    "src/Components/ExpenseManager.tsx": [
+      {
+        "path": "src/App.tsx",
+        "batchIndex": 3,
+        "symbols": [
+          "DEFAULT_PAGE_SIZE",
+          "defaultChat",
+          "App"
+        ]
+      },
+      {
+        "path": "src/Components/ProfitReport.tsx",
+        "batchIndex": 2,
+        "symbols": [
+          "optionStyle",
+          "ProfitReport"
+        ]
+      },
+      {
+        "path": "src/Service/Utils.ts",
+        "batchIndex": 2,
+        "symbols": [
+          "formatVND",
+          "randomId",
+          "formatMoneyAmount",
+          "formatLocaleNumber",
+          "lastDateOf",
+          "lastDateOfMonth",
+          "beginOfDay",
+          "endOfDay",
+          "addDays",
+          "adjustMonths",
+          "beginOfMonth",
+          "formatShortDate",
+          "formatISODate",
+          "formatISODateTime",
+          "formatLocaleDate",
+          "formatDatePartition",
+          "formatMonthPartition",
+          "format2DigitDate",
+          "formatDateMonthDate",
+          "formatVNDateTime",
+          "formatLocalTime",
+          "formatISOTime",
+          "utcToHourMinute",
+          "utcToDate",
+          "utcToDateTime",
+          "formatISOHourMinute",
+          "formatRooms",
+          "formatLongDateTime"
+        ]
+      }
+    ],
+    "src/Components/Settings.tsx": [
+      {
+        "path": "src/App.tsx",
+        "batchIndex": 3,
+        "symbols": [
+          "DEFAULT_PAGE_SIZE",
+          "defaultChat",
+          "App"
+        ]
+      },
+      {
+        "path": "src/Service/Utils.ts",
+        "batchIndex": 2,
+        "symbols": [
+          "formatVND",
+          "randomId",
+          "formatMoneyAmount",
+          "formatLocaleNumber",
+          "lastDateOf",
+          "lastDateOfMonth",
+          "beginOfDay",
+          "endOfDay",
+          "addDays",
+          "adjustMonths",
+          "beginOfMonth",
+          "formatShortDate",
+          "formatISODate",
+          "formatISODateTime",
+          "formatLocaleDate",
+          "formatDatePartition",
+          "formatMonthPartition",
+          "format2DigitDate",
+          "formatDateMonthDate",
+          "formatVNDateTime",
+          "formatLocalTime",
+          "formatISOTime",
+          "utcToHourMinute",
+          "utcToDate",
+          "utcToDateTime",
+          "formatISOHourMinute",
+          "formatRooms",
+          "formatLongDateTime"
+        ]
+      },
+      {
+        "path": "src/db/reservation.ts",
+        "batchIndex": 6,
+        "symbols": [
+          "updateReservation",
+          "listLatestReservations",
+          "listStayingAndComingReservations",
+          "getReservation",
+          "syncReservationFromMailbox"
+        ]
+      }
+    ],
+    "src/Components/SupplierManager.tsx": [
+      {
+        "path": "src/App.tsx",
+        "batchIndex": 3,
+        "symbols": [
+          "DEFAULT_PAGE_SIZE",
+          "defaultChat",
+          "App"
+        ]
+      },
+      {
+        "path": "src/Components/InvoiceManager.tsx",
+        "batchIndex": 2,
+        "symbols": [
+          "InvoiceManager"
+        ]
+      },
+      {
+        "path": "src/Service/Utils.ts",
+        "batchIndex": 2,
+        "symbols": [
+          "formatVND",
+          "randomId",
+          "formatMoneyAmount",
+          "formatLocaleNumber",
+          "lastDateOf",
+          "lastDateOfMonth",
+          "beginOfDay",
+          "endOfDay",
+          "addDays",
+          "adjustMonths",
+          "beginOfMonth",
+          "formatShortDate",
+          "formatISODate",
+          "formatISODateTime",
+          "formatLocaleDate",
+          "formatDatePartition",
+          "formatMonthPartition",
+          "format2DigitDate",
+          "formatDateMonthDate",
+          "formatVNDateTime",
+          "formatLocalTime",
+          "formatISOTime",
+          "utcToHourMinute",
+          "utcToDate",
+          "utcToDateTime",
+          "formatISOHourMinute",
+          "formatRooms",
+          "formatLongDateTime"
+        ]
+      }
+    ],
+    "src/db/apis.ts": [
+      {
+        "path": "src/db/immigrationRegistration.ts",
+        "batchIndex": 2,
+        "symbols": [
+          "listImmigrationRegistrations",
+          "listInvoicesForImmigration",
+          "addImmigrationRegistration",
+          "removeImmigrationRegistration",
+          "addImmigrationGuest",
+          "removeImmigrationGuest",
+          "unwrapPage"
+        ]
+      },
+      {
+        "path": "src/db/inventory.ts",
+        "batchIndex": 4,
+        "symbols": [
+          "listAllProductItems",
+          "listProductItems",
+          "adjustQuantity",
+          "changeItemStatus",
+          "planAvailability",
+          "listProductItemsWithName",
+          "listProductItemsByGroup",
+          "listProductItemsWithNameAndGroup"
+        ]
+      },
+      {
+        "path": "src/db/invoice.ts",
+        "batchIndex": 2,
+        "symbols": [
+          "Configs",
+          "updateInvoice",
+          "createInvoice",
+          "deleteInvoice",
+          "listByCheckIn",
+          "listStayingAndComingInvoices",
+          "listStayingAndComingInvoicesAndPrepaid",
+          "listInvoiceByGuestName",
+          "getInvoice"
+        ]
+      },
+      {
+        "path": "src/db/order.ts",
+        "batchIndex": 2,
+        "symbols": [
+          "listOrders",
+          "listOrderByStatuses",
+          "fetchUpcomingOrders",
+          "startOrder",
+          "adjustOrderItem",
+          "saveOrder",
+          "fetchAvailability",
+          "fetchItems",
+          "commitOrder",
+          "getPotentialInvoices",
+          "resolveInvoiceId",
+          "fetchOrder",
+          "confirmOrder",
+          "serveOrder",
+          "rejectOrder"
+        ]
+      },
+      {
+        "path": "src/db/pgroup.ts",
+        "batchIndex": 4,
+        "symbols": [
+          "listAllPGroups",
+          "deletePGroup",
+          "savePGroup"
+        ]
+      },
+      {
+        "path": "src/db/product.ts",
+        "batchIndex": 4,
+        "symbols": [
+          "listAllProducts",
+          "listProducts",
+          "getProduct",
+          "saveProduct",
+          "listProductsWithName",
+          "listProductsByGroup",
+          "listProductsWithNameAndGroup"
+        ]
+      },
+      {
+        "path": "src/db/profile.ts",
+        "batchIndex": 3,
+        "symbols": [
+          "getProfile"
+        ]
+      },
+      {
+        "path": "src/db/rate_plan.ts",
+        "batchIndex": 5,
+        "symbols": [
+          "list",
+          "get",
+          "save",
+          "create",
+          "deleteObject"
+        ]
+      },
+      {
+        "path": "src/db/reservation.ts",
+        "batchIndex": 6,
+        "symbols": [
+          "updateReservation",
+          "listLatestReservations",
+          "listStayingAndComingReservations",
+          "getReservation",
+          "syncReservationFromMailbox"
+        ]
+      },
+      {
+        "path": "src/db/reservation_extractor.ts",
+        "batchIndex": 6,
+        "symbols": [
+          "collectRes"
+        ]
+      },
+      {
+        "path": "src/db/room.ts",
+        "batchIndex": 5,
+        "symbols": [
+          "listRoom",
+          "createRoom",
+          "updateRoom",
+          "deleteRoom"
+        ]
+      },
+      {
+        "path": "src/db/taxPolicy.ts",
+        "batchIndex": 3,
+        "symbols": [
+          "listTaxPolicies",
+          "createTaxPolicy",
+          "updateTaxPolicy",
+          "reorderTaxPolicies"
+        ]
+      },
+      {
+        "path": "src/db/tour-request.ts",
+        "batchIndex": 3,
+        "symbols": [
+          "listTourRequest",
+          "saveTourRequest"
+        ]
+      },
+      {
+        "path": "src/db/tour.ts",
+        "batchIndex": 3,
+        "symbols": [
+          "listTour",
+          "getTour",
+          "saveTour",
+          "adjustTourQuantity"
+        ]
+      }
+    ],
+    "src/db/classification.ts": [
+      {
+        "path": "src/Components/InvoiceEditor.tsx",
+        "batchIndex": 4,
+        "symbols": [
+          "internalRooms",
+          "Configs",
+          "InvoiceEditor"
+        ]
+      }
+    ],
+    "src/db/configs.ts": [
+      {
+        "path": "src/App.tsx",
+        "batchIndex": 3,
+        "symbols": [
+          "DEFAULT_PAGE_SIZE",
+          "defaultChat",
+          "App"
+        ]
+      },
+      {
+        "path": "src/Components/InvoiceEditor.tsx",
+        "batchIndex": 4,
+        "symbols": [
+          "internalRooms",
+          "Configs",
+          "InvoiceEditor"
+        ]
+      },
+      {
+        "path": "src/Components/OrderManager.tsx",
+        "batchIndex": 2,
+        "symbols": [
+          "OrderStatus",
+          "OrderManager"
+        ]
+      }
+    ],
+    "src/db/profit.ts": [
+      {
+        "path": "src/Components/ProfitReport.tsx",
+        "batchIndex": 2,
+        "symbols": [
+          "optionStyle",
+          "ProfitReport"
+        ]
+      }
+    ],
+    "src/db/tax.ts": [
+      {
+        "path": "src/Components/TaxableInvoiceManager.tsx",
+        "batchIndex": 2,
+        "symbols": [
+          "TaxableInvoiceManager"
+        ]
+      }
+    ],
+    "src/db/users.ts": [
+      {
+        "path": "src/Components/InvoiceManager.tsx",
+        "batchIndex": 2,
+        "symbols": [
+          "InvoiceManager"
+        ]
+      },
+      {
+        "path": "src/Components/InvoiceEditor.tsx",
+        "batchIndex": 4,
+        "symbols": [
+          "internalRooms",
+          "Configs",
+          "InvoiceEditor"
+        ]
+      }
+    ]
+  }
+}

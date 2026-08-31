@@ -1,0 +1,9 @@
+{
+  "projectRoot": "C:/apps/ps/pms-ts",
+  "batchFiles": [
+    {"path": ".github/workflows/nodejs.yml", "language": "yaml", "sizeLines": 54, "fileCategory": "infra"}
+  ],
+  "batchImportData": {
+    ".github/workflows/nodejs.yml": []
+  }
+}

@@ -1,0 +1,483 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 5,
+  "filesSkipped": [
+    "Subscribe.txt"
+  ],
+  "analysisOutcomes": {
+    "structure": {
+      "succeeded": 5,
+      "failed": 0
+    },
+    "callGraph": {
+      "succeeded": 0,
+      "failed": 0,
+      "skipped": 5
+    }
+  },
+  "results": [
+    {
+      "path": ".env.development",
+      "language": "config",
+      "fileCategory": "config",
+      "totalLines": 55,
+      "nonEmptyLines": 52,
+      "definitions": [
+        {
+          "name": "REACT_APP_EXPENSE_SERVICE_ENDPOINT",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 1,
+          "endLine": 1
+        },
+        {
+          "name": "REACT_APP_INVENTORY_ENDPOINT",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 2,
+          "endLine": 2
+        },
+        {
+          "name": "REACT_APP_PRODUCT_SERVICE_ENDPOINT",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 3,
+          "endLine": 3
+        },
+        {
+          "name": "REACT_APP_PRODUCT_GROUP_ENDPOINT",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 4,
+          "endLine": 4
+        },
+        {
+          "name": "REACT_APP_INVOICE_SERVICE_ENDPOINT",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 5,
+          "endLine": 5
+        },
+        {
+          "name": "REACT_APP_PROFIT_SERVICE_ENDPOINT",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 6,
+          "endLine": 6
+        },
+        {
+          "name": "REACT_APP_RESERVATION_SERVICE_ENDPOINT",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 7,
+          "endLine": 7
+        },
+        {
+          "name": "REACT_APP_ROOM_ENDPOINT",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 8,
+          "endLine": 8
+        },
+        {
+          "name": "REACT_APP_RATE_PLAN_ENDPOINT",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 9,
+          "endLine": 9
+        },
+        {
+          "name": "REACT_APP_RESERVATION_EXTRACT_SERVICE_ENDPOINT",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 10,
+          "endLine": 10
+        },
+        {
+          "name": "REACT_APP_RESERVATION_TOPIC",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 11,
+          "endLine": 11
+        },
+        {
+          "name": "REACT_APP_SERVICE_CLASSIFICATION_ENDPOINT",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 12,
+          "endLine": 12
+        },
+        {
+          "name": "REACT_APP_ORDER_ENDPOINT",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 13,
+          "endLine": 13
+        },
+        {
+          "name": "REACT_APP_SUPPLIER_ENDPOINT",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 14,
+          "endLine": 14
+        },
+        {
+          "name": "REACT_APP_CONFIG_ENDPOINT",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 15,
+          "endLine": 15
+        },
+        {
+          "name": "REACT_APP_STATUS_ENDPOINT",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 16,
+          "endLine": 16
+        },
+        {
+          "name": "REACT_APP_USER_ENDPOINT",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 17,
+          "endLine": 17
+        },
+        {
+          "name": "REACT_APP_PROFILE_ENDPOINT",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 18,
+          "endLine": 18
+        },
+        {
+          "name": "REACT_APP_PS_BASE_URL",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 19,
+          "endLine": 19
+        },
+        {
+          "name": "REACT_APP_BOT_SERVICE_ENDPOINT",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 20,
+          "endLine": 20
+        },
+        {
+          "name": "REACT_APP_ROOM_ENDPOINT",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 21,
+          "endLine": 21
+        },
+        {
+          "name": "REACT_APP_TAX_SERVICE_ENDPOINT",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 22,
+          "endLine": 22
+        },
+        {
+          "name": "REACT_APP_TAX_POLICY_ENDPOINT",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 23,
+          "endLine": 23
+        },
+        {
+          "name": "REACT_APP_IMMIGRATION_REGISTRATION_ENDPOINT",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 24,
+          "endLine": 24
+        },
+        {
+          "name": "SERVER",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 26,
+          "endLine": 26
+        },
+        {
+          "name": "PORT",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 27,
+          "endLine": 27
+        },
+        {
+          "name": "HTTPS",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 28,
+          "endLine": 28
+        },
+        {
+          "name": "REACT_APP_FORCED_LOGIN",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 29,
+          "endLine": 29
+        },
+        {
+          "name": "REACT_APP_GCS_SYNCER_ENDPOINT",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 30,
+          "endLine": 30
+        },
+        {
+          "name": "REACT_APP_DEFAULT_PAGE_SIZE",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 31,
+          "endLine": 31
+        },
+        {
+          "name": "REACT_APP_INVOICE_MAP_DEFAULT_PAGE_SIZE",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 32,
+          "endLine": 32
+        },
+        {
+          "name": "REACT_APP_PUBLIC_BUCKET",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 33,
+          "endLine": 33
+        },
+        {
+          "name": "REACT_APP_FILE_SERVICE_ACCESS_KEY",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 34,
+          "endLine": 34
+        },
+        {
+          "name": "REACT_APP_FILE_SERVICE_ENDPOINT",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 35,
+          "endLine": 35
+        },
+        {
+          "name": "REACT_APP_FILE_SERVICE_PORT",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 36,
+          "endLine": 36
+        },
+        {
+          "name": "REACT_APP_FILE_SERVICE_SECRET_KEY",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 37,
+          "endLine": 37
+        },
+        {
+          "name": "REACT_APP_FILE_SERVICE_SSL_ENABLED",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 38,
+          "endLine": 38
+        },
+        {
+          "name": "REACT_APP_MENU_WEB_APP",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 39,
+          "endLine": 39
+        },
+        {
+          "name": "REACT_APP_MENU_VI_WEB_APP",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 40,
+          "endLine": 40
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "definitionCount": 39
+      }
+    },
+    {
+      "path": "PLAN.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 21,
+      "nonEmptyLines": 15,
+      "sections": [
+        {
+          "heading": "Project Improvement Plan - PMS",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "Status Summary",
+          "level": 2,
+          "line": 3
+        },
+        {
+          "heading": "Planned Tasks",
+          "level": 2,
+          "line": 6
+        },
+        {
+          "heading": "1. Bug Fixes",
+          "level": 3,
+          "line": 8
+        },
+        {
+          "heading": "2. Feature Completion",
+          "level": 3,
+          "line": 11
+        },
+        {
+          "heading": "3. Refactoring & Technical Debt",
+          "level": 3,
+          "line": 14
+        },
+        {
+          "heading": "Priority",
+          "level": 2,
+          "line": 18
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 7
+      }
+    },
+    {
+      "path": "README.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 31,
+      "nonEmptyLines": 22,
+      "sections": [
+        {
+          "heading": "PMS",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "Get Started",
+          "level": 2,
+          "line": 9
+        },
+        {
+          "heading": "Configure project",
+          "level": 3,
+          "line": 11
+        },
+        {
+          "heading": "Start the App",
+          "level": 3,
+          "line": 25
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 4
+      }
+    },
+    {
+      "path": "package.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 87,
+      "nonEmptyLines": 87,
+      "sections": [
+        {
+          "heading": "name",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "version",
+          "level": 1,
+          "line": 3
+        },
+        {
+          "heading": "private",
+          "level": 1,
+          "line": 4
+        },
+        {
+          "heading": "dependencies",
+          "level": 1,
+          "line": 5
+        },
+        {
+          "heading": "overrides",
+          "level": 1,
+          "line": 47
+        },
+        {
+          "heading": "scripts",
+          "level": 1,
+          "line": 50
+        },
+        {
+          "heading": "eslintConfig",
+          "level": 1,
+          "line": 56
+        },
+        {
+          "heading": "browserslist",
+          "level": 1,
+          "line": 62
+        },
+        {
+          "heading": "devDependencies",
+          "level": 1,
+          "line": 74
+        },
+        {
+          "heading": "description",
+          "level": 1,
+          "line": 86
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 10
+      }
+    },
+    {
+      "path": "tsconfig.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 112,
+      "nonEmptyLines": 104,
+      "sections": [
+        {
+          "heading": "compilerOptions",
+          "level": 1,
+          "line": 2
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 1
+      }
+    }
+  ]
+}

@@ -1,0 +1,187 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 4,
+  "filesSkipped": [],
+  "analysisOutcomes": {
+    "structure": {
+      "succeeded": 4,
+      "failed": 0
+    },
+    "callGraph": {
+      "succeeded": 0,
+      "failed": 0,
+      "skipped": 4
+    }
+  },
+  "results": [
+    {
+      "path": ".planning/PROJECT.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 22,
+      "nonEmptyLines": 18,
+      "sections": [
+        {
+          "heading": "Project: PMS (pms-ts)",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "Context",
+          "level": 2,
+          "line": 3
+        },
+        {
+          "heading": "Target Audience",
+          "level": 2,
+          "line": 9
+        },
+        {
+          "heading": "Constraints",
+          "level": 2,
+          "line": 12
+        },
+        {
+          "heading": "History & Lessons",
+          "level": 2,
+          "line": 18
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 5
+      }
+    },
+    {
+      "path": ".planning/REQUIREMENTS.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 27,
+      "nonEmptyLines": 23,
+      "sections": [
+        {
+          "heading": "Requirements: PMS Improvement",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "Functional Requirements",
+          "level": 2,
+          "line": 3
+        },
+        {
+          "heading": "Non-Functional Requirements",
+          "level": 2,
+          "line": 10
+        },
+        {
+          "heading": "User Stories",
+          "level": 2,
+          "line": 16
+        },
+        {
+          "heading": "Success Criteria",
+          "level": 2,
+          "line": 22
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 5
+      }
+    },
+    {
+      "path": ".planning/ROADMAP.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 36,
+      "nonEmptyLines": 29,
+      "sections": [
+        {
+          "heading": "Roadmap: PMS Improvement",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "Phase 1: Foundation & Refactoring (COMPLETED)",
+          "level": 2,
+          "line": 3
+        },
+        {
+          "heading": "Phase 2: Configuration Caching & Resilience (COMPLETED)",
+          "level": 2,
+          "line": 8
+        },
+        {
+          "heading": "Phase 3: Feature Completion & Persistence (COMPLETED)",
+          "level": 2,
+          "line": 13
+        },
+        {
+          "heading": "Phase 4: Dynamic Room Integration (COMPLETED)",
+          "level": 2,
+          "line": 18
+        },
+        {
+          "heading": "Phase 6: Room Manager and Invoice Map Optimization (COMPLETED)",
+          "level": 2,
+          "line": 23
+        },
+        {
+          "heading": "Phase 5: Advanced UX & Optimization (Current)",
+          "level": 2,
+          "line": 28
+        },
+        {
+          "heading": "Future Phases",
+          "level": 2,
+          "line": 33
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 8
+      }
+    },
+    {
+      "path": ".planning/STATE.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 44,
+      "nonEmptyLines": 37,
+      "sections": [
+        {
+          "heading": "Project State: PMS (pms-ts)",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "Recent Updates",
+          "level": 2,
+          "line": 6
+        },
+        {
+          "heading": "Pending Tasks",
+          "level": 2,
+          "line": 25
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 3
+      }
+    }
+  ]
+}

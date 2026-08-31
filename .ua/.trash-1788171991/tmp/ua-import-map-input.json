@@ -1,0 +1,520 @@
+{
+  "projectRoot": "C:/apps/ps/pms-ts",
+  "files": [
+    {
+      "path": ".babelrc",
+      "language": "unknown",
+      "fileCategory": "code"
+    },
+    {
+      "path": ".bg-shell/manifest.json",
+      "language": "json",
+      "fileCategory": "config"
+    },
+    {
+      "path": ".dockerignore",
+      "language": "unknown",
+      "fileCategory": "infra"
+    },
+    {
+      "path": ".env.development",
+      "language": "config",
+      "fileCategory": "config"
+    },
+    {
+      "path": ".github/copilot-instructions.md",
+      "language": "markdown",
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".github/workflows/nodejs.yml",
+      "language": "yaml",
+      "fileCategory": "infra"
+    },
+    {
+      "path": ".planning/PROJECT.md",
+      "language": "markdown",
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".planning/REQUIREMENTS.md",
+      "language": "markdown",
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".planning/ROADMAP.md",
+      "language": "markdown",
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".planning/STATE.md",
+      "language": "markdown",
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".planning/codebase/ARCHITECTURE.md",
+      "language": "markdown",
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".planning/codebase/CONCERNS.md",
+      "language": "markdown",
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".planning/codebase/CONVENTIONS.md",
+      "language": "markdown",
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".planning/codebase/INTEGRATIONS.md",
+      "language": "markdown",
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".planning/codebase/STACK.md",
+      "language": "markdown",
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".planning/codebase/STRUCTURE.md",
+      "language": "markdown",
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".planning/codebase/TESTING.md",
+      "language": "markdown",
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".planning/phases/01-foundation-refactoring/01-PLAN.md",
+      "language": "markdown",
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".planning/phases/01-foundation-refactoring/01-RESEARCH.md",
+      "language": "markdown",
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".planning/phases/02-configuration-caching-resilience/02-PLAN.md",
+      "language": "markdown",
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".planning/phases/02-configuration-caching-resilience/02-RESEARCH.md",
+      "language": "markdown",
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".planning/phases/04-CONTEXT.md",
+      "language": "markdown",
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".planning/phases/04-dynamic-room-integration/01-RESEARCH.md",
+      "language": "markdown",
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".planning/phases/04-dynamic-room-integration/04-PLAN.md",
+      "language": "markdown",
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".planning/phases/04-dynamic-room-integration/04-SUMMARY.md",
+      "language": "markdown",
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".planning/phases/06-room-invoice-map-optimization/06-PLAN.md",
+      "language": "markdown",
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".planning/phases/06-room-invoice-map-optimization/06-RESEARCH.md",
+      "language": "markdown",
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".planning/quick/configure-tls-port.md",
+      "language": "markdown",
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".planning/quick/fix-menu-path-error.md",
+      "language": "markdown",
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".planning/quick/fix-rate-plan-visibility.md",
+      "language": "markdown",
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".planning/quick/fix-room-preselection.md",
+      "language": "markdown",
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".planning/quick/rename-room-to-ts.md",
+      "language": "markdown",
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".planning/todos/01-bugs/fix-the-compile-error.md",
+      "language": "markdown",
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".ua/.understandignore",
+      "language": "unknown",
+      "fileCategory": "code"
+    },
+    {
+      "path": "Dockerfile",
+      "language": "dockerfile",
+      "fileCategory": "infra"
+    },
+    {
+      "path": "PLAN.md",
+      "language": "markdown",
+      "fileCategory": "docs"
+    },
+    {
+      "path": "README.md",
+      "language": "markdown",
+      "fileCategory": "docs"
+    },
+    {
+      "path": "Subscribe.txt",
+      "language": "txt",
+      "fileCategory": "docs"
+    },
+    {
+      "path": "config-overrides.js",
+      "language": "javascript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "package.json",
+      "language": "json",
+      "fileCategory": "config"
+    },
+    {
+      "path": "public/_redirects",
+      "language": "unknown",
+      "fileCategory": "code"
+    },
+    {
+      "path": "public/index.html",
+      "language": "html",
+      "fileCategory": "markup"
+    },
+    {
+      "path": "public/manifest.json",
+      "language": "json",
+      "fileCategory": "config"
+    },
+    {
+      "path": "public/robots.txt",
+      "language": "txt",
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/App.css",
+      "language": "css",
+      "fileCategory": "markup"
+    },
+    {
+      "path": "src/App.tsx",
+      "language": "typescript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/Components/CounterInput.tsx",
+      "language": "typescript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/Components/ExpenseManager.tsx",
+      "language": "typescript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/Components/Immigration.tsx",
+      "language": "typescript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/Components/ImmigrationRegistrationManager.tsx",
+      "language": "typescript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/Components/Inventory.tsx",
+      "language": "typescript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/Components/InvoiceEditor.tsx",
+      "language": "typescript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/Components/InvoiceManager.tsx",
+      "language": "typescript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/Components/InvoiceMap.tsx",
+      "language": "typescript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/Components/OrderEditor.tsx",
+      "language": "typescript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/Components/OrderManager.tsx",
+      "language": "typescript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/Components/PGroupManager.tsx",
+      "language": "typescript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/Components/ProfitReport.tsx",
+      "language": "typescript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/Components/RatePlanManager.tsx",
+      "language": "typescript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/Components/ReservationManager.tsx",
+      "language": "typescript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/Components/ReservationMap.tsx",
+      "language": "typescript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/Components/RoomManager.tsx",
+      "language": "typescript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/Components/Settings.tsx",
+      "language": "typescript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/Components/SupplierManager.tsx",
+      "language": "typescript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/Components/TaxPolicyManager.tsx",
+      "language": "typescript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/Components/TaxableInvoiceManager.tsx",
+      "language": "typescript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/Components/TourEditor.tsx",
+      "language": "typescript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/Components/TourManager.tsx",
+      "language": "typescript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/Components/UserProfile.tsx",
+      "language": "typescript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/Components/Welcome.tsx",
+      "language": "typescript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/Service/FileMinio.ts",
+      "language": "typescript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/Service/Utils.ts",
+      "language": "typescript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/db/apis.ts",
+      "language": "typescript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/db/bot.ts",
+      "language": "typescript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/db/classification.ts",
+      "language": "typescript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/db/configs.ts",
+      "language": "typescript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/db/expense.ts",
+      "language": "typescript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/db/gcs.ts",
+      "language": "typescript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/db/immigrationRegistration.ts",
+      "language": "typescript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/db/inventory.ts",
+      "language": "typescript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/db/invoice.ts",
+      "language": "typescript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/db/order.ts",
+      "language": "typescript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/db/permission.ts",
+      "language": "typescript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/db/pgroup.ts",
+      "language": "typescript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/db/product.ts",
+      "language": "typescript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/db/profile.ts",
+      "language": "typescript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/db/profit.ts",
+      "language": "typescript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/db/rate_plan.ts",
+      "language": "typescript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/db/reservation.ts",
+      "language": "typescript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/db/reservation_extractor.ts",
+      "language": "typescript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/db/room.ts",
+      "language": "typescript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/db/status.ts",
+      "language": "typescript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/db/supplier.ts",
+      "language": "typescript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/db/tax.ts",
+      "language": "typescript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/db/taxPolicy.ts",
+      "language": "typescript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/db/tour-request.ts",
+      "language": "typescript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/db/tour.ts",
+      "language": "typescript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/db/users.ts",
+      "language": "typescript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/index.css",
+      "language": "css",
+      "fileCategory": "markup"
+    },
+    {
+      "path": "src/index.tsx",
+      "language": "typescript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "tailwind.config.js",
+      "language": "javascript",
+      "fileCategory": "code"
+    },
+    {
+      "path": "tsconfig.json",
+      "language": "json",
+      "fileCategory": "config"
+    },
+    {
+      "path": "webpack.config.js",
+      "language": "javascript",
+      "fileCategory": "code"
+    }
+  ]
+}

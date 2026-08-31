@@ -1,0 +1,407 @@
+{
+  "nodes": [
+    {
+      "id": "file:.babelrc",
+      "type": "file",
+      "name": ".babelrc",
+      "filePath": ".babelrc",
+      "summary": "Babel compiler configuration enabling dynamic import syntax and preset-env with ES module transpilation disabled so webpack can handle module bundling itself.",
+      "tags": ["configuration", "build-system", "babel", "transpilation"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:.bg-shell/manifest.json",
+      "type": "config",
+      "name": "manifest.json",
+      "filePath": ".bg-shell/manifest.json",
+      "summary": "Empty manifest file for the .bg-shell tooling directory, currently containing no registered entries.",
+      "tags": ["configuration", "manifest", "empty"],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:.github/copilot-instructions.md",
+      "type": "document",
+      "name": "copilot-instructions.md",
+      "filePath": ".github/copilot-instructions.md",
+      "summary": "GitHub Copilot custom instructions directing the AI assistant to invoke Azure best-practice tooling when generating Azure-related code or running Azure commands.",
+      "tags": ["documentation", "ai-tooling", "azure", "copilot"],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:.planning/phases/01-foundation-refactoring/01-PLAN.md",
+      "type": "document",
+      "name": "01-PLAN.md",
+      "filePath": ".planning/phases/01-foundation-refactoring/01-PLAN.md",
+      "summary": "Implementation plan for Phase 1 covering PaymentMethod type refactoring into configs.ts, dynamic AppConfig distribution to InvoiceEditor, API factory consolidation in apis.ts, and verification of room/map data.",
+      "tags": ["documentation", "planning", "refactoring", "roadmap"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:.planning/phases/01-foundation-refactoring/01-RESEARCH.md",
+      "type": "document",
+      "name": "01-RESEARCH.md",
+      "filePath": ".planning/phases/01-foundation-refactoring/01-RESEARCH.md",
+      "summary": "Research notes for Phase 1 documenting the standard stack (Axios, flowbite-react), the configuration-provider and API-factory architecture patterns, and pitfalls to avoid when refactoring payment methods and config loading.",
+      "tags": ["documentation", "planning", "research", "architecture"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:.planning/phases/02-configuration-caching-resilience/02-PLAN.md",
+      "type": "document",
+      "name": "02-PLAN.md",
+      "filePath": ".planning/phases/02-configuration-caching-resilience/02-PLAN.md",
+      "summary": "Implementation plan for Phase 2 adding a cache-first localStorage strategy and a 3-attempt async retry mechanism to appConfigs, plus App.tsx loading/error state handling for offline resilience.",
+      "tags": ["documentation", "planning", "caching", "resilience"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:.planning/phases/02-configuration-caching-resilience/02-RESEARCH.md",
+      "type": "document",
+      "name": "02-RESEARCH.md",
+      "filePath": ".planning/phases/02-configuration-caching-resilience/02-RESEARCH.md",
+      "summary": "Research notes for Phase 2 detailing the cache-first-with-background-refresh pattern, idempotent background refresh, and asynchronous retry mechanism for loading app.json configuration, with sample retry-wrapper and appConfigs code.",
+      "tags": ["documentation", "planning", "research", "caching"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:.planning/phases/04-CONTEXT.md",
+      "type": "document",
+      "name": "04-CONTEXT.md",
+      "filePath": ".planning/phases/04-CONTEXT.md",
+      "summary": "Context notes for Phase 4 defining the scope of dynamic room integration, targeting room.ts and invoice.ts to remove hardcoded room identifiers, with UX enhancements deferred to Phase 5.",
+      "tags": ["documentation", "planning", "context", "rooms"],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:.planning/phases/06-room-invoice-map-optimization/06-PLAN.md",
+      "type": "document",
+      "name": "06-PLAN.md",
+      "filePath": ".planning/phases/06-room-invoice-map-optimization/06-PLAN.md",
+      "summary": "Implementation plan for Phase 6 refactoring RoomManager and InvoiceMap to use room IDs for consistent mapping, optimizing component lifecycle, and synchronizing UI between the two map views.",
+      "tags": ["documentation", "planning", "rooms", "invoicing"],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:.planning/phases/06-room-invoice-map-optimization/06-RESEARCH.md",
+      "type": "document",
+      "name": "06-RESEARCH.md",
+      "filePath": ".planning/phases/06-room-invoice-map-optimization/06-RESEARCH.md",
+      "summary": "Research notes for Phase 6 analyzing data inconsistencies between RoomManager and InvoiceMap (name-based vs ID-based mapping) and proposing an ID-based, static-grid rendering approach.",
+      "tags": ["documentation", "planning", "research", "rooms"],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:.planning/todos/01-bugs/fix-the-compile-error.md",
+      "type": "document",
+      "name": "fix-the-compile-error.md",
+      "filePath": ".planning/todos/01-bugs/fix-the-compile-error.md",
+      "summary": "Completed bug-fix todo tracking the resolution of TypeScript compile errors introduced during Phase 4, primarily in InvoiceEditor.tsx.",
+      "tags": ["documentation", "bugfix", "todo", "completed"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:.ua/.understandignore",
+      "type": "file",
+      "name": ".understandignore",
+      "filePath": ".ua/.understandignore",
+      "summary": "Ignore-pattern configuration for the Understand-Anything analysis tool, listing commented-out gitignore-style and per-language test-file exclusion patterns available for activation.",
+      "tags": ["configuration", "tooling", "ignore-patterns"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:config-overrides.js",
+      "type": "file",
+      "name": "config-overrides.js",
+      "filePath": "config-overrides.js",
+      "summary": "react-app-rewired override that patches webpack's module resolution fallbacks for Node core modules (crypto, stream, buffer, etc.) and injects Buffer/process polyfills so the browser build works without Node APIs.",
+      "tags": ["configuration", "build-system", "webpack", "polyfill"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:public/_redirects",
+      "type": "file",
+      "name": "_redirects",
+      "filePath": "public/_redirects",
+      "summary": "Static-host redirect rule rewriting all paths to index.html with a 200 status, enabling client-side routing for the single-page app on platforms like Netlify.",
+      "tags": ["configuration", "routing", "deployment", "spa"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/App.css",
+      "type": "file",
+      "name": "App.css",
+      "filePath": "src/App.css",
+      "summary": "Global stylesheet for the App component defining the card container flex layout, centered heading alignment, and a pointer-events override for a right-icon test element.",
+      "tags": ["styling", "layout", "css", "component-style"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/db/gcs.ts",
+      "type": "file",
+      "name": "gcs.ts",
+      "filePath": "src/db/gcs.ts",
+      "summary": "Google Cloud Storage upload client providing putObject and putBlob helpers that POST files/blobs with bucket and event metadata to the GCS-syncer microservice endpoint via FormData.",
+      "tags": ["data-access", "file-upload", "api-client", "storage"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/db/gcs.ts:putObject",
+      "type": "function",
+      "name": "putObject",
+      "filePath": "src/db/gcs.ts",
+      "lineRange": [1, 14],
+      "summary": "Uploads a File object to GCS via a multipart form POST, tagging it with a generated event UUID, bucket, and object key.",
+      "tags": ["api-client", "upload", "async"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/db/gcs.ts:putBlob",
+      "type": "function",
+      "name": "putBlob",
+      "filePath": "src/db/gcs.ts",
+      "lineRange": [17, 30],
+      "summary": "Uploads a Blob to GCS via a multipart form POST, mirroring putObject but accepting a Blob instead of a File.",
+      "tags": ["api-client", "upload", "async"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/index.css",
+      "type": "file",
+      "name": "index.css",
+      "filePath": "src/index.css",
+      "summary": "Root application stylesheet applying Tailwind's base/components/utilities layers, the global body font stack, code font family, and a Telegram viewport-height utility class.",
+      "tags": ["styling", "tailwind", "global-styles", "css"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:tailwind.config.js",
+      "type": "file",
+      "name": "tailwind.config.js",
+      "filePath": "tailwind.config.js",
+      "summary": "Tailwind CSS configuration scanning the src directory and Flowbite/tailwind-datepicker packages for class usage, and registering the Flowbite plugin for pre-built UI components.",
+      "tags": ["configuration", "tailwind", "styling", "build-system"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:webpack.config.js",
+      "type": "file",
+      "name": "webpack.config.js",
+      "filePath": "webpack.config.js",
+      "summary": "Base webpack configuration (generated by webpack-cli) defining src/index.tsx as the app entry point, the dist output directory, asset-loading rules for fonts/images, and production/development mode switching.",
+      "tags": ["configuration", "webpack", "build-system", "bundler"],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:src/db/gcs.ts",
+      "target": "function:src/db/gcs.ts:putObject",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/db/gcs.ts",
+      "target": "function:src/db/gcs.ts:putBlob",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/db/gcs.ts",
+      "target": "function:src/db/gcs.ts:putObject",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/db/gcs.ts",
+      "target": "function:src/db/gcs.ts:putBlob",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:webpack.config.js",
+      "target": "file:src/index.tsx",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:config-overrides.js",
+      "target": "file:src/index.tsx",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:.babelrc",
+      "target": "file:src/index.tsx",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:tailwind.config.js",
+      "target": "file:src/index.css",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:tailwind.config.js",
+      "target": "file:src/App.css",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:src/App.tsx",
+      "target": "file:src/App.css",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/index.tsx",
+      "target": "file:src/index.css",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "document:.planning/phases/01-foundation-refactoring/01-PLAN.md",
+      "target": "file:src/Components/InvoiceEditor.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/phases/01-foundation-refactoring/01-PLAN.md",
+      "target": "file:src/db/configs.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/phases/01-foundation-refactoring/01-PLAN.md",
+      "target": "file:src/db/staticdata.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/phases/01-foundation-refactoring/01-PLAN.md",
+      "target": "file:src/db/apis.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/phases/01-foundation-refactoring/01-PLAN.md",
+      "target": "file:src/App.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/phases/01-foundation-refactoring/01-PLAN.md",
+      "target": "file:src/Components/RoomManager.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/phases/01-foundation-refactoring/01-PLAN.md",
+      "target": "file:src/Components/InvoiceMap.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/phases/02-configuration-caching-resilience/02-PLAN.md",
+      "target": "file:src/db/configs.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/phases/02-configuration-caching-resilience/02-PLAN.md",
+      "target": "file:src/App.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/phases/02-configuration-caching-resilience/02-RESEARCH.md",
+      "target": "file:src/db/configs.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/phases/04-CONTEXT.md",
+      "target": "file:src/db/room.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/phases/04-CONTEXT.md",
+      "target": "file:src/db/invoice.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/phases/04-CONTEXT.md",
+      "target": "file:src/Components/InvoiceMap.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/phases/04-CONTEXT.md",
+      "target": "file:src/Components/ReservationMap.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/phases/06-room-invoice-map-optimization/06-PLAN.md",
+      "target": "file:src/Components/RoomManager.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/phases/06-room-invoice-map-optimization/06-PLAN.md",
+      "target": "file:src/Components/InvoiceMap.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/phases/06-room-invoice-map-optimization/06-RESEARCH.md",
+      "target": "file:src/Components/RoomManager.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/phases/06-room-invoice-map-optimization/06-RESEARCH.md",
+      "target": "file:src/Components/InvoiceMap.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/todos/01-bugs/fix-the-compile-error.md",
+      "target": "file:src/Components/InvoiceEditor.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    }
+  ]
+}

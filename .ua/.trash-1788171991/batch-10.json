@@ -1,0 +1,70 @@
+{
+  "nodes": [
+    {
+      "id": "document:.planning/PROJECT.md",
+      "type": "document",
+      "name": "PROJECT.md",
+      "filePath": ".planning/PROJECT.md",
+      "summary": "Project charter for the PMS frontend: defines the goal of completing a modular React/TypeScript property management system for homestay/resort operators, its tech stack (React 18, TypeScript, Tailwind CSS, Flowbite, Axios), constraints around existing microservice APIs, and lessons learned from prior work on invoices, reservations, and orders.",
+      "tags": ["documentation", "planning", "project-overview", "requirements"],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:.planning/REQUIREMENTS.md",
+      "type": "document",
+      "name": "REQUIREMENTS.md",
+      "filePath": ".planning/REQUIREMENTS.md",
+      "summary": "Functional and non-functional requirements for the PMS improvement effort, covering order-invoice integration, tour management persistence, dynamic room maps, advanced filtering, user stories, and success criteria for verifying completion.",
+      "tags": ["documentation", "planning", "requirements", "user-stories"],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:.planning/ROADMAP.md",
+      "type": "document",
+      "name": "ROADMAP.md",
+      "filePath": ".planning/ROADMAP.md",
+      "summary": "Phased delivery roadmap for the PMS improvement project, tracking completed phases (foundation/refactoring, config caching, feature persistence, dynamic room integration, room/invoice map optimization), the current phase (advanced UX & optimization), and future phases like a mobile companion app and reporting dashboard.",
+      "tags": ["documentation", "planning", "roadmap", "milestones"],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:.planning/STATE.md",
+      "type": "document",
+      "name": "STATE.md",
+      "filePath": ".planning/STATE.md",
+      "summary": "Living project-state log tracking the current roadmap phase, recent completed quick tasks and phase work (e.g. rate-plan menu fix, TLS config, room API refactor, ID-based room mapping), and pending tasks for the PMS project.",
+      "tags": ["documentation", "planning", "project-status", "changelog"],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "document:.planning/PROJECT.md",
+      "target": "document:.planning/REQUIREMENTS.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/REQUIREMENTS.md",
+      "target": "document:.planning/ROADMAP.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/ROADMAP.md",
+      "target": "document:.planning/STATE.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/STATE.md",
+      "target": "document:.planning/PROJECT.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    }
+  ]
+}

@@ -1,0 +1,778 @@
+{
+  "nodes": [
+    {
+      "id": "file:src/db/invoice.ts",
+      "type": "file",
+      "name": "invoice.ts",
+      "filePath": "src/db/invoice.ts",
+      "summary": "API client wrapper for invoice CRUD and querying endpoints (create, update, delete, list by check-in date or guest name).",
+      "tags": [
+        "api-client",
+        "invoice",
+        "service"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/db/invoice.ts:updateInvoice",
+      "type": "function",
+      "name": "updateInvoice",
+      "filePath": "src/db/invoice.ts",
+      "lineRange": [
+        8,
+        15
+      ],
+      "summary": "Persists updates to an existing invoice via POST.",
+      "tags": [
+        "api-handler",
+        "invoice"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/db/invoice.ts:createInvoice",
+      "type": "function",
+      "name": "createInvoice",
+      "filePath": "src/db/invoice.ts",
+      "lineRange": [
+        17,
+        24
+      ],
+      "summary": "Creates a new invoice via PUT.",
+      "tags": [
+        "api-handler",
+        "invoice"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/db/invoice.ts:deleteInvoice",
+      "type": "function",
+      "name": "deleteInvoice",
+      "filePath": "src/db/invoice.ts",
+      "lineRange": [
+        26,
+        34
+      ],
+      "summary": "Deletes an invoice by id.",
+      "tags": [
+        "api-handler",
+        "invoice"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/db/invoice.ts:listByCheckIn",
+      "type": "function",
+      "name": "listByCheckIn",
+      "filePath": "src/db/invoice.ts",
+      "lineRange": [
+        36,
+        42
+      ],
+      "summary": "Lists invoices filtered by check-in date range with pagination.",
+      "tags": [
+        "api-handler",
+        "invoice"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/db/invoice.ts:listStayingAndComingInvoices",
+      "type": "function",
+      "name": "listStayingAndComingInvoices",
+      "filePath": "src/db/invoice.ts",
+      "lineRange": [
+        44,
+        47
+      ],
+      "summary": "Lists invoices for guests currently staying or arriving from a given date.",
+      "tags": [
+        "api-handler",
+        "invoice"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/db/invoice.ts:listStayingAndComingInvoicesAndPrepaid",
+      "type": "function",
+      "name": "listStayingAndComingInvoicesAndPrepaid",
+      "filePath": "src/db/invoice.ts",
+      "lineRange": [
+        49,
+        55
+      ],
+      "summary": "Lists staying/coming invoices, optionally including prepaid ones.",
+      "tags": [
+        "api-handler",
+        "invoice"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/db/invoice.ts:listInvoiceByGuestName",
+      "type": "function",
+      "name": "listInvoiceByGuestName",
+      "filePath": "src/db/invoice.ts",
+      "lineRange": [
+        57,
+        64
+      ],
+      "summary": "Searches invoices by guest name from a given date with pagination.",
+      "tags": [
+        "api-handler",
+        "invoice",
+        "search"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/db/invoice.ts:getInvoice",
+      "type": "function",
+      "name": "getInvoice",
+      "filePath": "src/db/invoice.ts",
+      "lineRange": [
+        66,
+        70
+      ],
+      "summary": "Fetches a single invoice by id.",
+      "tags": [
+        "api-handler",
+        "invoice"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/db/order.ts",
+      "type": "file",
+      "name": "order.ts",
+      "filePath": "src/db/order.ts",
+      "summary": "API client wrapper for order lifecycle endpoints: listing, creating, confirming, serving, and rejecting orders, plus fetching linked invoices and availability.",
+      "tags": [
+        "api-client",
+        "order",
+        "service"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/db/order.ts:listOrders",
+      "type": "function",
+      "name": "listOrders",
+      "filePath": "src/db/order.ts",
+      "lineRange": [
+        4,
+        7
+      ],
+      "summary": "Lists orders from a given time with pagination.",
+      "tags": [
+        "api-handler",
+        "order"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/db/order.ts:listOrderByStatuses",
+      "type": "function",
+      "name": "listOrderByStatuses",
+      "filePath": "src/db/order.ts",
+      "lineRange": [
+        9,
+        12
+      ],
+      "summary": "Lists orders filtered by one or more statuses.",
+      "tags": [
+        "api-handler",
+        "order",
+        "filtering"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/db/order.ts:fetchUpcomingOrders",
+      "type": "function",
+      "name": "fetchUpcomingOrders",
+      "filePath": "src/db/order.ts",
+      "lineRange": [
+        14,
+        17
+      ],
+      "summary": "Fetches upcoming orders matching a filter.",
+      "tags": [
+        "api-handler",
+        "order"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/db/order.ts:startOrder",
+      "type": "function",
+      "name": "startOrder",
+      "filePath": "src/db/order.ts",
+      "lineRange": [
+        19,
+        22
+      ],
+      "summary": "Starts an order for a resolver at a given start time.",
+      "tags": [
+        "api-handler",
+        "order"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/db/order.ts:adjustOrderItem",
+      "type": "function",
+      "name": "adjustOrderItem",
+      "filePath": "src/db/order.ts",
+      "lineRange": [
+        24,
+        29
+      ],
+      "summary": "Adjusts a line item on an existing order.",
+      "tags": [
+        "api-handler",
+        "order"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/db/order.ts:saveOrder",
+      "type": "function",
+      "name": "saveOrder",
+      "filePath": "src/db/order.ts",
+      "lineRange": [
+        31,
+        36
+      ],
+      "summary": "Persists an order (create or update).",
+      "tags": [
+        "api-handler",
+        "order"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/db/order.ts:fetchAvailability",
+      "type": "function",
+      "name": "fetchAvailability",
+      "filePath": "src/db/order.ts",
+      "lineRange": [
+        38,
+        43
+      ],
+      "summary": "Fetches availability data for a set of item ids.",
+      "tags": [
+        "api-handler",
+        "order",
+        "inventory"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/db/order.ts:fetchItems",
+      "type": "function",
+      "name": "fetchItems",
+      "filePath": "src/db/order.ts",
+      "lineRange": [
+        45,
+        48
+      ],
+      "summary": "Fetches orderable items for a product group with pagination.",
+      "tags": [
+        "api-handler",
+        "order"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/db/order.ts:commitOrder",
+      "type": "function",
+      "name": "commitOrder",
+      "filePath": "src/db/order.ts",
+      "lineRange": [
+        50,
+        55
+      ],
+      "summary": "Commits an order, finalizing it.",
+      "tags": [
+        "api-handler",
+        "order"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/db/order.ts:getPotentialInvoices",
+      "type": "function",
+      "name": "getPotentialInvoices",
+      "filePath": "src/db/order.ts",
+      "lineRange": [
+        57,
+        60
+      ],
+      "summary": "Fetches invoices that could potentially be linked to an order.",
+      "tags": [
+        "api-handler",
+        "order",
+        "invoice"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/db/order.ts:resolveInvoiceId",
+      "type": "function",
+      "name": "resolveInvoiceId",
+      "filePath": "src/db/order.ts",
+      "lineRange": [
+        62,
+        65
+      ],
+      "summary": "Resolves an invoice id from a resolver id.",
+      "tags": [
+        "api-handler",
+        "order",
+        "invoice"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/db/order.ts:fetchOrder",
+      "type": "function",
+      "name": "fetchOrder",
+      "filePath": "src/db/order.ts",
+      "lineRange": [
+        67,
+        70
+      ],
+      "summary": "Fetches a single order by id.",
+      "tags": [
+        "api-handler",
+        "order"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/db/order.ts:confirmOrder",
+      "type": "function",
+      "name": "confirmOrder",
+      "filePath": "src/db/order.ts",
+      "lineRange": [
+        72,
+        77
+      ],
+      "summary": "Confirms an order, transitioning it to preparation.",
+      "tags": [
+        "api-handler",
+        "order",
+        "workflow"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/db/order.ts:serveOrder",
+      "type": "function",
+      "name": "serveOrder",
+      "filePath": "src/db/order.ts",
+      "lineRange": [
+        79,
+        84
+      ],
+      "summary": "Marks an order as served.",
+      "tags": [
+        "api-handler",
+        "order",
+        "workflow"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/db/order.ts:rejectOrder",
+      "type": "function",
+      "name": "rejectOrder",
+      "filePath": "src/db/order.ts",
+      "lineRange": [
+        86,
+        89
+      ],
+      "summary": "Rejects/cancels an order by a staff member.",
+      "tags": [
+        "api-handler",
+        "order",
+        "workflow"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/db/permission.ts",
+      "type": "file",
+      "name": "permission.ts",
+      "filePath": "src/db/permission.ts",
+      "summary": "Defines permission constant identifiers used for invoice deletion and assignment authority checks.",
+      "tags": [
+        "constants",
+        "permission",
+        "authorization"
+      ],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:src/db/invoice.ts",
+      "target": "function:src/db/invoice.ts:updateInvoice",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/db/invoice.ts",
+      "target": "function:src/db/invoice.ts:updateInvoice",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/db/invoice.ts",
+      "target": "function:src/db/invoice.ts:createInvoice",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/db/invoice.ts",
+      "target": "function:src/db/invoice.ts:createInvoice",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/db/invoice.ts",
+      "target": "function:src/db/invoice.ts:deleteInvoice",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/db/invoice.ts",
+      "target": "function:src/db/invoice.ts:deleteInvoice",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/db/invoice.ts",
+      "target": "function:src/db/invoice.ts:listByCheckIn",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/db/invoice.ts",
+      "target": "function:src/db/invoice.ts:listByCheckIn",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/db/invoice.ts",
+      "target": "function:src/db/invoice.ts:listStayingAndComingInvoices",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/db/invoice.ts",
+      "target": "function:src/db/invoice.ts:listStayingAndComingInvoices",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/db/invoice.ts",
+      "target": "function:src/db/invoice.ts:listStayingAndComingInvoicesAndPrepaid",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/db/invoice.ts",
+      "target": "function:src/db/invoice.ts:listStayingAndComingInvoicesAndPrepaid",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/db/invoice.ts",
+      "target": "function:src/db/invoice.ts:listInvoiceByGuestName",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/db/invoice.ts",
+      "target": "function:src/db/invoice.ts:listInvoiceByGuestName",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/db/invoice.ts",
+      "target": "function:src/db/invoice.ts:getInvoice",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/db/invoice.ts",
+      "target": "function:src/db/invoice.ts:getInvoice",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/db/order.ts",
+      "target": "function:src/db/order.ts:listOrders",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/db/order.ts",
+      "target": "function:src/db/order.ts:listOrders",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/db/order.ts",
+      "target": "function:src/db/order.ts:listOrderByStatuses",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/db/order.ts",
+      "target": "function:src/db/order.ts:listOrderByStatuses",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/db/order.ts",
+      "target": "function:src/db/order.ts:fetchUpcomingOrders",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/db/order.ts",
+      "target": "function:src/db/order.ts:fetchUpcomingOrders",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/db/order.ts",
+      "target": "function:src/db/order.ts:startOrder",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/db/order.ts",
+      "target": "function:src/db/order.ts:startOrder",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/db/order.ts",
+      "target": "function:src/db/order.ts:adjustOrderItem",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/db/order.ts",
+      "target": "function:src/db/order.ts:adjustOrderItem",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/db/order.ts",
+      "target": "function:src/db/order.ts:saveOrder",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/db/order.ts",
+      "target": "function:src/db/order.ts:saveOrder",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/db/order.ts",
+      "target": "function:src/db/order.ts:fetchAvailability",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/db/order.ts",
+      "target": "function:src/db/order.ts:fetchAvailability",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/db/order.ts",
+      "target": "function:src/db/order.ts:fetchItems",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/db/order.ts",
+      "target": "function:src/db/order.ts:fetchItems",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/db/order.ts",
+      "target": "function:src/db/order.ts:commitOrder",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/db/order.ts",
+      "target": "function:src/db/order.ts:commitOrder",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/db/order.ts",
+      "target": "function:src/db/order.ts:getPotentialInvoices",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/db/order.ts",
+      "target": "function:src/db/order.ts:getPotentialInvoices",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/db/order.ts",
+      "target": "function:src/db/order.ts:resolveInvoiceId",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/db/order.ts",
+      "target": "function:src/db/order.ts:resolveInvoiceId",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/db/order.ts",
+      "target": "function:src/db/order.ts:fetchOrder",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/db/order.ts",
+      "target": "function:src/db/order.ts:fetchOrder",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/db/order.ts",
+      "target": "function:src/db/order.ts:confirmOrder",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/db/order.ts",
+      "target": "function:src/db/order.ts:confirmOrder",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/db/order.ts",
+      "target": "function:src/db/order.ts:serveOrder",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/db/order.ts",
+      "target": "function:src/db/order.ts:serveOrder",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/db/order.ts",
+      "target": "function:src/db/order.ts:rejectOrder",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/db/order.ts",
+      "target": "function:src/db/order.ts:rejectOrder",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/db/invoice.ts",
+      "target": "file:src/Components/InvoiceManager.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/db/invoice.ts",
+      "target": "file:src/db/apis.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/db/order.ts",
+      "target": "file:src/Components/OrderManager.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/db/order.ts",
+      "target": "file:src/db/apis.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "function:src/db/invoice.ts:listStayingAndComingInvoices",
+      "target": "function:src/db/invoice.ts:listStayingAndComingInvoicesAndPrepaid",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "fixedSectionOk": true,
+  "nodesRecovered": 0,
+  "edgesRestored": 1,
+  "crossBatchEdgesAdded": 0,
+  "typesRemapped": 0,
+  "complexityRemapped": 0,
+  "notes": [
+    "No 'Fixed' pattern-count section was included in the report provided; as a sanity check, summing the per-batch node/edge counts (270 nodes, 770 edges) matches the script's reported 'Input' totals exactly, and 270 nodes in / 270 nodes out means zero ID collisions occurred across all 15 batches -- a clean signal for the batch-level ID normalization.",
+    "Post-fix scan of assembled-graph.json found: 0 nodes missing an id, 0 unknown node types (only function/file/document/config/service/pipeline present, all valid), 0 unknown complexity values (only simple/moderate/complex present), and 0 dangling edges.",
+    "Dropped edge 1 (document:.planning/codebase/STRUCTURE.md -> config:tailwind.config.js, type 'documents') was recovered: the target was a type-prefix mismatch, not a missing file -- file:tailwind.config.js exists in the graph. Retargeted the edge to file:tailwind.config.js and re-added it with the original weight (0.5) sourced from batch-11.json.",
+    "Dropped edge 2 (document:.planning/phases/01-foundation-refactoring/01-PLAN.md -> file:src/db/staticdata.ts, type 'documents') was left dropped: confirmed src/db/staticdata.ts does not exist anywhere in the repo (find turned up nothing), consistent with the independent confirmation noted in the dispatch -- this is a stale doc reference, not a merge defect.",
+    "Cross-batch import check: scan-result.json's importMap has 46 files with non-empty import lists totaling 176 file-to-file import relationships. All 176 already have a corresponding 'imports' edge in the assembled graph (checked in both directions, since some batches recorded the edge from the importer's side and others from the imported side). The merge script's 'Recovered 0 imports edges from importMap' is therefore expected behavior, not a gap -- no new cross-batch edges were needed."
+  ]
+}

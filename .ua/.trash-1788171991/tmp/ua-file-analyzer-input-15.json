@@ -1,0 +1,140 @@
+{
+  "projectRoot": "C:/apps/ps/pms-ts",
+  "batchFiles": [
+    {
+      "path": ".babelrc",
+      "language": "unknown",
+      "sizeLines": 11,
+      "fileCategory": "code"
+    },
+    {
+      "path": ".bg-shell/manifest.json",
+      "language": "json",
+      "sizeLines": 0,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".github/copilot-instructions.md",
+      "language": "markdown",
+      "sizeLines": 0,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".planning/phases/01-foundation-refactoring/01-PLAN.md",
+      "language": "markdown",
+      "sizeLines": 45,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".planning/phases/01-foundation-refactoring/01-RESEARCH.md",
+      "language": "markdown",
+      "sizeLines": 43,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".planning/phases/02-configuration-caching-resilience/02-PLAN.md",
+      "language": "markdown",
+      "sizeLines": 57,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".planning/phases/02-configuration-caching-resilience/02-RESEARCH.md",
+      "language": "markdown",
+      "sizeLines": 82,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".planning/phases/04-CONTEXT.md",
+      "language": "markdown",
+      "sizeLines": 17,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".planning/phases/06-room-invoice-map-optimization/06-PLAN.md",
+      "language": "markdown",
+      "sizeLines": 24,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".planning/phases/06-room-invoice-map-optimization/06-RESEARCH.md",
+      "language": "markdown",
+      "sizeLines": 15,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".planning/todos/01-bugs/fix-the-compile-error.md",
+      "language": "markdown",
+      "sizeLines": 16,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".ua/.understandignore",
+      "language": "unknown",
+      "sizeLines": 80,
+      "fileCategory": "code"
+    },
+    {
+      "path": "config-overrides.js",
+      "language": "javascript",
+      "sizeLines": 26,
+      "fileCategory": "code"
+    },
+    {
+      "path": "public/_redirects",
+      "language": "unknown",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/App.css",
+      "language": "css",
+      "sizeLines": 15,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "src/db/gcs.ts",
+      "language": "typescript",
+      "sizeLines": 31,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/index.css",
+      "language": "css",
+      "sizeLines": 20,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "tailwind.config.js",
+      "language": "javascript",
+      "sizeLines": 15,
+      "fileCategory": "code"
+    },
+    {
+      "path": "webpack.config.js",
+      "language": "javascript",
+      "sizeLines": 48,
+      "fileCategory": "code"
+    }
+  ],
+  "batchImportData": {
+    ".babelrc": [],
+    ".bg-shell/manifest.json": [],
+    ".github/copilot-instructions.md": [],
+    ".planning/phases/01-foundation-refactoring/01-PLAN.md": [],
+    ".planning/phases/01-foundation-refactoring/01-RESEARCH.md": [],
+    ".planning/phases/02-configuration-caching-resilience/02-PLAN.md": [],
+    ".planning/phases/02-configuration-caching-resilience/02-RESEARCH.md": [],
+    ".planning/phases/04-CONTEXT.md": [],
+    ".planning/phases/06-room-invoice-map-optimization/06-PLAN.md": [],
+    ".planning/phases/06-room-invoice-map-optimization/06-RESEARCH.md": [],
+    ".planning/todos/01-bugs/fix-the-compile-error.md": [],
+    ".ua/.understandignore": [],
+    "config-overrides.js": [],
+    "public/_redirects": [],
+    "src/App.css": [],
+    "src/db/gcs.ts": [],
+    "src/index.css": [],
+    "tailwind.config.js": [],
+    "webpack.config.js": []
+  }
+}

@@ -1,0 +1,91 @@
+[
+  {
+    "order": 1,
+    "title": "Project Overview",
+    "description": "PMS is a React/TypeScript web application that helps a property-management business track expenses, manage invoices, monitor reservation status, and view profit reports. The README explains that the app talks to a family of independent backend microservices (expense, invoice, tax policy, profit, reservation, classification) whose URLs are injected through environment variables rather than hardcoded, which is a theme that shows up throughout the codebase. Start here to understand what the app does before diving into how it is built.",
+    "nodeIds": ["document:README.md"]
+  },
+  {
+    "order": 2,
+    "title": "Application Entry Point",
+    "description": "src/index.tsx is where the app actually boots: it creates the React 18 root, imports the global index.css stylesheet, and mounts the top-level App component into the page's #root div. It is intentionally tiny -- almost every real responsibility (auth, routing, menu logic, screens) is delegated to App.tsx, which is the next stop.",
+    "nodeIds": ["file:src/index.tsx"],
+    "languageLesson": "React 18 introduced createRoot() in place of the older ReactDOM.render(), enabling concurrent rendering features. A one-line index.tsx that only mounts <App /> is a common convention -- it keeps bootstrapping logic separate from application logic."
+  },
+  {
+    "order": 3,
+    "title": "The App Shell & Navigation",
+    "description": "App.tsx is the single most connected file in the project -- it has the highest fan-in and fan-out of any component. It authenticates the user, fetches their profile and the app's configuration, builds a permission-filtered navigation menu, and conditionally renders whichever business screen (expenses, invoices, orders, reservations, tours, suppliers, rooms, settings) is currently selected. Because there is no global state library, App.tsx also 'lifts' shared state and passes it down as props to every screen it renders.",
+    "nodeIds": ["file:src/App.tsx"],
+    "languageLesson": "This is the 'lifted state' pattern in React: instead of a Redux/Context store, one root component owns shared state and distributes it via props. It is simple to reason about at small scale but tends to make the root component grow large, which is exactly what happened here."
+  },
+  {
+    "order": 4,
+    "title": "Architecture & Coding Conventions",
+    "description": "Before exploring individual features, these two planning documents explain the rules the codebase follows: a Service-Repository split where src/Components/ holds UI and src/db/ holds data access, React Router v6 with RBAC-driven menu filtering, OIDC/JWT authentication, and Tailwind CSS with Flowbite for styling. CONVENTIONS.md adds the naming rules (PascalCase components, mixed-case db modules) and the rule that all backend calls must go through src/db/apis.ts. Keep this pattern in mind -- every component you see from here on follows the same UI-versus-data-access split.",
+    "nodeIds": ["document:.planning/codebase/ARCHITECTURE.md", "document:.planning/codebase/CONVENTIONS.md"]
+  },
+  {
+    "order": 5,
+    "title": "Central API Factory & Cached Configuration",
+    "description": "src/db/apis.ts is tied with App.tsx for the highest fan-in in the project -- nearly every data-access module in src/db/ imports it, because it is the single factory that constructs every Axios client the app uses (expenses, invoices, orders, reservations, suppliers, tours, and more). src/db/configs.ts sits alongside it, fetching app configuration with a localStorage-backed cache and retry logic so the app stays usable even on a flaky network. Together these two files are the foundation of the Data Access Layer described in the architecture docs from Step 4.",
+    "nodeIds": ["file:src/db/apis.ts", "file:src/db/configs.ts"],
+    "languageLesson": "Centralizing HTTP client construction in one factory module (apis.ts) is a common way to enforce consistent base URLs, headers, and interceptors across an app without repeating Axios setup in every feature module."
+  },
+  {
+    "order": 6,
+    "title": "Shared Formatting Utilities",
+    "description": "src/Service/Utils.ts is imported by 19 other files, making it the third most depended-upon module in the codebase. It provides date/time formatting, VND currency formatting, and numeric-string parsing helpers -- small, pure functions that keep formatting logic consistent across every screen instead of being duplicated in each component. This is the 'Shared Services' layer that sits beneath both the UI components and the db modules.",
+    "nodeIds": ["file:src/Service/Utils.ts"]
+  },
+  {
+    "order": 7,
+    "title": "Invoice Management",
+    "description": "Invoices are the core business object of the app -- InvoiceManager.tsx (13 dependents) lists and filters staying/incoming invoices, while InvoiceEditor.tsx (10 dependents) is the large, monolithic screen that handles guest details, reservation linking, room assignment, line items, and payment method, all backed by src/db/invoice.ts. This is one of the files flagged in the project's own CONCERNS.md as needing decomposition, which you will see referenced again in Step 14.",
+    "nodeIds": ["file:src/Components/InvoiceManager.tsx", "file:src/Components/InvoiceEditor.tsx", "file:src/db/invoice.ts"]
+  },
+  {
+    "order": 8,
+    "title": "Inventory & Product Groups",
+    "description": "This tightly-coupled cluster manages what the business sells: Inventory.tsx is the product catalog screen (with MinIO-backed image uploads), PGroupManager.tsx manages the product categories that organize it, and src/db/pgroup.ts is the API layer beneath both. OrderEditor.tsx pulls these product groups into the order-creation workflow, linking inventory back to the invoices you saw in Step 7 through its 'link/unlink invoice' actions.",
+    "nodeIds": ["file:src/Components/Inventory.tsx", "file:src/Components/PGroupManager.tsx", "file:src/db/pgroup.ts", "file:src/Components/OrderEditor.tsx"]
+  },
+  {
+    "order": 9,
+    "title": "Reservations & Room Occupancy",
+    "description": "ReservationManager.tsx shows a filterable table of reservations with a manual mailbox-sync action, while ReservationMap.tsx and RoomManager.tsx render room-by-date occupancy grids -- a visual, calendar-like view of who is staying where. Both maps read from src/db/reservation.ts and src/db/room.ts, and the underlying room and reservation data feeds directly into the InvoiceEditor's room-assignment step from Step 7.",
+    "nodeIds": ["file:src/Components/ReservationManager.tsx", "file:src/Components/ReservationMap.tsx", "file:src/Components/RoomManager.tsx", "file:src/db/reservation.ts", "file:src/db/room.ts"]
+  },
+  {
+    "order": 10,
+    "title": "Profit Reporting & Tax Calculation",
+    "description": "Two small, self-contained clusters round out the financial-reporting side of the app: ProfitReport.tsx aggregates revenue and cost by aspect and time period using src/db/profit.ts, while TaxableInvoiceManager.tsx triggers and previews tax calculations for the invoices from Step 7 via src/db/tax.ts. Both follow the same pattern established earlier -- a thin UI component paired one-to-one with a dedicated db module.",
+    "nodeIds": ["file:src/Components/ProfitReport.tsx", "file:src/db/profit.ts", "file:src/Components/TaxableInvoiceManager.tsx", "file:src/db/tax.ts"]
+  },
+  {
+    "order": 11,
+    "title": "File Storage & External Integrations",
+    "description": "src/Service/FileMinio.ts wraps MinIO object storage with presigned-URL generation, powering the image uploads used by Inventory.tsx (Step 8) and InvoiceEditor.tsx (Step 7). INTEGRATIONS.md documents the full picture: OIDC/Keycloak authentication, the suite of Phuc Sinh Assistant backend microservices, Google Gemini AI for extracting data from receipt text, and Firebase/GCS for additional cloud storage -- tying together every external dependency the UI layers rely on.",
+    "nodeIds": ["file:src/Service/FileMinio.ts", "document:.planning/codebase/INTEGRATIONS.md"]
+  },
+  {
+    "order": 12,
+    "title": "Containerization & Environment Configuration",
+    "description": "The Dockerfile packages the entire app into a single-stage build: it copies the source tree, runs npm ci and npm run build, then serves the app with npm run start on port 3000. Numerous build ARGs inject the backend service endpoint URLs (invoice, inventory, expense, profit, reservation) as runtime environment variables -- the same variables documented in the README's Step 1 setup table and mirrored in .env.development for local development.",
+    "nodeIds": ["service:Dockerfile", "config:.env.development"],
+    "languageLesson": "Unlike a multi-stage Docker build (builder stage + slim runtime stage), this Dockerfile is single-stage: it keeps the full node_modules and source tree in the final image, trading a larger image size for a simpler build definition."
+  },
+  {
+    "order": 13,
+    "title": "CI/CD: Building & Publishing the Image",
+    "description": "The 'Containerize PMS' GitHub Actions workflow builds the Docker image from Step 12 and publishes it as a multi-platform image to Docker Hub, but only when a semantic-version tag (like 1.2.3) is pushed. This is the capstone of the deployment story: code changes flow from the components you toured, through the Dockerfile, into a versioned, publishable artifact.",
+    "nodeIds": ["pipeline:.github/workflows/nodejs.yml"],
+    "languageLesson": "GitHub Actions workflows are triggered by an 'on' block (here, a tag-push pattern), organize work into 'jobs', and each job runs sequential 'steps'. Gating a release build on a semver tag push is a common way to keep every commit from producing a published image."
+  },
+  {
+    "order": 14,
+    "title": "Known Technical Debt",
+    "description": "CONCERNS.md is the project's own honest self-assessment: overuse of the `any` type, monolithic components like InvoiceEditor.tsx (Step 7) and App.tsx (Step 3), hardcoded API keys and business data, fragile auth logic, and a complete absence of automated tests. Reading this last gives you a realistic picture of where the codebase stands today and what a newcomer should be cautious about when extending it.",
+    "nodeIds": ["document:.planning/codebase/CONCERNS.md"]
+  }
+]

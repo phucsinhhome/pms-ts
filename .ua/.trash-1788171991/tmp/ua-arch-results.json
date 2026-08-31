@@ -1,0 +1,619 @@
+{
+  "scriptCompleted": true,
+  "directoryGroups": {
+    "src": [
+      "file:src/Components/ExpenseManager.tsx",
+      "file:src/Components/Settings.tsx",
+      "file:src/Components/SupplierManager.tsx",
+      "file:src/db/apis.ts",
+      "file:src/db/bot.ts",
+      "file:src/db/classification.ts",
+      "file:src/db/configs.ts",
+      "file:src/db/expense.ts",
+      "file:src/db/profit.ts",
+      "file:src/db/status.ts",
+      "file:src/db/supplier.ts",
+      "file:src/db/tax.ts",
+      "file:src/db/users.ts",
+      "file:src/Components/Immigration.tsx",
+      "file:src/Components/ImmigrationRegistrationManager.tsx",
+      "file:src/Components/InvoiceManager.tsx",
+      "file:src/Components/InvoiceMap.tsx",
+      "file:src/Components/OrderEditor.tsx",
+      "file:src/Components/OrderManager.tsx",
+      "file:src/Components/ProfitReport.tsx",
+      "file:src/Components/TaxableInvoiceManager.tsx",
+      "file:src/Service/Utils.ts",
+      "file:src/db/immigrationRegistration.ts",
+      "file:src/db/invoice.ts",
+      "file:src/db/order.ts",
+      "file:src/db/permission.ts",
+      "file:src/App.tsx",
+      "file:src/Components/TaxPolicyManager.tsx",
+      "file:src/Components/TourEditor.tsx",
+      "file:src/Components/TourManager.tsx",
+      "file:src/Components/UserProfile.tsx",
+      "file:src/Components/Welcome.tsx",
+      "file:src/db/profile.ts",
+      "file:src/db/taxPolicy.ts",
+      "file:src/db/tour-request.ts",
+      "file:src/db/tour.ts",
+      "file:src/index.tsx",
+      "file:src/Components/Inventory.tsx",
+      "file:src/Components/InvoiceEditor.tsx",
+      "file:src/Components/PGroupManager.tsx",
+      "file:src/Service/FileMinio.ts",
+      "file:src/db/inventory.ts",
+      "file:src/db/pgroup.ts",
+      "file:src/db/product.ts",
+      "file:src/Components/CounterInput.tsx",
+      "file:src/Components/RatePlanManager.tsx",
+      "file:src/Components/RoomManager.tsx",
+      "file:src/db/rate_plan.ts",
+      "file:src/db/room.ts",
+      "file:src/Components/ReservationManager.tsx",
+      "file:src/Components/ReservationMap.tsx",
+      "file:src/db/reservation.ts",
+      "file:src/db/reservation_extractor.ts",
+      "file:src/App.css",
+      "file:src/db/gcs.ts",
+      "file:src/index.css"
+    ],
+    "root-other": [
+      "service:Dockerfile"
+    ],
+    "root-dockerignore": [
+      "config:.dockerignore"
+    ],
+    ".github": [
+      "pipeline:.github/workflows/nodejs.yml",
+      "document:.github/copilot-instructions.md"
+    ],
+    "root-development": [
+      "config:.env.development"
+    ],
+    "root-md": [
+      "document:PLAN.md",
+      "document:README.md"
+    ],
+    "root-txt": [
+      "document:Subscribe.txt"
+    ],
+    "root-json": [
+      "config:package.json",
+      "config:tsconfig.json"
+    ],
+    ".planning": [
+      "document:.planning/PROJECT.md",
+      "document:.planning/REQUIREMENTS.md",
+      "document:.planning/ROADMAP.md",
+      "document:.planning/STATE.md",
+      "document:.planning/codebase/ARCHITECTURE.md",
+      "document:.planning/codebase/CONCERNS.md",
+      "document:.planning/codebase/CONVENTIONS.md",
+      "document:.planning/codebase/INTEGRATIONS.md",
+      "document:.planning/codebase/STACK.md",
+      "document:.planning/codebase/STRUCTURE.md",
+      "document:.planning/codebase/TESTING.md",
+      "document:.planning/phases/04-dynamic-room-integration/01-RESEARCH.md",
+      "document:.planning/phases/04-dynamic-room-integration/04-PLAN.md",
+      "document:.planning/phases/04-dynamic-room-integration/04-SUMMARY.md",
+      "document:.planning/quick/configure-tls-port.md",
+      "document:.planning/quick/fix-menu-path-error.md",
+      "document:.planning/quick/fix-rate-plan-visibility.md",
+      "document:.planning/quick/fix-room-preselection.md",
+      "document:.planning/quick/rename-room-to-ts.md",
+      "document:.planning/phases/01-foundation-refactoring/01-PLAN.md",
+      "document:.planning/phases/01-foundation-refactoring/01-RESEARCH.md",
+      "document:.planning/phases/02-configuration-caching-resilience/02-PLAN.md",
+      "document:.planning/phases/02-configuration-caching-resilience/02-RESEARCH.md",
+      "document:.planning/phases/04-CONTEXT.md",
+      "document:.planning/phases/06-room-invoice-map-optimization/06-PLAN.md",
+      "document:.planning/phases/06-room-invoice-map-optimization/06-RESEARCH.md",
+      "document:.planning/todos/01-bugs/fix-the-compile-error.md"
+    ],
+    "public": [
+      "file:public/index.html",
+      "config:public/manifest.json",
+      "config:public/robots.txt",
+      "file:public/_redirects"
+    ],
+    "root-babelrc": [
+      "file:.babelrc"
+    ],
+    ".bg-shell": [
+      "config:.bg-shell/manifest.json"
+    ],
+    ".ua": [
+      "file:.ua/.understandignore"
+    ],
+    "root-js": [
+      "file:config-overrides.js"
+    ],
+    "config": [
+      "file:tailwind.config.js",
+      "file:webpack.config.js"
+    ]
+  },
+  "nodeTypeGroups": {
+    "file": [
+      "file:src/Components/ExpenseManager.tsx",
+      "file:src/Components/Settings.tsx",
+      "file:src/Components/SupplierManager.tsx",
+      "file:src/db/apis.ts",
+      "file:src/db/bot.ts",
+      "file:src/db/classification.ts",
+      "file:src/db/configs.ts",
+      "file:src/db/expense.ts",
+      "file:src/db/profit.ts",
+      "file:src/db/status.ts",
+      "file:src/db/supplier.ts",
+      "file:src/db/tax.ts",
+      "file:src/db/users.ts",
+      "file:src/Components/Immigration.tsx",
+      "file:src/Components/ImmigrationRegistrationManager.tsx",
+      "file:src/Components/InvoiceManager.tsx",
+      "file:src/Components/InvoiceMap.tsx",
+      "file:src/Components/OrderEditor.tsx",
+      "file:src/Components/OrderManager.tsx",
+      "file:src/Components/ProfitReport.tsx",
+      "file:src/Components/TaxableInvoiceManager.tsx",
+      "file:src/Service/Utils.ts",
+      "file:src/db/immigrationRegistration.ts",
+      "file:src/db/invoice.ts",
+      "file:src/db/order.ts",
+      "file:src/db/permission.ts",
+      "file:src/App.tsx",
+      "file:src/Components/TaxPolicyManager.tsx",
+      "file:src/Components/TourEditor.tsx",
+      "file:src/Components/TourManager.tsx",
+      "file:src/Components/UserProfile.tsx",
+      "file:src/Components/Welcome.tsx",
+      "file:src/db/profile.ts",
+      "file:src/db/taxPolicy.ts",
+      "file:src/db/tour-request.ts",
+      "file:src/db/tour.ts",
+      "file:src/index.tsx",
+      "file:src/Components/Inventory.tsx",
+      "file:src/Components/InvoiceEditor.tsx",
+      "file:src/Components/PGroupManager.tsx",
+      "file:src/Service/FileMinio.ts",
+      "file:src/db/inventory.ts",
+      "file:src/db/pgroup.ts",
+      "file:src/db/product.ts",
+      "file:src/Components/CounterInput.tsx",
+      "file:src/Components/RatePlanManager.tsx",
+      "file:src/Components/RoomManager.tsx",
+      "file:src/db/rate_plan.ts",
+      "file:src/db/room.ts",
+      "file:src/Components/ReservationManager.tsx",
+      "file:src/Components/ReservationMap.tsx",
+      "file:src/db/reservation.ts",
+      "file:src/db/reservation_extractor.ts",
+      "file:public/index.html",
+      "file:.babelrc",
+      "file:.ua/.understandignore",
+      "file:config-overrides.js",
+      "file:public/_redirects",
+      "file:src/App.css",
+      "file:src/db/gcs.ts",
+      "file:src/index.css",
+      "file:tailwind.config.js",
+      "file:webpack.config.js"
+    ],
+    "service": [
+      "service:Dockerfile"
+    ],
+    "config": [
+      "config:.dockerignore",
+      "config:.env.development",
+      "config:package.json",
+      "config:tsconfig.json",
+      "config:public/manifest.json",
+      "config:public/robots.txt",
+      "config:.bg-shell/manifest.json"
+    ],
+    "pipeline": [
+      "pipeline:.github/workflows/nodejs.yml"
+    ],
+    "document": [
+      "document:PLAN.md",
+      "document:README.md",
+      "document:Subscribe.txt",
+      "document:.planning/PROJECT.md",
+      "document:.planning/REQUIREMENTS.md",
+      "document:.planning/ROADMAP.md",
+      "document:.planning/STATE.md",
+      "document:.planning/codebase/ARCHITECTURE.md",
+      "document:.planning/codebase/CONCERNS.md",
+      "document:.planning/codebase/CONVENTIONS.md",
+      "document:.planning/codebase/INTEGRATIONS.md",
+      "document:.planning/codebase/STACK.md",
+      "document:.planning/codebase/STRUCTURE.md",
+      "document:.planning/codebase/TESTING.md",
+      "document:.planning/phases/04-dynamic-room-integration/01-RESEARCH.md",
+      "document:.planning/phases/04-dynamic-room-integration/04-PLAN.md",
+      "document:.planning/phases/04-dynamic-room-integration/04-SUMMARY.md",
+      "document:.planning/quick/configure-tls-port.md",
+      "document:.planning/quick/fix-menu-path-error.md",
+      "document:.planning/quick/fix-rate-plan-visibility.md",
+      "document:.planning/quick/fix-room-preselection.md",
+      "document:.planning/quick/rename-room-to-ts.md",
+      "document:.github/copilot-instructions.md",
+      "document:.planning/phases/01-foundation-refactoring/01-PLAN.md",
+      "document:.planning/phases/01-foundation-refactoring/01-RESEARCH.md",
+      "document:.planning/phases/02-configuration-caching-resilience/02-PLAN.md",
+      "document:.planning/phases/02-configuration-caching-resilience/02-RESEARCH.md",
+      "document:.planning/phases/04-CONTEXT.md",
+      "document:.planning/phases/06-room-invoice-map-optimization/06-PLAN.md",
+      "document:.planning/phases/06-room-invoice-map-optimization/06-RESEARCH.md",
+      "document:.planning/todos/01-bugs/fix-the-compile-error.md"
+    ]
+  },
+  "crossCategoryEdges": [
+    {
+      "fromType": "config",
+      "toType": "service",
+      "edgeType": "configures",
+      "count": 1
+    },
+    {
+      "fromType": "service",
+      "toType": "file",
+      "edgeType": "deploys",
+      "count": 1
+    },
+    {
+      "fromType": "pipeline",
+      "toType": "service",
+      "edgeType": "triggers",
+      "count": 1
+    },
+    {
+      "fromType": "pipeline",
+      "toType": "config",
+      "edgeType": "depends_on",
+      "count": 1
+    },
+    {
+      "fromType": "document",
+      "toType": "file",
+      "edgeType": "documents",
+      "count": 58
+    },
+    {
+      "fromType": "config",
+      "toType": "file",
+      "edgeType": "configures",
+      "count": 6
+    },
+    {
+      "fromType": "document",
+      "toType": "config",
+      "edgeType": "documents",
+      "count": 4
+    },
+    {
+      "fromType": "file",
+      "toType": "config",
+      "edgeType": "related",
+      "count": 1
+    }
+  ],
+  "interGroupImports": [
+    {
+      "from": "src",
+      "to": "src",
+      "count": 176
+    }
+  ],
+  "intraGroupDensity": {
+    "src": {
+      "internalEdges": 176,
+      "totalEdges": 176,
+      "density": 1
+    },
+    "root-other": {
+      "internalEdges": 0,
+      "totalEdges": 0,
+      "density": 0
+    },
+    "root-dockerignore": {
+      "internalEdges": 0,
+      "totalEdges": 0,
+      "density": 0
+    },
+    ".github": {
+      "internalEdges": 0,
+      "totalEdges": 0,
+      "density": 0
+    },
+    "root-development": {
+      "internalEdges": 0,
+      "totalEdges": 0,
+      "density": 0
+    },
+    "root-md": {
+      "internalEdges": 0,
+      "totalEdges": 0,
+      "density": 0
+    },
+    "root-txt": {
+      "internalEdges": 0,
+      "totalEdges": 0,
+      "density": 0
+    },
+    "root-json": {
+      "internalEdges": 0,
+      "totalEdges": 0,
+      "density": 0
+    },
+    ".planning": {
+      "internalEdges": 0,
+      "totalEdges": 0,
+      "density": 0
+    },
+    "public": {
+      "internalEdges": 0,
+      "totalEdges": 0,
+      "density": 0
+    },
+    "root-babelrc": {
+      "internalEdges": 0,
+      "totalEdges": 0,
+      "density": 0
+    },
+    ".bg-shell": {
+      "internalEdges": 0,
+      "totalEdges": 0,
+      "density": 0
+    },
+    ".ua": {
+      "internalEdges": 0,
+      "totalEdges": 0,
+      "density": 0
+    },
+    "root-js": {
+      "internalEdges": 0,
+      "totalEdges": 0,
+      "density": 0
+    },
+    "config": {
+      "internalEdges": 0,
+      "totalEdges": 0,
+      "density": 0
+    }
+  },
+  "patternMatches": {
+    ".github": "ci-cd",
+    "public": "assets",
+    "config": "config"
+  },
+  "fileLevelMatches": {
+    "service:Dockerfile": "infrastructure",
+    "pipeline:.github/workflows/nodejs.yml": "ci-cd",
+    "document:PLAN.md": "documentation",
+    "document:README.md": "documentation",
+    "document:.planning/PROJECT.md": "documentation",
+    "document:.planning/REQUIREMENTS.md": "documentation",
+    "document:.planning/ROADMAP.md": "documentation",
+    "document:.planning/STATE.md": "documentation",
+    "document:.planning/codebase/ARCHITECTURE.md": "documentation",
+    "document:.planning/codebase/CONCERNS.md": "documentation",
+    "document:.planning/codebase/CONVENTIONS.md": "documentation",
+    "document:.planning/codebase/INTEGRATIONS.md": "documentation",
+    "document:.planning/codebase/STACK.md": "documentation",
+    "document:.planning/codebase/STRUCTURE.md": "documentation",
+    "document:.planning/codebase/TESTING.md": "documentation",
+    "document:.planning/phases/04-dynamic-room-integration/01-RESEARCH.md": "documentation",
+    "document:.planning/phases/04-dynamic-room-integration/04-PLAN.md": "documentation",
+    "document:.planning/phases/04-dynamic-room-integration/04-SUMMARY.md": "documentation",
+    "document:.planning/quick/configure-tls-port.md": "documentation",
+    "document:.planning/quick/fix-menu-path-error.md": "documentation",
+    "document:.planning/quick/fix-rate-plan-visibility.md": "documentation",
+    "document:.planning/quick/fix-room-preselection.md": "documentation",
+    "document:.planning/quick/rename-room-to-ts.md": "documentation",
+    "document:.github/copilot-instructions.md": "documentation",
+    "document:.planning/phases/01-foundation-refactoring/01-PLAN.md": "documentation",
+    "document:.planning/phases/01-foundation-refactoring/01-RESEARCH.md": "documentation",
+    "document:.planning/phases/02-configuration-caching-resilience/02-PLAN.md": "documentation",
+    "document:.planning/phases/02-configuration-caching-resilience/02-RESEARCH.md": "documentation",
+    "document:.planning/phases/04-CONTEXT.md": "documentation",
+    "document:.planning/phases/06-room-invoice-map-optimization/06-PLAN.md": "documentation",
+    "document:.planning/phases/06-room-invoice-map-optimization/06-RESEARCH.md": "documentation",
+    "document:.planning/todos/01-bugs/fix-the-compile-error.md": "documentation"
+  },
+  "deploymentTopology": {
+    "hasDockerfile": true,
+    "hasCompose": false,
+    "hasK8s": false,
+    "hasTerraform": false,
+    "hasCI": true,
+    "infraFiles": [
+      "Dockerfile",
+      ".dockerignore",
+      ".github/workflows/nodejs.yml"
+    ]
+  },
+  "dataPipeline": {
+    "schemaFiles": [],
+    "migrationFiles": [],
+    "dataModelFiles": [
+      "src/db/apis.ts",
+      "src/db/bot.ts",
+      "src/db/classification.ts",
+      "src/db/configs.ts",
+      "src/db/expense.ts",
+      "src/db/profit.ts",
+      "src/db/status.ts",
+      "src/db/supplier.ts",
+      "src/db/tax.ts",
+      "src/db/users.ts",
+      "src/db/immigrationRegistration.ts",
+      "src/db/invoice.ts",
+      "src/db/order.ts",
+      "src/db/permission.ts",
+      "src/db/profile.ts",
+      "src/db/taxPolicy.ts",
+      "src/db/tour-request.ts",
+      "src/db/tour.ts",
+      "src/db/inventory.ts",
+      "src/db/pgroup.ts",
+      "src/db/product.ts",
+      "src/db/rate_plan.ts",
+      "src/db/room.ts",
+      "src/db/reservation.ts",
+      "src/db/reservation_extractor.ts",
+      "src/db/gcs.ts"
+    ],
+    "apiHandlerFiles": []
+  },
+  "docCoverage": {
+    "groupsWithDocs": 4,
+    "totalGroups": 15,
+    "coverageRatio": 0.267,
+    "undocumentedGroups": [
+      "src",
+      "root-other",
+      "root-dockerignore",
+      "root-development",
+      "root-json",
+      "public",
+      "root-babelrc",
+      ".bg-shell",
+      ".ua",
+      "root-js",
+      "config"
+    ]
+  },
+  "dependencyDirection": [],
+  "fileStats": {
+    "totalFileNodes": 103,
+    "filesPerGroup": {
+      "src": 56,
+      "root-other": 1,
+      "root-dockerignore": 1,
+      ".github": 2,
+      "root-development": 1,
+      "root-md": 2,
+      "root-txt": 1,
+      "root-json": 2,
+      ".planning": 27,
+      "public": 4,
+      "root-babelrc": 1,
+      ".bg-shell": 1,
+      ".ua": 1,
+      "root-js": 1,
+      "config": 2
+    },
+    "nodeTypeCounts": {
+      "file": 63,
+      "service": 1,
+      "config": 7,
+      "pipeline": 1,
+      "document": 31
+    }
+  },
+  "fileFanIn": {
+    "file:src/App.tsx": 17,
+    "file:src/Components/ProfitReport.tsx": 13,
+    "file:src/Service/Utils.ts": 16,
+    "file:src/db/classification.ts": 3,
+    "file:src/db/expense.ts": 1,
+    "file:src/db/users.ts": 2,
+    "file:src/db/bot.ts": 1,
+    "file:src/db/configs.ts": 4,
+    "file:src/db/reservation.ts": 4,
+    "file:src/db/status.ts": 1,
+    "file:src/Components/InvoiceManager.tsx": 11,
+    "file:src/db/supplier.ts": 1,
+    "file:src/db/apis.ts": 23,
+    "file:src/Components/ExpenseManager.tsx": 2,
+    "file:src/Components/SupplierManager.tsx": 2,
+    "file:src/Components/TaxableInvoiceManager.tsx": 2,
+    "file:src/db/invoice.ts": 6,
+    "file:src/db/permission.ts": 3,
+    "file:src/db/immigrationRegistration.ts": 1,
+    "file:src/Components/InvoiceEditor.tsx": 3,
+    "file:src/db/reservation_extractor.ts": 3,
+    "file:src/db/room.ts": 5,
+    "file:src/Components/OrderManager.tsx": 3,
+    "file:src/Components/PGroupManager.tsx": 5,
+    "file:src/db/order.ts": 2,
+    "file:src/db/pgroup.ts": 4,
+    "file:src/db/profit.ts": 1,
+    "file:src/db/tax.ts": 1,
+    "file:src/App.css": 1,
+    "file:src/Components/ImmigrationRegistrationManager.tsx": 1,
+    "file:src/Components/Inventory.tsx": 4,
+    "file:src/Components/InvoiceMap.tsx": 1,
+    "file:src/Components/OrderEditor.tsx": 1,
+    "file:src/Components/RatePlanManager.tsx": 2,
+    "file:src/Components/ReservationManager.tsx": 4,
+    "file:src/Components/ReservationMap.tsx": 1,
+    "file:src/Components/RoomManager.tsx": 1,
+    "file:src/Components/Settings.tsx": 1,
+    "file:src/Components/TaxPolicyManager.tsx": 1,
+    "file:src/Components/TourEditor.tsx": 1,
+    "file:src/Components/TourManager.tsx": 4,
+    "file:src/Components/UserProfile.tsx": 1,
+    "file:src/Components/Welcome.tsx": 1,
+    "file:src/db/profile.ts": 1,
+    "file:src/db/taxPolicy.ts": 1,
+    "file:src/db/tour.ts": 2,
+    "file:src/index.css": 1,
+    "file:src/Service/FileMinio.ts": 1,
+    "file:src/db/inventory.ts": 2,
+    "file:src/db/product.ts": 1,
+    "file:src/Components/CounterInput.tsx": 1,
+    "file:src/db/rate_plan.ts": 1
+  },
+  "fileFanOut": {
+    "file:src/Components/ExpenseManager.tsx": 6,
+    "file:src/Components/Settings.tsx": 6,
+    "file:src/Components/SupplierManager.tsx": 5,
+    "file:src/db/bot.ts": 1,
+    "file:src/db/classification.ts": 1,
+    "file:src/db/configs.ts": 2,
+    "file:src/db/expense.ts": 2,
+    "file:src/db/profit.ts": 2,
+    "file:src/db/status.ts": 1,
+    "file:src/db/supplier.ts": 2,
+    "file:src/db/tax.ts": 2,
+    "file:src/db/users.ts": 2,
+    "file:src/Components/Immigration.tsx": 6,
+    "file:src/Components/ImmigrationRegistrationManager.tsx": 4,
+    "file:src/Components/InvoiceManager.tsx": 5,
+    "file:src/Components/InvoiceMap.tsx": 7,
+    "file:src/Components/OrderEditor.tsx": 8,
+    "file:src/Components/OrderManager.tsx": 6,
+    "file:src/Components/ProfitReport.tsx": 2,
+    "file:src/Components/TaxableInvoiceManager.tsx": 3,
+    "file:src/db/immigrationRegistration.ts": 2,
+    "file:src/db/invoice.ts": 2,
+    "file:src/db/order.ts": 2,
+    "file:src/App.tsx": 25,
+    "file:src/Components/TaxPolicyManager.tsx": 1,
+    "file:src/Components/TourEditor.tsx": 3,
+    "file:src/Components/TourManager.tsx": 2,
+    "file:src/db/profile.ts": 1,
+    "file:src/db/taxPolicy.ts": 1,
+    "file:src/db/tour-request.ts": 2,
+    "file:src/db/tour.ts": 2,
+    "file:src/index.tsx": 2,
+    "file:src/Components/Inventory.tsx": 8,
+    "file:src/Components/InvoiceEditor.tsx": 15,
+    "file:src/Components/PGroupManager.tsx": 1,
+    "file:src/db/inventory.ts": 2,
+    "file:src/db/pgroup.ts": 2,
+    "file:src/db/product.ts": 2,
+    "file:src/Components/RatePlanManager.tsx": 6,
+    "file:src/Components/RoomManager.tsx": 3,
+    "file:src/db/rate_plan.ts": 2,
+    "file:src/db/room.ts": 1,
+    "file:src/Components/ReservationManager.tsx": 6,
+    "file:src/Components/ReservationMap.tsx": 7,
+    "file:src/db/reservation.ts": 2,
+    "file:src/db/reservation_extractor.ts": 1
+  }
+}

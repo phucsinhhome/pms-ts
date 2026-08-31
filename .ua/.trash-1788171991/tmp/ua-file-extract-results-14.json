@@ -1,0 +1,72 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 1,
+  "filesSkipped": [
+    "public/index.html",
+    "public/robots.txt"
+  ],
+  "analysisOutcomes": {
+    "structure": {
+      "succeeded": 1,
+      "failed": 0
+    },
+    "callGraph": {
+      "succeeded": 0,
+      "failed": 0,
+      "skipped": 1
+    }
+  },
+  "results": [
+    {
+      "path": "public/manifest.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 25,
+      "nonEmptyLines": 25,
+      "sections": [
+        {
+          "heading": "short_name",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "name",
+          "level": 1,
+          "line": 3
+        },
+        {
+          "heading": "icons",
+          "level": 1,
+          "line": 4
+        },
+        {
+          "heading": "start_url",
+          "level": 1,
+          "line": 21
+        },
+        {
+          "heading": "display",
+          "level": 1,
+          "line": 22
+        },
+        {
+          "heading": "theme_color",
+          "level": 1,
+          "line": 23
+        },
+        {
+          "heading": "background_color",
+          "level": 1,
+          "line": 24
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 7
+      }
+    }
+  ]
+}

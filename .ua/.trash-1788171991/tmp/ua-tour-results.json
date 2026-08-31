@@ -1,0 +1,1244 @@
+{
+  "scriptCompleted": true,
+  "entryPointCandidates": [
+    {
+      "id": "document:README.md",
+      "score": 5,
+      "name": "README.md",
+      "summary": "Project overview for the PMS web app describing its expense tracking, invoicing, reservation status, and profit reporting features, plus setup instructions for the required .env service-endpoint variables and how to run the dev server."
+    },
+    {
+      "id": "file:src/index.tsx",
+      "score": 4,
+      "name": "index.tsx",
+      "summary": "Application entry point that creates the React root and mounts App into the DOM, pulling in global styles from index.css."
+    },
+    {
+      "id": "file:src/Components/Immigration.tsx",
+      "score": 2,
+      "name": "Immigration.tsx",
+      "summary": "Invoice management screen scoped to the Immigration menu: lists staying/coming invoices, filters by date range and guest name, paginates results, and supports authority-checked invoice deletion."
+    },
+    {
+      "id": "file:src/App.tsx",
+      "score": 2,
+      "name": "App.tsx",
+      "summary": "Root application component that authenticates the user, fetches the profile and app config, builds an authority-filtered navigation menu, and conditionally renders every business-domain manager screen (expenses, invoices, orders, reservations, tours, suppliers, rooms, settings, etc.) based on the active menu selection."
+    },
+    {
+      "id": "config:.dockerignore",
+      "score": 2,
+      "name": ".dockerignore",
+      "summary": "Excludes node_modules and build directories from the Docker build context, keeping image builds fast and avoiding stale artifacts being copied into the container."
+    }
+  ],
+  "fanInRanking": [
+    {
+      "id": "file:src/db/apis.ts",
+      "fanIn": 27,
+      "name": "apis.ts"
+    },
+    {
+      "id": "file:src/App.tsx",
+      "fanIn": 27,
+      "name": "App.tsx"
+    },
+    {
+      "id": "file:src/Service/Utils.ts",
+      "fanIn": 19,
+      "name": "Utils.ts"
+    },
+    {
+      "id": "file:src/Components/InvoiceManager.tsx",
+      "fanIn": 13,
+      "name": "InvoiceManager.tsx"
+    },
+    {
+      "id": "file:src/Components/ProfitReport.tsx",
+      "fanIn": 13,
+      "name": "ProfitReport.tsx"
+    },
+    {
+      "id": "file:src/index.tsx",
+      "fanIn": 11,
+      "name": "index.tsx"
+    },
+    {
+      "id": "file:src/Components/InvoiceEditor.tsx",
+      "fanIn": 10,
+      "name": "InvoiceEditor.tsx"
+    },
+    {
+      "id": "file:src/db/configs.ts",
+      "fanIn": 8,
+      "name": "configs.ts"
+    },
+    {
+      "id": "file:src/db/invoice.ts",
+      "fanIn": 8,
+      "name": "invoice.ts"
+    },
+    {
+      "id": "file:src/db/room.ts",
+      "fanIn": 7,
+      "name": "room.ts"
+    },
+    {
+      "id": "file:src/Components/ReservationManager.tsx",
+      "fanIn": 7,
+      "name": "ReservationManager.tsx"
+    },
+    {
+      "id": "file:src/Components/RoomManager.tsx",
+      "fanIn": 6,
+      "name": "RoomManager.tsx"
+    },
+    {
+      "id": "file:src/Components/InvoiceMap.tsx",
+      "fanIn": 5,
+      "name": "InvoiceMap.tsx"
+    },
+    {
+      "id": "file:src/Components/Inventory.tsx",
+      "fanIn": 5,
+      "name": "Inventory.tsx"
+    },
+    {
+      "id": "file:src/Components/PGroupManager.tsx",
+      "fanIn": 5,
+      "name": "PGroupManager.tsx"
+    },
+    {
+      "id": "file:src/db/reservation.ts",
+      "fanIn": 5,
+      "name": "reservation.ts"
+    },
+    {
+      "id": "file:src/Components/OrderManager.tsx",
+      "fanIn": 4,
+      "name": "OrderManager.tsx"
+    },
+    {
+      "id": "file:src/Components/TourManager.tsx",
+      "fanIn": 4,
+      "name": "TourManager.tsx"
+    },
+    {
+      "id": "file:src/db/pgroup.ts",
+      "fanIn": 4,
+      "name": "pgroup.ts"
+    },
+    {
+      "id": "file:src/db/classification.ts",
+      "fanIn": 3,
+      "name": "classification.ts"
+    }
+  ],
+  "fanOutRanking": [
+    {
+      "id": "file:src/App.tsx",
+      "fanOut": 25,
+      "name": "App.tsx"
+    },
+    {
+      "id": "file:src/Components/InvoiceEditor.tsx",
+      "fanOut": 15,
+      "name": "InvoiceEditor.tsx"
+    },
+    {
+      "id": "document:.planning/codebase/STRUCTURE.md",
+      "fanOut": 15,
+      "name": "STRUCTURE.md"
+    },
+    {
+      "id": "file:src/Components/OrderEditor.tsx",
+      "fanOut": 8,
+      "name": "OrderEditor.tsx"
+    },
+    {
+      "id": "file:src/Components/Inventory.tsx",
+      "fanOut": 8,
+      "name": "Inventory.tsx"
+    },
+    {
+      "id": "file:src/Components/InvoiceMap.tsx",
+      "fanOut": 7,
+      "name": "InvoiceMap.tsx"
+    },
+    {
+      "id": "file:src/Components/ReservationMap.tsx",
+      "fanOut": 7,
+      "name": "ReservationMap.tsx"
+    },
+    {
+      "id": "document:.planning/codebase/CONCERNS.md",
+      "fanOut": 7,
+      "name": "CONCERNS.md"
+    },
+    {
+      "id": "document:.planning/codebase/CONVENTIONS.md",
+      "fanOut": 7,
+      "name": "CONVENTIONS.md"
+    },
+    {
+      "id": "file:src/Components/ExpenseManager.tsx",
+      "fanOut": 6,
+      "name": "ExpenseManager.tsx"
+    },
+    {
+      "id": "file:src/Components/Settings.tsx",
+      "fanOut": 6,
+      "name": "Settings.tsx"
+    },
+    {
+      "id": "file:src/Components/Immigration.tsx",
+      "fanOut": 6,
+      "name": "Immigration.tsx"
+    },
+    {
+      "id": "file:src/Components/OrderManager.tsx",
+      "fanOut": 6,
+      "name": "OrderManager.tsx"
+    },
+    {
+      "id": "file:src/Components/RatePlanManager.tsx",
+      "fanOut": 6,
+      "name": "RatePlanManager.tsx"
+    },
+    {
+      "id": "file:src/Components/ReservationManager.tsx",
+      "fanOut": 6,
+      "name": "ReservationManager.tsx"
+    },
+    {
+      "id": "document:.planning/phases/01-foundation-refactoring/01-PLAN.md",
+      "fanOut": 6,
+      "name": "01-PLAN.md"
+    },
+    {
+      "id": "file:src/Components/SupplierManager.tsx",
+      "fanOut": 5,
+      "name": "SupplierManager.tsx"
+    },
+    {
+      "id": "file:src/Components/InvoiceManager.tsx",
+      "fanOut": 5,
+      "name": "InvoiceManager.tsx"
+    },
+    {
+      "id": "file:src/Components/ImmigrationRegistrationManager.tsx",
+      "fanOut": 4,
+      "name": "ImmigrationRegistrationManager.tsx"
+    },
+    {
+      "id": "document:.planning/codebase/ARCHITECTURE.md",
+      "fanOut": 4,
+      "name": "ARCHITECTURE.md"
+    }
+  ],
+  "bfsTraversal": {
+    "startNode": "file:src/index.tsx",
+    "order": [
+      "file:src/index.tsx",
+      "file:src/App.tsx",
+      "file:src/index.css",
+      "file:src/App.css",
+      "file:src/Components/ExpenseManager.tsx",
+      "file:src/Components/ImmigrationRegistrationManager.tsx",
+      "file:src/Components/Inventory.tsx",
+      "file:src/Components/InvoiceEditor.tsx",
+      "file:src/Components/InvoiceManager.tsx",
+      "file:src/Components/InvoiceMap.tsx",
+      "file:src/Components/OrderEditor.tsx",
+      "file:src/Components/OrderManager.tsx",
+      "file:src/Components/PGroupManager.tsx",
+      "file:src/Components/ProfitReport.tsx",
+      "file:src/Components/RatePlanManager.tsx",
+      "file:src/Components/ReservationManager.tsx",
+      "file:src/Components/ReservationMap.tsx",
+      "file:src/Components/RoomManager.tsx",
+      "file:src/Components/Settings.tsx",
+      "file:src/Components/SupplierManager.tsx",
+      "file:src/Components/TaxPolicyManager.tsx",
+      "file:src/Components/TaxableInvoiceManager.tsx",
+      "file:src/Components/TourEditor.tsx",
+      "file:src/Components/TourManager.tsx",
+      "file:src/Components/UserProfile.tsx",
+      "file:src/Components/Welcome.tsx",
+      "file:src/db/configs.ts",
+      "file:src/db/profile.ts",
+      "file:src/Service/Utils.ts",
+      "file:src/db/classification.ts",
+      "file:src/db/expense.ts",
+      "file:src/db/users.ts",
+      "file:src/db/immigrationRegistration.ts",
+      "file:src/Service/FileMinio.ts",
+      "file:src/db/inventory.ts",
+      "file:src/db/pgroup.ts",
+      "file:src/db/product.ts",
+      "file:src/db/invoice.ts",
+      "file:src/db/permission.ts",
+      "file:src/db/reservation.ts",
+      "file:src/db/room.ts",
+      "file:src/db/reservation_extractor.ts",
+      "file:src/db/order.ts",
+      "file:src/db/profit.ts",
+      "file:src/Components/CounterInput.tsx",
+      "file:src/db/rate_plan.ts",
+      "file:src/db/bot.ts",
+      "file:src/db/status.ts",
+      "file:src/db/supplier.ts",
+      "file:src/db/taxPolicy.ts",
+      "file:src/db/tax.ts",
+      "file:src/db/tour.ts",
+      "file:src/db/apis.ts"
+    ],
+    "depthMap": {
+      "file:src/index.tsx": 0,
+      "file:src/App.tsx": 1,
+      "file:src/index.css": 1,
+      "file:src/App.css": 2,
+      "file:src/Components/ExpenseManager.tsx": 2,
+      "file:src/Components/ImmigrationRegistrationManager.tsx": 2,
+      "file:src/Components/Inventory.tsx": 2,
+      "file:src/Components/InvoiceEditor.tsx": 2,
+      "file:src/Components/InvoiceManager.tsx": 2,
+      "file:src/Components/InvoiceMap.tsx": 2,
+      "file:src/Components/OrderEditor.tsx": 2,
+      "file:src/Components/OrderManager.tsx": 2,
+      "file:src/Components/PGroupManager.tsx": 2,
+      "file:src/Components/ProfitReport.tsx": 2,
+      "file:src/Components/RatePlanManager.tsx": 2,
+      "file:src/Components/ReservationManager.tsx": 2,
+      "file:src/Components/ReservationMap.tsx": 2,
+      "file:src/Components/RoomManager.tsx": 2,
+      "file:src/Components/Settings.tsx": 2,
+      "file:src/Components/SupplierManager.tsx": 2,
+      "file:src/Components/TaxPolicyManager.tsx": 2,
+      "file:src/Components/TaxableInvoiceManager.tsx": 2,
+      "file:src/Components/TourEditor.tsx": 2,
+      "file:src/Components/TourManager.tsx": 2,
+      "file:src/Components/UserProfile.tsx": 2,
+      "file:src/Components/Welcome.tsx": 2,
+      "file:src/db/configs.ts": 2,
+      "file:src/db/profile.ts": 2,
+      "file:src/Service/Utils.ts": 3,
+      "file:src/db/classification.ts": 3,
+      "file:src/db/expense.ts": 3,
+      "file:src/db/users.ts": 3,
+      "file:src/db/immigrationRegistration.ts": 3,
+      "file:src/Service/FileMinio.ts": 3,
+      "file:src/db/inventory.ts": 3,
+      "file:src/db/pgroup.ts": 3,
+      "file:src/db/product.ts": 3,
+      "file:src/db/invoice.ts": 3,
+      "file:src/db/permission.ts": 3,
+      "file:src/db/reservation.ts": 3,
+      "file:src/db/room.ts": 3,
+      "file:src/db/reservation_extractor.ts": 3,
+      "file:src/db/order.ts": 3,
+      "file:src/db/profit.ts": 3,
+      "file:src/Components/CounterInput.tsx": 3,
+      "file:src/db/rate_plan.ts": 3,
+      "file:src/db/bot.ts": 3,
+      "file:src/db/status.ts": 3,
+      "file:src/db/supplier.ts": 3,
+      "file:src/db/taxPolicy.ts": 3,
+      "file:src/db/tax.ts": 3,
+      "file:src/db/tour.ts": 3,
+      "file:src/db/apis.ts": 3
+    },
+    "byDepth": {
+      "0": [
+        "file:src/index.tsx"
+      ],
+      "1": [
+        "file:src/App.tsx",
+        "file:src/index.css"
+      ],
+      "2": [
+        "file:src/App.css",
+        "file:src/Components/ExpenseManager.tsx",
+        "file:src/Components/ImmigrationRegistrationManager.tsx",
+        "file:src/Components/Inventory.tsx",
+        "file:src/Components/InvoiceEditor.tsx",
+        "file:src/Components/InvoiceManager.tsx",
+        "file:src/Components/InvoiceMap.tsx",
+        "file:src/Components/OrderEditor.tsx",
+        "file:src/Components/OrderManager.tsx",
+        "file:src/Components/PGroupManager.tsx",
+        "file:src/Components/ProfitReport.tsx",
+        "file:src/Components/RatePlanManager.tsx",
+        "file:src/Components/ReservationManager.tsx",
+        "file:src/Components/ReservationMap.tsx",
+        "file:src/Components/RoomManager.tsx",
+        "file:src/Components/Settings.tsx",
+        "file:src/Components/SupplierManager.tsx",
+        "file:src/Components/TaxPolicyManager.tsx",
+        "file:src/Components/TaxableInvoiceManager.tsx",
+        "file:src/Components/TourEditor.tsx",
+        "file:src/Components/TourManager.tsx",
+        "file:src/Components/UserProfile.tsx",
+        "file:src/Components/Welcome.tsx",
+        "file:src/db/configs.ts",
+        "file:src/db/profile.ts"
+      ],
+      "3": [
+        "file:src/Service/Utils.ts",
+        "file:src/db/classification.ts",
+        "file:src/db/expense.ts",
+        "file:src/db/users.ts",
+        "file:src/db/immigrationRegistration.ts",
+        "file:src/Service/FileMinio.ts",
+        "file:src/db/inventory.ts",
+        "file:src/db/pgroup.ts",
+        "file:src/db/product.ts",
+        "file:src/db/invoice.ts",
+        "file:src/db/permission.ts",
+        "file:src/db/reservation.ts",
+        "file:src/db/room.ts",
+        "file:src/db/reservation_extractor.ts",
+        "file:src/db/order.ts",
+        "file:src/db/profit.ts",
+        "file:src/Components/CounterInput.tsx",
+        "file:src/db/rate_plan.ts",
+        "file:src/db/bot.ts",
+        "file:src/db/status.ts",
+        "file:src/db/supplier.ts",
+        "file:src/db/taxPolicy.ts",
+        "file:src/db/tax.ts",
+        "file:src/db/tour.ts",
+        "file:src/db/apis.ts"
+      ]
+    }
+  },
+  "nonCodeFiles": {
+    "documentation": [
+      {
+        "id": "document:PLAN.md",
+        "name": "PLAN.md",
+        "type": "document",
+        "summary": "Internal improvement-tracking document for the PMS project, listing completed bug fixes and refactors for order management, tour management save persistence, and dynamic room-name fetching in the reservation and invoice maps."
+      },
+      {
+        "id": "document:README.md",
+        "name": "README.md",
+        "type": "document",
+        "summary": "Project overview for the PMS web app describing its expense tracking, invoicing, reservation status, and profit reporting features, plus setup instructions for the required .env service-endpoint variables and how to run the dev server."
+      },
+      {
+        "id": "document:Subscribe.txt",
+        "name": "Subscribe.txt",
+        "type": "document",
+        "summary": "Plain-text file containing a single YouTube channel URL; unrelated to application functionality."
+      },
+      {
+        "id": "document:.planning/PROJECT.md",
+        "name": "PROJECT.md",
+        "type": "document",
+        "summary": "Project charter for the PMS frontend: defines the goal of completing a modular React/TypeScript property management system for homestay/resort operators, its tech stack (React 18, TypeScript, Tailwind CSS, Flowbite, Axios), constraints around existing microservice APIs, and lessons learned from prior work on invoices, reservations, and orders."
+      },
+      {
+        "id": "document:.planning/REQUIREMENTS.md",
+        "name": "REQUIREMENTS.md",
+        "type": "document",
+        "summary": "Functional and non-functional requirements for the PMS improvement effort, covering order-invoice integration, tour management persistence, dynamic room maps, advanced filtering, user stories, and success criteria for verifying completion."
+      },
+      {
+        "id": "document:.planning/ROADMAP.md",
+        "name": "ROADMAP.md",
+        "type": "document",
+        "summary": "Phased delivery roadmap for the PMS improvement project, tracking completed phases (foundation/refactoring, config caching, feature persistence, dynamic room integration, room/invoice map optimization), the current phase (advanced UX & optimization), and future phases like a mobile companion app and reporting dashboard."
+      },
+      {
+        "id": "document:.planning/STATE.md",
+        "name": "STATE.md",
+        "type": "document",
+        "summary": "Living project-state log tracking the current roadmap phase, recent completed quick tasks and phase work (e.g. rate-plan menu fix, TLS config, room API refactor, ID-based room mapping), and pending tasks for the PMS project."
+      },
+      {
+        "id": "document:.planning/codebase/ARCHITECTURE.md",
+        "name": "ARCHITECTURE.md",
+        "type": "document",
+        "summary": "Describes the PMS-TS frontend architecture: functional React components with hooks, a Service-Repository split between UI (src/Components/) and data access (src/db/), lifted state in App.tsx with no global state library, React Router v6 routing with RBAC-driven menu filtering, OIDC/JWT-based authentication, and a Tailwind CSS + Flowbite UI layer."
+      },
+      {
+        "id": "document:.planning/codebase/CONCERNS.md",
+        "name": "CONCERNS.md",
+        "type": "document",
+        "summary": "Catalogs technical debt, security risks, performance bottlenecks, and missing features in pms-ts, including overuse of `any`, monolithic components like InvoiceEditor.tsx and App.tsx, hardcoded API keys and business data, fragile auth logic, and the complete absence of automated tests."
+      },
+      {
+        "id": "document:.planning/codebase/CONVENTIONS.md",
+        "name": "CONVENTIONS.md",
+        "type": "document",
+        "summary": "Defines pms-ts coding standards: PascalCase for components and services, mixed snake_case/kebab-case for db modules, Prettier with the Tailwind plugin, ESLint react-app rules, and architectural rules for component structure, data access via db/apis.ts, multi-tenancy via tenantId, and env-based configuration."
+      },
+      {
+        "id": "document:.planning/codebase/INTEGRATIONS.md",
+        "name": "INTEGRATIONS.md",
+        "type": "document",
+        "summary": "Lists external integrations used by pms-ts, including OIDC/Keycloak authentication with RBAC, a suite of Phuc Sinh Assistant backend microservices (expense, inventory, invoice, profit, reservation, order, supplier, tour), Google Gemini AI for data extraction, MinIO object storage, and Firebase/GCS cloud integrations."
+      },
+      {
+        "id": "document:.planning/codebase/STACK.md",
+        "name": "STACK.md",
+        "type": "document",
+        "summary": "Summarizes the pms-ts technology stack: TypeScript on React 18 with React Router v6, Tailwind CSS with Flowbite components, Axios for HTTP, Moment.js for dates, Google Generative AI, MinIO SDK, and a Webpack/react-app-rewired/Babel/PostCSS/Prettier build toolchain."
+      },
+      {
+        "id": "document:.planning/codebase/STRUCTURE.md",
+        "name": "STRUCTURE.md",
+        "type": "document",
+        "summary": "Maps the pms-ts directory layout, explaining the roles of src/Components/ (Manager, Editor, and Map components), src/db/ (API repositories), src/Service/ (utilities like FileMinio.ts and Utils.ts), the App.tsx/index.tsx entry points, public/ static assets, and top-level config files."
+      },
+      {
+        "id": "document:.planning/codebase/TESTING.md",
+        "name": "TESTING.md",
+        "type": "document",
+        "summary": "Defines the intended testing strategy for pms-ts using Jest and React Testing Library, covering unit tests for src/Service/ and src/db/, component tests for src/Components/, the absence of E2E tooling, mocking guidance for API calls, and coverage goals for critical domain logic."
+      },
+      {
+        "id": "document:.planning/phases/04-dynamic-room-integration/01-RESEARCH.md",
+        "name": "01-RESEARCH.md",
+        "type": "document",
+        "summary": "Research notes analyzing the redundant `roomIcons` mapping in src/db/room.tsx, tracing its usage to InvoiceEditor.tsx, and recommending removal in favor of a single standardized icon since other room components (RoomManager, ReservationMap, InvoiceMap) already avoid it."
+      },
+      {
+        "id": "document:.planning/phases/04-dynamic-room-integration/04-PLAN.md",
+        "name": "04-PLAN.md",
+        "type": "document",
+        "summary": "Implementation plan for Phase 4 (Dynamic Room Integration refinement), detailing tasks to remove the static roomIcons mapping, standardize the room selection UI in InvoiceEditor with a single icon, finalize elimination of static room data, and verify the build with tsc."
+      },
+      {
+        "id": "document:.planning/phases/04-dynamic-room-integration/04-SUMMARY.md",
+        "name": "04-SUMMARY.md",
+        "type": "document",
+        "summary": "Completion summary for Phase 4, confirming removal of the roomIcons mapping and src/db/staticdata.ts, standardization of InvoiceEditor's room selection icons, and full transition to dynamic backend-driven room data via the listRoom API."
+      },
+      {
+        "id": "document:.planning/quick/configure-tls-port.md",
+        "name": "configure-tls-port.md",
+        "type": "document",
+        "summary": "Quick-fix note describing how to enable HTTPS on port 3001 for local development by adding HTTPS=true to .env.development alongside the existing PORT=3001 setting."
+      },
+      {
+        "id": "document:.planning/quick/fix-menu-path-error.md",
+        "name": "fix-menu-path-error.md",
+        "type": "document",
+        "summary": "Quick-fix note for a startup TypeError in App.tsx caused by a mismatch between the 'rate-plan' key in menuOrder and the 'ratePlan' key in the menus object, resolved by aligning the keys and adding a safety filter in filterMenus."
+      },
+      {
+        "id": "document:.planning/quick/fix-rate-plan-visibility.md",
+        "name": "fix-rate-plan-visibility.md",
+        "type": "document",
+        "summary": "Quick-fix note explaining why the Rate Plan menu item was hidden due to a camelCase/kebab-case mismatch between the 'ratePlan' menu key and the backend-provided 'rate-plan' authority string, fixed by standardizing on 'rate-plan' throughout App.tsx."
+      },
+      {
+        "id": "document:.planning/quick/fix-room-preselection.md",
+        "name": "fix-room-preselection.md",
+        "type": "document",
+        "summary": "Quick-fix note for InvoiceEditor's chooseRoom function, which failed to pre-select rooms in the modal because it matched invoice.rooms values against room.name instead of the correct room.internalName field."
+      },
+      {
+        "id": "document:.planning/quick/rename-room-to-ts.md",
+        "name": "rename-room-to-ts.md",
+        "type": "document",
+        "summary": "Quick-fix note documenting the rename of src/db/room.tsx to src/db/room.ts, since the file no longer contains JSX and a .ts extension better reflects its pure TypeScript content."
+      },
+      {
+        "id": "document:.github/copilot-instructions.md",
+        "name": "copilot-instructions.md",
+        "type": "document",
+        "summary": "GitHub Copilot custom instructions directing the AI assistant to invoke Azure best-practice tooling when generating Azure-related code or running Azure commands."
+      },
+      {
+        "id": "document:.planning/phases/01-foundation-refactoring/01-PLAN.md",
+        "name": "01-PLAN.md",
+        "type": "document",
+        "summary": "Implementation plan for Phase 1 covering PaymentMethod type refactoring into configs.ts, dynamic AppConfig distribution to InvoiceEditor, API factory consolidation in apis.ts, and verification of room/map data."
+      },
+      {
+        "id": "document:.planning/phases/01-foundation-refactoring/01-RESEARCH.md",
+        "name": "01-RESEARCH.md",
+        "type": "document",
+        "summary": "Research notes for Phase 1 documenting the standard stack (Axios, flowbite-react), the configuration-provider and API-factory architecture patterns, and pitfalls to avoid when refactoring payment methods and config loading."
+      },
+      {
+        "id": "document:.planning/phases/02-configuration-caching-resilience/02-PLAN.md",
+        "name": "02-PLAN.md",
+        "type": "document",
+        "summary": "Implementation plan for Phase 2 adding a cache-first localStorage strategy and a 3-attempt async retry mechanism to appConfigs, plus App.tsx loading/error state handling for offline resilience."
+      },
+      {
+        "id": "document:.planning/phases/02-configuration-caching-resilience/02-RESEARCH.md",
+        "name": "02-RESEARCH.md",
+        "type": "document",
+        "summary": "Research notes for Phase 2 detailing the cache-first-with-background-refresh pattern, idempotent background refresh, and asynchronous retry mechanism for loading app.json configuration, with sample retry-wrapper and appConfigs code."
+      },
+      {
+        "id": "document:.planning/phases/04-CONTEXT.md",
+        "name": "04-CONTEXT.md",
+        "type": "document",
+        "summary": "Context notes for Phase 4 defining the scope of dynamic room integration, targeting room.ts and invoice.ts to remove hardcoded room identifiers, with UX enhancements deferred to Phase 5."
+      },
+      {
+        "id": "document:.planning/phases/06-room-invoice-map-optimization/06-PLAN.md",
+        "name": "06-PLAN.md",
+        "type": "document",
+        "summary": "Implementation plan for Phase 6 refactoring RoomManager and InvoiceMap to use room IDs for consistent mapping, optimizing component lifecycle, and synchronizing UI between the two map views."
+      },
+      {
+        "id": "document:.planning/phases/06-room-invoice-map-optimization/06-RESEARCH.md",
+        "name": "06-RESEARCH.md",
+        "type": "document",
+        "summary": "Research notes for Phase 6 analyzing data inconsistencies between RoomManager and InvoiceMap (name-based vs ID-based mapping) and proposing an ID-based, static-grid rendering approach."
+      },
+      {
+        "id": "document:.planning/todos/01-bugs/fix-the-compile-error.md",
+        "name": "fix-the-compile-error.md",
+        "type": "document",
+        "summary": "Completed bug-fix todo tracking the resolution of TypeScript compile errors introduced during Phase 4, primarily in InvoiceEditor.tsx."
+      }
+    ],
+    "infrastructure": [
+      {
+        "id": "service:Dockerfile",
+        "name": "Dockerfile",
+        "type": "service",
+        "summary": "Single-stage Docker build for the PMS React web app: copies the full source tree, installs dependencies with npm ci, runs npm run build, then starts the app via npm run start on port 3000. Numerous build ARGs inject service endpoint URLs (invoice, inventory, expense, profit, service-classification, reservation, and file-service) as runtime ENV vars."
+      },
+      {
+        "id": "pipeline:.github/workflows/nodejs.yml",
+        "name": "nodejs.yml",
+        "type": "pipeline",
+        "summary": "GitHub Actions workflow (\"Containerize PMS\") that builds the Node.js application and publishes a multi-platform Docker image of the PMS app to Docker Hub whenever a semantic-version tag (e.g. 1.2.3) is pushed."
+      }
+    ],
+    "data": [],
+    "config": [
+      {
+        "id": "config:.dockerignore",
+        "name": ".dockerignore",
+        "type": "config",
+        "summary": "Excludes node_modules and build directories from the Docker build context, keeping image builds fast and avoiding stale artifacts being copied into the container."
+      },
+      {
+        "id": "config:.env.development",
+        "name": ".env.development",
+        "type": "config",
+        "summary": "Development environment configuration defining local backend service endpoints (expense, invoice, reservation, profit, tax, order, room, supplier, user, immigration registration, etc.), file-storage (MinIO) credentials, and dev server settings for the PMS app, with a block of legacy staging URLs kept as comments."
+      },
+      {
+        "id": "config:package.json",
+        "name": "package.json",
+        "type": "config",
+        "summary": "NPM manifest for the my-webpack-project PMS app, declaring React 18 + TypeScript dependencies (Firebase, Axios, Flowbite, react-router-dom, MinIO client, OIDC client, html2canvas) alongside Node.js browser polyfills, and defining react-app-rewired start/build/test/eject scripts."
+      },
+      {
+        "id": "config:tsconfig.json",
+        "name": "tsconfig.json",
+        "type": "config",
+        "summary": "TypeScript compiler configuration for the React app, targeting ES2016 with classic React JSX transform, CommonJS modules, strict type-checking, esModuleInterop, and forced consistent file-name casing."
+      },
+      {
+        "id": "config:public/manifest.json",
+        "name": "manifest.json",
+        "type": "config",
+        "summary": "Progressive Web App manifest defining the PMS (Phuc Sinh Home) app's short name, icons, start URL, and standalone display mode used when the app is installed on a mobile or desktop device."
+      },
+      {
+        "id": "config:public/robots.txt",
+        "name": "robots.txt",
+        "type": "config",
+        "summary": "Robots exclusion file that allows all web crawlers unrestricted access to the site, with no disallowed paths configured."
+      },
+      {
+        "id": "config:.bg-shell/manifest.json",
+        "name": "manifest.json",
+        "type": "config",
+        "summary": "Empty manifest file for the .bg-shell tooling directory, currently containing no registered entries."
+      }
+    ]
+  },
+  "clusters": [
+    {
+      "nodes": [
+        "file:src/Components/PGroupManager.tsx",
+        "file:src/db/pgroup.ts",
+        "file:src/Components/OrderEditor.tsx",
+        "file:src/Components/Inventory.tsx",
+        "file:src/Components/InvoiceEditor.tsx"
+      ],
+      "edgeCount": 9
+    },
+    {
+      "nodes": [
+        "file:src/db/profit.ts",
+        "file:src/Components/ProfitReport.tsx"
+      ],
+      "edgeCount": 2
+    },
+    {
+      "nodes": [
+        "file:src/db/tax.ts",
+        "file:src/Components/TaxableInvoiceManager.tsx"
+      ],
+      "edgeCount": 2
+    }
+  ],
+  "layers": {
+    "count": 6,
+    "list": [
+      {
+        "id": "layer:ui",
+        "name": "UI Components & Application Shell",
+        "description": "React/TypeScript components implementing the PMS screens for expense tracking, invoicing, reservations, inventory, tours, rate plans, immigration registration, and profit reporting, together with the App/index bootstrap files that assemble and route between them."
+      },
+      {
+        "id": "layer:data",
+        "name": "Data Access Layer",
+        "description": "Database access modules under src/db exposing CRUD and query functions for each business entity (orders, invoices, reservations, rooms, taxes, suppliers, users, profit) that the UI components call directly."
+      },
+      {
+        "id": "layer:service",
+        "name": "Shared Services & Utilities",
+        "description": "Cross-cutting helper logic (Utils.ts, imported across most of the app) and the FileMinio.ts integration for uploading/retrieving files, sitting beneath the UI and data layers."
+      },
+      {
+        "id": "layer:infrastructure",
+        "name": "Infrastructure & CI/CD",
+        "description": "Container build definition, Docker ignore rules, the GitHub Actions workflow, and the static-host redirect rules used to build, test, and deploy the application."
+      },
+      {
+        "id": "layer:config",
+        "name": "Project Configuration",
+        "description": "Build-tool and runtime configuration (package.json, tsconfig, tailwind, webpack, babel, environment variables) plus the public app manifest and HTML entry point that wire the toolchain and static assets together."
+      },
+      {
+        "id": "layer:documentation",
+        "name": "Documentation & Planning",
+        "description": "README, project planning notes, phase research/plan/summary documents, quick-fix notes, and contributor instructions describing the codebase, its architecture, and its roadmap."
+      }
+    ]
+  },
+  "nodeSummaryIndex": {
+    "file:src/Components/ExpenseManager.tsx": {
+      "name": "ExpenseManager.tsx",
+      "type": "file",
+      "summary": "React component providing the full expense-management UI: paginated expense listing, creation/editing of expense line items, AI-assisted expense generation from receipt text, and expenser assignment workflows."
+    },
+    "file:src/Components/Settings.tsx": {
+      "name": "Settings.tsx",
+      "type": "file",
+      "summary": "Settings screen component for application configuration: inventory auto-update toggles, monthly status sync, reservation mailbox sync, and Telegram bot registration."
+    },
+    "file:src/Components/SupplierManager.tsx": {
+      "name": "SupplierManager.tsx",
+      "type": "file",
+      "summary": "React component managing supplier invoices: filtering by status, AI-assisted invoice generation from text, line-item editing, and invoice lifecycle actions (confirm, mark taken-place, mark paid, reject)."
+    },
+    "file:src/db/apis.ts": {
+      "name": "apis.ts",
+      "type": "file",
+      "summary": "Central Axios client factory that constructs and exports every backend API instance used throughout the app (expenses, invoices, orders, reservations, suppliers, tours, configs, and more)."
+    },
+    "file:src/db/bot.ts": {
+      "name": "bot.ts",
+      "type": "file",
+      "summary": "Data-access module for registering a Telegram bot (id and token) with the backend."
+    },
+    "file:src/db/classification.ts": {
+      "name": "classification.ts",
+      "type": "file",
+      "summary": "Data-access module that classifies expense/invoice item names into predefined service categories via a backend classification API."
+    },
+    "file:src/db/configs.ts": {
+      "name": "configs.ts",
+      "type": "file",
+      "summary": "Data-access module managing application configuration: cached app configs with a localStorage-backed, retry-based fetch; config CRUD; auto-update-availability toggling; and Firebase config export."
+    },
+    "file:src/db/expense.ts": {
+      "name": "expense.ts",
+      "type": "file",
+      "summary": "Data-access module for expense records: listing (by date, by expenser), fetching, saving, assigning, deleting, and AI-assisted generation of expenses from free text."
+    },
+    "file:src/db/profit.ts": {
+      "name": "profit.ts",
+      "type": "file",
+      "summary": "Data-access module for fetching monthly profit report data by date range and report key."
+    },
+    "file:src/db/status.ts": {
+      "name": "status.ts",
+      "type": "file",
+      "summary": "Data-access module that triggers a backend sync of status data (e.g. inventory/reservation) for a given month partition."
+    },
+    "file:src/db/supplier.ts": {
+      "name": "supplier.ts",
+      "type": "file",
+      "summary": "Data-access module for supplier invoices: listing (all, by status, by time and status), AI-assisted generation, saving, and lifecycle transitions (taken-place, paid, rejected)."
+    },
+    "file:src/db/tax.ts": {
+      "name": "tax.ts",
+      "type": "file",
+      "summary": "Data-access module for taxable invoices: listing by date range, calculating tax totals, and fetching a single taxable invoice."
+    },
+    "file:src/db/users.ts": {
+      "name": "users.ts",
+      "type": "file",
+      "summary": "Data-access module for fetching user accounts, used for assigning expenses and invoices to specific users."
+    },
+    "file:src/Components/Immigration.tsx": {
+      "name": "Immigration.tsx",
+      "type": "file",
+      "summary": "Invoice management screen scoped to the Immigration menu: lists staying/coming invoices, filters by date range and guest name, paginates results, and supports authority-checked invoice deletion."
+    },
+    "file:src/Components/ImmigrationRegistrationManager.tsx": {
+      "name": "ImmigrationRegistrationManager.tsx",
+      "type": "file",
+      "summary": "Manages immigration guest registrations tied to invoices: lists registrations by date range, lets staff pick an eligible invoice, add/remove registered guests, and submit registration data to the backend."
+    },
+    "file:src/Components/InvoiceManager.tsx": {
+      "name": "InvoiceManager.tsx",
+      "type": "file",
+      "summary": "Primary invoice management screen listing staying/incoming invoices with date and guest-name filters, pagination, and authority-gated invoice deletion."
+    },
+    "file:src/Components/InvoiceMap.tsx": {
+      "name": "InvoiceMap.tsx",
+      "type": "file",
+      "summary": "Visual room-grid map showing invoices and guests per room for a selectable work date, with date navigation and manual room-occupancy updates via reservation extraction."
+    },
+    "file:src/Components/OrderEditor.tsx": {
+      "name": "OrderEditor.tsx",
+      "type": "file",
+      "summary": "Order detail/edit screen that loads an order and its linked invoice, manages product-group items, and drives the order lifecycle (send to preparation, mark served, stop preparation, link/unlink invoice)."
+    },
+    "file:src/Components/OrderManager.tsx": {
+      "name": "OrderManager.tsx",
+      "type": "file",
+      "summary": "Order list/board screen with status-based filtering (OrderStatus), invoice linking, and lifecycle actions (confirm, serve, reject orders)."
+    },
+    "file:src/Components/ProfitReport.tsx": {
+      "name": "ProfitReport.tsx",
+      "type": "file",
+      "summary": "Profit reporting dashboard aggregating revenue/cost breakdowns by aspect and time period, computing profit margin and formatted currency figures."
+    },
+    "file:src/Components/TaxableInvoiceManager.tsx": {
+      "name": "TaxableInvoiceManager.tsx",
+      "type": "file",
+      "summary": "Screen for listing taxable invoices within a date range, triggering tax calculation, and previewing calculation results per invoice."
+    },
+    "file:src/Service/Utils.ts": {
+      "name": "Utils.ts",
+      "type": "file",
+      "summary": "Shared utility module of date/time formatting, VND currency formatting, and numeric-string parsing helpers used throughout the UI components."
+    },
+    "file:src/db/immigrationRegistration.ts": {
+      "name": "immigrationRegistration.ts",
+      "type": "file",
+      "summary": "API client wrapper for immigration registration endpoints: list registrations, list eligible invoices, and add/remove registrations and guests."
+    },
+    "file:src/db/invoice.ts": {
+      "name": "invoice.ts",
+      "type": "file",
+      "summary": "API client wrapper for invoice CRUD and querying endpoints (create, update, delete, list by check-in date or guest name)."
+    },
+    "file:src/db/order.ts": {
+      "name": "order.ts",
+      "type": "file",
+      "summary": "API client wrapper for order lifecycle endpoints: listing, creating, confirming, serving, and rejecting orders, plus fetching linked invoices and availability."
+    },
+    "file:src/db/permission.ts": {
+      "name": "permission.ts",
+      "type": "file",
+      "summary": "Defines permission constant identifiers used for invoice deletion and assignment authority checks."
+    },
+    "file:src/App.tsx": {
+      "name": "App.tsx",
+      "type": "file",
+      "summary": "Root application component that authenticates the user, fetches the profile and app config, builds an authority-filtered navigation menu, and conditionally renders every business-domain manager screen (expenses, invoices, orders, reservations, tours, suppliers, rooms, settings, etc.) based on the active menu selection."
+    },
+    "file:src/Components/TaxPolicyManager.tsx": {
+      "name": "TaxPolicyManager.tsx",
+      "type": "file",
+      "summary": "Admin screen for managing tax policies: lists policies in order, supports creating, editing, reordering (via move up/down), and deleting through the tax policy API."
+    },
+    "file:src/Components/TourEditor.tsx": {
+      "name": "TourEditor.tsx",
+      "type": "file",
+      "summary": "Detail/edit screen for a single tour, supporting inline field editing, feature-image upload, and managing lists of time slots and price tiers before saving changes back to the tour API."
+    },
+    "file:src/Components/TourManager.tsx": {
+      "name": "TourManager.tsx",
+      "type": "file",
+      "summary": "List/management screen for tours with pagination, delete actions, and navigation into the tour editor; also defines the TourStatus enum used across tour features."
+    },
+    "file:src/Components/UserProfile.tsx": {
+      "name": "UserProfile.tsx",
+      "type": "file",
+      "summary": "User account screen showing display name, first/last name, roles, and organizations, with an inline edit mode for updating profile fields and a sign-out action."
+    },
+    "file:src/Components/Welcome.tsx": {
+      "name": "Welcome.tsx",
+      "type": "file",
+      "summary": "Simple landing/home screen shown when the user has no active menu selected, notifying the parent App of the active menu via an effect."
+    },
+    "file:src/db/profile.ts": {
+      "name": "profile.ts",
+      "type": "file",
+      "summary": "Thin API client wrapper that fetches the current user's profile from the backend profile endpoint."
+    },
+    "file:src/db/taxPolicy.ts": {
+      "name": "taxPolicy.ts",
+      "type": "file",
+      "summary": "API client wrapper exposing list, create, update, and reorder operations for tax policies, backing the TaxPolicyManager screen."
+    },
+    "file:src/db/tour-request.ts": {
+      "name": "tour-request.ts",
+      "type": "file",
+      "summary": "API client wrapper for listing and saving tour requests against the backend tour-request endpoint."
+    },
+    "file:src/db/tour.ts": {
+      "name": "tour.ts",
+      "type": "file",
+      "summary": "API client wrapper exposing list, get, save, and quantity-adjustment operations for tours, used by TourManager and TourEditor."
+    },
+    "file:src/index.tsx": {
+      "name": "index.tsx",
+      "type": "file",
+      "summary": "Application entry point that creates the React root and mounts App into the DOM, pulling in global styles from index.css."
+    },
+    "file:src/Components/Inventory.tsx": {
+      "name": "Inventory.tsx",
+      "type": "file",
+      "summary": "React component that renders the inventory/product catalog screen for the PMS, supporting listing, filtering by group or name, pagination, availability scheduling, and full product editing including image uploads via MinIO."
+    },
+    "file:src/Components/InvoiceEditor.tsx": {
+      "name": "InvoiceEditor.tsx",
+      "type": "file",
+      "summary": "Large React component providing the full invoice creation/editing workflow for the PMS -- guest details, reservation linking, room assignment, line items, payment method, and issuer selection -- backed by multiple db modules."
+    },
+    "file:src/Components/PGroupManager.tsx": {
+      "name": "PGroupManager.tsx",
+      "type": "file",
+      "summary": "React component for managing product groups (categories) in the PMS -- creating, editing, deleting, and listing the groups used to organize inventory products."
+    },
+    "file:src/Service/FileMinio.ts": {
+      "name": "FileMinio.ts",
+      "type": "file",
+      "summary": "MinIO object-storage service wrapper providing presigned URL generation and file upload helpers used for product and invoice image storage."
+    },
+    "file:src/db/inventory.ts": {
+      "name": "inventory.ts",
+      "type": "file",
+      "summary": "Data-access module wrapping the inventory REST API -- listing, filtering, and paginating product items, adjusting stock quantities, changing item status, and planning availability windows."
+    },
+    "file:src/db/pgroup.ts": {
+      "name": "pgroup.ts",
+      "type": "file",
+      "summary": "Data-access module wrapping the product-group REST API for listing, deleting, and saving product groups."
+    },
+    "file:src/db/product.ts": {
+      "name": "product.ts",
+      "type": "file",
+      "summary": "Data-access module wrapping the product REST API -- listing, searching, fetching, and saving managed product records."
+    },
+    "file:src/Components/CounterInput.tsx": {
+      "name": "CounterInput.tsx",
+      "type": "file",
+      "summary": "Generic numeric stepper input component with increment/decrement buttons, bounded by configurable min/max/step values."
+    },
+    "file:src/Components/RatePlanManager.tsx": {
+      "name": "RatePlanManager.tsx",
+      "type": "file",
+      "summary": "CRUD management screen for hotel rate plans, handling listing with pagination, room association, meal inclusion, applied date/time ranges, and create/edit/delete modals."
+    },
+    "file:src/Components/RoomManager.tsx": {
+      "name": "RoomManager.tsx",
+      "type": "file",
+      "summary": "CRUD management screen for hotel rooms, providing search/filter, pagination, and add/edit/delete modal workflows backed by the room API."
+    },
+    "file:src/db/rate_plan.ts": {
+      "name": "rate_plan.ts",
+      "type": "file",
+      "summary": "Data-access layer wrapping the rate plan REST API with list, get, save, create, and delete operations."
+    },
+    "file:src/db/room.ts": {
+      "name": "room.ts",
+      "type": "file",
+      "summary": "Data-access layer wrapping the room REST API with list, create, update, and delete operations, and defines the Room type."
+    },
+    "file:src/Components/ReservationManager.tsx": {
+      "name": "ReservationManager.tsx",
+      "type": "file",
+      "summary": "React component that displays a paginated, filterable table of hotel reservations fetched from the backend, with quick date filters and a manual sync-from-mailbox action."
+    },
+    "file:src/Components/ReservationMap.tsx": {
+      "name": "ReservationMap.tsx",
+      "type": "file",
+      "summary": "React component rendering a room-by-date occupancy grid (map view) of staying and upcoming reservations, built from room and reservation data with date-range navigation controls."
+    },
+    "file:src/db/reservation.ts": {
+      "name": "reservation.ts",
+      "type": "file",
+      "summary": "Data-access module exposing API calls for reservations: update, list latest, list staying/coming, get by id, and sync from mailbox."
+    },
+    "file:src/db/reservation_extractor.ts": {
+      "name": "reservation_extractor.ts",
+      "type": "file",
+      "summary": "Thin API wrapper that triggers backend collection/extraction of reservations for a given date range from an external mailbox/topic source."
+    },
+    "service:Dockerfile": {
+      "name": "Dockerfile",
+      "type": "service",
+      "summary": "Single-stage Docker build for the PMS React web app: copies the full source tree, installs dependencies with npm ci, runs npm run build, then starts the app via npm run start on port 3000. Numerous build ARGs inject service endpoint URLs (invoice, inventory, expense, profit, service-classification, reservation, and file-service) as runtime ENV vars."
+    },
+    "config:.dockerignore": {
+      "name": ".dockerignore",
+      "type": "config",
+      "summary": "Excludes node_modules and build directories from the Docker build context, keeping image builds fast and avoiding stale artifacts being copied into the container."
+    },
+    "pipeline:.github/workflows/nodejs.yml": {
+      "name": "nodejs.yml",
+      "type": "pipeline",
+      "summary": "GitHub Actions workflow (\"Containerize PMS\") that builds the Node.js application and publishes a multi-platform Docker image of the PMS app to Docker Hub whenever a semantic-version tag (e.g. 1.2.3) is pushed."
+    },
+    "config:.env.development": {
+      "name": ".env.development",
+      "type": "config",
+      "summary": "Development environment configuration defining local backend service endpoints (expense, invoice, reservation, profit, tax, order, room, supplier, user, immigration registration, etc.), file-storage (MinIO) credentials, and dev server settings for the PMS app, with a block of legacy staging URLs kept as comments."
+    },
+    "document:PLAN.md": {
+      "name": "PLAN.md",
+      "type": "document",
+      "summary": "Internal improvement-tracking document for the PMS project, listing completed bug fixes and refactors for order management, tour management save persistence, and dynamic room-name fetching in the reservation and invoice maps."
+    },
+    "document:README.md": {
+      "name": "README.md",
+      "type": "document",
+      "summary": "Project overview for the PMS web app describing its expense tracking, invoicing, reservation status, and profit reporting features, plus setup instructions for the required .env service-endpoint variables and how to run the dev server."
+    },
+    "document:Subscribe.txt": {
+      "name": "Subscribe.txt",
+      "type": "document",
+      "summary": "Plain-text file containing a single YouTube channel URL; unrelated to application functionality."
+    },
+    "config:package.json": {
+      "name": "package.json",
+      "type": "config",
+      "summary": "NPM manifest for the my-webpack-project PMS app, declaring React 18 + TypeScript dependencies (Firebase, Axios, Flowbite, react-router-dom, MinIO client, OIDC client, html2canvas) alongside Node.js browser polyfills, and defining react-app-rewired start/build/test/eject scripts."
+    },
+    "config:tsconfig.json": {
+      "name": "tsconfig.json",
+      "type": "config",
+      "summary": "TypeScript compiler configuration for the React app, targeting ES2016 with classic React JSX transform, CommonJS modules, strict type-checking, esModuleInterop, and forced consistent file-name casing."
+    },
+    "document:.planning/PROJECT.md": {
+      "name": "PROJECT.md",
+      "type": "document",
+      "summary": "Project charter for the PMS frontend: defines the goal of completing a modular React/TypeScript property management system for homestay/resort operators, its tech stack (React 18, TypeScript, Tailwind CSS, Flowbite, Axios), constraints around existing microservice APIs, and lessons learned from prior work on invoices, reservations, and orders."
+    },
+    "document:.planning/REQUIREMENTS.md": {
+      "name": "REQUIREMENTS.md",
+      "type": "document",
+      "summary": "Functional and non-functional requirements for the PMS improvement effort, covering order-invoice integration, tour management persistence, dynamic room maps, advanced filtering, user stories, and success criteria for verifying completion."
+    },
+    "document:.planning/ROADMAP.md": {
+      "name": "ROADMAP.md",
+      "type": "document",
+      "summary": "Phased delivery roadmap for the PMS improvement project, tracking completed phases (foundation/refactoring, config caching, feature persistence, dynamic room integration, room/invoice map optimization), the current phase (advanced UX & optimization), and future phases like a mobile companion app and reporting dashboard."
+    },
+    "document:.planning/STATE.md": {
+      "name": "STATE.md",
+      "type": "document",
+      "summary": "Living project-state log tracking the current roadmap phase, recent completed quick tasks and phase work (e.g. rate-plan menu fix, TLS config, room API refactor, ID-based room mapping), and pending tasks for the PMS project."
+    },
+    "document:.planning/codebase/ARCHITECTURE.md": {
+      "name": "ARCHITECTURE.md",
+      "type": "document",
+      "summary": "Describes the PMS-TS frontend architecture: functional React components with hooks, a Service-Repository split between UI (src/Components/) and data access (src/db/), lifted state in App.tsx with no global state library, React Router v6 routing with RBAC-driven menu filtering, OIDC/JWT-based authentication, and a Tailwind CSS + Flowbite UI layer."
+    },
+    "document:.planning/codebase/CONCERNS.md": {
+      "name": "CONCERNS.md",
+      "type": "document",
+      "summary": "Catalogs technical debt, security risks, performance bottlenecks, and missing features in pms-ts, including overuse of `any`, monolithic components like InvoiceEditor.tsx and App.tsx, hardcoded API keys and business data, fragile auth logic, and the complete absence of automated tests."
+    },
+    "document:.planning/codebase/CONVENTIONS.md": {
+      "name": "CONVENTIONS.md",
+      "type": "document",
+      "summary": "Defines pms-ts coding standards: PascalCase for components and services, mixed snake_case/kebab-case for db modules, Prettier with the Tailwind plugin, ESLint react-app rules, and architectural rules for component structure, data access via db/apis.ts, multi-tenancy via tenantId, and env-based configuration."
+    },
+    "document:.planning/codebase/INTEGRATIONS.md": {
+      "name": "INTEGRATIONS.md",
+      "type": "document",
+      "summary": "Lists external integrations used by pms-ts, including OIDC/Keycloak authentication with RBAC, a suite of Phuc Sinh Assistant backend microservices (expense, inventory, invoice, profit, reservation, order, supplier, tour), Google Gemini AI for data extraction, MinIO object storage, and Firebase/GCS cloud integrations."
+    },
+    "document:.planning/codebase/STACK.md": {
+      "name": "STACK.md",
+      "type": "document",
+      "summary": "Summarizes the pms-ts technology stack: TypeScript on React 18 with React Router v6, Tailwind CSS with Flowbite components, Axios for HTTP, Moment.js for dates, Google Generative AI, MinIO SDK, and a Webpack/react-app-rewired/Babel/PostCSS/Prettier build toolchain."
+    },
+    "document:.planning/codebase/STRUCTURE.md": {
+      "name": "STRUCTURE.md",
+      "type": "document",
+      "summary": "Maps the pms-ts directory layout, explaining the roles of src/Components/ (Manager, Editor, and Map components), src/db/ (API repositories), src/Service/ (utilities like FileMinio.ts and Utils.ts), the App.tsx/index.tsx entry points, public/ static assets, and top-level config files."
+    },
+    "document:.planning/codebase/TESTING.md": {
+      "name": "TESTING.md",
+      "type": "document",
+      "summary": "Defines the intended testing strategy for pms-ts using Jest and React Testing Library, covering unit tests for src/Service/ and src/db/, component tests for src/Components/, the absence of E2E tooling, mocking guidance for API calls, and coverage goals for critical domain logic."
+    },
+    "document:.planning/phases/04-dynamic-room-integration/01-RESEARCH.md": {
+      "name": "01-RESEARCH.md",
+      "type": "document",
+      "summary": "Research notes analyzing the redundant `roomIcons` mapping in src/db/room.tsx, tracing its usage to InvoiceEditor.tsx, and recommending removal in favor of a single standardized icon since other room components (RoomManager, ReservationMap, InvoiceMap) already avoid it."
+    },
+    "document:.planning/phases/04-dynamic-room-integration/04-PLAN.md": {
+      "name": "04-PLAN.md",
+      "type": "document",
+      "summary": "Implementation plan for Phase 4 (Dynamic Room Integration refinement), detailing tasks to remove the static roomIcons mapping, standardize the room selection UI in InvoiceEditor with a single icon, finalize elimination of static room data, and verify the build with tsc."
+    },
+    "document:.planning/phases/04-dynamic-room-integration/04-SUMMARY.md": {
+      "name": "04-SUMMARY.md",
+      "type": "document",
+      "summary": "Completion summary for Phase 4, confirming removal of the roomIcons mapping and src/db/staticdata.ts, standardization of InvoiceEditor's room selection icons, and full transition to dynamic backend-driven room data via the listRoom API."
+    },
+    "document:.planning/quick/configure-tls-port.md": {
+      "name": "configure-tls-port.md",
+      "type": "document",
+      "summary": "Quick-fix note describing how to enable HTTPS on port 3001 for local development by adding HTTPS=true to .env.development alongside the existing PORT=3001 setting."
+    },
+    "document:.planning/quick/fix-menu-path-error.md": {
+      "name": "fix-menu-path-error.md",
+      "type": "document",
+      "summary": "Quick-fix note for a startup TypeError in App.tsx caused by a mismatch between the 'rate-plan' key in menuOrder and the 'ratePlan' key in the menus object, resolved by aligning the keys and adding a safety filter in filterMenus."
+    },
+    "document:.planning/quick/fix-rate-plan-visibility.md": {
+      "name": "fix-rate-plan-visibility.md",
+      "type": "document",
+      "summary": "Quick-fix note explaining why the Rate Plan menu item was hidden due to a camelCase/kebab-case mismatch between the 'ratePlan' menu key and the backend-provided 'rate-plan' authority string, fixed by standardizing on 'rate-plan' throughout App.tsx."
+    },
+    "document:.planning/quick/fix-room-preselection.md": {
+      "name": "fix-room-preselection.md",
+      "type": "document",
+      "summary": "Quick-fix note for InvoiceEditor's chooseRoom function, which failed to pre-select rooms in the modal because it matched invoice.rooms values against room.name instead of the correct room.internalName field."
+    },
+    "document:.planning/quick/rename-room-to-ts.md": {
+      "name": "rename-room-to-ts.md",
+      "type": "document",
+      "summary": "Quick-fix note documenting the rename of src/db/room.tsx to src/db/room.ts, since the file no longer contains JSX and a .ts extension better reflects its pure TypeScript content."
+    },
+    "file:public/index.html": {
+      "name": "index.html",
+      "type": "file",
+      "summary": "HTML shell for the Create React App build that provides the #root div the React application mounts into, and wires up the favicon, viewport meta tags, and PWA manifest link."
+    },
+    "config:public/manifest.json": {
+      "name": "manifest.json",
+      "type": "config",
+      "summary": "Progressive Web App manifest defining the PMS (Phuc Sinh Home) app's short name, icons, start URL, and standalone display mode used when the app is installed on a mobile or desktop device."
+    },
+    "config:public/robots.txt": {
+      "name": "robots.txt",
+      "type": "config",
+      "summary": "Robots exclusion file that allows all web crawlers unrestricted access to the site, with no disallowed paths configured."
+    },
+    "file:.babelrc": {
+      "name": ".babelrc",
+      "type": "file",
+      "summary": "Babel compiler configuration enabling dynamic import syntax and preset-env with ES module transpilation disabled so webpack can handle module bundling itself."
+    },
+    "config:.bg-shell/manifest.json": {
+      "name": "manifest.json",
+      "type": "config",
+      "summary": "Empty manifest file for the .bg-shell tooling directory, currently containing no registered entries."
+    },
+    "document:.github/copilot-instructions.md": {
+      "name": "copilot-instructions.md",
+      "type": "document",
+      "summary": "GitHub Copilot custom instructions directing the AI assistant to invoke Azure best-practice tooling when generating Azure-related code or running Azure commands."
+    },
+    "document:.planning/phases/01-foundation-refactoring/01-PLAN.md": {
+      "name": "01-PLAN.md",
+      "type": "document",
+      "summary": "Implementation plan for Phase 1 covering PaymentMethod type refactoring into configs.ts, dynamic AppConfig distribution to InvoiceEditor, API factory consolidation in apis.ts, and verification of room/map data."
+    },
+    "document:.planning/phases/01-foundation-refactoring/01-RESEARCH.md": {
+      "name": "01-RESEARCH.md",
+      "type": "document",
+      "summary": "Research notes for Phase 1 documenting the standard stack (Axios, flowbite-react), the configuration-provider and API-factory architecture patterns, and pitfalls to avoid when refactoring payment methods and config loading."
+    },
+    "document:.planning/phases/02-configuration-caching-resilience/02-PLAN.md": {
+      "name": "02-PLAN.md",
+      "type": "document",
+      "summary": "Implementation plan for Phase 2 adding a cache-first localStorage strategy and a 3-attempt async retry mechanism to appConfigs, plus App.tsx loading/error state handling for offline resilience."
+    },
+    "document:.planning/phases/02-configuration-caching-resilience/02-RESEARCH.md": {
+      "name": "02-RESEARCH.md",
+      "type": "document",
+      "summary": "Research notes for Phase 2 detailing the cache-first-with-background-refresh pattern, idempotent background refresh, and asynchronous retry mechanism for loading app.json configuration, with sample retry-wrapper and appConfigs code."
+    },
+    "document:.planning/phases/04-CONTEXT.md": {
+      "name": "04-CONTEXT.md",
+      "type": "document",
+      "summary": "Context notes for Phase 4 defining the scope of dynamic room integration, targeting room.ts and invoice.ts to remove hardcoded room identifiers, with UX enhancements deferred to Phase 5."
+    },
+    "document:.planning/phases/06-room-invoice-map-optimization/06-PLAN.md": {
+      "name": "06-PLAN.md",
+      "type": "document",
+      "summary": "Implementation plan for Phase 6 refactoring RoomManager and InvoiceMap to use room IDs for consistent mapping, optimizing component lifecycle, and synchronizing UI between the two map views."
+    },
+    "document:.planning/phases/06-room-invoice-map-optimization/06-RESEARCH.md": {
+      "name": "06-RESEARCH.md",
+      "type": "document",
+      "summary": "Research notes for Phase 6 analyzing data inconsistencies between RoomManager and InvoiceMap (name-based vs ID-based mapping) and proposing an ID-based, static-grid rendering approach."
+    },
+    "document:.planning/todos/01-bugs/fix-the-compile-error.md": {
+      "name": "fix-the-compile-error.md",
+      "type": "document",
+      "summary": "Completed bug-fix todo tracking the resolution of TypeScript compile errors introduced during Phase 4, primarily in InvoiceEditor.tsx."
+    },
+    "file:.ua/.understandignore": {
+      "name": ".understandignore",
+      "type": "file",
+      "summary": "Ignore-pattern configuration for the Understand-Anything analysis tool, listing commented-out gitignore-style and per-language test-file exclusion patterns available for activation."
+    },
+    "file:config-overrides.js": {
+      "name": "config-overrides.js",
+      "type": "file",
+      "summary": "react-app-rewired override that patches webpack's module resolution fallbacks for Node core modules (crypto, stream, buffer, etc.) and injects Buffer/process polyfills so the browser build works without Node APIs."
+    },
+    "file:public/_redirects": {
+      "name": "_redirects",
+      "type": "file",
+      "summary": "Static-host redirect rule rewriting all paths to index.html with a 200 status, enabling client-side routing for the single-page app on platforms like Netlify."
+    },
+    "file:src/App.css": {
+      "name": "App.css",
+      "type": "file",
+      "summary": "Global stylesheet for the App component defining the card container flex layout, centered heading alignment, and a pointer-events override for a right-icon test element."
+    },
+    "file:src/db/gcs.ts": {
+      "name": "gcs.ts",
+      "type": "file",
+      "summary": "Google Cloud Storage upload client providing putObject and putBlob helpers that POST files/blobs with bucket and event metadata to the GCS-syncer microservice endpoint via FormData."
+    },
+    "file:src/index.css": {
+      "name": "index.css",
+      "type": "file",
+      "summary": "Root application stylesheet applying Tailwind's base/components/utilities layers, the global body font stack, code font family, and a Telegram viewport-height utility class."
+    },
+    "file:tailwind.config.js": {
+      "name": "tailwind.config.js",
+      "type": "file",
+      "summary": "Tailwind CSS configuration scanning the src directory and Flowbite/tailwind-datepicker packages for class usage, and registering the Flowbite plugin for pre-built UI components."
+    },
+    "file:webpack.config.js": {
+      "name": "webpack.config.js",
+      "type": "file",
+      "summary": "Base webpack configuration (generated by webpack-cli) defining src/index.tsx as the app entry point, the dist output directory, asset-loading rules for fonts/images, and production/development mode switching."
+    }
+  },
+  "totalNodes": 103,
+  "totalEdges": 261
+}

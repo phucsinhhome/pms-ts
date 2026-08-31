@@ -1,0 +1,30 @@
+{
+  "nodes": [
+    {
+      "id": "pipeline:.github/workflows/nodejs.yml",
+      "type": "pipeline",
+      "name": "nodejs.yml",
+      "filePath": ".github/workflows/nodejs.yml",
+      "summary": "GitHub Actions workflow (\"Containerize PMS\") that builds the Node.js application and publishes a multi-platform Docker image of the PMS app to Docker Hub whenever a semantic-version tag (e.g. 1.2.3) is pushed.",
+      "tags": ["ci-cd", "deployment", "containerization", "docker", "github-actions"],
+      "complexity": "simple",
+      "languageNotes": "Single-job workflow triggered on tag push; installs dependencies with `npm ci`, runs `npm run build --if-present`, sets up Docker Buildx, logs into Docker Hub, derives image tags/labels via docker/metadata-action, and builds+pushes a multi-arch image (linux/amd64, linux/arm64/v8) for digitalsaleron/pms using pinned third-party action SHAs."
+    }
+  ],
+  "edges": [
+    {
+      "source": "pipeline:.github/workflows/nodejs.yml",
+      "target": "service:Dockerfile",
+      "type": "triggers",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "pipeline:.github/workflows/nodejs.yml",
+      "target": "config:package.json",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    }
+  ]
+}

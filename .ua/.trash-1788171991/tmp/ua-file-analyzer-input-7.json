@@ -1,0 +1,11 @@
+{
+  "projectRoot": "C:/apps/ps/pms-ts",
+  "batchFiles": [
+    {"path": ".dockerignore", "language": "unknown", "sizeLines": 1, "fileCategory": "infra"},
+    {"path": "Dockerfile", "language": "dockerfile", "sizeLines": 48, "fileCategory": "infra"}
+  ],
+  "batchImportData": {
+    ".dockerignore": [],
+    "Dockerfile": []
+  }
+}

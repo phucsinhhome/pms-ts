@@ -1,0 +1,2926 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 13,
+  "filesSkipped": [],
+  "analysisOutcomes": {
+    "structure": {
+      "succeeded": 13,
+      "failed": 0
+    },
+    "callGraph": {
+      "succeeded": 13,
+      "failed": 0,
+      "skipped": 0
+    }
+  },
+  "results": [
+    {
+      "path": "src/Components/ExpenseManager.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 905,
+      "nonEmptyLines": 858,
+      "exports": [
+        {
+          "name": "ExpenseManager",
+          "line": 81,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "handlePaginationClick",
+          "callee": "console.log",
+          "lineNumber": 109
+        },
+        {
+          "caller": "handlePaginationClick",
+          "callee": "setPagination",
+          "lineNumber": 110
+        },
+        {
+          "caller": "fetchExpenses",
+          "callee": "formatISODate",
+          "lineNumber": 123
+        },
+        {
+          "caller": "fetchExpenses",
+          "callee": "listExpenseByDate",
+          "lineNumber": 127
+        },
+        {
+          "caller": "fetchExpenses",
+          "callee": "listExpenseByExpenserAndDate",
+          "lineNumber": 133
+        },
+        {
+          "caller": "fetchExpenses",
+          "callee": "props.handleUnauthorized",
+          "lineNumber": 141
+        },
+        {
+          "caller": "fetchExpenses",
+          "callee": "console.warn",
+          "lineNumber": 145
+        },
+        {
+          "caller": "fetchExpenses",
+          "callee": "console.info",
+          "lineNumber": 149
+        },
+        {
+          "caller": "fetchExpenses",
+          "callee": "setExpenses",
+          "lineNumber": 151
+        },
+        {
+          "caller": "fetchExpenses",
+          "callee": "setPagination",
+          "lineNumber": 152
+        },
+        {
+          "caller": "fetchExpenses",
+          "callee": "console.error",
+          "lineNumber": 159
+        },
+        {
+          "caller": "fetchExpenses",
+          "callee": "alert",
+          "lineNumber": 161
+        },
+        {
+          "caller": "handleDeleteExpense",
+          "callee": "console.warn",
+          "lineNumber": 190
+        },
+        {
+          "caller": "handleDeleteExpense",
+          "callee": "deleteExpense(exp).then",
+          "lineNumber": 191
+        },
+        {
+          "caller": "handleDeleteExpense",
+          "callee": "deleteExpense",
+          "lineNumber": 191
+        },
+        {
+          "caller": "handleDeleteExpense",
+          "callee": "console.log",
+          "lineNumber": 193
+        },
+        {
+          "caller": "handleDeleteExpense",
+          "callee": "fetchExpenses",
+          "lineNumber": 194
+        },
+        {
+          "caller": "handleDeleteExpense",
+          "callee": "console.error",
+          "lineNumber": 198
+        },
+        {
+          "caller": "handleDeleteExpense",
+          "callee": "alert",
+          "lineNumber": 200
+        },
+        {
+          "caller": "askForDelExpenseConfirmation",
+          "callee": "setDeletingExpense",
+          "lineNumber": 207
+        },
+        {
+          "caller": "askForDelExpenseConfirmation",
+          "callee": "setOpenDelExpenseModal",
+          "lineNumber": 208
+        },
+        {
+          "caller": "cancelDelExpense",
+          "callee": "setOpenDelExpenseModal",
+          "lineNumber": 212
+        },
+        {
+          "caller": "cancelDelExpense",
+          "callee": "setDeletingExpense",
+          "lineNumber": 213
+        },
+        {
+          "caller": "confirmDelExpense",
+          "callee": "handleDeleteExpense",
+          "lineNumber": 221
+        },
+        {
+          "caller": "confirmDelExpense",
+          "callee": "console.error",
+          "lineNumber": 223
+        },
+        {
+          "caller": "confirmDelExpense",
+          "callee": "setOpenDelExpenseModal",
+          "lineNumber": 225
+        },
+        {
+          "caller": "confirmDelExpense",
+          "callee": "setDeletingExpense",
+          "lineNumber": 226
+        },
+        {
+          "caller": "editExpense",
+          "callee": "formatMoneyAmount",
+          "lineNumber": 232
+        },
+        {
+          "caller": "editExpense",
+          "callee": "String",
+          "lineNumber": 232
+        },
+        {
+          "caller": "editExpense",
+          "callee": "setEditingExpense",
+          "lineNumber": 239
+        },
+        {
+          "caller": "editExpense",
+          "callee": "setOpenEditingExpenseModal",
+          "lineNumber": 240
+        },
+        {
+          "caller": "cancelEditingExpense",
+          "callee": "setEditingExpense",
+          "lineNumber": 244
+        },
+        {
+          "caller": "cancelEditingExpense",
+          "callee": "setOpenEditingExpenseModal",
+          "lineNumber": 245
+        },
+        {
+          "caller": "cancelEditingExpense",
+          "callee": "fetchExpenses",
+          "lineNumber": 246
+        },
+        {
+          "caller": "changeItemMessage",
+          "callee": "setEditingExpense",
+          "lineNumber": 255
+        },
+        {
+          "caller": "changeItemName",
+          "callee": "setEditingExpense",
+          "lineNumber": 267
+        },
+        {
+          "caller": "emptyItemName",
+          "callee": "setEditingExpense",
+          "lineNumber": 278
+        },
+        {
+          "caller": "changeService",
+          "callee": "setEditingExpense",
+          "lineNumber": 290
+        },
+        {
+          "caller": "blurItemName",
+          "callee": "setClassifyingExp",
+          "lineNumber": 299
+        },
+        {
+          "caller": "blurItemName",
+          "callee": "console.log",
+          "lineNumber": 300
+        },
+        {
+          "caller": "blurItemName",
+          "callee": "classifyServiceByItemName",
+          "lineNumber": 301
+        },
+        {
+          "caller": "blurItemName",
+          "callee": "console.error",
+          "lineNumber": 303
+        },
+        {
+          "caller": "blurItemName",
+          "callee": "setClassifyingExp",
+          "lineNumber": 304
+        },
+        {
+          "caller": "blurItemName",
+          "callee": "setEditingExpense",
+          "lineNumber": 314
+        },
+        {
+          "caller": "blurItemName",
+          "callee": "setClassifyingExp",
+          "lineNumber": 315
+        },
+        {
+          "caller": "blurItemName",
+          "callee": "console.error",
+          "lineNumber": 317
+        },
+        {
+          "caller": "blurItemName",
+          "callee": "alert",
+          "lineNumber": 319
+        },
+        {
+          "caller": "blurItemName",
+          "callee": "setClassifyingExp",
+          "lineNumber": 322
+        },
+        {
+          "caller": "changeUnitPrice",
+          "callee": "formatMoneyAmount",
+          "lineNumber": 328
+        },
+        {
+          "caller": "changeUnitPrice",
+          "callee": "setEditingExpense",
+          "lineNumber": 338
+        },
+        {
+          "caller": "changeQuantity",
+          "callee": "setEditingExpense",
+          "lineNumber": 351
+        },
+        {
+          "caller": "generatePopupExpense",
+          "callee": "console.info",
+          "lineNumber": 356
+        },
+        {
+          "caller": "generatePopupExpense",
+          "callee": "console.warn",
+          "lineNumber": 358
+        },
+        {
+          "caller": "generatePopupExpense",
+          "callee": "setGeneratingExp",
+          "lineNumber": 363
+        },
+        {
+          "caller": "generatePopupExpense",
+          "callee": "generateExpense",
+          "lineNumber": 365
+        },
+        {
+          "caller": "generatePopupExpense",
+          "callee": "console.warn",
+          "lineNumber": 367
+        },
+        {
+          "caller": "generatePopupExpense",
+          "callee": "formatMoneyAmount",
+          "lineNumber": 372
+        },
+        {
+          "caller": "generatePopupExpense",
+          "callee": "String",
+          "lineNumber": 372
+        },
+        {
+          "caller": "generatePopupExpense",
+          "callee": "setEditingExpense",
+          "lineNumber": 379
+        },
+        {
+          "caller": "generatePopupExpense",
+          "callee": "setGeneratingExp",
+          "lineNumber": 381
+        },
+        {
+          "caller": "generateExpense",
+          "callee": "generate",
+          "lineNumber": 387
+        },
+        {
+          "caller": "generateExpense",
+          "callee": "console.warn",
+          "lineNumber": 389
+        },
+        {
+          "caller": "generateExpense",
+          "callee": "formatISODateTime",
+          "lineNumber": 392
+        },
+        {
+          "caller": "generateExpense",
+          "callee": "formatISODateTime",
+          "lineNumber": 402
+        },
+        {
+          "caller": "generateExpense",
+          "callee": "console.error",
+          "lineNumber": 407
+        },
+        {
+          "caller": "generateExpense",
+          "callee": "alert",
+          "lineNumber": 409
+        },
+        {
+          "caller": "generateExpense",
+          "callee": "formatISODateTime",
+          "lineNumber": 413
+        },
+        {
+          "caller": "processSaveExpense",
+          "callee": "console.warn",
+          "lineNumber": 423
+        },
+        {
+          "caller": "processSaveExpense",
+          "callee": "Promise.resolve",
+          "lineNumber": 424
+        },
+        {
+          "caller": "processSaveExpense",
+          "callee": "newExpId",
+          "lineNumber": 439
+        },
+        {
+          "caller": "processSaveExpense",
+          "callee": "console.info",
+          "lineNumber": 440
+        },
+        {
+          "caller": "processSaveExpense",
+          "callee": "formatISODateTime",
+          "lineNumber": 443
+        },
+        {
+          "caller": "processSaveExpense",
+          "callee": "console.info",
+          "lineNumber": 445
+        },
+        {
+          "caller": "processSaveExpense",
+          "callee": "console.info",
+          "lineNumber": 450
+        },
+        {
+          "caller": "processSaveExpense",
+          "callee": "console.info",
+          "lineNumber": 452
+        },
+        {
+          "caller": "processSaveExpense",
+          "callee": "saveExpense(exp).then",
+          "lineNumber": 453
+        },
+        {
+          "caller": "processSaveExpense",
+          "callee": "saveExpense",
+          "lineNumber": 453
+        },
+        {
+          "caller": "processSaveExpense",
+          "callee": "console.error",
+          "lineNumber": 455
+        },
+        {
+          "caller": "processSaveExpense",
+          "callee": "alert",
+          "lineNumber": 457
+        },
+        {
+          "caller": "processSaveExpense",
+          "callee": "Promise.resolve",
+          "lineNumber": 459
+        },
+        {
+          "caller": "handleSaveAndCompleteExpense",
+          "callee": "processSaveExpense().then",
+          "lineNumber": 464
+        },
+        {
+          "caller": "handleSaveAndCompleteExpense",
+          "callee": "processSaveExpense",
+          "lineNumber": 464
+        },
+        {
+          "caller": "handleSaveAndCompleteExpense",
+          "callee": "cancelEditingExpense",
+          "lineNumber": 466
+        },
+        {
+          "caller": "handleSaveAndCompleteExpense",
+          "callee": "console.error",
+          "lineNumber": 468
+        },
+        {
+          "caller": "handleSaveAndContinueExpense",
+          "callee": "processSaveExpense().then",
+          "lineNumber": 474
+        },
+        {
+          "caller": "handleSaveAndContinueExpense",
+          "callee": "processSaveExpense",
+          "lineNumber": 474
+        },
+        {
+          "caller": "handleSaveAndContinueExpense",
+          "callee": "setEditingExpense",
+          "lineNumber": 476
+        },
+        {
+          "caller": "handleSaveAndContinueExpense",
+          "callee": "expMsgRef.current.focus",
+          "lineNumber": 480
+        },
+        {
+          "caller": "handleSaveAndContinueExpense",
+          "callee": "console.error",
+          "lineNumber": 482
+        },
+        {
+          "caller": "chooseExpenser",
+          "callee": "setEditingExpense",
+          "lineNumber": 488
+        },
+        {
+          "caller": "chooseExpenser",
+          "callee": "listUsers",
+          "lineNumber": 489
+        },
+        {
+          "caller": "chooseExpenser",
+          "callee": "setUsers",
+          "lineNumber": 491
+        },
+        {
+          "caller": "chooseExpenser",
+          "callee": "setOpenUsersModal",
+          "lineNumber": 492
+        },
+        {
+          "caller": "cancelSelectUser",
+          "callee": "setOpenUsersModal",
+          "lineNumber": 497
+        },
+        {
+          "caller": "changeIssuer",
+          "callee": "console.warn",
+          "lineNumber": 502
+        },
+        {
+          "caller": "changeIssuer",
+          "callee": "assignExpense",
+          "lineNumber": 507
+        },
+        {
+          "caller": "changeIssuer",
+          "callee": "props.handleUnauthorized",
+          "lineNumber": 509
+        },
+        {
+          "caller": "changeIssuer",
+          "callee": "alert",
+          "lineNumber": 512
+        },
+        {
+          "caller": "changeIssuer",
+          "callee": "console.log",
+          "lineNumber": 515
+        },
+        {
+          "caller": "changeIssuer",
+          "callee": "fetchExpenses",
+          "lineNumber": 520
+        },
+        {
+          "caller": "changeIssuer",
+          "callee": "console.error",
+          "lineNumber": 523
+        },
+        {
+          "caller": "changeIssuer",
+          "callee": "setOpenUsersModal",
+          "lineNumber": 525
+        }
+      ],
+      "metrics": {
+        "importCount": 6,
+        "exportCount": 1,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/Components/Settings.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 247,
+      "nonEmptyLines": 224,
+      "functions": [
+        {
+          "name": "Settings",
+          "startLine": 20,
+          "endLine": 247,
+          "params": [
+            "props"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "Settings",
+          "line": 20,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "Settings",
+          "callee": "useState",
+          "lineNumber": 22
+        },
+        {
+          "caller": "Settings",
+          "callee": "formatDatePartition",
+          "lineNumber": 22
+        },
+        {
+          "caller": "Settings",
+          "callee": "useState",
+          "lineNumber": 23
+        },
+        {
+          "caller": "Settings",
+          "callee": "useState",
+          "lineNumber": 26
+        },
+        {
+          "caller": "Settings",
+          "callee": "useState",
+          "lineNumber": 27
+        },
+        {
+          "caller": "Settings",
+          "callee": "useState",
+          "lineNumber": 28
+        },
+        {
+          "caller": "Settings",
+          "callee": "useState",
+          "lineNumber": 29
+        },
+        {
+          "caller": "fetchInventoryConfigs",
+          "callee": "getConfigs(\"inventory\")\r\n      .then((rsp) => {\r\n        if (rsp.status === 200) {\r\n          return rsp.data;\r\n        }\r\n        return null;\r\n      }).then((data: any) => {\r\n        setInventoryConfigs(data)\r\n      }).catch",
+          "lineNumber": 32
+        },
+        {
+          "caller": "fetchInventoryConfigs",
+          "callee": "getConfigs(\"inventory\")\r\n      .then((rsp) => {\r\n        if (rsp.status === 200) {\r\n          return rsp.data;\r\n        }\r\n        return null;\r\n      }).then",
+          "lineNumber": 32
+        },
+        {
+          "caller": "fetchInventoryConfigs",
+          "callee": "getConfigs(\"inventory\")\r\n      .then",
+          "lineNumber": 32
+        },
+        {
+          "caller": "fetchInventoryConfigs",
+          "callee": "getConfigs",
+          "lineNumber": 32
+        },
+        {
+          "caller": "fetchInventoryConfigs",
+          "callee": "setInventoryConfigs",
+          "lineNumber": 39
+        },
+        {
+          "caller": "fetchInventoryConfigs",
+          "callee": "console.error",
+          "lineNumber": 41
+        },
+        {
+          "caller": "Settings",
+          "callee": "useEffect",
+          "lineNumber": 45
+        },
+        {
+          "caller": "Settings",
+          "callee": "props.activeMenu",
+          "lineNumber": 46
+        },
+        {
+          "caller": "Settings",
+          "callee": "fetchInventoryConfigs",
+          "lineNumber": 47
+        },
+        {
+          "caller": "changeAutoUpdateAvailability",
+          "callee": "setAutoUpdateAvailability(enabled)\r\n      .then((rsp) => {\r\n        if (rsp.status === 200) {\r\n          console.info(\"Change auto update availability to %s successfully\", enabled)\r\n          setInventoryConfigs(rsp.data)\r\n        }\r\n      })\r\n      .catch",
+          "lineNumber": 54
+        },
+        {
+          "caller": "changeAutoUpdateAvailability",
+          "callee": "setAutoUpdateAvailability(enabled)\r\n      .then",
+          "lineNumber": 54
+        },
+        {
+          "caller": "changeAutoUpdateAvailability",
+          "callee": "setAutoUpdateAvailability",
+          "lineNumber": 54
+        },
+        {
+          "caller": "changeAutoUpdateAvailability",
+          "callee": "console.info",
+          "lineNumber": 57
+        },
+        {
+          "caller": "changeAutoUpdateAvailability",
+          "callee": "setInventoryConfigs",
+          "lineNumber": 58
+        },
+        {
+          "caller": "changeAutoUpdateAvailability",
+          "callee": "console.error",
+          "lineNumber": 62
+        },
+        {
+          "caller": "syncStatus",
+          "callee": "props.changeSyncing",
+          "lineNumber": 68
+        },
+        {
+          "caller": "syncStatus",
+          "callee": "console.info",
+          "lineNumber": 69
+        },
+        {
+          "caller": "syncStatus",
+          "callee": "syncStatusOfMonth(datePartition)\r\n      .then((rsp) => {\r\n        if (rsp.status === 200) {\r\n          console.info(\"Sync status of %s successfully\", datePartition)\r\n        }\r\n        console.log(rsp)\r\n      }).catch((e: any) => {\r\n        console.error(e)\r\n      }).finally",
+          "lineNumber": 70
+        },
+        {
+          "caller": "syncStatus",
+          "callee": "syncStatusOfMonth(datePartition)\r\n      .then((rsp) => {\r\n        if (rsp.status === 200) {\r\n          console.info(\"Sync status of %s successfully\", datePartition)\r\n        }\r\n        console.log(rsp)\r\n      }).catch",
+          "lineNumber": 70
+        },
+        {
+          "caller": "syncStatus",
+          "callee": "syncStatusOfMonth(datePartition)\r\n      .then",
+          "lineNumber": 70
+        },
+        {
+          "caller": "syncStatus",
+          "callee": "syncStatusOfMonth",
+          "lineNumber": 70
+        },
+        {
+          "caller": "syncStatus",
+          "callee": "console.info",
+          "lineNumber": 73
+        },
+        {
+          "caller": "syncStatus",
+          "callee": "console.log",
+          "lineNumber": 75
+        },
+        {
+          "caller": "syncStatus",
+          "callee": "console.error",
+          "lineNumber": 77
+        },
+        {
+          "caller": "syncStatus",
+          "callee": "props.changeSyncing",
+          "lineNumber": 79
+        },
+        {
+          "caller": "handleGoogleLogin",
+          "callee": "console.info",
+          "lineNumber": 84
+        },
+        {
+          "caller": "syncReservation",
+          "callee": "props.changeResSyncing",
+          "lineNumber": 92
+        },
+        {
+          "caller": "syncReservation",
+          "callee": "console.info",
+          "lineNumber": 93
+        },
+        {
+          "caller": "syncReservation",
+          "callee": "syncReservationFromMailbox",
+          "lineNumber": 94
+        },
+        {
+          "caller": "syncReservation",
+          "callee": "console.info",
+          "lineNumber": 96
+        },
+        {
+          "caller": "syncReservation",
+          "callee": "console.error",
+          "lineNumber": 99
+        },
+        {
+          "caller": "syncReservation",
+          "callee": "props.changeResSyncing",
+          "lineNumber": 101
+        },
+        {
+          "caller": "changePartition",
+          "callee": "setDatePartition",
+          "lineNumber": 107
+        },
+        {
+          "caller": "handleBotIdChange",
+          "callee": "setBotId",
+          "lineNumber": 112
+        },
+        {
+          "caller": "handleBotTokenChange",
+          "callee": "setBotToken",
+          "lineNumber": 116
+        },
+        {
+          "caller": "handleRegisterBot",
+          "callee": "e.preventDefault",
+          "lineNumber": 120
+        },
+        {
+          "caller": "handleRegisterBot",
+          "callee": "alert",
+          "lineNumber": 122
+        },
+        {
+          "caller": "handleRegisterBot",
+          "callee": "setIsRegisteringBot",
+          "lineNumber": 126
+        },
+        {
+          "caller": "handleRegisterBot",
+          "callee": "registerBot",
+          "lineNumber": 128
+        },
+        {
+          "caller": "handleRegisterBot",
+          "callee": "alert",
+          "lineNumber": 129
+        },
+        {
+          "caller": "handleRegisterBot",
+          "callee": "setBotId",
+          "lineNumber": 130
+        },
+        {
+          "caller": "handleRegisterBot",
+          "callee": "setBotToken",
+          "lineNumber": 131
+        },
+        {
+          "caller": "handleRegisterBot",
+          "callee": "setIsBotModalOpen",
+          "lineNumber": 132
+        },
+        {
+          "caller": "handleRegisterBot",
+          "callee": "console.error",
+          "lineNumber": 134
+        },
+        {
+          "caller": "handleRegisterBot",
+          "callee": "alert",
+          "lineNumber": 136
+        },
+        {
+          "caller": "handleRegisterBot",
+          "callee": "setIsRegisteringBot",
+          "lineNumber": 138
+        },
+        {
+          "caller": "Settings",
+          "callee": "syncStatus",
+          "lineNumber": 162
+        },
+        {
+          "caller": "Settings",
+          "callee": "syncReservation",
+          "lineNumber": 172
+        },
+        {
+          "caller": "Settings",
+          "callee": "setIsBotModalOpen",
+          "lineNumber": 196
+        },
+        {
+          "caller": "Settings",
+          "callee": "setIsBotModalOpen",
+          "lineNumber": 202
+        }
+      ],
+      "metrics": {
+        "importCount": 6,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/Components/SupplierManager.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 908,
+      "nonEmptyLines": 847,
+      "functions": [
+        {
+          "name": "SupplierManager",
+          "startLine": 124,
+          "endLine": 908,
+          "params": [
+            "props"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "SInvoiceStatus",
+          "line": 15,
+          "isDefault": false
+        },
+        {
+          "name": "SupplierManager",
+          "line": 124,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "SupplierManager",
+          "callee": "useState",
+          "lineNumber": 125
+        },
+        {
+          "caller": "SupplierManager",
+          "callee": "useState",
+          "lineNumber": 128
+        },
+        {
+          "caller": "SupplierManager",
+          "callee": "useState",
+          "lineNumber": 129
+        },
+        {
+          "caller": "SupplierManager",
+          "callee": "useState",
+          "lineNumber": 131
+        },
+        {
+          "caller": "SupplierManager",
+          "callee": "useState",
+          "lineNumber": 132
+        },
+        {
+          "caller": "SupplierManager",
+          "callee": "useState",
+          "lineNumber": 134
+        },
+        {
+          "caller": "SupplierManager",
+          "callee": "useState",
+          "lineNumber": 135
+        },
+        {
+          "caller": "SupplierManager",
+          "callee": "useState",
+          "lineNumber": 138
+        },
+        {
+          "caller": "SupplierManager",
+          "callee": "useState",
+          "lineNumber": 140
+        },
+        {
+          "caller": "SupplierManager",
+          "callee": "useState",
+          "lineNumber": 142
+        },
+        {
+          "caller": "handlePaginationClick",
+          "callee": "console.log",
+          "lineNumber": 150
+        },
+        {
+          "caller": "handlePaginationClick",
+          "callee": "setPagination",
+          "lineNumber": 152
+        },
+        {
+          "caller": "SupplierManager",
+          "callee": "useEffect",
+          "lineNumber": 158
+        },
+        {
+          "caller": "SupplierManager",
+          "callee": "fetchInvoices",
+          "lineNumber": 159
+        },
+        {
+          "caller": "SupplierManager",
+          "callee": "props.activeMenu",
+          "lineNumber": 160
+        },
+        {
+          "caller": "SupplierManager",
+          "callee": "useEffect",
+          "lineNumber": 164
+        },
+        {
+          "caller": "SupplierManager",
+          "callee": "fetchInvoices",
+          "lineNumber": 168
+        },
+        {
+          "caller": "SupplierManager",
+          "callee": "useEffect",
+          "lineNumber": 172
+        },
+        {
+          "caller": "SupplierManager",
+          "callee": "fetchInvoices",
+          "lineNumber": 176
+        },
+        {
+          "caller": "fetchInvoices",
+          "callee": "createdTime.setDate",
+          "lineNumber": 184
+        },
+        {
+          "caller": "fetchInvoices",
+          "callee": "createdTime.getDate",
+          "lineNumber": 184
+        },
+        {
+          "caller": "fetchInvoices",
+          "callee": "createdTime.setHours",
+          "lineNumber": 185
+        },
+        {
+          "caller": "fetchInvoices",
+          "callee": "formatISODateTime",
+          "lineNumber": 186
+        },
+        {
+          "caller": "fetchInvoices",
+          "callee": "listSupplierInvoicesByTimeAndStatus(fromTime, statuses, pagination.pageNumber, pagination.pageSize)\r\n          .then(rsp => {\r\n            if (rsp.status === 200) {\r\n              const data = rsp.data;\r\n              setInvoices(data.content)\r\n              if (data.totalPages !== pagination.totalPages) {\r\n                setPagination({\r\n                  ...pagination,\r\n                  totalPages: data.totalPages\r\n                })\r\n              }\r\n            } else {\r\n              setInvoices([]);\r\n            }\r\n          })\r\n          .catch",
+          "lineNumber": 189
+        },
+        {
+          "caller": "fetchInvoices",
+          "callee": "listSupplierInvoicesByTimeAndStatus(fromTime, statuses, pagination.pageNumber, pagination.pageSize)\r\n          .then",
+          "lineNumber": 189
+        },
+        {
+          "caller": "fetchInvoices",
+          "callee": "listSupplierInvoicesByTimeAndStatus",
+          "lineNumber": 189
+        },
+        {
+          "caller": "fetchInvoices",
+          "callee": "setInvoices",
+          "lineNumber": 193
+        },
+        {
+          "caller": "fetchInvoices",
+          "callee": "setPagination",
+          "lineNumber": 195
+        },
+        {
+          "caller": "fetchInvoices",
+          "callee": "setInvoices",
+          "lineNumber": 201
+        },
+        {
+          "caller": "fetchInvoices",
+          "callee": "setInvoices",
+          "lineNumber": 204
+        },
+        {
+          "caller": "fetchInvoices",
+          "callee": "listSupplierInvoices(fromTime, pagination.pageNumber, pagination.pageSize)\r\n        .then(rsp => {\r\n          if (rsp.status === 200) {\r\n            const data = rsp.data;\r\n            setInvoices(data.content)\r\n            if (data.totalPages !== pagination.totalPages) {\r\n              setPagination({\r\n                ...pagination,\r\n                totalPages: data.totalPages\r\n              })\r\n            }\r\n          } else {\r\n            setInvoices([]);\r\n          }\r\n        })\r\n        .catch",
+          "lineNumber": 207
+        },
+        {
+          "caller": "fetchInvoices",
+          "callee": "listSupplierInvoices(fromTime, pagination.pageNumber, pagination.pageSize)\r\n        .then",
+          "lineNumber": 207
+        },
+        {
+          "caller": "fetchInvoices",
+          "callee": "listSupplierInvoices",
+          "lineNumber": 207
+        },
+        {
+          "caller": "fetchInvoices",
+          "callee": "setInvoices",
+          "lineNumber": 211
+        },
+        {
+          "caller": "fetchInvoices",
+          "callee": "setPagination",
+          "lineNumber": 213
+        },
+        {
+          "caller": "fetchInvoices",
+          "callee": "setInvoices",
+          "lineNumber": 219
+        },
+        {
+          "caller": "fetchInvoices",
+          "callee": "setInvoices",
+          "lineNumber": 222
+        },
+        {
+          "caller": "fetchInvoices",
+          "callee": "console.error",
+          "lineNumber": 224
+        },
+        {
+          "caller": "fetchInvoices",
+          "callee": "alert",
+          "lineNumber": 226
+        },
+        {
+          "caller": "hideInvoiceDetail",
+          "callee": "setShowInvoiceDetail",
+          "lineNumber": 239
+        },
+        {
+          "caller": "hideInvoiceDetail",
+          "callee": "setResultMessage",
+          "lineNumber": 240
+        },
+        {
+          "caller": "generate",
+          "callee": "console.warn",
+          "lineNumber": 248
+        },
+        {
+          "caller": "generate",
+          "callee": "setGenerating",
+          "lineNumber": 251
+        },
+        {
+          "caller": "generate",
+          "callee": "generateSInvoice(invoiceTxt)\r\n      .then(rsp => {\r\n        if (rsp.status === 200) {\r\n          const data: SupplierInvoice = rsp.data;\r\n          console.info(\"Generate invoice successfully\")\r\n          let nItems = data.items.map((item: InvoiceItem) => {\r\n            return {\r\n              ...item,\r\n              id: randomId()\r\n            }\r\n          })\r\n\r\n          setEInvoice({\r\n            ...eInvoice,\r\n            description: data.description,\r\n            subTotal: data.subTotal,\r\n            createdTime: formatISODateTime(new Date(data.createdTime)),\r\n            items: nItems\r\n          })\r\n        } else {\r\n          console.error(\"Failed to generate invoice: \", rsp.statusText)\r\n        }\r\n      })\r\n      .catch((err) => {\r\n        console.error(\"Failed to generate invoice\", err)\r\n      })\r\n      .finally",
+          "lineNumber": 252
+        },
+        {
+          "caller": "generate",
+          "callee": "generateSInvoice(invoiceTxt)\r\n      .then(rsp => {\r\n        if (rsp.status === 200) {\r\n          const data: SupplierInvoice = rsp.data;\r\n          console.info(\"Generate invoice successfully\")\r\n          let nItems = data.items.map((item: InvoiceItem) => {\r\n            return {\r\n              ...item,\r\n              id: randomId()\r\n            }\r\n          })\r\n\r\n          setEInvoice({\r\n            ...eInvoice,\r\n            description: data.description,\r\n            subTotal: data.subTotal,\r\n            createdTime: formatISODateTime(new Date(data.createdTime)),\r\n            items: nItems\r\n          })\r\n        } else {\r\n          console.error(\"Failed to generate invoice: \", rsp.statusText)\r\n        }\r\n      })\r\n      .catch",
+          "lineNumber": 252
+        },
+        {
+          "caller": "generate",
+          "callee": "generateSInvoice(invoiceTxt)\r\n      .then",
+          "lineNumber": 252
+        },
+        {
+          "caller": "generate",
+          "callee": "generateSInvoice",
+          "lineNumber": 252
+        },
+        {
+          "caller": "generate",
+          "callee": "console.info",
+          "lineNumber": 256
+        },
+        {
+          "caller": "generate",
+          "callee": "data.items.map",
+          "lineNumber": 257
+        },
+        {
+          "caller": "generate",
+          "callee": "randomId",
+          "lineNumber": 260
+        },
+        {
+          "caller": "generate",
+          "callee": "setEInvoice",
+          "lineNumber": 264
+        },
+        {
+          "caller": "generate",
+          "callee": "formatISODateTime",
+          "lineNumber": 268
+        },
+        {
+          "caller": "generate",
+          "callee": "console.error",
+          "lineNumber": 272
+        },
+        {
+          "caller": "generate",
+          "callee": "console.error",
+          "lineNumber": 276
+        },
+        {
+          "caller": "generate",
+          "callee": "setGenerating",
+          "lineNumber": 279
+        },
+        {
+          "caller": "editInvoice",
+          "callee": "setInvoiceTxt",
+          "lineNumber": 284
+        },
+        {
+          "caller": "editInvoice",
+          "callee": "setEInvoice",
+          "lineNumber": 285
+        },
+        {
+          "caller": "editInvoice",
+          "callee": "setShowInvoiceDetail",
+          "lineNumber": 286
+        },
+        {
+          "caller": "createInvoice",
+          "callee": "editInvoice",
+          "lineNumber": 291
+        },
+        {
+          "caller": "createInvoice",
+          "callee": "formatISODateTime",
+          "lineNumber": 293
+        },
+        {
+          "caller": "createInvoice",
+          "callee": "sampleSInvoice.items.map",
+          "lineNumber": 294
+        },
+        {
+          "caller": "createInvoice",
+          "callee": "randomId",
+          "lineNumber": 297
+        },
+        {
+          "caller": "confirmInvoice",
+          "callee": "saveSInvoice(inv)\r\n      .then(rsp => {\r\n        if (rsp.status === 200) {\r\n          const data: SupplierInvoice = rsp.data;\r\n          console.info(`Confirm invoice ${data.id} successfully`)\r\n          setEInvoice(data)\r\n          setResultMessage(\"Invoice confirmed successfully\")\r\n          setShowInvoiceDetail(false)\r\n          fetchInvoices()\r\n        } else {\r\n          console.error(\"Failed to confirm invoice: \", rsp.statusText)\r\n          setResultMessage(\"Failed to confirm invoice\")\r\n        }\r\n      })\r\n      .catch",
+          "lineNumber": 309
+        },
+        {
+          "caller": "confirmInvoice",
+          "callee": "saveSInvoice(inv)\r\n      .then",
+          "lineNumber": 309
+        },
+        {
+          "caller": "confirmInvoice",
+          "callee": "saveSInvoice",
+          "lineNumber": 309
+        },
+        {
+          "caller": "confirmInvoice",
+          "callee": "console.info",
+          "lineNumber": 313
+        },
+        {
+          "caller": "confirmInvoice",
+          "callee": "setEInvoice",
+          "lineNumber": 314
+        },
+        {
+          "caller": "confirmInvoice",
+          "callee": "setResultMessage",
+          "lineNumber": 315
+        },
+        {
+          "caller": "confirmInvoice",
+          "callee": "setShowInvoiceDetail",
+          "lineNumber": 316
+        },
+        {
+          "caller": "confirmInvoice",
+          "callee": "fetchInvoices",
+          "lineNumber": 317
+        },
+        {
+          "caller": "confirmInvoice",
+          "callee": "console.error",
+          "lineNumber": 319
+        },
+        {
+          "caller": "confirmInvoice",
+          "callee": "setResultMessage",
+          "lineNumber": 320
+        },
+        {
+          "caller": "confirmInvoice",
+          "callee": "console.error",
+          "lineNumber": 324
+        },
+        {
+          "caller": "confirmInvoice",
+          "callee": "setResultMessage",
+          "lineNumber": 325
+        },
+        {
+          "caller": "takenPlaceInvoice",
+          "callee": "takenPlaceSInvoice(inv)\r\n      .then(rsp => {\r\n        if (rsp.status === 200) {\r\n          const data: SupplierInvoice = rsp.data;\r\n          console.info(`Taken place invoice ${data.id} successfully`)\r\n          setEInvoice(data)\r\n          setResultMessage(`Taken place successfully`)\r\n          setShowInvoiceDetail(false)\r\n          fetchInvoices()\r\n        } else {\r\n          console.error(\"Failed to mark invoice as taken place: \", rsp.statusText)\r\n          setResultMessage(\"Failed to mark invoice as taken place\")\r\n        }\r\n      })\r\n      .catch((err) => {\r\n        console.error(\"Failed to mark invoice as taken place\", err)\r\n        setResultMessage(\"Failed to mark invoice as taken place\")\r\n      })\r\n      .finally",
+          "lineNumber": 335
+        },
+        {
+          "caller": "takenPlaceInvoice",
+          "callee": "takenPlaceSInvoice(inv)\r\n      .then(rsp => {\r\n        if (rsp.status === 200) {\r\n          const data: SupplierInvoice = rsp.data;\r\n          console.info(`Taken place invoice ${data.id} successfully`)\r\n          setEInvoice(data)\r\n          setResultMessage(`Taken place successfully`)\r\n          setShowInvoiceDetail(false)\r\n          fetchInvoices()\r\n        } else {\r\n          console.error(\"Failed to mark invoice as taken place: \", rsp.statusText)\r\n          setResultMessage(\"Failed to mark invoice as taken place\")\r\n        }\r\n      })\r\n      .catch",
+          "lineNumber": 335
+        },
+        {
+          "caller": "takenPlaceInvoice",
+          "callee": "takenPlaceSInvoice(inv)\r\n      .then",
+          "lineNumber": 335
+        },
+        {
+          "caller": "takenPlaceInvoice",
+          "callee": "takenPlaceSInvoice",
+          "lineNumber": 335
+        },
+        {
+          "caller": "takenPlaceInvoice",
+          "callee": "console.info",
+          "lineNumber": 339
+        },
+        {
+          "caller": "takenPlaceInvoice",
+          "callee": "setEInvoice",
+          "lineNumber": 340
+        },
+        {
+          "caller": "takenPlaceInvoice",
+          "callee": "setResultMessage",
+          "lineNumber": 341
+        },
+        {
+          "caller": "takenPlaceInvoice",
+          "callee": "setShowInvoiceDetail",
+          "lineNumber": 342
+        },
+        {
+          "caller": "takenPlaceInvoice",
+          "callee": "fetchInvoices",
+          "lineNumber": 343
+        },
+        {
+          "caller": "takenPlaceInvoice",
+          "callee": "console.error",
+          "lineNumber": 345
+        },
+        {
+          "caller": "takenPlaceInvoice",
+          "callee": "setResultMessage",
+          "lineNumber": 346
+        },
+        {
+          "caller": "takenPlaceInvoice",
+          "callee": "console.error",
+          "lineNumber": 350
+        },
+        {
+          "caller": "takenPlaceInvoice",
+          "callee": "setResultMessage",
+          "lineNumber": 351
+        },
+        {
+          "caller": "takenPlaceInvoice",
+          "callee": "setShowInvoiceDetail",
+          "lineNumber": 354
+        },
+        {
+          "caller": "paidInvoice",
+          "callee": "formatISODateTime",
+          "lineNumber": 361
+        },
+        {
+          "caller": "paidInvoice",
+          "callee": "paidSInvoice(inv)\r\n      .then(rsp => {\r\n        if (rsp.status === 200) {\r\n          const data: SupplierInvoice = rsp.data;\r\n          console.info(`Paid invoice ${data.id} successfully`)\r\n          setEInvoice(data)\r\n          setResultMessage(`Paid successfully`)\r\n          setShowInvoiceDetail(false)\r\n          fetchInvoices()\r\n        } else {\r\n          console.error(\"Failed to mark invoice as paid: \", rsp.statusText)\r\n          setResultMessage(\"Failed to mark invoice as paid\")\r\n        }\r\n      })\r\n      .catch",
+          "lineNumber": 365
+        },
+        {
+          "caller": "paidInvoice",
+          "callee": "paidSInvoice(inv)\r\n      .then",
+          "lineNumber": 365
+        },
+        {
+          "caller": "paidInvoice",
+          "callee": "paidSInvoice",
+          "lineNumber": 365
+        },
+        {
+          "caller": "paidInvoice",
+          "callee": "console.info",
+          "lineNumber": 369
+        },
+        {
+          "caller": "paidInvoice",
+          "callee": "setEInvoice",
+          "lineNumber": 370
+        },
+        {
+          "caller": "paidInvoice",
+          "callee": "setResultMessage",
+          "lineNumber": 371
+        },
+        {
+          "caller": "paidInvoice",
+          "callee": "setShowInvoiceDetail",
+          "lineNumber": 372
+        },
+        {
+          "caller": "paidInvoice",
+          "callee": "fetchInvoices",
+          "lineNumber": 373
+        },
+        {
+          "caller": "paidInvoice",
+          "callee": "console.error",
+          "lineNumber": 375
+        },
+        {
+          "caller": "paidInvoice",
+          "callee": "setResultMessage",
+          "lineNumber": 376
+        },
+        {
+          "caller": "paidInvoice",
+          "callee": "console.error",
+          "lineNumber": 380
+        },
+        {
+          "caller": "paidInvoice",
+          "callee": "setResultMessage",
+          "lineNumber": 381
+        },
+        {
+          "caller": "rejectInvoice",
+          "callee": "rejectSInvoice",
+          "lineNumber": 392
+        },
+        {
+          "caller": "rejectInvoice",
+          "callee": "console.info",
+          "lineNumber": 394
+        },
+        {
+          "caller": "rejectInvoice",
+          "callee": "setEInvoice",
+          "lineNumber": 395
+        },
+        {
+          "caller": "rejectInvoice",
+          "callee": "setResultMessage",
+          "lineNumber": 396
+        },
+        {
+          "caller": "rejectInvoice",
+          "callee": "setShowInvoiceDetail",
+          "lineNumber": 397
+        },
+        {
+          "caller": "rejectInvoice",
+          "callee": "fetchInvoices",
+          "lineNumber": 398
+        },
+        {
+          "caller": "rejectInvoice",
+          "callee": "console.error",
+          "lineNumber": 400
+        },
+        {
+          "caller": "rejectInvoice",
+          "callee": "setResultMessage",
+          "lineNumber": 401
+        },
+        {
+          "caller": "rejectInvoice",
+          "callee": "console.error",
+          "lineNumber": 404
+        },
+        {
+          "caller": "rejectInvoice",
+          "callee": "setResultMessage",
+          "lineNumber": 405
+        },
+        {
+          "caller": "saveInvoice",
+          "callee": "formatISODateTime",
+          "lineNumber": 419
+        },
+        {
+          "caller": "saveInvoice",
+          "callee": "console.info",
+          "lineNumber": 425
+        },
+        {
+          "caller": "saveInvoice",
+          "callee": "saveSInvoice(inv)\r\n      .then(rsp => {\r\n        if (rsp.status === 200) {\r\n          const data: SupplierInvoice = rsp.data;\r\n          console.info(`Save invoice ${data.id} successfully`)\r\n          setEInvoice(data)\r\n          setResultMessage(\"Invoice saved successfully\")\r\n          setShowInvoiceDetail(false)\r\n          setEInvoice(emptySInvoice)\r\n          fetchInvoices()\r\n        } else {\r\n          console.error(\"Failed to save invoice: \", rsp.statusText)\r\n          setResultMessage(\"Failed to save invoice\")\r\n        }\r\n      })\r\n      .catch",
+          "lineNumber": 428
+        },
+        {
+          "caller": "saveInvoice",
+          "callee": "saveSInvoice(inv)\r\n      .then",
+          "lineNumber": 428
+        },
+        {
+          "caller": "saveInvoice",
+          "callee": "saveSInvoice",
+          "lineNumber": 428
+        },
+        {
+          "caller": "saveInvoice",
+          "callee": "console.info",
+          "lineNumber": 432
+        },
+        {
+          "caller": "saveInvoice",
+          "callee": "setEInvoice",
+          "lineNumber": 433
+        },
+        {
+          "caller": "saveInvoice",
+          "callee": "setResultMessage",
+          "lineNumber": 434
+        },
+        {
+          "caller": "saveInvoice",
+          "callee": "setShowInvoiceDetail",
+          "lineNumber": 435
+        },
+        {
+          "caller": "saveInvoice",
+          "callee": "setEInvoice",
+          "lineNumber": 436
+        },
+        {
+          "caller": "saveInvoice",
+          "callee": "fetchInvoices",
+          "lineNumber": 437
+        },
+        {
+          "caller": "saveInvoice",
+          "callee": "console.error",
+          "lineNumber": 439
+        },
+        {
+          "caller": "saveInvoice",
+          "callee": "setResultMessage",
+          "lineNumber": 440
+        },
+        {
+          "caller": "saveInvoice",
+          "callee": "console.error",
+          "lineNumber": 444
+        },
+        {
+          "caller": "saveInvoice",
+          "callee": "setResultMessage",
+          "lineNumber": 445
+        },
+        {
+          "caller": "changeInvoiceTxt",
+          "callee": "setInvoiceTxt",
+          "lineNumber": 451
+        },
+        {
+          "caller": "emptyInvoiceTxt",
+          "callee": "setInvoiceTxt",
+          "lineNumber": 455
+        },
+        {
+          "caller": "changeDescription",
+          "callee": "setEInvoice",
+          "lineNumber": 459
+        },
+        {
+          "caller": "emptyDescription",
+          "callee": "setEInvoice",
+          "lineNumber": 466
+        },
+        {
+          "caller": "editItem",
+          "callee": "formatMoneyAmount",
+          "lineNumber": 473
+        },
+        {
+          "caller": "editItem",
+          "callee": "String",
+          "lineNumber": 473
+        },
+        {
+          "caller": "editItem",
+          "callee": "setEItem",
+          "lineNumber": 474
+        },
+        {
+          "caller": "editItem",
+          "callee": "setShowInvoiceDetail",
+          "lineNumber": 478
+        },
+        {
+          "caller": "editItem",
+          "callee": "setShowItemDetail",
+          "lineNumber": 479
+        },
+        {
+          "caller": "changeService",
+          "callee": "setEItem",
+          "lineNumber": 483
+        },
+        {
+          "caller": "changeItemName",
+          "callee": "setEItem",
+          "lineNumber": 490
+        },
+        {
+          "caller": "emptyItemName",
+          "callee": "setEItem",
+          "lineNumber": 497
+        },
+        {
+          "caller": "changeQuantity",
+          "callee": "setEItem",
+          "lineNumber": 505
+        },
+        {
+          "caller": "changeUnitPrice",
+          "callee": "formatMoneyAmount",
+          "lineNumber": 514
+        },
+        {
+          "caller": "changeUnitPrice",
+          "callee": "setEItem",
+          "lineNumber": 515
+        },
+        {
+          "caller": "hideItemDetail",
+          "callee": "setShowItemDetail",
+          "lineNumber": 524
+        },
+        {
+          "caller": "hideItemDetail",
+          "callee": "setShowInvoiceDetail",
+          "lineNumber": 525
+        },
+        {
+          "caller": "saveItem",
+          "callee": "eInvoice.items.findIndex",
+          "lineNumber": 529
+        },
+        {
+          "caller": "saveItem",
+          "callee": "nItems.splice",
+          "lineNumber": 531
+        },
+        {
+          "caller": "saveItem",
+          "callee": "setEInvoice",
+          "lineNumber": 532
+        },
+        {
+          "caller": "saveItem",
+          "callee": "nItems.map(i => i.amount).reduce",
+          "lineNumber": 535
+        },
+        {
+          "caller": "saveItem",
+          "callee": "nItems.map",
+          "lineNumber": 535
+        },
+        {
+          "caller": "saveItem",
+          "callee": "hideItemDetail",
+          "lineNumber": 537
+        },
+        {
+          "caller": "filterStatus",
+          "callee": "uS.indexOf",
+          "lineNumber": 546
+        },
+        {
+          "caller": "filterStatus",
+          "callee": "console.info",
+          "lineNumber": 547
+        },
+        {
+          "caller": "filterStatus",
+          "callee": "uS.splice",
+          "lineNumber": 549
+        },
+        {
+          "caller": "filterStatus",
+          "callee": "console.log",
+          "lineNumber": 553
+        },
+        {
+          "caller": "filterStatus",
+          "callee": "setStatuses",
+          "lineNumber": 554
+        },
+        {
+          "caller": "SupplierManager",
+          "callee": "filterStatuses.map",
+          "lineNumber": 565
+        },
+        {
+          "caller": "SupplierManager",
+          "callee": "statuses.includes",
+          "lineNumber": 567
+        },
+        {
+          "caller": "SupplierManager",
+          "callee": "filterStatus",
+          "lineNumber": 570
+        },
+        {
+          "caller": "SupplierManager",
+          "callee": "formatVND",
+          "lineNumber": 577
+        },
+        {
+          "caller": "SupplierManager",
+          "callee": "invoices.map(i => i.subTotal).reduce",
+          "lineNumber": 577
+        },
+        {
+          "caller": "SupplierManager",
+          "callee": "invoices.map",
+          "lineNumber": 577
+        },
+        {
+          "caller": "SupplierManager",
+          "callee": "invoices?.map",
+          "lineNumber": 582
+        },
+        {
+          "caller": "SupplierManager",
+          "callee": "formatVND",
+          "lineNumber": 598
+        },
+        {
+          "caller": "SupplierManager",
+          "callee": "utcToDate",
+          "lineNumber": 602
+        },
+        {
+          "caller": "SupplierManager",
+          "callee": "rejectInvoice",
+          "lineNumber": 610
+        },
+        {
+          "caller": "SupplierManager",
+          "callee": "editInvoice",
+          "lineNumber": 613
+        },
+        {
+          "caller": "SupplierManager",
+          "callee": "handlePaginationClick",
+          "lineNumber": 622
+        },
+        {
+          "caller": "SupplierManager",
+          "callee": "handlePaginationClick",
+          "lineNumber": 625
+        },
+        {
+          "caller": "SupplierManager",
+          "callee": "pageClass",
+          "lineNumber": 625
+        },
+        {
+          "caller": "SupplierManager",
+          "callee": "pageClass",
+          "lineNumber": 628
+        },
+        {
+          "caller": "SupplierManager",
+          "callee": "handlePaginationClick",
+          "lineNumber": 631
+        },
+        {
+          "caller": "SupplierManager",
+          "callee": "pageClass",
+          "lineNumber": 631
+        },
+        {
+          "caller": "SupplierManager",
+          "callee": "handlePaginationClick",
+          "lineNumber": 634
+        },
+        {
+          "caller": "SupplierManager",
+          "callee": "generate",
+          "lineNumber": 663
+        },
+        {
+          "caller": "SupplierManager",
+          "callee": "formatVND",
+          "lineNumber": 676
+        },
+        {
+          "caller": "SupplierManager",
+          "callee": "textInputColor",
+          "lineNumber": 696
+        },
+        {
+          "caller": "SupplierManager",
+          "callee": "eInvoice?.items.map",
+          "lineNumber": 702
+        },
+        {
+          "caller": "SupplierManager",
+          "callee": "formatVND",
+          "lineNumber": 720
+        },
+        {
+          "caller": "SupplierManager",
+          "callee": "editItem",
+          "lineNumber": 738
+        },
+        {
+          "caller": "SupplierManager",
+          "callee": "rejectInvoice",
+          "lineNumber": 765
+        },
+        {
+          "caller": "SupplierManager",
+          "callee": "changeQuantity",
+          "lineNumber": 831
+        },
+        {
+          "caller": "SupplierManager",
+          "callee": "changeQuantity",
+          "lineNumber": 853
+        },
+        {
+          "caller": "SupplierManager",
+          "callee": "services.map",
+          "lineNumber": 871
+        },
+        {
+          "caller": "SupplierManager",
+          "callee": "changeService",
+          "lineNumber": 874
+        },
+        {
+          "caller": "SupplierManager",
+          "callee": "group.toUpperCase",
+          "lineNumber": 875
+        },
+        {
+          "caller": "SupplierManager",
+          "callee": "formatVND",
+          "lineNumber": 891
+        }
+      ],
+      "metrics": {
+        "importCount": 5,
+        "exportCount": 2,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/db/apis.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 105,
+      "nonEmptyLines": 80,
+      "functions": [
+        {
+          "name": "createApiInstance",
+          "startLine": 3,
+          "endLine": 8,
+          "params": [
+            "baseURL",
+            "withCredentials"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "reportApi",
+          "line": 80,
+          "isDefault": false
+        },
+        {
+          "name": "expenseApi",
+          "line": 80,
+          "isDefault": false
+        },
+        {
+          "name": "invoiceApi",
+          "line": 80,
+          "isDefault": false
+        },
+        {
+          "name": "taxApi",
+          "line": 80,
+          "isDefault": false
+        },
+        {
+          "name": "taxPolicyApi",
+          "line": 80,
+          "isDefault": false
+        },
+        {
+          "name": "inventoryApi",
+          "line": 80,
+          "isDefault": false
+        },
+        {
+          "name": "productApi",
+          "line": 80,
+          "isDefault": false
+        },
+        {
+          "name": "productGroupApi",
+          "line": 80,
+          "isDefault": false
+        },
+        {
+          "name": "orderApi",
+          "line": 80,
+          "isDefault": false
+        },
+        {
+          "name": "reservationApi",
+          "line": 80,
+          "isDefault": false
+        },
+        {
+          "name": "reservationExtractApi",
+          "line": 80,
+          "isDefault": false
+        },
+        {
+          "name": "supplierApi",
+          "line": 80,
+          "isDefault": false
+        },
+        {
+          "name": "tourApi",
+          "line": 80,
+          "isDefault": false
+        },
+        {
+          "name": "tourRequestApi",
+          "line": 80,
+          "isDefault": false
+        },
+        {
+          "name": "configApi",
+          "line": 80,
+          "isDefault": false
+        },
+        {
+          "name": "classificationApi",
+          "line": 80,
+          "isDefault": false
+        },
+        {
+          "name": "statusApi",
+          "line": 80,
+          "isDefault": false
+        },
+        {
+          "name": "profileApi",
+          "line": 80,
+          "isDefault": false
+        },
+        {
+          "name": "userApi",
+          "line": 80,
+          "isDefault": false
+        },
+        {
+          "name": "botApi",
+          "line": 80,
+          "isDefault": false
+        },
+        {
+          "name": "psBaseApi",
+          "line": 80,
+          "isDefault": false
+        },
+        {
+          "name": "roomApi",
+          "line": 80,
+          "isDefault": false
+        },
+        {
+          "name": "ratePlanApi",
+          "line": 80,
+          "isDefault": false
+        },
+        {
+          "name": "immigrationRegistrationApi",
+          "line": 80,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "createApiInstance",
+          "callee": "axios.create",
+          "lineNumber": 4
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 24,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/db/bot.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 14,
+      "nonEmptyLines": 13,
+      "functions": [
+        {
+          "name": "registerBot",
+          "startLine": 3,
+          "endLine": 14,
+          "params": [
+            "botId",
+            "botToken"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "registerBot",
+          "line": 3,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "registerBot",
+          "callee": "botApi.post",
+          "lineNumber": 5
+        },
+        {
+          "caller": "registerBot",
+          "callee": "console.error",
+          "lineNumber": 11
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/db/classification.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 7,
+      "nonEmptyLines": 6,
+      "functions": [
+        {
+          "name": "classifyServiceByItemName",
+          "startLine": 4,
+          "endLine": 7,
+          "params": [
+            "itemName"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "SERVICE_NAMES",
+          "line": 3,
+          "isDefault": false
+        },
+        {
+          "name": "classifyServiceByItemName",
+          "line": 4,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "classifyServiceByItemName",
+          "callee": "console.info",
+          "lineNumber": 5
+        },
+        {
+          "caller": "classifyServiceByItemName",
+          "callee": "classificationApi.get",
+          "lineNumber": 6
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 2,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/db/configs.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 161,
+      "nonEmptyLines": 149,
+      "functions": [
+        {
+          "name": "appConfigs",
+          "startLine": 103,
+          "endLine": 128,
+          "params": []
+        },
+        {
+          "name": "fetchWithRetry",
+          "startLine": 130,
+          "endLine": 142,
+          "params": [
+            "url",
+            "retries",
+            "delay"
+          ]
+        },
+        {
+          "name": "getConfigs",
+          "startLine": 144,
+          "endLine": 147,
+          "params": [
+            "config"
+          ]
+        },
+        {
+          "name": "setAutoUpdateAvailability",
+          "startLine": 149,
+          "endLine": 152,
+          "params": [
+            "enabled"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "defaultAppConfigs",
+          "line": 32,
+          "isDefault": false
+        },
+        {
+          "name": "appConfigs",
+          "line": 103,
+          "isDefault": false
+        },
+        {
+          "name": "getConfigs",
+          "line": 144,
+          "isDefault": false
+        },
+        {
+          "name": "setAutoUpdateAvailability",
+          "line": 149,
+          "isDefault": false
+        },
+        {
+          "name": "firebaseConfig",
+          "line": 154,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "appConfigs",
+          "callee": "localStorage.getItem",
+          "lineNumber": 105
+        },
+        {
+          "caller": "appConfigs",
+          "callee": "fetchWithRetry",
+          "lineNumber": 110
+        },
+        {
+          "caller": "appConfigs",
+          "callee": "Date.now",
+          "lineNumber": 110
+        },
+        {
+          "caller": "appConfigs",
+          "callee": "localStorage.setItem",
+          "lineNumber": 112
+        },
+        {
+          "caller": "appConfigs",
+          "callee": "JSON.stringify",
+          "lineNumber": 112
+        },
+        {
+          "caller": "appConfigs",
+          "callee": "console.warn",
+          "lineNumber": 115
+        },
+        {
+          "caller": "appConfigs",
+          "callee": "JSON.parse",
+          "lineNumber": 120
+        },
+        {
+          "caller": "appConfigs",
+          "callee": "console.warn",
+          "lineNumber": 122
+        },
+        {
+          "caller": "appConfigs",
+          "callee": "console.warn",
+          "lineNumber": 126
+        },
+        {
+          "caller": "fetchWithRetry",
+          "callee": "fetch",
+          "lineNumber": 133
+        },
+        {
+          "caller": "fetchWithRetry",
+          "callee": "res.json",
+          "lineNumber": 135
+        },
+        {
+          "caller": "fetchWithRetry",
+          "callee": "console.warn",
+          "lineNumber": 137
+        },
+        {
+          "caller": "fetchWithRetry",
+          "callee": "setTimeout",
+          "lineNumber": 139
+        },
+        {
+          "caller": "getConfigs",
+          "callee": "console.info",
+          "lineNumber": 145
+        },
+        {
+          "caller": "getConfigs",
+          "callee": "configApi.get",
+          "lineNumber": 146
+        },
+        {
+          "caller": "setAutoUpdateAvailability",
+          "callee": "console.info",
+          "lineNumber": 150
+        },
+        {
+          "caller": "setAutoUpdateAvailability",
+          "callee": "configApi.post",
+          "lineNumber": 151
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 5,
+        "functionCount": 4,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/db/expense.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 86,
+      "nonEmptyLines": 73,
+      "functions": [
+        {
+          "name": "newExpId",
+          "startLine": 4,
+          "endLine": 6,
+          "params": []
+        },
+        {
+          "name": "listLatestExpenses",
+          "startLine": 8,
+          "endLine": 15,
+          "params": [
+            "pageNumber",
+            "pageSize"
+          ]
+        },
+        {
+          "name": "listExpenseByDate",
+          "startLine": 17,
+          "endLine": 24,
+          "params": [
+            "byDate",
+            "pageNumber",
+            "pageSize"
+          ]
+        },
+        {
+          "name": "listExpenseByExpenserAndDate",
+          "startLine": 26,
+          "endLine": 42,
+          "params": [
+            "expenserId",
+            "byDate",
+            "pageNumber",
+            "pageSize"
+          ]
+        },
+        {
+          "name": "getExpense",
+          "startLine": 44,
+          "endLine": 48,
+          "params": [
+            "expenseId"
+          ]
+        },
+        {
+          "name": "saveExpense",
+          "startLine": 50,
+          "endLine": 57,
+          "params": [
+            "expense"
+          ]
+        },
+        {
+          "name": "assignExpense",
+          "startLine": 59,
+          "endLine": 66,
+          "params": [
+            "expenseId",
+            "expenserId"
+          ]
+        },
+        {
+          "name": "deleteExpense",
+          "startLine": 68,
+          "endLine": 77,
+          "params": [
+            "expense"
+          ]
+        },
+        {
+          "name": "generate",
+          "startLine": 79,
+          "endLine": 86,
+          "params": [
+            "expenseTxt"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "newExpId",
+          "line": 4,
+          "isDefault": false
+        },
+        {
+          "name": "listLatestExpenses",
+          "line": 8,
+          "isDefault": false
+        },
+        {
+          "name": "listExpenseByDate",
+          "line": 17,
+          "isDefault": false
+        },
+        {
+          "name": "listExpenseByExpenserAndDate",
+          "line": 26,
+          "isDefault": false
+        },
+        {
+          "name": "getExpense",
+          "line": 44,
+          "isDefault": false
+        },
+        {
+          "name": "saveExpense",
+          "line": 50,
+          "isDefault": false
+        },
+        {
+          "name": "assignExpense",
+          "line": 59,
+          "isDefault": false
+        },
+        {
+          "name": "deleteExpense",
+          "line": 68,
+          "isDefault": false
+        },
+        {
+          "name": "generate",
+          "line": 79,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "newExpId",
+          "callee": "Date.now",
+          "lineNumber": 5
+        },
+        {
+          "caller": "listLatestExpenses",
+          "callee": "console.info",
+          "lineNumber": 9
+        },
+        {
+          "caller": "listLatestExpenses",
+          "callee": "expenseApi.get",
+          "lineNumber": 11
+        },
+        {
+          "caller": "listExpenseByDate",
+          "callee": "console.info",
+          "lineNumber": 18
+        },
+        {
+          "caller": "listExpenseByDate",
+          "callee": "expenseApi.get",
+          "lineNumber": 20
+        },
+        {
+          "caller": "listExpenseByExpenserAndDate",
+          "callee": "console.info",
+          "lineNumber": 32
+        },
+        {
+          "caller": "listExpenseByExpenserAndDate",
+          "callee": "expenseApi.get",
+          "lineNumber": 38
+        },
+        {
+          "caller": "getExpense",
+          "callee": "console.info",
+          "lineNumber": 45
+        },
+        {
+          "caller": "getExpense",
+          "callee": "expenseApi.get",
+          "lineNumber": 47
+        },
+        {
+          "caller": "saveExpense",
+          "callee": "console.info",
+          "lineNumber": 51
+        },
+        {
+          "caller": "saveExpense",
+          "callee": "expenseApi.post",
+          "lineNumber": 52
+        },
+        {
+          "caller": "assignExpense",
+          "callee": "console.info",
+          "lineNumber": 60
+        },
+        {
+          "caller": "assignExpense",
+          "callee": "expenseApi.post",
+          "lineNumber": 61
+        },
+        {
+          "caller": "deleteExpense",
+          "callee": "console.info",
+          "lineNumber": 69
+        },
+        {
+          "caller": "deleteExpense",
+          "callee": "expenseApi.delete",
+          "lineNumber": 70
+        },
+        {
+          "caller": "generate",
+          "callee": "console.info",
+          "lineNumber": 80
+        },
+        {
+          "caller": "generate",
+          "callee": "expenseApi.post",
+          "lineNumber": 81
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 9,
+        "functionCount": 9,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/db/profit.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 19,
+      "nonEmptyLines": 17,
+      "functions": [
+        {
+          "name": "getProfitReportThisMonth",
+          "startLine": 4,
+          "endLine": 11,
+          "params": [
+            "fromDate",
+            "toDate",
+            "reportKey"
+          ]
+        },
+        {
+          "name": "fetchPReportThisMonth",
+          "startLine": 13,
+          "endLine": 19,
+          "params": [
+            "fromDate",
+            "toDate",
+            "reportKey"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "getProfitReportThisMonth",
+          "line": 4,
+          "isDefault": false
+        },
+        {
+          "name": "fetchPReportThisMonth",
+          "line": 13,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "getProfitReportThisMonth",
+          "callee": "console.info",
+          "lineNumber": 5
+        },
+        {
+          "caller": "getProfitReportThisMonth",
+          "callee": "reportApi.get",
+          "lineNumber": 6
+        },
+        {
+          "caller": "fetchPReportThisMonth",
+          "callee": "reportApi.get",
+          "lineNumber": 14
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 2,
+        "functionCount": 2,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/db/status.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 7,
+      "nonEmptyLines": 5,
+      "functions": [
+        {
+          "name": "syncStatusOfMonth",
+          "startLine": 4,
+          "endLine": 7,
+          "params": [
+            "partition"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "syncStatusOfMonth",
+          "line": 4,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "syncStatusOfMonth",
+          "callee": "console.info",
+          "lineNumber": 5
+        },
+        {
+          "caller": "syncStatusOfMonth",
+          "callee": "statusApi.post",
+          "lineNumber": 6
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/db/supplier.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 55,
+      "nonEmptyLines": 46,
+      "functions": [
+        {
+          "name": "listSupplierInvoices",
+          "startLine": 4,
+          "endLine": 7,
+          "params": [
+            "createdTime",
+            "page",
+            "size"
+          ]
+        },
+        {
+          "name": "listAllSupplierInvoices",
+          "startLine": 9,
+          "endLine": 12,
+          "params": [
+            "page",
+            "size"
+          ]
+        },
+        {
+          "name": "listSupplierInvoicesByStatus",
+          "startLine": 14,
+          "endLine": 17,
+          "params": [
+            "statuses",
+            "page",
+            "size"
+          ]
+        },
+        {
+          "name": "listSupplierInvoicesByTimeAndStatus",
+          "startLine": 19,
+          "endLine": 22,
+          "params": [
+            "createdTime",
+            "statuses",
+            "page",
+            "size"
+          ]
+        },
+        {
+          "name": "generateSInvoice",
+          "startLine": 24,
+          "endLine": 29,
+          "params": [
+            "text"
+          ]
+        },
+        {
+          "name": "saveSInvoice",
+          "startLine": 31,
+          "endLine": 36,
+          "params": [
+            "invoice"
+          ]
+        },
+        {
+          "name": "takenPlaceSInvoice",
+          "startLine": 38,
+          "endLine": 43,
+          "params": [
+            "invoice"
+          ]
+        },
+        {
+          "name": "paidSInvoice",
+          "startLine": 45,
+          "endLine": 50,
+          "params": [
+            "invoice"
+          ]
+        },
+        {
+          "name": "rejectSInvoice",
+          "startLine": 52,
+          "endLine": 55,
+          "params": [
+            "invoiceId",
+            "username"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "listSupplierInvoices",
+          "line": 4,
+          "isDefault": false
+        },
+        {
+          "name": "listAllSupplierInvoices",
+          "line": 9,
+          "isDefault": false
+        },
+        {
+          "name": "listSupplierInvoicesByStatus",
+          "line": 14,
+          "isDefault": false
+        },
+        {
+          "name": "listSupplierInvoicesByTimeAndStatus",
+          "line": 19,
+          "isDefault": false
+        },
+        {
+          "name": "generateSInvoice",
+          "line": 24,
+          "isDefault": false
+        },
+        {
+          "name": "saveSInvoice",
+          "line": 31,
+          "isDefault": false
+        },
+        {
+          "name": "takenPlaceSInvoice",
+          "line": 38,
+          "isDefault": false
+        },
+        {
+          "name": "paidSInvoice",
+          "line": 45,
+          "isDefault": false
+        },
+        {
+          "name": "rejectSInvoice",
+          "line": 52,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "listSupplierInvoices",
+          "callee": "console.info",
+          "lineNumber": 5
+        },
+        {
+          "caller": "listSupplierInvoices",
+          "callee": "supplierApi.get",
+          "lineNumber": 6
+        },
+        {
+          "caller": "listAllSupplierInvoices",
+          "callee": "console.info",
+          "lineNumber": 10
+        },
+        {
+          "caller": "listAllSupplierInvoices",
+          "callee": "supplierApi.get",
+          "lineNumber": 11
+        },
+        {
+          "caller": "listSupplierInvoicesByStatus",
+          "callee": "console.info",
+          "lineNumber": 15
+        },
+        {
+          "caller": "listSupplierInvoicesByStatus",
+          "callee": "supplierApi.get",
+          "lineNumber": 16
+        },
+        {
+          "caller": "listSupplierInvoicesByTimeAndStatus",
+          "callee": "console.info",
+          "lineNumber": 20
+        },
+        {
+          "caller": "listSupplierInvoicesByTimeAndStatus",
+          "callee": "supplierApi.get",
+          "lineNumber": 21
+        },
+        {
+          "caller": "generateSInvoice",
+          "callee": "console.info",
+          "lineNumber": 25
+        },
+        {
+          "caller": "generateSInvoice",
+          "callee": "supplierApi.post",
+          "lineNumber": 26
+        },
+        {
+          "caller": "saveSInvoice",
+          "callee": "console.info",
+          "lineNumber": 32
+        },
+        {
+          "caller": "saveSInvoice",
+          "callee": "supplierApi.post",
+          "lineNumber": 33
+        },
+        {
+          "caller": "takenPlaceSInvoice",
+          "callee": "console.info",
+          "lineNumber": 39
+        },
+        {
+          "caller": "takenPlaceSInvoice",
+          "callee": "supplierApi.post",
+          "lineNumber": 40
+        },
+        {
+          "caller": "paidSInvoice",
+          "callee": "console.info",
+          "lineNumber": 46
+        },
+        {
+          "caller": "paidSInvoice",
+          "callee": "supplierApi.post",
+          "lineNumber": 47
+        },
+        {
+          "caller": "rejectSInvoice",
+          "callee": "console.info",
+          "lineNumber": 53
+        },
+        {
+          "caller": "rejectSInvoice",
+          "callee": "supplierApi.post",
+          "lineNumber": 54
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 9,
+        "functionCount": 9,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/db/tax.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 48,
+      "nonEmptyLines": 42,
+      "functions": [
+        {
+          "name": "listTaxableInvoices",
+          "startLine": 13,
+          "endLine": 22,
+          "params": [
+            "fromDate",
+            "toDate",
+            "pageNumber",
+            "pageSize"
+          ]
+        },
+        {
+          "name": "calculateTaxableInvoices",
+          "startLine": 40,
+          "endLine": 45,
+          "params": [
+            "fromDate",
+            "toDate",
+            "storeResult"
+          ]
+        },
+        {
+          "name": "getTaxableInvoice",
+          "startLine": 47,
+          "endLine": 48,
+          "params": [
+            "invoiceId"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "listTaxableInvoices",
+          "line": 13,
+          "isDefault": false
+        },
+        {
+          "name": "calculateTaxableInvoices",
+          "line": 40,
+          "isDefault": false
+        },
+        {
+          "name": "getTaxableInvoice",
+          "line": 47,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "listTaxableInvoices",
+          "callee": "taxApi.get",
+          "lineNumber": 19
+        },
+        {
+          "caller": "calculateTaxableInvoices",
+          "callee": "taxApi.post",
+          "lineNumber": 45
+        },
+        {
+          "caller": "getTaxableInvoice",
+          "callee": "taxApi.get",
+          "lineNumber": 48
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 3,
+        "functionCount": 3,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/db/users.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 24,
+      "nonEmptyLines": 21,
+      "functions": [
+        {
+          "name": "listUsers",
+          "startLine": 21,
+          "endLine": 24,
+          "params": [
+            "page",
+            "size"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "getUsers",
+          "line": 12,
+          "isDefault": false
+        },
+        {
+          "name": "listUsers",
+          "line": 21,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "listUsers",
+          "callee": "console.info",
+          "lineNumber": 22
+        },
+        {
+          "caller": "listUsers",
+          "callee": "userApi.get",
+          "lineNumber": 23
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 2,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    }
+  ]
+}

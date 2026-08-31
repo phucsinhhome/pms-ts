@@ -1,0 +1,15 @@
+{
+  "projectRoot": "C:/apps/ps/pms-ts",
+  "batchFiles": [
+    {"path": ".planning/PROJECT.md", "language": "markdown", "sizeLines": 22, "fileCategory": "docs"},
+    {"path": ".planning/REQUIREMENTS.md", "language": "markdown", "sizeLines": 27, "fileCategory": "docs"},
+    {"path": ".planning/ROADMAP.md", "language": "markdown", "sizeLines": 36, "fileCategory": "docs"},
+    {"path": ".planning/STATE.md", "language": "markdown", "sizeLines": 44, "fileCategory": "docs"}
+  ],
+  "batchImportData": {
+    ".planning/PROJECT.md": [],
+    ".planning/REQUIREMENTS.md": [],
+    ".planning/ROADMAP.md": [],
+    ".planning/STATE.md": []
+  }
+}

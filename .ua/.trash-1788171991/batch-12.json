@@ -1,0 +1,47 @@
+{
+  "nodes": [
+    {
+      "id": "document:.planning/phases/04-dynamic-room-integration/01-RESEARCH.md",
+      "type": "document",
+      "name": "01-RESEARCH.md",
+      "filePath": ".planning/phases/04-dynamic-room-integration/01-RESEARCH.md",
+      "summary": "Research notes analyzing the redundant `roomIcons` mapping in src/db/room.tsx, tracing its usage to InvoiceEditor.tsx, and recommending removal in favor of a single standardized icon since other room components (RoomManager, ReservationMap, InvoiceMap) already avoid it.",
+      "tags": ["documentation", "planning", "technical-debt", "research"],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:.planning/phases/04-dynamic-room-integration/04-PLAN.md",
+      "type": "document",
+      "name": "04-PLAN.md",
+      "filePath": ".planning/phases/04-dynamic-room-integration/04-PLAN.md",
+      "summary": "Implementation plan for Phase 4 (Dynamic Room Integration refinement), detailing tasks to remove the static roomIcons mapping, standardize the room selection UI in InvoiceEditor with a single icon, finalize elimination of static room data, and verify the build with tsc.",
+      "tags": ["documentation", "planning", "task-list"],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:.planning/phases/04-dynamic-room-integration/04-SUMMARY.md",
+      "type": "document",
+      "name": "04-SUMMARY.md",
+      "filePath": ".planning/phases/04-dynamic-room-integration/04-SUMMARY.md",
+      "summary": "Completion summary for Phase 4, confirming removal of the roomIcons mapping and src/db/staticdata.ts, standardization of InvoiceEditor's room selection icons, and full transition to dynamic backend-driven room data via the listRoom API.",
+      "tags": ["documentation", "planning", "summary"],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "document:.planning/phases/04-dynamic-room-integration/01-RESEARCH.md",
+      "target": "document:.planning/phases/04-dynamic-room-integration/04-PLAN.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.planning/phases/04-dynamic-room-integration/04-PLAN.md",
+      "target": "document:.planning/phases/04-dynamic-room-integration/04-SUMMARY.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    }
+  ]
+}

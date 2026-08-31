@@ -1,0 +1,2139 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 11,
+  "filesSkipped": [],
+  "analysisOutcomes": {
+    "structure": {
+      "succeeded": 11,
+      "failed": 0
+    },
+    "callGraph": {
+      "succeeded": 11,
+      "failed": 0,
+      "skipped": 0
+    }
+  },
+  "results": [
+    {
+      "path": "src/App.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 521,
+      "nonEmptyLines": 495,
+      "functions": [
+        {
+          "name": "App",
+          "startLine": 163,
+          "endLine": 521,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "DEFAULT_PAGE_SIZE",
+          "line": 36,
+          "isDefault": false
+        },
+        {
+          "name": "defaultChat",
+          "line": 48,
+          "isDefault": false
+        },
+        {
+          "name": "App",
+          "line": 163,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "App",
+          "callee": "useState",
+          "lineNumber": 164
+        },
+        {
+          "caller": "App",
+          "callee": "useState",
+          "lineNumber": 165
+        },
+        {
+          "caller": "App",
+          "callee": "useState",
+          "lineNumber": 166
+        },
+        {
+          "caller": "App",
+          "callee": "useState",
+          "lineNumber": 167
+        },
+        {
+          "caller": "App",
+          "callee": "useState",
+          "lineNumber": 169
+        },
+        {
+          "caller": "App",
+          "callee": "useState",
+          "lineNumber": 170
+        },
+        {
+          "caller": "App",
+          "callee": "useState",
+          "lineNumber": 171
+        },
+        {
+          "caller": "App",
+          "callee": "useNavigate",
+          "lineNumber": 172
+        },
+        {
+          "caller": "App",
+          "callee": "useState",
+          "lineNumber": 173
+        },
+        {
+          "caller": "App",
+          "callee": "useState",
+          "lineNumber": 174
+        },
+        {
+          "caller": "App",
+          "callee": "useState",
+          "lineNumber": 175
+        },
+        {
+          "caller": "App",
+          "callee": "useState",
+          "lineNumber": 176
+        },
+        {
+          "caller": "App",
+          "callee": "useState",
+          "lineNumber": 177
+        },
+        {
+          "caller": "App",
+          "callee": "useState",
+          "lineNumber": 178
+        },
+        {
+          "caller": "fetchUserProfile",
+          "callee": "getProfile",
+          "lineNumber": 183
+        },
+        {
+          "caller": "fetchUserProfile",
+          "callee": "console.warn",
+          "lineNumber": 187
+        },
+        {
+          "caller": "fetchUserProfile",
+          "callee": "console.info",
+          "lineNumber": 191
+        },
+        {
+          "caller": "fetchUserProfile",
+          "callee": "console.warn",
+          "lineNumber": 193
+        },
+        {
+          "caller": "fetchUserProfile",
+          "callee": "setUserProfile",
+          "lineNumber": 196
+        },
+        {
+          "caller": "fetchUserProfile",
+          "callee": "setChat",
+          "lineNumber": 197
+        },
+        {
+          "caller": "fetchUserProfile",
+          "callee": "setAuthorizedUserId",
+          "lineNumber": 206
+        },
+        {
+          "caller": "fetchUserProfile",
+          "callee": "setAuthorities",
+          "lineNumber": 207
+        },
+        {
+          "caller": "fetchUserProfile",
+          "callee": "setRoles",
+          "lineNumber": 208
+        },
+        {
+          "caller": "fetchUserProfile",
+          "callee": "console.error",
+          "lineNumber": 211
+        },
+        {
+          "caller": "fetchUserProfile",
+          "callee": "setUserProfile",
+          "lineNumber": 212
+        },
+        {
+          "caller": "fetchUserProfile",
+          "callee": "setChat",
+          "lineNumber": 213
+        },
+        {
+          "caller": "fetchUserProfile",
+          "callee": "setAuthorizedUserId",
+          "lineNumber": 214
+        },
+        {
+          "caller": "fetchUserProfile",
+          "callee": "setAuthorities",
+          "lineNumber": 215
+        },
+        {
+          "caller": "fetchUserProfile",
+          "callee": "setRoles",
+          "lineNumber": 216
+        },
+        {
+          "caller": "fetchUserProfile",
+          "callee": "console.error",
+          "lineNumber": 218
+        },
+        {
+          "caller": "fetchUserProfile",
+          "callee": "setUserProfile",
+          "lineNumber": 219
+        },
+        {
+          "caller": "fetchUserProfile",
+          "callee": "setChat",
+          "lineNumber": 220
+        },
+        {
+          "caller": "fetchUserProfile",
+          "callee": "setAuthorizedUserId",
+          "lineNumber": 221
+        },
+        {
+          "caller": "fetchUserProfile",
+          "callee": "setAuthorities",
+          "lineNumber": 222
+        },
+        {
+          "caller": "fetchUserProfile",
+          "callee": "setRoles",
+          "lineNumber": 223
+        },
+        {
+          "caller": "fetchUserProfile",
+          "callee": "setLoadingProfile",
+          "lineNumber": 226
+        },
+        {
+          "caller": "App",
+          "callee": "useEffect",
+          "lineNumber": 231
+        },
+        {
+          "caller": "App",
+          "callee": "fetchConfig",
+          "lineNumber": 233
+        },
+        {
+          "caller": "App",
+          "callee": "fetchUserProfile",
+          "lineNumber": 234
+        },
+        {
+          "caller": "App",
+          "callee": "useEffect",
+          "lineNumber": 239
+        },
+        {
+          "caller": "App",
+          "callee": "filterMenus",
+          "lineNumber": 240
+        },
+        {
+          "caller": "filterMenus",
+          "callee": "menuOrder\r\n          .filter(menuKey => authorities.some(role => role.toLowerCase() === menuKey.toLowerCase()))\r\n          .map(menuKey => menus[menuKey as keyof typeof menus])\r\n          .filter",
+          "lineNumber": 247
+        },
+        {
+          "caller": "filterMenus",
+          "callee": "menuOrder\r\n          .filter(menuKey => authorities.some(role => role.toLowerCase() === menuKey.toLowerCase()))\r\n          .map",
+          "lineNumber": 247
+        },
+        {
+          "caller": "filterMenus",
+          "callee": "menuOrder\r\n          .filter",
+          "lineNumber": 247
+        },
+        {
+          "caller": "filterMenus",
+          "callee": "authorities.some",
+          "lineNumber": 248
+        },
+        {
+          "caller": "filterMenus",
+          "callee": "role.toLowerCase",
+          "lineNumber": 248
+        },
+        {
+          "caller": "filterMenus",
+          "callee": "menuKey.toLowerCase",
+          "lineNumber": 248
+        },
+        {
+          "caller": "filterMenus",
+          "callee": "setFilteredMenus",
+          "lineNumber": 251
+        },
+        {
+          "caller": "filterMenus",
+          "callee": "setActiveMenu",
+          "lineNumber": 252
+        },
+        {
+          "caller": "filterMenus",
+          "callee": "navigate",
+          "lineNumber": 253
+        },
+        {
+          "caller": "hasAuthority",
+          "callee": "authorities.some",
+          "lineNumber": 260
+        },
+        {
+          "caller": "hasAuthority",
+          "callee": "a.toLowerCase",
+          "lineNumber": 260
+        },
+        {
+          "caller": "hasAuthority",
+          "callee": "auth.toLowerCase",
+          "lineNumber": 260
+        },
+        {
+          "caller": "fetchConfig",
+          "callee": "setLoadingConfig",
+          "lineNumber": 265
+        },
+        {
+          "caller": "fetchConfig",
+          "callee": "setConfigError",
+          "lineNumber": 266
+        },
+        {
+          "caller": "fetchConfig",
+          "callee": "appConfigs",
+          "lineNumber": 267
+        },
+        {
+          "caller": "fetchConfig",
+          "callee": "setConfigs",
+          "lineNumber": 268
+        },
+        {
+          "caller": "fetchConfig",
+          "callee": "console.error",
+          "lineNumber": 270
+        },
+        {
+          "caller": "fetchConfig",
+          "callee": "setConfigError",
+          "lineNumber": 271
+        },
+        {
+          "caller": "fetchConfig",
+          "callee": "setLoadingConfig",
+          "lineNumber": 273
+        },
+        {
+          "caller": "App",
+          "callee": "fetchConfig",
+          "lineNumber": 327
+        },
+        {
+          "caller": "App",
+          "callee": "filteredMenus.map",
+          "lineNumber": 344
+        },
+        {
+          "caller": "App",
+          "callee": "menuStyle",
+          "lineNumber": 348
+        },
+        {
+          "caller": "App",
+          "callee": "setActiveMenu",
+          "lineNumber": 350
+        },
+        {
+          "caller": "App",
+          "callee": "setActiveMenu",
+          "lineNumber": 365
+        },
+        {
+          "caller": "App",
+          "callee": "navigate",
+          "lineNumber": 366
+        },
+        {
+          "caller": "App",
+          "callee": "setActiveMenu",
+          "lineNumber": 378
+        },
+        {
+          "caller": "App",
+          "callee": "setActiveMenu",
+          "lineNumber": 379
+        },
+        {
+          "caller": "App",
+          "callee": "setActiveMenu",
+          "lineNumber": 380
+        },
+        {
+          "caller": "App",
+          "callee": "setActiveMenu",
+          "lineNumber": 382
+        },
+        {
+          "caller": "App",
+          "callee": "handleLogin",
+          "lineNumber": 383
+        },
+        {
+          "caller": "App",
+          "callee": "hasAuthority",
+          "lineNumber": 384
+        },
+        {
+          "caller": "App",
+          "callee": "setActiveMenu",
+          "lineNumber": 387
+        },
+        {
+          "caller": "App",
+          "callee": "handleLogin",
+          "lineNumber": 388
+        },
+        {
+          "caller": "App",
+          "callee": "setActiveMenu",
+          "lineNumber": 391
+        },
+        {
+          "caller": "App",
+          "callee": "handleLogin",
+          "lineNumber": 392
+        },
+        {
+          "caller": "App",
+          "callee": "setActiveMenu",
+          "lineNumber": 395
+        },
+        {
+          "caller": "App",
+          "callee": "handleLogin",
+          "lineNumber": 396
+        },
+        {
+          "caller": "App",
+          "callee": "hasAuthority",
+          "lineNumber": 397
+        },
+        {
+          "caller": "App",
+          "callee": "setActiveMenu",
+          "lineNumber": 400
+        },
+        {
+          "caller": "App",
+          "callee": "handleLogin",
+          "lineNumber": 401
+        },
+        {
+          "caller": "App",
+          "callee": "getChat",
+          "lineNumber": 404
+        },
+        {
+          "caller": "App",
+          "callee": "fullName",
+          "lineNumber": 405
+        },
+        {
+          "caller": "App",
+          "callee": "setActiveMenu",
+          "lineNumber": 407
+        },
+        {
+          "caller": "App",
+          "callee": "handleLogin",
+          "lineNumber": 408
+        },
+        {
+          "caller": "App",
+          "callee": "hasAuthority",
+          "lineNumber": 409
+        },
+        {
+          "caller": "App",
+          "callee": "getChat",
+          "lineNumber": 413
+        },
+        {
+          "caller": "App",
+          "callee": "fullName",
+          "lineNumber": 414
+        },
+        {
+          "caller": "App",
+          "callee": "setActiveMenu",
+          "lineNumber": 416
+        },
+        {
+          "caller": "App",
+          "callee": "handleLogin",
+          "lineNumber": 417
+        },
+        {
+          "caller": "App",
+          "callee": "hasAuthority",
+          "lineNumber": 418
+        },
+        {
+          "caller": "App",
+          "callee": "setActiveMenu",
+          "lineNumber": 421
+        },
+        {
+          "caller": "App",
+          "callee": "handleLogin",
+          "lineNumber": 422
+        },
+        {
+          "caller": "App",
+          "callee": "setActiveMenu",
+          "lineNumber": 425
+        },
+        {
+          "caller": "App",
+          "callee": "handleLogin",
+          "lineNumber": 426
+        },
+        {
+          "caller": "App",
+          "callee": "getChat",
+          "lineNumber": 429
+        },
+        {
+          "caller": "App",
+          "callee": "fullName",
+          "lineNumber": 430
+        },
+        {
+          "caller": "App",
+          "callee": "setActiveMenu",
+          "lineNumber": 432
+        },
+        {
+          "caller": "App",
+          "callee": "handleLogin",
+          "lineNumber": 433
+        },
+        {
+          "caller": "App",
+          "callee": "hasAuthority",
+          "lineNumber": 434
+        },
+        {
+          "caller": "App",
+          "callee": "getChat",
+          "lineNumber": 437
+        },
+        {
+          "caller": "App",
+          "callee": "fullName",
+          "lineNumber": 438
+        },
+        {
+          "caller": "App",
+          "callee": "setActiveMenu",
+          "lineNumber": 440
+        },
+        {
+          "caller": "App",
+          "callee": "handleLogin",
+          "lineNumber": 441
+        },
+        {
+          "caller": "App",
+          "callee": "hasAuthority",
+          "lineNumber": 442
+        },
+        {
+          "caller": "App",
+          "callee": "getChat",
+          "lineNumber": 445
+        },
+        {
+          "caller": "App",
+          "callee": "fullName",
+          "lineNumber": 446
+        },
+        {
+          "caller": "App",
+          "callee": "setActiveMenu",
+          "lineNumber": 448
+        },
+        {
+          "caller": "App",
+          "callee": "handleLogin",
+          "lineNumber": 450
+        },
+        {
+          "caller": "App",
+          "callee": "getChat",
+          "lineNumber": 454
+        },
+        {
+          "caller": "App",
+          "callee": "setActiveMenu",
+          "lineNumber": 455
+        },
+        {
+          "caller": "App",
+          "callee": "setActiveMenu",
+          "lineNumber": 458
+        },
+        {
+          "caller": "App",
+          "callee": "handleLogin",
+          "lineNumber": 459
+        },
+        {
+          "caller": "App",
+          "callee": "setActiveMenu",
+          "lineNumber": 461
+        },
+        {
+          "caller": "App",
+          "callee": "getChat",
+          "lineNumber": 462
+        },
+        {
+          "caller": "App",
+          "callee": "fullName",
+          "lineNumber": 462
+        },
+        {
+          "caller": "App",
+          "callee": "setActiveMenu",
+          "lineNumber": 462
+        },
+        {
+          "caller": "App",
+          "callee": "getChat",
+          "lineNumber": 464
+        },
+        {
+          "caller": "App",
+          "callee": "fullName",
+          "lineNumber": 465
+        },
+        {
+          "caller": "App",
+          "callee": "setActiveMenu",
+          "lineNumber": 467
+        },
+        {
+          "caller": "App",
+          "callee": "getChat",
+          "lineNumber": 471
+        },
+        {
+          "caller": "App",
+          "callee": "fullName",
+          "lineNumber": 472
+        },
+        {
+          "caller": "App",
+          "callee": "setActiveMenu",
+          "lineNumber": 474
+        },
+        {
+          "caller": "App",
+          "callee": "setSyncing",
+          "lineNumber": 478
+        },
+        {
+          "caller": "App",
+          "callee": "setSyncingRes",
+          "lineNumber": 480
+        },
+        {
+          "caller": "App",
+          "callee": "setActiveMenu",
+          "lineNumber": 481
+        },
+        {
+          "caller": "App",
+          "callee": "getChat",
+          "lineNumber": 482
+        },
+        {
+          "caller": "App",
+          "callee": "setActiveMenu",
+          "lineNumber": 500
+        },
+        {
+          "caller": "App",
+          "callee": "navigate",
+          "lineNumber": 501
+        },
+        {
+          "caller": "App",
+          "callee": "fullName",
+          "lineNumber": 504
+        }
+      ],
+      "metrics": {
+        "importCount": 25,
+        "exportCount": 3,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/Components/TaxPolicyManager.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 201,
+      "nonEmptyLines": 188,
+      "functions": [
+        {
+          "name": "normalizePolicies",
+          "startLine": 13,
+          "endLine": 14,
+          "params": [
+            "policies"
+          ]
+        },
+        {
+          "name": "extractPolicies",
+          "startLine": 16,
+          "endLine": 24,
+          "params": [
+            "payload"
+          ]
+        },
+        {
+          "name": "TaxPolicyManager",
+          "startLine": 26,
+          "endLine": 201,
+          "params": [
+            "props"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "TaxPolicyManager",
+          "line": 26,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "normalizePolicies",
+          "callee": "[...policies].sort((a, b) => a.order - b.order).map",
+          "lineNumber": 14
+        },
+        {
+          "caller": "normalizePolicies",
+          "callee": "[...policies].sort",
+          "lineNumber": 14
+        },
+        {
+          "caller": "extractPolicies",
+          "callee": "Array.isArray",
+          "lineNumber": 17
+        },
+        {
+          "caller": "extractPolicies",
+          "callee": "Array.isArray",
+          "lineNumber": 20
+        },
+        {
+          "caller": "extractPolicies",
+          "callee": "Array.isArray",
+          "lineNumber": 21
+        },
+        {
+          "caller": "extractPolicies",
+          "callee": "Array.isArray",
+          "lineNumber": 22
+        },
+        {
+          "caller": "TaxPolicyManager",
+          "callee": "useState",
+          "lineNumber": 27
+        },
+        {
+          "caller": "TaxPolicyManager",
+          "callee": "useState",
+          "lineNumber": 28
+        },
+        {
+          "caller": "TaxPolicyManager",
+          "callee": "useState",
+          "lineNumber": 29
+        },
+        {
+          "caller": "TaxPolicyManager",
+          "callee": "useState",
+          "lineNumber": 30
+        },
+        {
+          "caller": "TaxPolicyManager",
+          "callee": "useState",
+          "lineNumber": 31
+        },
+        {
+          "caller": "TaxPolicyManager",
+          "callee": "useState",
+          "lineNumber": 32
+        },
+        {
+          "caller": "TaxPolicyManager",
+          "callee": "useState",
+          "lineNumber": 33
+        },
+        {
+          "caller": "loadPolicies",
+          "callee": "setLoading",
+          "lineNumber": 36
+        },
+        {
+          "caller": "loadPolicies",
+          "callee": "setError",
+          "lineNumber": 37
+        },
+        {
+          "caller": "loadPolicies",
+          "callee": "listTaxPolicies",
+          "lineNumber": 39
+        },
+        {
+          "caller": "loadPolicies",
+          "callee": "props.handleUnauthorized",
+          "lineNumber": 41
+        },
+        {
+          "caller": "loadPolicies",
+          "callee": "normalizePolicies",
+          "lineNumber": 45
+        },
+        {
+          "caller": "loadPolicies",
+          "callee": "extractPolicies",
+          "lineNumber": 45
+        },
+        {
+          "caller": "loadPolicies",
+          "callee": "setPolicies",
+          "lineNumber": 46
+        },
+        {
+          "caller": "loadPolicies",
+          "callee": "setSelectedId",
+          "lineNumber": 47
+        },
+        {
+          "caller": "loadPolicies",
+          "callee": "data.some",
+          "lineNumber": 47
+        },
+        {
+          "caller": "loadPolicies",
+          "callee": "console.error",
+          "lineNumber": 49
+        },
+        {
+          "caller": "loadPolicies",
+          "callee": "setError",
+          "lineNumber": 50
+        },
+        {
+          "caller": "loadPolicies",
+          "callee": "setLoading",
+          "lineNumber": 52
+        },
+        {
+          "caller": "TaxPolicyManager",
+          "callee": "useEffect",
+          "lineNumber": 56
+        },
+        {
+          "caller": "TaxPolicyManager",
+          "callee": "props.activeMenu",
+          "lineNumber": 57
+        },
+        {
+          "caller": "TaxPolicyManager",
+          "callee": "loadPolicies",
+          "lineNumber": 58
+        },
+        {
+          "caller": "moveSelected",
+          "callee": "policies.findIndex",
+          "lineNumber": 63
+        },
+        {
+          "caller": "moveSelected",
+          "callee": "next.map",
+          "lineNumber": 69
+        },
+        {
+          "caller": "moveSelected",
+          "callee": "setPolicies",
+          "lineNumber": 70
+        },
+        {
+          "caller": "moveSelected",
+          "callee": "next.map",
+          "lineNumber": 70
+        },
+        {
+          "caller": "moveSelected",
+          "callee": "setSaving",
+          "lineNumber": 71
+        },
+        {
+          "caller": "moveSelected",
+          "callee": "reorderTaxPolicies",
+          "lineNumber": 73
+        },
+        {
+          "caller": "moveSelected",
+          "callee": "props.handleUnauthorized",
+          "lineNumber": 74
+        },
+        {
+          "caller": "moveSelected",
+          "callee": "Array.isArray",
+          "lineNumber": 77
+        },
+        {
+          "caller": "moveSelected",
+          "callee": "next.map",
+          "lineNumber": 80
+        },
+        {
+          "caller": "moveSelected",
+          "callee": "responseOrder\r\n                .map((policyId) => policiesById.get(policyId))\r\n                .filter",
+          "lineNumber": 81
+        },
+        {
+          "caller": "moveSelected",
+          "callee": "responseOrder\r\n                .map",
+          "lineNumber": 81
+        },
+        {
+          "caller": "moveSelected",
+          "callee": "policiesById.get",
+          "lineNumber": 82
+        },
+        {
+          "caller": "moveSelected",
+          "callee": "next.filter",
+          "lineNumber": 84
+        },
+        {
+          "caller": "moveSelected",
+          "callee": "responseOrder.includes",
+          "lineNumber": 84
+        },
+        {
+          "caller": "moveSelected",
+          "callee": "setPolicies",
+          "lineNumber": 85
+        },
+        {
+          "caller": "moveSelected",
+          "callee": "[...orderedPolicies, ...missingPolicies].map",
+          "lineNumber": 85
+        },
+        {
+          "caller": "moveSelected",
+          "callee": "console.error",
+          "lineNumber": 87
+        },
+        {
+          "caller": "moveSelected",
+          "callee": "setError",
+          "lineNumber": 88
+        },
+        {
+          "caller": "moveSelected",
+          "callee": "loadPolicies",
+          "lineNumber": 89
+        },
+        {
+          "caller": "moveSelected",
+          "callee": "setSaving",
+          "lineNumber": 91
+        },
+        {
+          "caller": "openCreateModal",
+          "callee": "setIsCreating",
+          "lineNumber": 97
+        },
+        {
+          "caller": "openCreateModal",
+          "callee": "setEditingPolicy",
+          "lineNumber": 98
+        },
+        {
+          "caller": "closePolicyModal",
+          "callee": "setEditingPolicy",
+          "lineNumber": 111
+        },
+        {
+          "caller": "closePolicyModal",
+          "callee": "setIsCreating",
+          "lineNumber": 112
+        },
+        {
+          "caller": "savePolicy",
+          "callee": "setSaving",
+          "lineNumber": 118
+        },
+        {
+          "caller": "savePolicy",
+          "callee": "setError",
+          "lineNumber": 119
+        },
+        {
+          "caller": "savePolicy",
+          "callee": "createTaxPolicy",
+          "lineNumber": 122
+        },
+        {
+          "caller": "savePolicy",
+          "callee": "updateTaxPolicy",
+          "lineNumber": 123
+        },
+        {
+          "caller": "savePolicy",
+          "callee": "props.handleUnauthorized",
+          "lineNumber": 125
+        },
+        {
+          "caller": "savePolicy",
+          "callee": "loadPolicies",
+          "lineNumber": 130
+        },
+        {
+          "caller": "savePolicy",
+          "callee": "setPolicies",
+          "lineNumber": 132
+        },
+        {
+          "caller": "savePolicy",
+          "callee": "normalizePolicies",
+          "lineNumber": 132
+        },
+        {
+          "caller": "savePolicy",
+          "callee": "current.map",
+          "lineNumber": 132
+        },
+        {
+          "caller": "savePolicy",
+          "callee": "setEditingPolicy",
+          "lineNumber": 134
+        },
+        {
+          "caller": "savePolicy",
+          "callee": "setIsCreating",
+          "lineNumber": 135
+        },
+        {
+          "caller": "savePolicy",
+          "callee": "console.error",
+          "lineNumber": 137
+        },
+        {
+          "caller": "savePolicy",
+          "callee": "setError",
+          "lineNumber": 138
+        },
+        {
+          "caller": "savePolicy",
+          "callee": "setSaving",
+          "lineNumber": 140
+        },
+        {
+          "caller": "TaxPolicyManager",
+          "callee": "policies.map",
+          "lineNumber": 152
+        },
+        {
+          "caller": "TaxPolicyManager",
+          "callee": "setSelectedId",
+          "lineNumber": 154
+        },
+        {
+          "caller": "TaxPolicyManager",
+          "callee": "(policy.taxRate * 100).toFixed",
+          "lineNumber": 157
+        },
+        {
+          "caller": "TaxPolicyManager",
+          "callee": "setEditingPolicy",
+          "lineNumber": 162
+        },
+        {
+          "caller": "TaxPolicyManager",
+          "callee": "policies.findIndex",
+          "lineNumber": 171
+        },
+        {
+          "caller": "TaxPolicyManager",
+          "callee": "moveSelected",
+          "lineNumber": 171
+        },
+        {
+          "caller": "TaxPolicyManager",
+          "callee": "policies.findIndex",
+          "lineNumber": 172
+        },
+        {
+          "caller": "TaxPolicyManager",
+          "callee": "policies.findIndex",
+          "lineNumber": 172
+        },
+        {
+          "caller": "TaxPolicyManager",
+          "callee": "moveSelected",
+          "lineNumber": 172
+        },
+        {
+          "caller": "TaxPolicyManager",
+          "callee": "props.hasAuthority",
+          "lineNumber": 173
+        },
+        {
+          "caller": "TaxPolicyManager",
+          "callee": "setEditingPolicy",
+          "lineNumber": 181
+        },
+        {
+          "caller": "TaxPolicyManager",
+          "callee": "setEditingPolicy",
+          "lineNumber": 182
+        },
+        {
+          "caller": "TaxPolicyManager",
+          "callee": "Number",
+          "lineNumber": 182
+        },
+        {
+          "caller": "TaxPolicyManager",
+          "callee": "setEditingPolicy",
+          "lineNumber": 191
+        },
+        {
+          "caller": "TaxPolicyManager",
+          "callee": "setEditingPolicy",
+          "lineNumber": 194
+        },
+        {
+          "caller": "TaxPolicyManager",
+          "callee": "editingPolicy?.name.trim",
+          "lineNumber": 197
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 1,
+        "functionCount": 3,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/Components/TourEditor.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 469,
+      "nonEmptyLines": 443,
+      "functions": [
+        {
+          "name": "EditField",
+          "startLine": 19,
+          "endLine": 95,
+          "params": [
+            "{\r\n  label,\r\n  value,\r\n  field,\r\n  editField,\r\n  onEdit,\r\n  onCancel,\r\n  onChange,\r\n  type = \"text\",\r\n}"
+          ]
+        },
+        {
+          "name": "TourEditor",
+          "startLine": 97,
+          "endLine": 469,
+          "params": [
+            "props"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "TourEditor",
+          "line": 97,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "EditField",
+          "callee": "onEdit",
+          "lineNumber": 60
+        },
+        {
+          "caller": "EditField",
+          "callee": "onChange",
+          "lineNumber": 71
+        },
+        {
+          "caller": "EditField",
+          "callee": "onChange",
+          "lineNumber": 80
+        },
+        {
+          "caller": "EditField",
+          "callee": "parseFloat",
+          "lineNumber": 82
+        },
+        {
+          "caller": "EditField",
+          "callee": "value.toString",
+          "lineNumber": 90
+        },
+        {
+          "caller": "TourEditor",
+          "callee": "useState",
+          "lineNumber": 98
+        },
+        {
+          "caller": "TourEditor",
+          "callee": "useParams",
+          "lineNumber": 99
+        },
+        {
+          "caller": "TourEditor",
+          "callee": "useState",
+          "lineNumber": 100
+        },
+        {
+          "caller": "TourEditor",
+          "callee": "useState",
+          "lineNumber": 101
+        },
+        {
+          "caller": "TourEditor",
+          "callee": "useState",
+          "lineNumber": 102
+        },
+        {
+          "caller": "TourEditor",
+          "callee": "useState",
+          "lineNumber": 103
+        },
+        {
+          "caller": "TourEditor",
+          "callee": "useState",
+          "lineNumber": 104
+        },
+        {
+          "caller": "TourEditor",
+          "callee": "useEffect",
+          "lineNumber": 106
+        },
+        {
+          "caller": "TourEditor",
+          "callee": "fetchTour",
+          "lineNumber": 108
+        },
+        {
+          "caller": "fetchTour",
+          "callee": "getTour",
+          "lineNumber": 114
+        },
+        {
+          "caller": "fetchTour",
+          "callee": "setTour",
+          "lineNumber": 117
+        },
+        {
+          "caller": "fetchTour",
+          "callee": "setFeatureImage",
+          "lineNumber": 118
+        },
+        {
+          "caller": "fetchTour",
+          "callee": "setSlots",
+          "lineNumber": 119
+        },
+        {
+          "caller": "fetchTour",
+          "callee": "setPrices",
+          "lineNumber": 120
+        },
+        {
+          "caller": "fetchTour",
+          "callee": "console.error",
+          "lineNumber": 122
+        },
+        {
+          "caller": "fetchTour",
+          "callee": "console.error",
+          "lineNumber": 125
+        },
+        {
+          "caller": "fetchTour",
+          "callee": "alert",
+          "lineNumber": 127
+        },
+        {
+          "caller": "handleEditClick",
+          "callee": "setEditField",
+          "lineNumber": 133
+        },
+        {
+          "caller": "handleInputChange",
+          "callee": "setTour",
+          "lineNumber": 137
+        },
+        {
+          "caller": "handleImageChange",
+          "callee": "setFeatureImage",
+          "lineNumber": 152
+        },
+        {
+          "caller": "handleImageChange",
+          "callee": "handleInputChange",
+          "lineNumber": 153
+        },
+        {
+          "caller": "handleImageChange",
+          "callee": "reader.readAsDataURL",
+          "lineNumber": 155
+        },
+        {
+          "caller": "handleSave",
+          "callee": "setIsSaving",
+          "lineNumber": 161
+        },
+        {
+          "caller": "handleSave",
+          "callee": "saveTour",
+          "lineNumber": 168
+        },
+        {
+          "caller": "handleSave",
+          "callee": "setTour",
+          "lineNumber": 171
+        },
+        {
+          "caller": "handleSave",
+          "callee": "setSlots",
+          "lineNumber": 172
+        },
+        {
+          "caller": "handleSave",
+          "callee": "setPrices",
+          "lineNumber": 173
+        },
+        {
+          "caller": "handleSave",
+          "callee": "console.info",
+          "lineNumber": 174
+        },
+        {
+          "caller": "handleSave",
+          "callee": "alert",
+          "lineNumber": 175
+        },
+        {
+          "caller": "handleSave",
+          "callee": "console.error",
+          "lineNumber": 177
+        },
+        {
+          "caller": "handleSave",
+          "callee": "console.error",
+          "lineNumber": 180
+        },
+        {
+          "caller": "handleSave",
+          "callee": "alert",
+          "lineNumber": 182
+        },
+        {
+          "caller": "handleSave",
+          "callee": "setEditField",
+          "lineNumber": 185
+        },
+        {
+          "caller": "handleSave",
+          "callee": "setIsSaving",
+          "lineNumber": 186
+        },
+        {
+          "caller": "handleDeleteSlot",
+          "callee": "slots.filter",
+          "lineNumber": 191
+        },
+        {
+          "caller": "handleDeleteSlot",
+          "callee": "setSlots",
+          "lineNumber": 192
+        },
+        {
+          "caller": "handleDeletePrice",
+          "callee": "prices.filter",
+          "lineNumber": 196
+        },
+        {
+          "caller": "handleDeletePrice",
+          "callee": "setPrices",
+          "lineNumber": 197
+        },
+        {
+          "caller": "handleCancel",
+          "callee": "setEditField",
+          "lineNumber": 201
+        },
+        {
+          "caller": "handleAddSlot",
+          "callee": "setSlots",
+          "lineNumber": 205
+        },
+        {
+          "caller": "handleEditSlot",
+          "callee": "setSlots",
+          "lineNumber": 211
+        },
+        {
+          "caller": "handleAddPrice",
+          "callee": "setPrices",
+          "lineNumber": 215
+        },
+        {
+          "caller": "handleEditPrice",
+          "callee": "setPrices",
+          "lineNumber": 221
+        },
+        {
+          "caller": "TourEditor",
+          "callee": "handleEditClick",
+          "lineNumber": 239
+        },
+        {
+          "caller": "TourEditor",
+          "callee": "handleInputChange",
+          "lineNumber": 248
+        },
+        {
+          "caller": "TourEditor",
+          "callee": "handleEditClick",
+          "lineNumber": 290
+        },
+        {
+          "caller": "TourEditor",
+          "callee": "slots.map",
+          "lineNumber": 378
+        },
+        {
+          "caller": "TourEditor",
+          "callee": "handleEditSlot",
+          "lineNumber": 383
+        },
+        {
+          "caller": "TourEditor",
+          "callee": "handleEditSlot",
+          "lineNumber": 389
+        },
+        {
+          "caller": "TourEditor",
+          "callee": "handleDeleteSlot",
+          "lineNumber": 395
+        },
+        {
+          "caller": "TourEditor",
+          "callee": "prices.map",
+          "lineNumber": 419
+        },
+        {
+          "caller": "TourEditor",
+          "callee": "handleEditPrice",
+          "lineNumber": 429
+        },
+        {
+          "caller": "TourEditor",
+          "callee": "parseFloat",
+          "lineNumber": 429
+        },
+        {
+          "caller": "TourEditor",
+          "callee": "handleDeletePrice",
+          "lineNumber": 436
+        }
+      ],
+      "metrics": {
+        "importCount": 3,
+        "exportCount": 1,
+        "functionCount": 2,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/Components/TourManager.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 182,
+      "nonEmptyLines": 166,
+      "functions": [
+        {
+          "name": "TourManager",
+          "startLine": 54,
+          "endLine": 182,
+          "params": [
+            "props"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "TourStatus",
+          "line": 11,
+          "isDefault": false
+        },
+        {
+          "name": "TourManager",
+          "line": 54,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "TourManager",
+          "callee": "useState",
+          "lineNumber": 55
+        },
+        {
+          "caller": "TourManager",
+          "callee": "useState",
+          "lineNumber": 57
+        },
+        {
+          "caller": "handlePaginationClick",
+          "callee": "console.log",
+          "lineNumber": 65
+        },
+        {
+          "caller": "handlePaginationClick",
+          "callee": "setPagination",
+          "lineNumber": 67
+        },
+        {
+          "caller": "TourManager",
+          "callee": "useEffect",
+          "lineNumber": 80
+        },
+        {
+          "caller": "TourManager",
+          "callee": "fetchTours",
+          "lineNumber": 81
+        },
+        {
+          "caller": "TourManager",
+          "callee": "props.activeMenu",
+          "lineNumber": 82
+        },
+        {
+          "caller": "fetchTours",
+          "callee": "listTour()\r\n        .then(rsp => {\r\n          if (rsp.status === 200) {\r\n            const data = rsp.data;\r\n            setTours(data.content)\r\n            if (data.totalPages !== pagination.totalPages) {\r\n              setPagination({\r\n                ...pagination,\r\n                totalPages: data.totalPages\r\n              })\r\n            }\r\n          }\r\n        })\r\n        .catch",
+          "lineNumber": 89
+        },
+        {
+          "caller": "fetchTours",
+          "callee": "listTour()\r\n        .then",
+          "lineNumber": 89
+        },
+        {
+          "caller": "fetchTours",
+          "callee": "listTour",
+          "lineNumber": 89
+        },
+        {
+          "caller": "fetchTours",
+          "callee": "setTours",
+          "lineNumber": 93
+        },
+        {
+          "caller": "fetchTours",
+          "callee": "setPagination",
+          "lineNumber": 95
+        },
+        {
+          "caller": "fetchTours",
+          "callee": "console.error",
+          "lineNumber": 103
+        },
+        {
+          "caller": "fetchTours",
+          "callee": "console.error",
+          "lineNumber": 106
+        },
+        {
+          "caller": "fetchTours",
+          "callee": "alert",
+          "lineNumber": 108
+        },
+        {
+          "caller": "removeTour",
+          "callee": "console.log",
+          "lineNumber": 117
+        },
+        {
+          "caller": "TourManager",
+          "callee": "tours?.map",
+          "lineNumber": 129
+        },
+        {
+          "caller": "TourManager",
+          "callee": "removeTour",
+          "lineNumber": 150
+        },
+        {
+          "caller": "TourManager",
+          "callee": "handlePaginationClick",
+          "lineNumber": 163
+        },
+        {
+          "caller": "TourManager",
+          "callee": "handlePaginationClick",
+          "lineNumber": 166
+        },
+        {
+          "caller": "TourManager",
+          "callee": "pageClass",
+          "lineNumber": 166
+        },
+        {
+          "caller": "TourManager",
+          "callee": "pageClass",
+          "lineNumber": 169
+        },
+        {
+          "caller": "TourManager",
+          "callee": "handlePaginationClick",
+          "lineNumber": 172
+        },
+        {
+          "caller": "TourManager",
+          "callee": "pageClass",
+          "lineNumber": 172
+        },
+        {
+          "caller": "TourManager",
+          "callee": "handlePaginationClick",
+          "lineNumber": 175
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 2,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/Components/UserProfile.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 137,
+      "nonEmptyLines": 131,
+      "functions": [
+        {
+          "name": "UserProfile",
+          "startLine": 8,
+          "endLine": 135,
+          "params": [
+            "{ userProfile, onSignOut }"
+          ]
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "UserProfile",
+          "callee": "useState",
+          "lineNumber": 9
+        },
+        {
+          "caller": "UserProfile",
+          "callee": "useState",
+          "lineNumber": 10
+        },
+        {
+          "caller": "UserProfile",
+          "callee": "useState",
+          "lineNumber": 11
+        },
+        {
+          "caller": "UserProfile",
+          "callee": "useState",
+          "lineNumber": 12
+        },
+        {
+          "caller": "UserProfile",
+          "callee": "useState",
+          "lineNumber": 13
+        },
+        {
+          "caller": "UserProfile",
+          "callee": "useState",
+          "lineNumber": 14
+        },
+        {
+          "caller": "UserProfile",
+          "callee": "useState",
+          "lineNumber": 15
+        },
+        {
+          "caller": "handleSave",
+          "callee": "e.preventDefault",
+          "lineNumber": 22
+        },
+        {
+          "caller": "handleSave",
+          "callee": "setStatus",
+          "lineNumber": 24
+        },
+        {
+          "caller": "handleSave",
+          "callee": "setEditing",
+          "lineNumber": 25
+        },
+        {
+          "caller": "UserProfile",
+          "callee": "window.history.back",
+          "lineNumber": 33
+        },
+        {
+          "caller": "UserProfile",
+          "callee": "setDisplayName",
+          "lineNumber": 63
+        },
+        {
+          "caller": "UserProfile",
+          "callee": "setFirstName",
+          "lineNumber": 77
+        },
+        {
+          "caller": "UserProfile",
+          "callee": "setLastName",
+          "lineNumber": 91
+        },
+        {
+          "caller": "UserProfile",
+          "callee": "roles.join",
+          "lineNumber": 100
+        },
+        {
+          "caller": "UserProfile",
+          "callee": "organization.join",
+          "lineNumber": 104
+        },
+        {
+          "caller": "UserProfile",
+          "callee": "setEditing",
+          "lineNumber": 118
+        },
+        {
+          "caller": "UserProfile",
+          "callee": "setEditing",
+          "lineNumber": 127
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/Components/Welcome.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 27,
+      "nonEmptyLines": 23,
+      "functions": [
+        {
+          "name": "Welcome",
+          "startLine": 9,
+          "endLine": 27,
+          "params": [
+            "props"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "Welcome",
+          "line": 9,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "Welcome",
+          "callee": "useEffect",
+          "lineNumber": 10
+        },
+        {
+          "caller": "Welcome",
+          "callee": "props.activeMenu",
+          "lineNumber": 11
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/db/profile.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 6,
+      "nonEmptyLines": 5,
+      "functions": [
+        {
+          "name": "getProfile",
+          "startLine": 3,
+          "endLine": 6,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "getProfile",
+          "line": 3,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "getProfile",
+          "callee": "console.info",
+          "lineNumber": 4
+        },
+        {
+          "caller": "getProfile",
+          "callee": "profileApi.getUri",
+          "lineNumber": 4
+        },
+        {
+          "caller": "getProfile",
+          "callee": "profileApi.get",
+          "lineNumber": 5
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/db/taxPolicy.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 24,
+      "nonEmptyLines": 19,
+      "functions": [
+        {
+          "name": "listTaxPolicies",
+          "startLine": 14,
+          "endLine": 15,
+          "params": []
+        },
+        {
+          "name": "createTaxPolicy",
+          "startLine": 17,
+          "endLine": 18,
+          "params": [
+            "policy"
+          ]
+        },
+        {
+          "name": "updateTaxPolicy",
+          "startLine": 20,
+          "endLine": 21,
+          "params": [
+            "policy"
+          ]
+        },
+        {
+          "name": "reorderTaxPolicies",
+          "startLine": 23,
+          "endLine": 24,
+          "params": [
+            "policyIds"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "listTaxPolicies",
+          "line": 14,
+          "isDefault": false
+        },
+        {
+          "name": "createTaxPolicy",
+          "line": 17,
+          "isDefault": false
+        },
+        {
+          "name": "updateTaxPolicy",
+          "line": 20,
+          "isDefault": false
+        },
+        {
+          "name": "reorderTaxPolicies",
+          "line": 23,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "listTaxPolicies",
+          "callee": "taxPolicyApi.get",
+          "lineNumber": 15
+        },
+        {
+          "caller": "createTaxPolicy",
+          "callee": "taxPolicyApi.post",
+          "lineNumber": 18
+        },
+        {
+          "caller": "updateTaxPolicy",
+          "callee": "taxPolicyApi.put",
+          "lineNumber": 21
+        },
+        {
+          "caller": "reorderTaxPolicies",
+          "callee": "taxPolicyApi.put",
+          "lineNumber": 24
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 4,
+        "functionCount": 4,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/db/tour-request.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 14,
+      "nonEmptyLines": 12,
+      "functions": [
+        {
+          "name": "listTourRequest",
+          "startLine": 4,
+          "endLine": 7,
+          "params": []
+        },
+        {
+          "name": "saveTourRequest",
+          "startLine": 9,
+          "endLine": 14,
+          "params": [
+            "tour"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "listTourRequest",
+          "line": 4,
+          "isDefault": false
+        },
+        {
+          "name": "saveTourRequest",
+          "line": 9,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "listTourRequest",
+          "callee": "console.info",
+          "lineNumber": 5
+        },
+        {
+          "caller": "listTourRequest",
+          "callee": "tourRequestApi.get",
+          "lineNumber": 6
+        },
+        {
+          "caller": "saveTourRequest",
+          "callee": "console.info",
+          "lineNumber": 10
+        },
+        {
+          "caller": "saveTourRequest",
+          "callee": "tourRequestApi.post",
+          "lineNumber": 11
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 2,
+        "functionCount": 2,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/db/tour.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 26,
+      "nonEmptyLines": 22,
+      "functions": [
+        {
+          "name": "listTour",
+          "startLine": 4,
+          "endLine": 7,
+          "params": []
+        },
+        {
+          "name": "getTour",
+          "startLine": 9,
+          "endLine": 12,
+          "params": [
+            "tourId"
+          ]
+        },
+        {
+          "name": "saveTour",
+          "startLine": 14,
+          "endLine": 19,
+          "params": [
+            "tour"
+          ]
+        },
+        {
+          "name": "adjustTourQuantity",
+          "startLine": 21,
+          "endLine": 26,
+          "params": [
+            "tour"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "listTour",
+          "line": 4,
+          "isDefault": false
+        },
+        {
+          "name": "getTour",
+          "line": 9,
+          "isDefault": false
+        },
+        {
+          "name": "saveTour",
+          "line": 14,
+          "isDefault": false
+        },
+        {
+          "name": "adjustTourQuantity",
+          "line": 21,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "listTour",
+          "callee": "console.info",
+          "lineNumber": 5
+        },
+        {
+          "caller": "listTour",
+          "callee": "tourApi.get",
+          "lineNumber": 6
+        },
+        {
+          "caller": "getTour",
+          "callee": "console.info",
+          "lineNumber": 10
+        },
+        {
+          "caller": "getTour",
+          "callee": "tourApi.get",
+          "lineNumber": 11
+        },
+        {
+          "caller": "saveTour",
+          "callee": "console.info",
+          "lineNumber": 15
+        },
+        {
+          "caller": "saveTour",
+          "callee": "tourApi.post",
+          "lineNumber": 16
+        },
+        {
+          "caller": "adjustTourQuantity",
+          "callee": "console.info",
+          "lineNumber": 22
+        },
+        {
+          "caller": "adjustTourQuantity",
+          "callee": "tourApi.post",
+          "lineNumber": 23
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 4,
+        "functionCount": 4,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/index.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 13,
+      "nonEmptyLines": 12,
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    }
+  ]
+}

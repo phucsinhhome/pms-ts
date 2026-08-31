@@ -1,0 +1,13 @@
+{
+  "projectRoot": "C:/apps/ps/pms-ts",
+  "batchFiles": [
+    {"path": ".planning/phases/04-dynamic-room-integration/01-RESEARCH.md", "language": "markdown", "sizeLines": 24, "fileCategory": "docs"},
+    {"path": ".planning/phases/04-dynamic-room-integration/04-PLAN.md", "language": "markdown", "sizeLines": 25, "fileCategory": "docs"},
+    {"path": ".planning/phases/04-dynamic-room-integration/04-SUMMARY.md", "language": "markdown", "sizeLines": 22, "fileCategory": "docs"}
+  ],
+  "batchImportData": {
+    ".planning/phases/04-dynamic-room-integration/01-RESEARCH.md": [],
+    ".planning/phases/04-dynamic-room-integration/04-PLAN.md": [],
+    ".planning/phases/04-dynamic-room-integration/04-SUMMARY.md": []
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "projectRoot": "C:/apps/ps/pms-ts",
+  "batchFiles": [
+    {
+      "path": "src/Components/CounterInput.tsx",
+      "language": "typescript",
+      "sizeLines": 73,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/Components/RatePlanManager.tsx",
+      "language": "typescript",
+      "sizeLines": 678,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/Components/RoomManager.tsx",
+      "language": "typescript",
+      "sizeLines": 346,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/db/rate_plan.ts",
+      "language": "typescript",
+      "sizeLines": 31,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/db/room.ts",
+      "language": "typescript",
+      "sizeLines": 26,
+      "fileCategory": "code"
+    }
+  ],
+  "batchImportData": {
+    "src/Components/CounterInput.tsx": [],
+    "src/Components/RatePlanManager.tsx": [
+      "src/App.tsx",
+      "src/Components/CounterInput.tsx",
+      "src/Components/ProfitReport.tsx",
+      "src/Service/Utils.ts",
+      "src/db/rate_plan.ts",
+      "src/db/room.ts"
+    ],
+    "src/Components/RoomManager.tsx": [
+      "src/App.tsx",
+      "src/Components/ProfitReport.tsx",
+      "src/db/room.ts"
+    ],
+    "src/db/rate_plan.ts": [
+      "src/Components/RatePlanManager.tsx",
+      "src/db/apis.ts"
+    ],
+    "src/db/room.ts": [
+      "src/db/apis.ts"
+    ]
+  }
+}

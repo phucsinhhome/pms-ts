@@ -1,0 +1,77 @@
+{
+  "projectRoot": "C:/apps/ps/pms-ts",
+  "batchFiles": [
+    {"path": "src/App.tsx", "language": "typescript", "sizeLines": 521, "fileCategory": "code"},
+    {"path": "src/Components/TaxPolicyManager.tsx", "language": "typescript", "sizeLines": 201, "fileCategory": "code"},
+    {"path": "src/Components/TourEditor.tsx", "language": "typescript", "sizeLines": 469, "fileCategory": "code"},
+    {"path": "src/Components/TourManager.tsx", "language": "typescript", "sizeLines": 182, "fileCategory": "code"},
+    {"path": "src/Components/UserProfile.tsx", "language": "typescript", "sizeLines": 136, "fileCategory": "code"},
+    {"path": "src/Components/Welcome.tsx", "language": "typescript", "sizeLines": 26, "fileCategory": "code"},
+    {"path": "src/db/profile.ts", "language": "typescript", "sizeLines": 5, "fileCategory": "code"},
+    {"path": "src/db/taxPolicy.ts", "language": "typescript", "sizeLines": 24, "fileCategory": "code"},
+    {"path": "src/db/tour-request.ts", "language": "typescript", "sizeLines": 13, "fileCategory": "code"},
+    {"path": "src/db/tour.ts", "language": "typescript", "sizeLines": 26, "fileCategory": "code"},
+    {"path": "src/index.tsx", "language": "typescript", "sizeLines": 12, "fileCategory": "code"}
+  ],
+  "batchImportData": {
+    "src/App.tsx": [
+      "src/App.css",
+      "src/Components/ExpenseManager.tsx",
+      "src/Components/ImmigrationRegistrationManager.tsx",
+      "src/Components/Inventory.tsx",
+      "src/Components/InvoiceEditor.tsx",
+      "src/Components/InvoiceManager.tsx",
+      "src/Components/InvoiceMap.tsx",
+      "src/Components/OrderEditor.tsx",
+      "src/Components/OrderManager.tsx",
+      "src/Components/PGroupManager.tsx",
+      "src/Components/ProfitReport.tsx",
+      "src/Components/RatePlanManager.tsx",
+      "src/Components/ReservationManager.tsx",
+      "src/Components/ReservationMap.tsx",
+      "src/Components/RoomManager.tsx",
+      "src/Components/Settings.tsx",
+      "src/Components/SupplierManager.tsx",
+      "src/Components/TaxPolicyManager.tsx",
+      "src/Components/TaxableInvoiceManager.tsx",
+      "src/Components/TourEditor.tsx",
+      "src/Components/TourManager.tsx",
+      "src/Components/UserProfile.tsx",
+      "src/Components/Welcome.tsx",
+      "src/db/configs.ts",
+      "src/db/profile.ts"
+    ],
+    "src/Components/TaxPolicyManager.tsx": [
+      "src/db/taxPolicy.ts"
+    ],
+    "src/Components/TourEditor.tsx": [
+      "src/App.tsx",
+      "src/Components/TourManager.tsx",
+      "src/db/tour.ts"
+    ],
+    "src/Components/TourManager.tsx": [
+      "src/App.tsx",
+      "src/db/tour.ts"
+    ],
+    "src/Components/UserProfile.tsx": [],
+    "src/Components/Welcome.tsx": [],
+    "src/db/profile.ts": [
+      "src/db/apis.ts"
+    ],
+    "src/db/taxPolicy.ts": [
+      "src/db/apis.ts"
+    ],
+    "src/db/tour-request.ts": [
+      "src/Components/TourManager.tsx",
+      "src/db/apis.ts"
+    ],
+    "src/db/tour.ts": [
+      "src/Components/TourManager.tsx",
+      "src/db/apis.ts"
+    ],
+    "src/index.tsx": [
+      "src/App.tsx",
+      "src/index.css"
+    ]
+  }
+}

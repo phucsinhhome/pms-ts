@@ -1,0 +1,686 @@
+{
+  "nodes": [
+    {
+      "id": "file:src/Components/Immigration.tsx",
+      "type": "file",
+      "name": "Immigration.tsx",
+      "filePath": "src/Components/Immigration.tsx",
+      "summary": "Invoice management screen scoped to the Immigration menu: lists staying/coming invoices, filters by date range and guest name, paginates results, and supports authority-checked invoice deletion.",
+      "tags": [
+        "component",
+        "invoice",
+        "immigration",
+        "pagination"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/Components/Immigration.tsx:InvoiceManager",
+      "type": "function",
+      "name": "InvoiceManager",
+      "filePath": "src/Components/Immigration.tsx",
+      "lineRange": [
+        31,
+        421
+      ],
+      "summary": "React component implementing the invoice list view for the Immigration menu: fetches staying/incoming invoices, filters by date range and guest name, paginates results, and supports authority-checked invoice deletion with confirmation.",
+      "tags": [
+        "component",
+        "invoice",
+        "state-management"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/Components/ImmigrationRegistrationManager.tsx",
+      "type": "file",
+      "name": "ImmigrationRegistrationManager.tsx",
+      "filePath": "src/Components/ImmigrationRegistrationManager.tsx",
+      "summary": "Manages immigration guest registrations tied to invoices: lists registrations by date range, lets staff pick an eligible invoice, add/remove registered guests, and submit registration data to the backend.",
+      "tags": [
+        "component",
+        "immigration",
+        "crud",
+        "form"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/Components/ImmigrationRegistrationManager.tsx:ImmigrationRegistrationManager",
+      "type": "function",
+      "name": "ImmigrationRegistrationManager",
+      "filePath": "src/Components/ImmigrationRegistrationManager.tsx",
+      "lineRange": [
+        35,
+        265
+      ],
+      "summary": "React component that loads immigration registrations for a date range, lets staff select an eligible invoice to register, add/remove guests, and paginate through registrations.",
+      "tags": [
+        "component",
+        "immigration",
+        "state-management"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/Components/InvoiceManager.tsx",
+      "type": "file",
+      "name": "InvoiceManager.tsx",
+      "filePath": "src/Components/InvoiceManager.tsx",
+      "summary": "Primary invoice management screen listing staying/incoming invoices with date and guest-name filters, pagination, and authority-gated invoice deletion.",
+      "tags": [
+        "component",
+        "invoice",
+        "crud",
+        "pagination"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/Components/InvoiceManager.tsx:InvoiceManager",
+      "type": "function",
+      "name": "InvoiceManager",
+      "filePath": "src/Components/InvoiceManager.tsx",
+      "lineRange": [
+        63,
+        453
+      ],
+      "summary": "React component implementing the main invoice list view: fetches staying/incoming invoices, filters by date and guest name, paginates results, and supports authority-checked invoice deletion.",
+      "tags": [
+        "component",
+        "invoice",
+        "state-management"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/Components/InvoiceMap.tsx",
+      "type": "file",
+      "name": "InvoiceMap.tsx",
+      "filePath": "src/Components/InvoiceMap.tsx",
+      "summary": "Visual room-grid map showing invoices and guests per room for a selectable work date, with date navigation and manual room-occupancy updates via reservation extraction.",
+      "tags": [
+        "component",
+        "visualization",
+        "rooms",
+        "invoice"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/Components/InvoiceMap.tsx:InvoiceMap",
+      "type": "function",
+      "name": "InvoiceMap",
+      "filePath": "src/Components/InvoiceMap.tsx",
+      "lineRange": [
+        39,
+        244
+      ],
+      "summary": "React component rendering a grid of rooms for a chosen work date, mapping invoices/guests to rooms, and allowing manual reservation updates via collectRes.",
+      "tags": [
+        "component",
+        "visualization",
+        "rooms"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/Components/OrderEditor.tsx",
+      "type": "file",
+      "name": "OrderEditor.tsx",
+      "filePath": "src/Components/OrderEditor.tsx",
+      "summary": "Order detail/edit screen that loads an order and its linked invoice, manages product-group items, and drives the order lifecycle (send to preparation, mark served, stop preparation, link/unlink invoice).",
+      "tags": [
+        "component",
+        "order",
+        "workflow",
+        "invoice"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/Components/OrderEditor.tsx:OrderEditor",
+      "type": "function",
+      "name": "OrderEditor",
+      "filePath": "src/Components/OrderEditor.tsx",
+      "lineRange": [
+        23,
+        462
+      ],
+      "summary": "React component managing a single order's lifecycle: loading order/invoice data, editing linked product-group items, and transitioning order status (prepare, serve, reject, link invoice).",
+      "tags": [
+        "component",
+        "order",
+        "lifecycle"
+      ],
+      "complexity": "complex"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:src/Components/Immigration.tsx",
+      "target": "function:src/Components/Immigration.tsx:InvoiceManager",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/Components/Immigration.tsx",
+      "target": "function:src/Components/Immigration.tsx:InvoiceManager",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/Components/ImmigrationRegistrationManager.tsx",
+      "target": "function:src/Components/ImmigrationRegistrationManager.tsx:ImmigrationRegistrationManager",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/Components/ImmigrationRegistrationManager.tsx",
+      "target": "function:src/Components/ImmigrationRegistrationManager.tsx:ImmigrationRegistrationManager",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/Components/InvoiceManager.tsx",
+      "target": "function:src/Components/InvoiceManager.tsx:InvoiceManager",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/Components/InvoiceManager.tsx",
+      "target": "function:src/Components/InvoiceManager.tsx:InvoiceManager",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/Components/InvoiceMap.tsx",
+      "target": "function:src/Components/InvoiceMap.tsx:InvoiceMap",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/Components/InvoiceMap.tsx",
+      "target": "function:src/Components/InvoiceMap.tsx:InvoiceMap",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/Components/OrderEditor.tsx",
+      "target": "function:src/Components/OrderEditor.tsx:OrderEditor",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/Components/OrderEditor.tsx",
+      "target": "function:src/Components/OrderEditor.tsx:OrderEditor",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/Components/Immigration.tsx",
+      "target": "file:src/App.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/Immigration.tsx",
+      "target": "file:src/Components/InvoiceManager.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/Immigration.tsx",
+      "target": "file:src/Components/ProfitReport.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/Immigration.tsx",
+      "target": "file:src/Service/Utils.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/Immigration.tsx",
+      "target": "file:src/db/invoice.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/Immigration.tsx",
+      "target": "file:src/db/permission.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/ImmigrationRegistrationManager.tsx",
+      "target": "file:src/Components/InvoiceManager.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/ImmigrationRegistrationManager.tsx",
+      "target": "file:src/Components/ProfitReport.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/ImmigrationRegistrationManager.tsx",
+      "target": "file:src/Service/Utils.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/ImmigrationRegistrationManager.tsx",
+      "target": "file:src/db/immigrationRegistration.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/InvoiceManager.tsx",
+      "target": "file:src/App.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/InvoiceManager.tsx",
+      "target": "file:src/Components/ProfitReport.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/InvoiceManager.tsx",
+      "target": "file:src/Service/Utils.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/InvoiceManager.tsx",
+      "target": "file:src/db/invoice.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/InvoiceManager.tsx",
+      "target": "file:src/db/permission.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/InvoiceMap.tsx",
+      "target": "file:src/Components/InvoiceEditor.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/InvoiceMap.tsx",
+      "target": "file:src/Components/InvoiceManager.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/InvoiceMap.tsx",
+      "target": "file:src/Components/ProfitReport.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/InvoiceMap.tsx",
+      "target": "file:src/Service/Utils.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/InvoiceMap.tsx",
+      "target": "file:src/db/invoice.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/InvoiceMap.tsx",
+      "target": "file:src/db/reservation_extractor.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/InvoiceMap.tsx",
+      "target": "file:src/db/room.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/OrderEditor.tsx",
+      "target": "file:src/App.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/OrderEditor.tsx",
+      "target": "file:src/Components/InvoiceManager.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/OrderEditor.tsx",
+      "target": "file:src/Components/OrderManager.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/OrderEditor.tsx",
+      "target": "file:src/Components/PGroupManager.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/OrderEditor.tsx",
+      "target": "file:src/Service/Utils.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/OrderEditor.tsx",
+      "target": "file:src/db/invoice.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/OrderEditor.tsx",
+      "target": "file:src/db/order.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/Components/OrderEditor.tsx",
+      "target": "file:src/db/pgroup.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "function:src/Components/Immigration.tsx:InvoiceManager",
+      "target": "function:src/Service/Utils.ts:formatISODate",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Components/Immigration.tsx:InvoiceManager",
+      "target": "function:src/Service/Utils.ts:formatVND",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Components/Immigration.tsx:InvoiceManager",
+      "target": "function:src/db/invoice.ts:listStayingAndComingInvoices",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Components/Immigration.tsx:InvoiceManager",
+      "target": "function:src/db/invoice.ts:deleteInvoice",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Components/Immigration.tsx:InvoiceManager",
+      "target": "function:src/db/invoice.ts:listInvoiceByGuestName",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Components/ImmigrationRegistrationManager.tsx:ImmigrationRegistrationManager",
+      "target": "function:src/Service/Utils.ts:formatISODate",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Components/ImmigrationRegistrationManager.tsx:ImmigrationRegistrationManager",
+      "target": "function:src/Service/Utils.ts:beginOfMonth",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Components/ImmigrationRegistrationManager.tsx:ImmigrationRegistrationManager",
+      "target": "function:src/db/immigrationRegistration.ts:listImmigrationRegistrations",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Components/ImmigrationRegistrationManager.tsx:ImmigrationRegistrationManager",
+      "target": "function:src/db/immigrationRegistration.ts:listInvoicesForImmigration",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Components/ImmigrationRegistrationManager.tsx:ImmigrationRegistrationManager",
+      "target": "function:src/db/immigrationRegistration.ts:addImmigrationRegistration",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Components/ImmigrationRegistrationManager.tsx:ImmigrationRegistrationManager",
+      "target": "function:src/db/immigrationRegistration.ts:addImmigrationGuest",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Components/ImmigrationRegistrationManager.tsx:ImmigrationRegistrationManager",
+      "target": "function:src/db/immigrationRegistration.ts:removeImmigrationRegistration",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Components/ImmigrationRegistrationManager.tsx:ImmigrationRegistrationManager",
+      "target": "function:src/db/immigrationRegistration.ts:unwrapPage",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Components/InvoiceManager.tsx:InvoiceManager",
+      "target": "function:src/Service/Utils.ts:formatISODate",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Components/InvoiceManager.tsx:InvoiceManager",
+      "target": "function:src/Service/Utils.ts:formatVND",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Components/InvoiceManager.tsx:InvoiceManager",
+      "target": "function:src/db/invoice.ts:listStayingAndComingInvoices",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Components/InvoiceManager.tsx:InvoiceManager",
+      "target": "function:src/db/invoice.ts:deleteInvoice",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Components/InvoiceManager.tsx:InvoiceManager",
+      "target": "function:src/db/invoice.ts:listInvoiceByGuestName",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Components/InvoiceMap.tsx:InvoiceMap",
+      "target": "function:src/Service/Utils.ts:formatISODate",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Components/InvoiceMap.tsx:InvoiceMap",
+      "target": "function:src/Service/Utils.ts:addDays",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Components/InvoiceMap.tsx:InvoiceMap",
+      "target": "function:src/db/invoice.ts:listStayingAndComingInvoices",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Components/InvoiceMap.tsx:InvoiceMap",
+      "target": "function:src/db/room.ts:listRoom",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Components/InvoiceMap.tsx:InvoiceMap",
+      "target": "function:src/db/reservation_extractor.ts:collectRes",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Components/OrderEditor.tsx:OrderEditor",
+      "target": "function:src/Service/Utils.ts:formatISODateTime",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Components/OrderEditor.tsx:OrderEditor",
+      "target": "function:src/Service/Utils.ts:formatRooms",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Components/OrderEditor.tsx:OrderEditor",
+      "target": "function:src/Service/Utils.ts:formatVND",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Components/OrderEditor.tsx:OrderEditor",
+      "target": "function:src/db/invoice.ts:getInvoice",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Components/OrderEditor.tsx:OrderEditor",
+      "target": "function:src/db/invoice.ts:listInvoiceByGuestName",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Components/OrderEditor.tsx:OrderEditor",
+      "target": "function:src/db/order.ts:fetchOrder",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Components/OrderEditor.tsx:OrderEditor",
+      "target": "function:src/db/order.ts:getPotentialInvoices",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Components/OrderEditor.tsx:OrderEditor",
+      "target": "function:src/db/order.ts:saveOrder",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Components/OrderEditor.tsx:OrderEditor",
+      "target": "function:src/db/order.ts:confirmOrder",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Components/OrderEditor.tsx:OrderEditor",
+      "target": "function:src/db/order.ts:serveOrder",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Components/OrderEditor.tsx:OrderEditor",
+      "target": "function:src/db/order.ts:rejectOrder",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/Components/OrderEditor.tsx:OrderEditor",
+      "target": "function:src/db/pgroup.ts:listAllPGroups",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    }
+  ]
+}

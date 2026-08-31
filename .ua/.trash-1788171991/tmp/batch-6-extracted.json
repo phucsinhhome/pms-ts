@@ -1,0 +1,269 @@
+{
+  "batchIndex": 6,
+  "files": [
+    {
+      "path": "src/Components/ReservationManager.tsx",
+      "language": "typescript",
+      "sizeLines": 235,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/Components/ReservationMap.tsx",
+      "language": "typescript",
+      "sizeLines": 232,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/db/reservation.ts",
+      "language": "typescript",
+      "sizeLines": 38,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/db/reservation_extractor.ts",
+      "language": "typescript",
+      "sizeLines": 14,
+      "fileCategory": "code"
+    }
+  ],
+  "batchImportData": {
+    "src/Components/ReservationManager.tsx": [
+      "src/App.tsx",
+      "src/Components/InvoiceEditor.tsx",
+      "src/Components/ProfitReport.tsx",
+      "src/Service/Utils.ts",
+      "src/db/reservation.ts",
+      "src/db/reservation_extractor.ts"
+    ],
+    "src/Components/ReservationMap.tsx": [
+      "src/App.tsx",
+      "src/Components/ProfitReport.tsx",
+      "src/Components/ReservationManager.tsx",
+      "src/Service/Utils.ts",
+      "src/db/reservation.ts",
+      "src/db/reservation_extractor.ts",
+      "src/db/room.ts"
+    ],
+    "src/db/reservation.ts": [
+      "src/Components/ReservationManager.tsx",
+      "src/db/apis.ts"
+    ],
+    "src/db/reservation_extractor.ts": [
+      "src/db/apis.ts"
+    ]
+  },
+  "neighborMap": {
+    "src/Components/ReservationManager.tsx": [
+      {
+        "path": "src/App.tsx",
+        "batchIndex": 3,
+        "symbols": [
+          "DEFAULT_PAGE_SIZE",
+          "defaultChat",
+          "App"
+        ]
+      },
+      {
+        "path": "src/Components/InvoiceEditor.tsx",
+        "batchIndex": 4,
+        "symbols": [
+          "internalRooms",
+          "Configs",
+          "InvoiceEditor"
+        ]
+      },
+      {
+        "path": "src/Components/ProfitReport.tsx",
+        "batchIndex": 2,
+        "symbols": [
+          "optionStyle",
+          "ProfitReport"
+        ]
+      },
+      {
+        "path": "src/Service/Utils.ts",
+        "batchIndex": 2,
+        "symbols": [
+          "formatVND",
+          "randomId",
+          "formatMoneyAmount",
+          "formatLocaleNumber",
+          "lastDateOf",
+          "lastDateOfMonth",
+          "beginOfDay",
+          "endOfDay",
+          "addDays",
+          "adjustMonths",
+          "beginOfMonth",
+          "formatShortDate",
+          "formatISODate",
+          "formatISODateTime",
+          "formatLocaleDate",
+          "formatDatePartition",
+          "formatMonthPartition",
+          "format2DigitDate",
+          "formatDateMonthDate",
+          "formatVNDateTime",
+          "formatLocalTime",
+          "formatISOTime",
+          "utcToHourMinute",
+          "utcToDate",
+          "utcToDateTime",
+          "formatISOHourMinute",
+          "formatRooms",
+          "formatLongDateTime"
+        ]
+      }
+    ],
+    "src/Components/ReservationMap.tsx": [
+      {
+        "path": "src/App.tsx",
+        "batchIndex": 3,
+        "symbols": [
+          "DEFAULT_PAGE_SIZE",
+          "defaultChat",
+          "App"
+        ]
+      },
+      {
+        "path": "src/Components/ProfitReport.tsx",
+        "batchIndex": 2,
+        "symbols": [
+          "optionStyle",
+          "ProfitReport"
+        ]
+      },
+      {
+        "path": "src/Service/Utils.ts",
+        "batchIndex": 2,
+        "symbols": [
+          "formatVND",
+          "randomId",
+          "formatMoneyAmount",
+          "formatLocaleNumber",
+          "lastDateOf",
+          "lastDateOfMonth",
+          "beginOfDay",
+          "endOfDay",
+          "addDays",
+          "adjustMonths",
+          "beginOfMonth",
+          "formatShortDate",
+          "formatISODate",
+          "formatISODateTime",
+          "formatLocaleDate",
+          "formatDatePartition",
+          "formatMonthPartition",
+          "format2DigitDate",
+          "formatDateMonthDate",
+          "formatVNDateTime",
+          "formatLocalTime",
+          "formatISOTime",
+          "utcToHourMinute",
+          "utcToDate",
+          "utcToDateTime",
+          "formatISOHourMinute",
+          "formatRooms",
+          "formatLongDateTime"
+        ]
+      },
+      {
+        "path": "src/db/room.ts",
+        "batchIndex": 5,
+        "symbols": [
+          "listRoom",
+          "createRoom",
+          "updateRoom",
+          "deleteRoom"
+        ]
+      }
+    ],
+    "src/db/reservation.ts": [
+      {
+        "path": "src/db/apis.ts",
+        "batchIndex": 1,
+        "symbols": [
+          "reportApi",
+          "expenseApi",
+          "invoiceApi",
+          "taxApi",
+          "taxPolicyApi",
+          "inventoryApi",
+          "productApi",
+          "productGroupApi",
+          "orderApi",
+          "reservationApi",
+          "reservationExtractApi",
+          "supplierApi",
+          "tourApi",
+          "tourRequestApi",
+          "configApi",
+          "classificationApi",
+          "statusApi",
+          "profileApi",
+          "userApi",
+          "botApi",
+          "psBaseApi",
+          "roomApi",
+          "ratePlanApi",
+          "immigrationRegistrationApi"
+        ]
+      },
+      {
+        "path": "src/Components/InvoiceEditor.tsx",
+        "batchIndex": 4,
+        "symbols": [
+          "internalRooms",
+          "Configs",
+          "InvoiceEditor"
+        ]
+      },
+      {
+        "path": "src/Components/Settings.tsx",
+        "batchIndex": 1,
+        "symbols": [
+          "Settings"
+        ]
+      }
+    ],
+    "src/db/reservation_extractor.ts": [
+      {
+        "path": "src/db/apis.ts",
+        "batchIndex": 1,
+        "symbols": [
+          "reportApi",
+          "expenseApi",
+          "invoiceApi",
+          "taxApi",
+          "taxPolicyApi",
+          "inventoryApi",
+          "productApi",
+          "productGroupApi",
+          "orderApi",
+          "reservationApi",
+          "reservationExtractApi",
+          "supplierApi",
+          "tourApi",
+          "tourRequestApi",
+          "configApi",
+          "classificationApi",
+          "statusApi",
+          "profileApi",
+          "userApi",
+          "botApi",
+          "psBaseApi",
+          "roomApi",
+          "ratePlanApi",
+          "immigrationRegistrationApi"
+        ]
+      },
+      {
+        "path": "src/Components/InvoiceMap.tsx",
+        "batchIndex": 2,
+        "symbols": [
+          "InvoiceMap"
+        ]
+      }
+    ]
+  }
+}

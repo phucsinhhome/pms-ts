@@ -1,0 +1,335 @@
+{
+  "scriptCompleted": true,
+  "stats": {
+    "filesScanned": 103,
+    "filesWithImports": 46,
+    "totalEdges": 176
+  },
+  "importMap": {
+    ".babelrc": [],
+    ".bg-shell/manifest.json": [],
+    ".dockerignore": [],
+    ".env.development": [],
+    ".github/copilot-instructions.md": [],
+    ".github/workflows/nodejs.yml": [],
+    ".planning/PROJECT.md": [],
+    ".planning/REQUIREMENTS.md": [],
+    ".planning/ROADMAP.md": [],
+    ".planning/STATE.md": [],
+    ".planning/codebase/ARCHITECTURE.md": [],
+    ".planning/codebase/CONCERNS.md": [],
+    ".planning/codebase/CONVENTIONS.md": [],
+    ".planning/codebase/INTEGRATIONS.md": [],
+    ".planning/codebase/STACK.md": [],
+    ".planning/codebase/STRUCTURE.md": [],
+    ".planning/codebase/TESTING.md": [],
+    ".planning/phases/01-foundation-refactoring/01-PLAN.md": [],
+    ".planning/phases/01-foundation-refactoring/01-RESEARCH.md": [],
+    ".planning/phases/02-configuration-caching-resilience/02-PLAN.md": [],
+    ".planning/phases/02-configuration-caching-resilience/02-RESEARCH.md": [],
+    ".planning/phases/04-CONTEXT.md": [],
+    ".planning/phases/04-dynamic-room-integration/01-RESEARCH.md": [],
+    ".planning/phases/04-dynamic-room-integration/04-PLAN.md": [],
+    ".planning/phases/04-dynamic-room-integration/04-SUMMARY.md": [],
+    ".planning/phases/06-room-invoice-map-optimization/06-PLAN.md": [],
+    ".planning/phases/06-room-invoice-map-optimization/06-RESEARCH.md": [],
+    ".planning/quick/configure-tls-port.md": [],
+    ".planning/quick/fix-menu-path-error.md": [],
+    ".planning/quick/fix-rate-plan-visibility.md": [],
+    ".planning/quick/fix-room-preselection.md": [],
+    ".planning/quick/rename-room-to-ts.md": [],
+    ".planning/todos/01-bugs/fix-the-compile-error.md": [],
+    ".ua/.understandignore": [],
+    "Dockerfile": [],
+    "PLAN.md": [],
+    "README.md": [],
+    "Subscribe.txt": [],
+    "config-overrides.js": [],
+    "package.json": [],
+    "public/_redirects": [],
+    "public/index.html": [],
+    "public/manifest.json": [],
+    "public/robots.txt": [],
+    "src/App.css": [],
+    "src/App.tsx": [
+      "src/App.css",
+      "src/Components/ExpenseManager.tsx",
+      "src/Components/ImmigrationRegistrationManager.tsx",
+      "src/Components/Inventory.tsx",
+      "src/Components/InvoiceEditor.tsx",
+      "src/Components/InvoiceManager.tsx",
+      "src/Components/InvoiceMap.tsx",
+      "src/Components/OrderEditor.tsx",
+      "src/Components/OrderManager.tsx",
+      "src/Components/PGroupManager.tsx",
+      "src/Components/ProfitReport.tsx",
+      "src/Components/RatePlanManager.tsx",
+      "src/Components/ReservationManager.tsx",
+      "src/Components/ReservationMap.tsx",
+      "src/Components/RoomManager.tsx",
+      "src/Components/Settings.tsx",
+      "src/Components/SupplierManager.tsx",
+      "src/Components/TaxPolicyManager.tsx",
+      "src/Components/TaxableInvoiceManager.tsx",
+      "src/Components/TourEditor.tsx",
+      "src/Components/TourManager.tsx",
+      "src/Components/UserProfile.tsx",
+      "src/Components/Welcome.tsx",
+      "src/db/configs.ts",
+      "src/db/profile.ts"
+    ],
+    "src/Components/CounterInput.tsx": [],
+    "src/Components/ExpenseManager.tsx": [
+      "src/App.tsx",
+      "src/Components/ProfitReport.tsx",
+      "src/Service/Utils.ts",
+      "src/db/classification.ts",
+      "src/db/expense.ts",
+      "src/db/users.ts"
+    ],
+    "src/Components/Immigration.tsx": [
+      "src/App.tsx",
+      "src/Components/InvoiceManager.tsx",
+      "src/Components/ProfitReport.tsx",
+      "src/Service/Utils.ts",
+      "src/db/invoice.ts",
+      "src/db/permission.ts"
+    ],
+    "src/Components/ImmigrationRegistrationManager.tsx": [
+      "src/Components/InvoiceManager.tsx",
+      "src/Components/ProfitReport.tsx",
+      "src/Service/Utils.ts",
+      "src/db/immigrationRegistration.ts"
+    ],
+    "src/Components/Inventory.tsx": [
+      "src/App.tsx",
+      "src/Components/PGroupManager.tsx",
+      "src/Components/ProfitReport.tsx",
+      "src/Service/FileMinio.ts",
+      "src/Service/Utils.ts",
+      "src/db/inventory.ts",
+      "src/db/pgroup.ts",
+      "src/db/product.ts"
+    ],
+    "src/Components/InvoiceEditor.tsx": [
+      "src/App.tsx",
+      "src/Components/Inventory.tsx",
+      "src/Components/InvoiceManager.tsx",
+      "src/Components/PGroupManager.tsx",
+      "src/Components/ReservationManager.tsx",
+      "src/Service/Utils.ts",
+      "src/db/classification.ts",
+      "src/db/configs.ts",
+      "src/db/inventory.ts",
+      "src/db/invoice.ts",
+      "src/db/permission.ts",
+      "src/db/pgroup.ts",
+      "src/db/reservation.ts",
+      "src/db/room.ts",
+      "src/db/users.ts"
+    ],
+    "src/Components/InvoiceManager.tsx": [
+      "src/App.tsx",
+      "src/Components/ProfitReport.tsx",
+      "src/Service/Utils.ts",
+      "src/db/invoice.ts",
+      "src/db/permission.ts"
+    ],
+    "src/Components/InvoiceMap.tsx": [
+      "src/Components/InvoiceEditor.tsx",
+      "src/Components/InvoiceManager.tsx",
+      "src/Components/ProfitReport.tsx",
+      "src/Service/Utils.ts",
+      "src/db/invoice.ts",
+      "src/db/reservation_extractor.ts",
+      "src/db/room.ts"
+    ],
+    "src/Components/OrderEditor.tsx": [
+      "src/App.tsx",
+      "src/Components/InvoiceManager.tsx",
+      "src/Components/OrderManager.tsx",
+      "src/Components/PGroupManager.tsx",
+      "src/Service/Utils.ts",
+      "src/db/invoice.ts",
+      "src/db/order.ts",
+      "src/db/pgroup.ts"
+    ],
+    "src/Components/OrderManager.tsx": [
+      "src/App.tsx",
+      "src/Components/InvoiceManager.tsx",
+      "src/Service/Utils.ts",
+      "src/db/configs.ts",
+      "src/db/invoice.ts",
+      "src/db/order.ts"
+    ],
+    "src/Components/PGroupManager.tsx": [
+      "src/db/pgroup.ts"
+    ],
+    "src/Components/ProfitReport.tsx": [
+      "src/Service/Utils.ts",
+      "src/db/profit.ts"
+    ],
+    "src/Components/RatePlanManager.tsx": [
+      "src/App.tsx",
+      "src/Components/CounterInput.tsx",
+      "src/Components/ProfitReport.tsx",
+      "src/Service/Utils.ts",
+      "src/db/rate_plan.ts",
+      "src/db/room.ts"
+    ],
+    "src/Components/ReservationManager.tsx": [
+      "src/App.tsx",
+      "src/Components/InvoiceEditor.tsx",
+      "src/Components/ProfitReport.tsx",
+      "src/Service/Utils.ts",
+      "src/db/reservation.ts",
+      "src/db/reservation_extractor.ts"
+    ],
+    "src/Components/ReservationMap.tsx": [
+      "src/App.tsx",
+      "src/Components/ProfitReport.tsx",
+      "src/Components/ReservationManager.tsx",
+      "src/Service/Utils.ts",
+      "src/db/reservation.ts",
+      "src/db/reservation_extractor.ts",
+      "src/db/room.ts"
+    ],
+    "src/Components/RoomManager.tsx": [
+      "src/App.tsx",
+      "src/Components/ProfitReport.tsx",
+      "src/db/room.ts"
+    ],
+    "src/Components/Settings.tsx": [
+      "src/App.tsx",
+      "src/Service/Utils.ts",
+      "src/db/bot.ts",
+      "src/db/configs.ts",
+      "src/db/reservation.ts",
+      "src/db/status.ts"
+    ],
+    "src/Components/SupplierManager.tsx": [
+      "src/App.tsx",
+      "src/Components/InvoiceManager.tsx",
+      "src/Service/Utils.ts",
+      "src/db/classification.ts",
+      "src/db/supplier.ts"
+    ],
+    "src/Components/TaxPolicyManager.tsx": [
+      "src/db/taxPolicy.ts"
+    ],
+    "src/Components/TaxableInvoiceManager.tsx": [
+      "src/Components/ProfitReport.tsx",
+      "src/Service/Utils.ts",
+      "src/db/tax.ts"
+    ],
+    "src/Components/TourEditor.tsx": [
+      "src/App.tsx",
+      "src/Components/TourManager.tsx",
+      "src/db/tour.ts"
+    ],
+    "src/Components/TourManager.tsx": [
+      "src/App.tsx",
+      "src/db/tour.ts"
+    ],
+    "src/Components/UserProfile.tsx": [],
+    "src/Components/Welcome.tsx": [],
+    "src/Service/FileMinio.ts": [],
+    "src/Service/Utils.ts": [],
+    "src/db/apis.ts": [],
+    "src/db/bot.ts": [
+      "src/db/apis.ts"
+    ],
+    "src/db/classification.ts": [
+      "src/db/apis.ts"
+    ],
+    "src/db/configs.ts": [
+      "src/App.tsx",
+      "src/db/apis.ts"
+    ],
+    "src/db/expense.ts": [
+      "src/Components/ExpenseManager.tsx",
+      "src/db/apis.ts"
+    ],
+    "src/db/gcs.ts": [],
+    "src/db/immigrationRegistration.ts": [
+      "src/Components/InvoiceManager.tsx",
+      "src/db/apis.ts"
+    ],
+    "src/db/inventory.ts": [
+      "src/Components/Inventory.tsx",
+      "src/db/apis.ts"
+    ],
+    "src/db/invoice.ts": [
+      "src/Components/InvoiceManager.tsx",
+      "src/db/apis.ts"
+    ],
+    "src/db/order.ts": [
+      "src/Components/OrderManager.tsx",
+      "src/db/apis.ts"
+    ],
+    "src/db/permission.ts": [],
+    "src/db/pgroup.ts": [
+      "src/Components/PGroupManager.tsx",
+      "src/db/apis.ts"
+    ],
+    "src/db/product.ts": [
+      "src/Components/Inventory.tsx",
+      "src/db/apis.ts"
+    ],
+    "src/db/profile.ts": [
+      "src/db/apis.ts"
+    ],
+    "src/db/profit.ts": [
+      "src/Components/ProfitReport.tsx",
+      "src/db/apis.ts"
+    ],
+    "src/db/rate_plan.ts": [
+      "src/Components/RatePlanManager.tsx",
+      "src/db/apis.ts"
+    ],
+    "src/db/reservation.ts": [
+      "src/Components/ReservationManager.tsx",
+      "src/db/apis.ts"
+    ],
+    "src/db/reservation_extractor.ts": [
+      "src/db/apis.ts"
+    ],
+    "src/db/room.ts": [
+      "src/db/apis.ts"
+    ],
+    "src/db/status.ts": [
+      "src/db/apis.ts"
+    ],
+    "src/db/supplier.ts": [
+      "src/Components/SupplierManager.tsx",
+      "src/db/apis.ts"
+    ],
+    "src/db/tax.ts": [
+      "src/Components/TaxableInvoiceManager.tsx",
+      "src/db/apis.ts"
+    ],
+    "src/db/taxPolicy.ts": [
+      "src/db/apis.ts"
+    ],
+    "src/db/tour-request.ts": [
+      "src/Components/TourManager.tsx",
+      "src/db/apis.ts"
+    ],
+    "src/db/tour.ts": [
+      "src/Components/TourManager.tsx",
+      "src/db/apis.ts"
+    ],
+    "src/db/users.ts": [
+      "src/Components/InvoiceManager.tsx",
+      "src/db/apis.ts"
+    ],
+    "src/index.css": [],
+    "src/index.tsx": [
+      "src/App.tsx",
+      "src/index.css"
+    ],
+    "tailwind.config.js": [],
+    "tsconfig.json": [],
+    "webpack.config.js": []
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "nodes": [
+    {
+      "id": "file:public/index.html",
+      "type": "file",
+      "name": "index.html",
+      "filePath": "public/index.html",
+      "summary": "HTML shell for the Create React App build that provides the #root div the React application mounts into, and wires up the favicon, viewport meta tags, and PWA manifest link.",
+      "tags": ["entry-point", "html-shell", "static-asset", "cra-template"],
+      "complexity": "simple",
+      "languageNotes": "Uses the CRA %PUBLIC_URL% placeholder, which is replaced with the public folder URL at build time; this is the mount target where src/index.tsx renders the React root."
+    },
+    {
+      "id": "config:public/manifest.json",
+      "type": "config",
+      "name": "manifest.json",
+      "filePath": "public/manifest.json",
+      "summary": "Progressive Web App manifest defining the PMS (Phuc Sinh Home) app's short name, icons, start URL, and standalone display mode used when the app is installed on a mobile or desktop device.",
+      "tags": ["pwa", "configuration", "web-manifest", "static-asset"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:public/robots.txt",
+      "type": "config",
+      "name": "robots.txt",
+      "filePath": "public/robots.txt",
+      "summary": "Robots exclusion file that allows all web crawlers unrestricted access to the site, with no disallowed paths configured.",
+      "tags": ["configuration", "seo", "crawler-directives", "static-asset"],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "config:public/manifest.json",
+      "target": "file:src/index.tsx",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:public/index.html",
+      "target": "file:src/index.tsx",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:public/index.html",
+      "target": "config:public/manifest.json",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    }
+  ]
+}

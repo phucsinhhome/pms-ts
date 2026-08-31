@@ -58,12 +58,14 @@ type InvoiceManagerProps = {
   activeMenu: any;
   handleUnauthorized(): any;
   hasAuthority: (auth: string) => boolean;
+  workDate: Date;
+  setWorkDate: React.Dispatch<React.SetStateAction<Date>>;
 };
 
 export const InvoiceManager = (props: InvoiceManagerProps) => {
   const [invoices, setInvoices] = useState<Invoice[]>([]);
 
-  const [fromDate, setFromDate] = useState(new Date());
+  const { workDate, setWorkDate } = props;
   const [deltaDays, setDeltaDays] = useState(0);
 
   const [pagination, setPagination] = useState<Pagination>({
@@ -81,7 +83,7 @@ export const InvoiceManager = (props: InvoiceManagerProps) => {
     var newDate = Date.now() + numDays * 86400000;
     var newDD = new Date(newDate);
     console.info("Change filter date to %s", newDD.toISOString());
-    setFromDate(newDD);
+    setWorkDate(newDD);
     setDeltaDays(numDays);
   };
 
@@ -101,7 +103,7 @@ export const InvoiceManager = (props: InvoiceManagerProps) => {
 
   const fetchInvoices = async () => {
     try {
-      const fd = formatISODate(fromDate);
+      const fd = formatISODate(workDate);
       console.info("Loading invoices from date %s...", fd);
 
       const rsp = await listStayingAndComingInvoices(
@@ -140,7 +142,7 @@ export const InvoiceManager = (props: InvoiceManagerProps) => {
     props.activeMenu();
 
     // eslint-disable-next-line
-  }, [pagination.pageNumber, fromDate]);
+  }, [pagination.pageNumber, workDate]);
 
   const filterOpts = [
     {

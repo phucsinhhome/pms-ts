@@ -16,7 +16,9 @@ import { listRoom, Room } from "../db/room";
 
 type InvoiceMapProps = {
   activeMenu: any,
-  handleUnauthorized(): any
+  handleUnauthorized(): any,
+  workDate: Date,
+  setWorkDate: React.Dispatch<React.SetStateAction<Date>>
 }
 
 type InvoiceWindow = {
@@ -39,7 +41,7 @@ const invoiceStateStyles = {
 export const InvoiceMap = (props: InvoiceMapProps) => {
   const [invoices, setInvoices] = useState<InvoiceWindow[]>([])
   const [rooms, setRooms] = useState<Room[]>([])
-  const [workDate, setWorkDate] = useState(new Date());
+  const { workDate, setWorkDate } = props;
   const INVOICE_MAP_DEFAULT_PAGE_SIZE = Number(process.env.REACT_APP_INVOICE_MAP_DEFAULT_PAGE_SIZE)
 
   const [pagination, setPagination] = useState<Pagination>({

@@ -169,6 +169,7 @@ export const App = () => {
   const [filteredMenus, setFilteredMenus] = useState([menus.home]); // Default to home menu
   const [activeMenu, setActiveMenu] = useState(menus.home)
   const [configs, setConfigs] = useState<AppConfig>()
+  const [workDate, setWorkDate] = useState(new Date());
   const navigate = useNavigate();
   const [loadingProfile, setLoadingProfile] = useState(true);
   const [loadingConfig, setLoadingConfig] = useState(true);
@@ -382,10 +383,14 @@ export const App = () => {
           activeMenu={() => setActiveMenu(menus.invoice)}
           handleUnauthorized={() => handleLogin()}
           hasAuthority={(auth:string) => hasAuthority(auth)}
+          workDate={workDate}
+          setWorkDate={setWorkDate}
         />} />
         <Route path="invoice-map" element={<InvoiceMap
           activeMenu={() => setActiveMenu(menus.invoice)}
           handleUnauthorized={() => handleLogin()}
+          workDate={workDate}
+          setWorkDate={setWorkDate}
         />} />
         <Route path="tax" element={<TaxableInvoiceManager
           activeMenu={() => setActiveMenu(menus.tax)}

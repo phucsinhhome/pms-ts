@@ -177,20 +177,21 @@ export const App = () => {
   const [roles, setRoles] = useState<string[]>([]);
   const [authorities, setAuthorities] = useState<string[]>([]);
   const [userProfile, setUserProfile] = useState<any>(null);
-  const AUTH_URL =`${process.env.REACT_APP_PS_BASE_URL}/oauth2login.html`;
+  const AUTH_URL_BASE = `${process.env.REACT_APP_PS_BASE_URL}/oauth2login.html`;
+  const AUTH_URL =`${AUTH_URL_BASE}?redirect_uri=${encodeURIComponent(window.location.origin)}`;
 
   const fetchUserProfile = async () => {
     try {
       const rsp = await getProfile();
       if(rsp.status===200){
-        // Check if the final URL differs from the requested URL
-        if (rsp.request.responseURL && AUTH_URL === rsp.request.responseURL) {
+        // Check if the request was redirected to the login page
+        if (rsp.request.responseURL && rsp.request.responseURL.startsWith(AUTH_URL_BASE)) {
           console.warn("User is not authorized, redirecting to login.");
           return;
         }
         const profile: any = rsp.data;
         console.info("User profile fetched:", profile);
-        if(!profile){
+        if(!profile || typeof profile !== "object"){
           console.warn("No user profile data found");
           return;
         }

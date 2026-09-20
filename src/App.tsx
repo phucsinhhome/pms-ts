@@ -178,7 +178,6 @@ export const App = () => {
   const [authorities, setAuthorities] = useState<string[]>([]);
   const [userProfile, setUserProfile] = useState<any>(null);
   const AUTH_URL_BASE = `${process.env.REACT_APP_PS_BASE_URL}/oauth2login.html`;
-  const AUTH_URL =`${AUTH_URL_BASE}?redirect_uri=${encodeURIComponent(window.location.origin)}`;
 
   const fetchUserProfile = async () => {
     try {
@@ -279,11 +278,11 @@ export const App = () => {
   const getChat = () => chat ? chat : defaultChat
 
   const handleLogin = () => {
-    window.location.href = AUTH_URL;
+    window.location.href = `${AUTH_URL_BASE}?redirect_uri=${encodeURIComponent(window.location.origin)}`;
   };
 
   const handleSignOut = () => {
-    window.location.href = `${process.env.REACT_APP_PS_BASE_URL}/logout`;
+    window.location.href = `${process.env.REACT_APP_PS_BASE_URL}/logout?redirect_uri=${encodeURIComponent(window.location.origin)}`;
   };
 
   // In your React app (e.g., UserProfile component)

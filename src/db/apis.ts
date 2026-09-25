@@ -1,10 +1,27 @@
 import axios, { AxiosInstance } from 'axios';
+import { getTenant, TENANT_PLACEHOLDER } from './tenant';
+
+// True when the endpoints are configured with the {tenant} placeholder, i.e. the organization
+// can be switched at runtime rather than being fixed in the build configuration.
+export let tenantSwitchable = false;
 
 const createApiInstance = (baseURL: string | undefined, withCredentials = true): AxiosInstance => {
-    return axios.create({
+    const instance = axios.create({
         baseURL,
         withCredentials
     });
+    if (baseURL?.includes(TENANT_PLACEHOLDER)) {
+        tenantSwitchable = true;
+        instance.interceptors.request.use(config => {
+            const tenant = getTenant();
+            if (!tenant) {
+                throw new Error("No organization selected");
+            }
+            config.baseURL = baseURL.replace(TENANT_PLACEHOLDER, encodeURIComponent(tenant));
+            return config;
+        });
+    }
+    return instance;
 };
 
 // reportApi

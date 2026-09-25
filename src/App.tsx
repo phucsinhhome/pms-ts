@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import axios from "axios";
 import "./App.css";
 import ProfitReport from "./Components/ProfitReport";
 import { InvoiceManager } from "./Components/InvoiceManager"
@@ -25,6 +26,8 @@ import { InvoiceMap } from "./Components/InvoiceMap";
 import { RoomManager } from "./Components/RoomManager";
 import { RatePlanManager } from "./Components/RatePlanManager";
 import { getProfile } from "./db/profile";
+import { Organization, resolveTenant, setTenant } from "./db/tenant";
+import { tenantSwitchable } from "./db/apis";
 import { FaBed, FaMoneyBill } from "react-icons/fa";
 import { TaxableInvoiceManager } from "./Components/TaxableInvoiceManager";
 import { TaxPolicyManager } from "./Components/TaxPolicyManager";
@@ -160,6 +163,32 @@ const menus = {
   },
 }
 
+type SessionState = 'authenticated' | 'unauthenticated' | 'unknown'
+
+// sessionStorage keys that survive the round trip to the login page within the same tab
+const AUTO_LOGIN_AT_KEY = 'pms.autoLoginAt'
+const SIGNED_OUT_KEY = 'pms.signedOut'
+// Don't auto-redirect to login again within this window, so a failing login can't loop forever
+const AUTO_LOGIN_COOLDOWN_MS = 60 * 1000
+// Minimum gap between session re-checks when the tab becomes visible again
+const SESSION_RECHECK_INTERVAL_MS = 30 * 1000
+
+const readSession = (key: string): string | null => {
+  try {
+    return sessionStorage.getItem(key)
+  } catch {
+    return null
+  }
+}
+
+const writeSession = (key: string, value: string | null) => {
+  try {
+    value === null ? sessionStorage.removeItem(key) : sessionStorage.setItem(key, value)
+  } catch {
+    // storage unavailable (private mode, blocked site data) - auto-login simply stays unguarded
+  }
+}
+
 export const App = () => {
   const [chat, setChat] = useState<Chat>(defaultChat);
   const [authorizedUserId, setAuthorizedUserId] = useState<string | null>(null)
@@ -177,24 +206,49 @@ export const App = () => {
   const [roles, setRoles] = useState<string[]>([]);
   const [authorities, setAuthorities] = useState<string[]>([]);
   const [userProfile, setUserProfile] = useState<any>(null);
+  const [redirectingToLogin, setRedirectingToLogin] = useState(false);
+  const [organizations, setOrganizations] = useState<Organization[]>([]);
+  const [currentTenant, setCurrentTenant] = useState('');
+  const lastSessionCheckRef = useRef(0);
+  // Backend page that unauthenticated API calls get redirected to
   const AUTH_URL_BASE = `${process.env.REACT_APP_PS_BASE_URL}/oauth2login.html`;
+  // Starts the Keycloak login directly, skipping the "Click to Login" page
+  const LOGIN_URL = `${process.env.REACT_APP_PS_BASE_URL}/oauth2/authorization/keycloak`;
 
-  const fetchUserProfile = async () => {
+  const clearUserState = () => {
+    setUserProfile(null);
+    setChat(defaultChat);
+    setAuthorizedUserId(null);
+    setAuthorities([]);
+    setRoles([]);
+  }
+
+  const fetchUserProfile = async (): Promise<SessionState> => {
+    lastSessionCheckRef.current = Date.now();
     try {
       const rsp = await getProfile();
       if(rsp.status===200){
         // Check if the request was redirected to the login page
         if (rsp.request.responseURL && rsp.request.responseURL.startsWith(AUTH_URL_BASE)) {
           console.warn("User is not authorized, redirecting to login.");
-          return;
+          clearUserState();
+          return 'unauthenticated';
         }
         const profile: any = rsp.data;
         console.info("User profile fetched:", profile);
         if(!profile || typeof profile !== "object"){
           console.warn("No user profile data found");
-          return;
+          return 'unknown';
         }
+        writeSession(SIGNED_OUT_KEY, null);
+        writeSession(AUTO_LOGIN_AT_KEY, null);
+        const memberships: string[] = Array.isArray(profile.organization) ? profile.organization : [];
+        const tenant = resolveTenant(memberships);
         setUserProfile(profile);
+        setOrganizations(Array.isArray(profile.organizations)
+          ? profile.organizations
+          : memberships.map(alias => ({ alias, name: alias })));
+        setCurrentTenant(tenant);
         setChat({
           id: profile.sub,
           firstName: profile.given_name || "",
@@ -202,37 +256,74 @@ export const App = () => {
           username: profile.preferred_username || profile.email || "",
           email: profile.email,
           iss: profile.iss,
-          tenantId: profile.organization?profile.organization[0]:""
+          tenantId: tenant
         });
         setAuthorizedUserId(profile.sub);
         setAuthorities(profile.authorities || []);
         setRoles(profile.roles || []);
-        return;
+        return 'authenticated';
       }
       console.error("Failed to fetch user profile, status:", rsp.status);
-      setUserProfile(null);
-      setChat(defaultChat);
-      setAuthorizedUserId(null);
-      setAuthorities([]);
-      setRoles([]);
+      return 'unknown';
     } catch (error) {
       console.error("Failed to fetch user profile:", error);
-      setUserProfile(null);
-      setChat(defaultChat);
-      setAuthorizedUserId(null);
-      setAuthorities([]);
-      setRoles([]);
+      const status = axios.isAxiosError(error) ? error.response?.status : undefined;
+      if (status === 401 || status === 403) {
+        clearUserState();
+        return 'unauthenticated';
+      }
+      // Network/offline errors: keep whatever state we have rather than logging the user out
+      return 'unknown';
     }
     finally {
       setLoadingProfile(false);
     }
   };
 
+  const redirectToLogin = () => {
+    setRedirectingToLogin(true);
+    // Return to the current page (not just the origin) once login completes
+    window.location.href = `${LOGIN_URL}?redirect_uri=${encodeURIComponent(window.location.href)}`;
+  };
+
+  // Silently re-login when the session is gone. Keycloak skips the credential form while its SSO
+  // session is alive. Skipped right after an explicit sign-out and throttled to prevent loops.
+  const autoLogin = () => {
+    if (readSession(SIGNED_OUT_KEY)) {
+      return;
+    }
+    const lastAttempt = Number(readSession(AUTO_LOGIN_AT_KEY) || 0);
+    if (Date.now() - lastAttempt < AUTO_LOGIN_COOLDOWN_MS) {
+      console.warn("Auto login attempted recently, falling back to the Login button.");
+      return;
+    }
+    writeSession(AUTO_LOGIN_AT_KEY, String(Date.now()));
+    redirectToLogin();
+  };
+
+  const checkSession = async () => {
+    if (await fetchUserProfile() === 'unauthenticated') {
+      autoLogin();
+    }
+  };
 
   useEffect(() => {
     document.title = "PMS";
     fetchConfig();
-    fetchUserProfile();
+    checkSession();
+
+    // Mobile browsers freeze background tabs; re-validate the session when the user comes back
+    const onVisibilityChange = () => {
+      if (document.visibilityState !== 'visible') {
+        return;
+      }
+      if (Date.now() - lastSessionCheckRef.current < SESSION_RECHECK_INTERVAL_MS) {
+        return;
+      }
+      checkSession();
+    };
+    document.addEventListener('visibilitychange', onVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', onVisibilityChange);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -249,9 +340,8 @@ export const App = () => {
           .filter(menuKey => authorities.some(role => role.toLowerCase() === menuKey.toLowerCase()))
           .map(menuKey => menus[menuKey as keyof typeof menus])
           .filter(Boolean) as any; // Type guard to remove undefined values
+    // Keep the current route; each page sets its own active menu when it mounts
     setFilteredMenus(fM);
-    setActiveMenu(menus.home);
-    navigate('/home');
     // fM.includes(menus.invoice)? setActiveMenu(menus.invoice) : setActiveMenu(menus.home);
     // window.location.href = `${process.env.REACT_APP_PS_BASE_URL}/${activeMenu.path}`;
     // navigate(`/${activeMenu.path}`);
@@ -278,10 +368,22 @@ export const App = () => {
   const getChat = () => chat ? chat : defaultChat
 
   const handleLogin = () => {
-    window.location.href = `${AUTH_URL_BASE}?redirect_uri=${encodeURIComponent(window.location.origin)}`;
+    writeSession(SIGNED_OUT_KEY, null);
+    redirectToLogin();
+  };
+
+  const handleSwitchTenant = (tenant: string) => {
+    if (tenant === currentTenant) {
+      return;
+    }
+    setTenant(tenant);
+    // Full reload so no page keeps data loaded for the previous organization
+    window.location.assign('/home');
   };
 
   const handleSignOut = () => {
+    // Stop the landing page from bouncing straight back into login after sign-out
+    writeSession(SIGNED_OUT_KEY, 'true');
     window.location.href = `${process.env.REACT_APP_PS_BASE_URL}/logout?redirect_uri=${encodeURIComponent(window.location.origin)}`;
   };
 
@@ -300,7 +402,7 @@ export const App = () => {
       : "px-1 py-1 bg-green-50 text-center text-green-800 text-sm font-sans rounded-sm shadow-sm transition-transform duration-150";
   }
 
-  if (loadingConfig || (loadingProfile && !userProfile)) {
+  if (redirectingToLogin || loadingConfig || (loadingProfile && !userProfile)) {
     return (
       <div className="flex flex-col items-center justify-center h-[100dvh] bg-white">
         <div className="w-32 h-32 rounded-full bg-gray-100 flex items-center justify-center shadow-lg mb-6">
@@ -311,7 +413,7 @@ export const App = () => {
           />
         </div>
         <div className="text-lg text-gray-600 font-semibold">
-            {loadingConfig ? "Loading Configuration..." : "Fetching User Profile..."}
+            {redirectingToLogin ? "Redirecting to Login..." : loadingConfig ? "Loading Configuration..." : "Fetching User Profile..."}
         </div>
       </div>
     );
@@ -492,6 +594,10 @@ export const App = () => {
             <UserProfile
               userProfile={userProfile}
               onSignOut={handleSignOut}
+              organizations={organizations}
+              currentTenant={currentTenant}
+              canSwitchTenant={tenantSwitchable}
+              onSwitchTenant={handleSwitchTenant}
             />
           }
         />

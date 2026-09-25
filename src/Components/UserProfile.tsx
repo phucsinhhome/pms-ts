@@ -1,18 +1,23 @@
 import React, { useState } from "react";
+import { Organization } from "../db/tenant";
 
 type UserProfileProps = {
   userProfile: any;
   onSignOut: () => void;
+  organizations: Organization[];
+  currentTenant: string;
+  canSwitchTenant: boolean;
+  onSwitchTenant: (tenant: string) => void;
 };
 
-const UserProfile: React.FC<UserProfileProps> = ({ userProfile, onSignOut }) => {
+const UserProfile: React.FC<UserProfileProps> = ({ userProfile, onSignOut, organizations, currentTenant, canSwitchTenant, onSwitchTenant }) => {
   const [editing, setEditing] = useState(false);
   const [firstName, setFirstName] = useState(userProfile?.given_name || "");
   const [lastName, setLastName] = useState(userProfile?.family_name || "");
   const [displayName, setDisplayName] = useState(userProfile?.name || "");
   const [roles] = useState(userProfile?.roles || []);
-  const [organization] = useState(userProfile?.organization || []);
   const [status, setStatus] = useState<string | null>(null);
+  const currentOrganization = organizations.find(o => o.alias === currentTenant);
 
   if (!userProfile) return <div className="p-4">No user profile found.</div>;
 
@@ -101,7 +106,19 @@ const UserProfile: React.FC<UserProfileProps> = ({ userProfile, onSignOut }) => 
         </div>
         <div className="mb-4">
           <label className="block text-gray-700">Organization:</label>
-          <div className="text-gray-900">{organization.join(", ")}</div>
+          {canSwitchTenant && organizations.length > 1 ? (
+            <select
+              className="border rounded px-2 py-1 w-full"
+              value={currentTenant}
+              onChange={e => onSwitchTenant(e.target.value)}
+            >
+              {organizations.map(o => (
+                <option key={o.alias} value={o.alias}>{o.name}</option>
+              ))}
+            </select>
+          ) : (
+            <div className="text-gray-900">{currentOrganization?.name || currentTenant}</div>
+          )}
         </div>
         {status && <div className="mb-2 text-green-600">{status}</div>}
         {editing ? (

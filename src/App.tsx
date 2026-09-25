@@ -33,7 +33,6 @@ import { TaxableInvoiceManager } from "./Components/TaxableInvoiceManager";
 import { TaxPolicyManager } from "./Components/TaxPolicyManager";
 import { ImmigrationRegistrationManager } from "./Components/ImmigrationRegistrationManager";
 
-// Add a lotus image to your public folder or assets and use its path here
 
 
 export const DEFAULT_PAGE_SIZE = Number(process.env.REACT_APP_DEFAULT_PAGE_SIZE)
@@ -307,8 +306,15 @@ export const App = () => {
     }
   };
 
+  const organizationName = organizations.find(o => o.alias === currentTenant)?.name || currentTenant;
+  // Only users in several organizations get somewhere to switch to
+  const canSwitchOrganization = tenantSwitchable && organizations.length > 1;
+
   useEffect(() => {
-    document.title = "PMS";
+    document.title = organizationName ? `${organizationName} · PMS` : "PMS";
+  }, [organizationName]);
+
+  useEffect(() => {
     fetchConfig();
     checkSession();
 
@@ -404,14 +410,11 @@ export const App = () => {
 
   if (redirectingToLogin || loadingConfig || (loadingProfile && !userProfile)) {
     return (
-      <div className="flex flex-col items-center justify-center h-[100dvh] bg-white">
-        <div className="w-32 h-32 rounded-full bg-gray-100 flex items-center justify-center shadow-lg mb-6">
-          <img
-            src="/lotus.png"
-            alt="Lotus"
-            className="w-24 h-24 object-contain"
-          />
-        </div>
+      <div className="flex flex-col items-center justify-center h-[100dvh] bg-white" role="status" aria-live="polite">
+        <div
+          className="w-14 h-14 mb-6 rounded-full border-4 border-green-100 border-t-green-700 animate-spin motion-reduce:animate-none"
+          aria-hidden="true"
+        />
         <div className="text-lg text-gray-600 font-semibold">
             {redirectingToLogin ? "Redirecting to Login..." : loadingConfig ? "Loading Configuration..." : "Fetching User Profile..."}
         </div>
@@ -442,7 +445,26 @@ export const App = () => {
       <div>
         {
           activeMenu === menus.home ? (
-            <div className="mt-36 grid grid-cols-3 grid-rows-2 ">
+            <>
+            {/* Fixed height keeps the menu grid in place whether or not there is a name */}
+            <div className="h-7 pt-2 max-w-[55%]">
+              {organizationName && (canSwitchOrganization ? (
+                <button
+                  type="button"
+                  className="block max-w-full truncate text-sm font-semibold text-green-900 underline decoration-dotted"
+                  title="Switch organization"
+                  onClick={() => {
+                    setActiveMenu(menus.profile);
+                    navigate('/profile');
+                  }}
+                >
+                  {organizationName}
+                </button>
+              ) : (
+                <div className="truncate text-sm font-semibold text-green-900">{organizationName}</div>
+              ))}
+            </div>
+            <div className="mt-28 grid grid-cols-3 grid-rows-2 ">
               {
                 filteredMenus.map((menu) => (
                   <Link
@@ -460,6 +482,7 @@ export const App = () => {
                 ))
               }
             </div>
+            </>
           ) : (
             <div className="flex items-center space-x-2 ">
               <button
@@ -472,14 +495,19 @@ export const App = () => {
               >
                 &larr; Back
               </button>
-              <span className="text-sm font-semibold text-green-900">{activeMenu.title}</span>
+              <div className="flex flex-col min-w-0 max-w-[55%]">
+                <span className="text-sm font-semibold text-green-900">{activeMenu.title}</span>
+                {organizationName && (
+                  <span className="truncate text-xs text-green-700">{organizationName}</span>
+                )}
+              </div>
             </div>
           )
         }
       </div>
       <Routes>
-        <Route path="" element={<Welcome activeMenu={() => setActiveMenu(menus.home)} />} />
-        <Route path="home" element={<Welcome activeMenu={() => setActiveMenu(menus.home)} />} />
+        <Route path="" element={<Welcome organizationName={organizationName} activeMenu={() => setActiveMenu(menus.home)} />} />
+        <Route path="home" element={<Welcome organizationName={organizationName} activeMenu={() => setActiveMenu(menus.home)} />} />
         <Route path="profit" element={<ProfitReport activeMenu={() => setActiveMenu(menus.profit)} />} />
         <Route path="invoice" element={<InvoiceManager
           activeMenu={() => setActiveMenu(menus.invoice)}

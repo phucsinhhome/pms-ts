@@ -20,6 +20,7 @@ import { TourManager } from "./Components/TourManager";
 import { TourEditor } from "./Components/TourEditor";
 import UserProfile from "./Components/UserProfile";
 import { Welcome } from "./Components/Welcome";
+import { LoadingSpinner } from "./Components/LoadingSpinner";
 import { Button } from "flowbite-react";
 import { ReservationMap } from "./Components/ReservationMap";
 import { InvoiceMap } from "./Components/InvoiceMap";
@@ -411,10 +412,7 @@ export const App = () => {
   if (redirectingToLogin || loadingConfig || (loadingProfile && !userProfile)) {
     return (
       <div className="flex flex-col items-center justify-center h-[100dvh] bg-white" role="status" aria-live="polite">
-        <div
-          className="w-14 h-14 mb-6 rounded-full border-4 border-green-100 border-t-green-700 animate-spin motion-reduce:animate-none"
-          aria-hidden="true"
-        />
+        <LoadingSpinner className="mb-6" />
         <div className="text-lg text-gray-600 font-semibold">
             {redirectingToLogin ? "Redirecting to Login..." : loadingConfig ? "Loading Configuration..." : "Fetching User Profile..."}
         </div>

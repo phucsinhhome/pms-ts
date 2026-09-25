@@ -26,6 +26,8 @@ import { InvoiceMap } from "./Components/InvoiceMap";
 import { RoomManager } from "./Components/RoomManager";
 import { RatePlanManager } from "./Components/RatePlanManager";
 import { getProfile } from "./db/profile";
+import { Organization, resolveTenant, setTenant } from "./db/tenant";
+import { tenantSwitchable } from "./db/apis";
 import { FaBed, FaMoneyBill } from "react-icons/fa";
 import { TaxableInvoiceManager } from "./Components/TaxableInvoiceManager";
 import { TaxPolicyManager } from "./Components/TaxPolicyManager";
@@ -205,8 +207,13 @@ export const App = () => {
   const [authorities, setAuthorities] = useState<string[]>([]);
   const [userProfile, setUserProfile] = useState<any>(null);
   const [redirectingToLogin, setRedirectingToLogin] = useState(false);
+  const [organizations, setOrganizations] = useState<Organization[]>([]);
+  const [currentTenant, setCurrentTenant] = useState('');
   const lastSessionCheckRef = useRef(0);
+  // Backend page that unauthenticated API calls get redirected to
   const AUTH_URL_BASE = `${process.env.REACT_APP_PS_BASE_URL}/oauth2login.html`;
+  // Starts the Keycloak login directly, skipping the "Click to Login" page
+  const LOGIN_URL = `${process.env.REACT_APP_PS_BASE_URL}/oauth2/authorization/keycloak`;
 
   const clearUserState = () => {
     setUserProfile(null);
@@ -235,7 +242,13 @@ export const App = () => {
         }
         writeSession(SIGNED_OUT_KEY, null);
         writeSession(AUTO_LOGIN_AT_KEY, null);
+        const memberships: string[] = Array.isArray(profile.organization) ? profile.organization : [];
+        const tenant = resolveTenant(memberships);
         setUserProfile(profile);
+        setOrganizations(Array.isArray(profile.organizations)
+          ? profile.organizations
+          : memberships.map(alias => ({ alias, name: alias })));
+        setCurrentTenant(tenant);
         setChat({
           id: profile.sub,
           firstName: profile.given_name || "",
@@ -243,7 +256,7 @@ export const App = () => {
           username: profile.preferred_username || profile.email || "",
           email: profile.email,
           iss: profile.iss,
-          tenantId: profile.organization?profile.organization[0]:""
+          tenantId: tenant
         });
         setAuthorizedUserId(profile.sub);
         setAuthorities(profile.authorities || []);
@@ -270,7 +283,7 @@ export const App = () => {
   const redirectToLogin = () => {
     setRedirectingToLogin(true);
     // Return to the current page (not just the origin) once login completes
-    window.location.href = `${AUTH_URL_BASE}?redirect_uri=${encodeURIComponent(window.location.href)}`;
+    window.location.href = `${LOGIN_URL}?redirect_uri=${encodeURIComponent(window.location.href)}`;
   };
 
   // Silently re-login when the session is gone. Keycloak skips the credential form while its SSO
@@ -357,6 +370,15 @@ export const App = () => {
   const handleLogin = () => {
     writeSession(SIGNED_OUT_KEY, null);
     redirectToLogin();
+  };
+
+  const handleSwitchTenant = (tenant: string) => {
+    if (tenant === currentTenant) {
+      return;
+    }
+    setTenant(tenant);
+    // Full reload so no page keeps data loaded for the previous organization
+    window.location.assign('/home');
   };
 
   const handleSignOut = () => {
@@ -572,6 +594,10 @@ export const App = () => {
             <UserProfile
               userProfile={userProfile}
               onSignOut={handleSignOut}
+              organizations={organizations}
+              currentTenant={currentTenant}
+              canSwitchTenant={tenantSwitchable}
+              onSwitchTenant={handleSwitchTenant}
             />
           }
         />

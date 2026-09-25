@@ -28,6 +28,7 @@ import { IoMdRemoveCircle } from "react-icons/io";
 import { CiEdit } from "react-icons/ci";
 import Moment from "react-moment";
 import { listUsers, UserInfo } from "../db/users";
+import { LoadingSpinner } from "./LoadingSpinner";
 
 export type Expense = {
   id: string;
@@ -80,6 +81,10 @@ type ExpenseProps = {
 
 export const ExpenseManager = memo((props: ExpenseProps) => {
   const [expenses, setExpenses] = useState([defaultEmptExpense]);
+  const [loadingExpenses, setLoadingExpenses] = useState(true);
+  const [expensesLoaded, setExpensesLoaded] = useState(false);
+  // Fetches can overlap (both mount effects fire); only the latest one may end the loading state
+  const fetchSeq = useRef(0);
   const [generatingExp, setGeneratingExp] = useState(false);
   const [classifyingExp, setClassifyingExp] = useState(false);
 
@@ -119,6 +124,8 @@ export const ExpenseManager = memo((props: ExpenseProps) => {
   };
 
   const fetchExpenses = async () => {
+    const seq = ++fetchSeq.current;
+    setLoadingExpenses(true);
     try {
       let byDate = formatISODate(new Date());
 
@@ -159,6 +166,11 @@ export const ExpenseManager = memo((props: ExpenseProps) => {
       console.error("Error while fetching expenses", e);
       if (e instanceof Error) {
         alert(e.message);
+      }
+    } finally {
+      if (seq === fetchSeq.current) {
+        setLoadingExpenses(false);
+        setExpensesLoaded(true);
       }
     }
   };
@@ -537,7 +549,19 @@ export const ExpenseManager = memo((props: ExpenseProps) => {
         </Button>
       </div>
       <div className="flex-1 flex-col overflow-y-auto">
-        <div className="flex flex-col space-y-1.5 divide-y">
+        {expensesLoaded && loadingExpenses && (
+          // Reload: keep the list visible and pin a small spinner to the top of the viewport
+          <div className="sticky top-2 z-10 flex h-0 justify-center overflow-visible" role="status" aria-label="Loading expenses">
+            <LoadingSpinner size="sm" />
+          </div>
+        )}
+        {!expensesLoaded ? (
+          <div className="flex flex-col items-center justify-center py-16" role="status" aria-live="polite">
+            <LoadingSpinner className="mb-4" />
+            <span className="text-sm font-semibold text-gray-600">Loading expenses...</span>
+          </div>
+        ) : (
+        <div className={`flex flex-col space-y-1.5 divide-y transition-opacity ${loadingExpenses ? "opacity-50" : ""}`}>
           {expenses?.map((item) => {
             return (
               <div
@@ -587,6 +611,7 @@ export const ExpenseManager = memo((props: ExpenseProps) => {
             );
           })}
         </div>
+        )}
         <div className="h-14"></div>
       </div>
 

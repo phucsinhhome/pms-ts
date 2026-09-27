@@ -27,3 +27,6 @@ yarn-error.log*
 build.log
 /.gsd
 /.ua/intermediate
+
+# Local HTTPS certificate for the dev server (mkcert); contains a private key
+.cert/

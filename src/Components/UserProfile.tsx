@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Organization } from "../db/tenant";
+import { OrderAlertsSetting } from "./OrderAlertsSetting";
 
 type UserProfileProps = {
   userProfile: any;
@@ -120,7 +121,8 @@ const UserProfile: React.FC<UserProfileProps> = ({ userProfile, onSignOut, organ
             <div className="text-gray-900">{currentOrganization?.name || currentTenant}</div>
           )}
         </div>
-        {status && <div className="mb-2 text-green-600">{status}</div>}
+        <OrderAlertsSetting />
+        {status &&<div className="mb-2 text-green-600">{status}</div>}
         {editing ? (
           <div>
             <button

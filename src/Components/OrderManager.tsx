@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ChangeEvent } from "react";
+import React, { useState, useEffect, useRef, ChangeEvent } from "react";
 import { addDays, formatISODate, formatISODateTime, formatRooms } from "../Service/Utils";
 import { Chat } from "../App";
 import { confirmOrder, listOrderByStatuses, listOrders, rejectOrder, saveOrder, serveOrder } from "../db/order";
@@ -140,6 +140,15 @@ export const OrderManager = (props: OrderManagerProps) => {
     props.activeMenu()
     // eslint-disable-next-line
   }, [activeStatuses]);
+
+  // Reload when an order alert arrives while this page is open; the ref keeps the current filter
+  const fetchOrdersRef = useRef(fetchOrders)
+  fetchOrdersRef.current = fetchOrders
+  useEffect(() => {
+    const onOrderCommitted = () => fetchOrdersRef.current()
+    window.addEventListener('pms:order-committed', onOrderCommitted)
+    return () => window.removeEventListener('pms:order-committed', onOrderCommitted)
+  }, []);
 
 
   const selectOrder = async (order: Order) => {

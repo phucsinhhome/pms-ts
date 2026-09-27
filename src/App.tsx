@@ -21,6 +21,8 @@ import { TourEditor } from "./Components/TourEditor";
 import UserProfile from "./Components/UserProfile";
 import { Welcome } from "./Components/Welcome";
 import { LoadingSpinner } from "./Components/LoadingSpinner";
+import { OrderAlertToast } from "./Components/OrderAlertToast";
+import { disableOrderAlerts, listenForOrderAlerts, OrderAlert, refreshOrderAlerts } from "./db/notification";
 import { Button } from "flowbite-react";
 import { ReservationMap } from "./Components/ReservationMap";
 import { InvoiceMap } from "./Components/InvoiceMap";
@@ -210,6 +212,8 @@ export const App = () => {
   const [organizations, setOrganizations] = useState<Organization[]>([]);
   const [currentTenant, setCurrentTenant] = useState('');
   const lastSessionCheckRef = useRef(0);
+  const orderAlertsRefreshedRef = useRef(false);
+  const [orderAlert, setOrderAlert] = useState<OrderAlert | null>(null);
   // Backend page that unauthenticated API calls get redirected to
   const AUTH_URL_BASE = `${process.env.REACT_APP_PS_BASE_URL}/oauth2login.html`;
   // Starts the Keycloak login directly, skipping the "Click to Login" page
@@ -222,6 +226,22 @@ export const App = () => {
     setAuthorities([]);
     setRoles([]);
   }
+
+  // Order alert links carry ?tenant=<alias> so the app opens in the order's organization.
+  // Honoured only for the user's own organizations, then removed so reloads don't re-apply it.
+  const applyRequestedTenant = (memberships: string[]) => {
+    const params = new URLSearchParams(window.location.search);
+    const requested = params.get('tenant');
+    if (!requested) {
+      return;
+    }
+    if (memberships.includes(requested)) {
+      setTenant(requested);
+    }
+    params.delete('tenant');
+    const search = params.toString();
+    navigate(`${window.location.pathname}${search ? `?${search}` : ''}${window.location.hash}`, { replace: true });
+  };
 
   const fetchUserProfile = async (): Promise<SessionState> => {
     lastSessionCheckRef.current = Date.now();
@@ -243,6 +263,7 @@ export const App = () => {
         writeSession(SIGNED_OUT_KEY, null);
         writeSession(AUTO_LOGIN_AT_KEY, null);
         const memberships: string[] = Array.isArray(profile.organization) ? profile.organization : [];
+        applyRequestedTenant(memberships);
         const tenant = resolveTenant(memberships);
         setUserProfile(profile);
         setOrganizations(Array.isArray(profile.organizations)
@@ -302,8 +323,13 @@ export const App = () => {
   };
 
   const checkSession = async () => {
-    if (await fetchUserProfile() === 'unauthenticated') {
+    const state = await fetchUserProfile();
+    if (state === 'unauthenticated') {
       autoLogin();
+    } else if (state === 'authenticated' && !orderAlertsRefreshedRef.current) {
+      // Once per app start: keeps the push token and its organizations current
+      orderAlertsRefreshedRef.current = true;
+      refreshOrderAlerts();
     }
   };
 
@@ -330,7 +356,17 @@ export const App = () => {
       checkSession();
     };
     document.addEventListener('visibilitychange', onVisibilityChange);
-    return () => document.removeEventListener('visibilitychange', onVisibilityChange);
+
+    // Order pushes arriving while the app is open: show a toast and let open pages refresh
+    const stopOrderAlerts = listenForOrderAlerts(alert => {
+      setOrderAlert(alert);
+      window.dispatchEvent(new CustomEvent('pms:order-committed', { detail: alert }));
+    });
+
+    return () => {
+      document.removeEventListener('visibilitychange', onVisibilityChange);
+      stopOrderAlerts();
+    };
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -388,9 +424,24 @@ export const App = () => {
     window.location.assign('/home');
   };
 
-  const handleSignOut = () => {
+  const openOrderAlert = (alert: OrderAlert) => {
+    setOrderAlert(null);
+    const url = new URL(alert.path, window.location.origin);
+    const tenant = url.searchParams.get('tenant');
+    if (tenant && tenant !== currentTenant) {
+      // Another organization: full reload so the switch applies before the order loads
+      window.location.assign(`${url.pathname}${url.search}`);
+      return;
+    }
+    setActiveMenu(menus.order);
+    navigate(url.pathname);
+  };
+
+  const handleSignOut = async () => {
     // Stop the landing page from bouncing straight back into login after sign-out
     writeSession(SIGNED_OUT_KEY, 'true');
+    // Shared devices must not keep receiving this user's order alerts
+    await disableOrderAlerts();
     window.location.href = `${process.env.REACT_APP_PS_BASE_URL}/logout?redirect_uri=${encodeURIComponent(window.location.origin)}`;
   };
 
@@ -440,6 +491,13 @@ export const App = () => {
 
   return (
     <div className="flex flex-col relative h-[100dvh] mx-2">
+      {orderAlert && (
+        <OrderAlertToast
+          alert={orderAlert}
+          onOpen={() => openOrderAlert(orderAlert)}
+          onClose={() => setOrderAlert(null)}
+        />
+      )}
       <div>
         {
           activeMenu === menus.home ? (

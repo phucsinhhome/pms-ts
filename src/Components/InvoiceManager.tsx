@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ChangeEvent } from "react";
+import React, { useState, useEffect, useRef, ChangeEvent } from "react";
 import { Link } from "react-router-dom";
 import { Button, Modal, TextInput } from "flowbite-react";
 import Moment from "react-moment";
@@ -15,6 +15,7 @@ import { GiHouse } from "react-icons/gi";
 import { IoMdMap, IoMdPersonAdd, IoMdRemoveCircle } from "react-icons/io";
 import { CiEdit } from "react-icons/ci";
 import { PERMISSION_INVOICE_DELETE } from "../db/permission";
+import { LoadingSpinner } from "./LoadingSpinner";
 
 export type InvoiceItem = {
   id: string;
@@ -64,6 +65,10 @@ type InvoiceManagerProps = {
 
 export const InvoiceManager = (props: InvoiceManagerProps) => {
   const [invoices, setInvoices] = useState<Invoice[]>([]);
+  const [loadingInvoices, setLoadingInvoices] = useState(true);
+  const [invoicesLoaded, setInvoicesLoaded] = useState(false);
+  // Fetches can overlap (paging, date filter, name search); only the latest one may update the list
+  const fetchSeq = useRef(0);
 
   const { workDate, setWorkDate } = props;
   const [deltaDays, setDeltaDays] = useState(0);
@@ -102,6 +107,8 @@ export const InvoiceManager = (props: InvoiceManagerProps) => {
   };
 
   const fetchInvoices = async () => {
+    const seq = ++fetchSeq.current;
+    setLoadingInvoices(true);
     try {
       const fd = formatISODate(workDate);
       console.info("Loading invoices from date %s...", fd);
@@ -111,6 +118,9 @@ export const InvoiceManager = (props: InvoiceManagerProps) => {
         pagination.pageNumber,
         pagination.pageSize,
       );
+      if (seq !== fetchSeq.current) {
+        return;
+      }
       if (rsp.status === 401 || rsp.status === 403) {
         props.handleUnauthorized();
         return;
@@ -133,7 +143,14 @@ export const InvoiceManager = (props: InvoiceManagerProps) => {
       }
     } catch (e) {
       console.error(e);
-      setInvoices([]);
+      if (seq === fetchSeq.current) {
+        setInvoices([]);
+      }
+    } finally {
+      if (seq === fetchSeq.current) {
+        setLoadingInvoices(false);
+        setInvoicesLoaded(true);
+      }
     }
   };
 
@@ -233,8 +250,13 @@ export const InvoiceManager = (props: InvoiceManagerProps) => {
     }
     let fromDate = formatISODate(new Date());
 
+    const seq = ++fetchSeq.current;
+    setLoadingInvoices(true);
     listInvoiceByGuestName(fromDate, fN, 0, DEFAULT_PAGE_SIZE)
       .then((rsp) => {
+        if (seq !== fetchSeq.current) {
+          return;
+        }
         // Axios: check status code and update state
         if (rsp.status === 200) {
           const data = rsp.data;
@@ -252,7 +274,17 @@ export const InvoiceManager = (props: InvoiceManagerProps) => {
           setInvoices([]);
         }
       })
-      .catch(() => setInvoices([]));
+      .catch(() => {
+        if (seq === fetchSeq.current) {
+          setInvoices([]);
+        }
+      })
+      .finally(() => {
+        if (seq === fetchSeq.current) {
+          setLoadingInvoices(false);
+          setInvoicesLoaded(true);
+        }
+      });
   };
 
   const emptyFilteredName = () => {
@@ -299,7 +331,19 @@ export const InvoiceManager = (props: InvoiceManagerProps) => {
         })}
       </div>
       <div className="flex-1 flex-col overflow-y-auto">
-        <div className="flex flex-col divide-y space-y-2">
+        {invoicesLoaded && loadingInvoices && (
+          // Reload: keep the list visible and pin a small spinner to the top of the viewport
+          <div className="sticky top-2 z-10 flex h-0 justify-center overflow-visible" role="status" aria-label="Loading invoices">
+            <LoadingSpinner size="sm" />
+          </div>
+        )}
+        {!invoicesLoaded ? (
+          <div className="flex flex-col items-center justify-center py-16" role="status" aria-live="polite">
+            <LoadingSpinner className="mb-4" />
+            <span className="text-sm font-semibold text-gray-600">Loading invoices...</span>
+          </div>
+        ) : (
+        <div className={`flex flex-col divide-y space-y-2 transition-opacity ${loadingInvoices ? "opacity-50" : ""}`}>
           {invoices?.map((inv) => {
             return (
               <div className="relative flex flex-col px-2" key={inv.id}>
@@ -349,6 +393,7 @@ export const InvoiceManager = (props: InvoiceManagerProps) => {
             );
           })}
         </div>
+        )}
         <div className="h-14"></div>
       </div>
       <div className="absolute bottom-1 left-1/2 flex w-11/12 -translate-x-1/2 flex-row items-center justify-center py-1 space-x-2 rounded-3xl bg-slate-300 opacity-90 shadow-sm">

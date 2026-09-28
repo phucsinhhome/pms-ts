@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, ChangeEvent, memo } from "react";
+import React, { useState, useEffect, useMemo, useRef, ChangeEvent, memo } from "react";
 import { TextInput, Label, Spinner, Modal, Button } from "flowbite-react";
 import {
   assignExpense,
@@ -13,8 +13,10 @@ import { HiOutlineCash, HiUserCircle, HiX } from "react-icons/hi";
 import {
   formatISODate,
   formatISODateTime,
+  formatLocalISODate,
   formatMoneyAmount,
   formatVND,
+  parseUTCDateTime,
 } from "../Service/Utils";
 import { PiBrainThin } from "react-icons/pi";
 import { FaRotate } from "react-icons/fa6";
@@ -41,6 +43,27 @@ export type Expense = {
   expenserId: string;
   service: string;
   tenantId: string;
+};
+
+export type ExpenseDayGroup = {
+  day: string; // local YYYY-MM-DD, used as React key
+  date: Date; // first item's parsed date, used for the header label
+  total: number;
+  items: Expense[];
+};
+
+export const groupExpensesByDay = (expenses: Expense[]): ExpenseDayGroup[] => {
+  const groups = new Map<string, ExpenseDayGroup>();
+  for (const exp of expenses) {
+    const date = parseUTCDateTime(exp.expenseDate);
+    const day = formatLocalISODate(date);
+    const group = groups.get(day) ?? { day, date, total: 0, items: [] };
+    group.items.push(exp);
+    group.total += exp.amount;
+    groups.set(day, group);
+  }
+  // Newest day first. Items keep the API order within a day.
+  return Array.from(groups.values()).sort((a, b) => b.day.localeCompare(a.day));
 };
 
 type EditingExpense = {
@@ -81,6 +104,7 @@ type ExpenseProps = {
 
 export const ExpenseManager = memo((props: ExpenseProps) => {
   const [expenses, setExpenses] = useState([defaultEmptExpense]);
+  const dayGroups = useMemo(() => groupExpensesByDay(expenses ?? []), [expenses]);
   const [loadingExpenses, setLoadingExpenses] = useState(true);
   const [expensesLoaded, setExpensesLoaded] = useState(false);
   // Fetches can overlap (both mount effects fire); only the latest one may end the loading state
@@ -335,6 +359,32 @@ export const ExpenseManager = memo((props: ExpenseProps) => {
     }
   };
 
+  const changeExpenseDate = (e: ChangeEvent<HTMLInputElement>) => {
+    const [y, m, d] = e.target.value.split("-").map(Number);
+    if (!y || !m || !d) {
+      return;
+    }
+    // Keep the expense's time of day; only move it to the chosen local day
+    const parsed = parseUTCDateTime(editingExpense.origin.expenseDate ?? "");
+    const current = isNaN(parsed.getTime()) ? new Date() : parsed;
+    const next = new Date(
+      y,
+      m - 1,
+      d,
+      current.getHours(),
+      current.getMinutes(),
+      current.getSeconds(),
+    );
+    let eI = {
+      ...editingExpense,
+      origin: {
+        ...editingExpense.origin,
+        expenseDate: formatISODateTime(next),
+      },
+    };
+    setEditingExpense(eI);
+  };
+
   const changeUnitPrice = (e: ChangeEvent<HTMLInputElement>) => {
     let v = e.target.value;
     let uP = formatMoneyAmount(v);
@@ -383,7 +433,8 @@ export const ExpenseManager = memo((props: ExpenseProps) => {
       }
       let uP = formatMoneyAmount(String(exp.unitPrice));
       let eI = {
-        origin: exp,
+        // Keep the date the user already picked instead of the generated "now"
+        origin: { ...exp, expenseDate: editingExpense.origin.expenseDate },
         formattedUnitPrice: uP.formattedAmount,
         originItemName: exp.itemName,
         itemMessage: expMsg,
@@ -485,7 +536,14 @@ export const ExpenseManager = memo((props: ExpenseProps) => {
   const handleSaveAndContinueExpense = () => {
     processSaveExpense().then((result: boolean) => {
       if (result) {
-        setEditingExpense(defaultEditingExpense);
+        // Keep the chosen date so several items can be entered for the same day
+        setEditingExpense({
+          ...defaultEditingExpense,
+          origin: {
+            ...defaultEmptExpense,
+            expenseDate: editingExpense.origin.expenseDate,
+          },
+        });
         if (expMsgRef.current === null) {
           return;
         }
@@ -561,8 +619,16 @@ export const ExpenseManager = memo((props: ExpenseProps) => {
             <span className="text-sm font-semibold text-gray-600">Loading expenses...</span>
           </div>
         ) : (
-        <div className={`flex flex-col space-y-1.5 divide-y transition-opacity ${loadingExpenses ? "opacity-50" : ""}`}>
-          {expenses?.map((item) => {
+        <div className={`flex flex-col space-y-1.5 transition-opacity ${loadingExpenses ? "opacity-50" : ""}`}>
+          {dayGroups.map((group) => (
+          <div key={group.day} className="flex flex-col">
+            {/* z-[5] keeps the day header under the reload spinner (z-10) */}
+            <div className="sticky top-0 z-[5] flex flex-row justify-between bg-green-50 px-1 py-0.5 text-xs font-semibold text-green-900">
+              <Moment format="ddd DD.MM">{group.date}</Moment>
+              <span>{formatVND(group.total)}</span>
+            </div>
+            <div className="flex flex-col space-y-1.5 divide-y">
+          {group.items.map((item) => {
             return (
               <div
                 key={item.id}
@@ -572,8 +638,8 @@ export const ExpenseManager = memo((props: ExpenseProps) => {
                   {item.itemName}
                 </div>
                 <div className="flex flex-row space-x-1 text-[10px]">
-                  <Moment format="DD.MM" className="w-10">
-                    {new Date(item.expenseDate)}
+                  <Moment format="HH:mm" className="w-10">
+                    {parseUTCDateTime(item.expenseDate)}
                   </Moment>
                   <span className="w-6">{"x" + item.quantity}</span>
                   <span className="w-24">{formatVND(item.amount)}</span>
@@ -610,6 +676,9 @@ export const ExpenseManager = memo((props: ExpenseProps) => {
               </div>
             );
           })}
+            </div>
+          </div>
+          ))}
         </div>
         )}
         <div className="h-14"></div>
@@ -685,7 +754,12 @@ export const ExpenseManager = memo((props: ExpenseProps) => {
         <Button
           size="xs"
           color="green"
-          onClick={() => editExpense(defaultEmptExpense)}
+          onClick={() =>
+            editExpense({
+              ...defaultEmptExpense,
+              expenseDate: formatISODateTime(new Date()),
+            })
+          }
         >
           <MdAssignmentAdd size="1.5em" className="mr-2" /> Add
         </Button>
@@ -757,6 +831,22 @@ export const ExpenseManager = memo((props: ExpenseProps) => {
                 onBlur={blurItemName}
                 className="w-full"
                 rightIcon={() => <HiX onClick={emptyItemName} />}
+              />
+            </div>
+            <div className="flex w-full flex-row align-middle">
+              <div className="flex w-2/5 items-center">
+                <Label htmlFor="expenseDate" value="Date" />
+              </div>
+              <TextInput
+                id="expenseDate"
+                type="date"
+                required={true}
+                max={formatLocalISODate(new Date())}
+                value={formatLocalISODate(
+                  parseUTCDateTime(editingExpense.origin.expenseDate),
+                )}
+                onChange={changeExpenseDate}
+                className="w-full"
               />
             </div>
             <div className="flex w-full flex-row align-middle">

@@ -77,6 +77,18 @@ export const formatISODateTime = (date: Date) => {
     return date.toISOString().substring(0, 19)
 }
 
+export const parseUTCDateTime = (value: string) => {
+    // Stored expense/entity times are UTC without a zone suffix (see formatISODateTime).
+    // Append 'Z' so the browser does not read them as local time; keep explicit zones as-is.
+    return new Date(/(Z|[+-]\d{2}:?\d{2})$/.test(value) ? value : value + 'Z')
+}
+
+export const formatLocalISODate = (date: Date) => {
+    // Format: 2024-07-30 in the browser's time zone (unlike formatISODate, which uses UTC)
+    const pad = (n: number) => String(n).padStart(2, '0')
+    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`
+}
+
 export const formatLocaleDate = (date: Date) => {
     console.log(date)
     if (isNaN(date.getTime())) {

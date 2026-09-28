@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, Spinner } from "flowbite-react";
 import { formatISODate, addDays } from "../Service/Utils";
@@ -13,6 +13,7 @@ import { collectRes } from "../db/reservation_extractor";
 import { Configs } from "./InvoiceEditor";
 import { MdAssignmentAdd } from "react-icons/md";
 import { listRoom, Room } from "../db/room";
+import { LoadingSpinner } from "./LoadingSpinner";
 
 type InvoiceMapProps = {
   activeMenu: any,
@@ -52,6 +53,11 @@ export const InvoiceMap = (props: InvoiceMapProps) => {
   })
   const navigate = useNavigate();
   const [isUpdating, setIsUpdating] = useState(false);
+  const [roomsLoaded, setRoomsLoaded] = useState(false);
+  const [loadingInvoices, setLoadingInvoices] = useState(true);
+  const [invoicesLoaded, setInvoicesLoaded] = useState(false);
+  // Fetches can overlap (the effect re-runs, date navigation); only the latest one may update the map
+  const fetchSeq = useRef(0);
 
   const fetchRooms = useCallback(async () => {
     try {
@@ -65,6 +71,8 @@ export const InvoiceMap = (props: InvoiceMapProps) => {
       }
     } catch (e) {
       console.error("Error while fetching rooms", e);
+    } finally {
+      setRoomsLoaded(true);
     }
   }, [props]);
 
@@ -97,28 +105,45 @@ export const InvoiceMap = (props: InvoiceMapProps) => {
   }, [workDate]);
 
   const fetchInvoices = useCallback(async () => {
-    const fd = formatISODate(workDate);
-    const rsp = await listStayingAndComingInvoices(fd, pagination.pageNumber, pagination.pageSize);
-    if (rsp.status === 401 || rsp.status === 403) {
-      props.handleUnauthorized()
-      return
-    }
-    if (rsp.status === 200) {
-      const data = rsp.data;
-      setInvoices(data.content.map(toWindow).filter((invW: InvoiceWindow) => invW.state !== 'outOfWindow'));
-      if (data.totalPages !== pagination.totalPages) {
-        const page = {
-          pageNumber: data.number,
-          pageSize: data.size,
-          totalElements: data.totalElements,
-          totalPages: data.totalPages
-        }
-        setPagination(page);
+    const seq = ++fetchSeq.current;
+    setLoadingInvoices(true);
+    try {
+      const fd = formatISODate(workDate);
+      const rsp = await listStayingAndComingInvoices(fd, pagination.pageNumber, pagination.pageSize);
+      if (seq !== fetchSeq.current) {
+        return
       }
-    } else {
-      setInvoices([]);
+      if (rsp.status === 401 || rsp.status === 403) {
+        props.handleUnauthorized()
+        return
+      }
+      if (rsp.status === 200) {
+        const data = rsp.data;
+        setInvoices(data.content.map(toWindow).filter((invW: InvoiceWindow) => invW.state !== 'outOfWindow'));
+        if (data.totalPages !== pagination.totalPages) {
+          const page = {
+            pageNumber: data.number,
+            pageSize: data.size,
+            totalElements: data.totalElements,
+            totalPages: data.totalPages
+          }
+          setPagination(page);
+        }
+      } else {
+        setInvoices([]);
+      }
+    } catch (e) {
+      console.error("Error while fetching invoices", e);
+      if (seq === fetchSeq.current) {
+        setInvoices([]);
+      }
+    } finally {
+      if (seq === fetchSeq.current) {
+        setLoadingInvoices(false);
+        setInvoicesLoaded(true);
+      }
     }
-  }, [pagination.pageNumber, pagination.pageSize, pagination.totalPages, props, toWindow, workDate]);
+  },[pagination.pageNumber, pagination.pageSize, pagination.totalPages, props, toWindow, workDate]);
 
   useEffect(() => {
     fetchRooms();
@@ -199,9 +224,22 @@ export const InvoiceMap = (props: InvoiceMapProps) => {
           </Button>
         </div>
       </div>
+      {!(roomsLoaded && invoicesLoaded) ? (
+        <div className="flex flex-col items-center justify-center py-16" role="status" aria-live="polite">
+          <LoadingSpinner className="mb-4" />
+          <span className="text-sm font-semibold text-gray-600">Loading invoices...</span>
+        </div>
+      ) : (
+      <div className="relative">
+      {loadingInvoices && (
+        // Reload: keep the map visible and float a small spinner over the top of it
+        <div className="pointer-events-none absolute inset-x-0 top-2 z-10 flex justify-center" role="status" aria-label="Loading invoices">
+          <LoadingSpinner size="sm" />
+        </div>
+      )}
       {/* Room layout grid */}
       <div
-        className="grid grid-cols-2 gap-2 mt-4 p-2 overflow-y-auto max-h-[calc(100vh-200px)]"
+        className={`grid grid-cols-2 gap-2 mt-4 p-2 overflow-y-auto max-h-[calc(100vh-200px)] transition-opacity ${loadingInvoices ? "opacity-50" : ""}`}
       >
         {roomGrid?.flatMap((row, rowIdx) =>
           row.map((roomName, colIdx) => (
@@ -241,6 +279,8 @@ export const InvoiceMap = (props: InvoiceMapProps) => {
           ))
         )}
       </div>
+      </div>
+      )}
     </div>
   );
 }

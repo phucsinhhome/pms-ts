@@ -120,12 +120,12 @@ Create the feature branch in both repos before making any change.
 ### Success Criteria:
 
 #### Automated Verification:
-- [ ] vom-assistant is on the branch: `git -C C:/apps/ps/vom-assistant branch --show-current` prints `feature/activity_request_management`
-- [ ] pms-ts is on the branch: `git -C C:/apps/ps/pms-ts branch --show-current` prints `feature/activity_request_management`
-- [ ] The baseline is recorded: `mvn test` has run, and its list of failing classes is noted in the PR description or the implementation notes
+- [x] vom-assistant is on the branch: `git -C C:/apps/ps/vom-assistant branch --show-current` prints `feature/activity_request_management`
+- [x] pms-ts is on the branch: `git -C C:/apps/ps/pms-ts branch --show-current` prints `feature/activity_request_management`
+- [x] The baseline is recorded: `mvn test` has run, and its list of failing classes is noted in the PR description or the implementation notes
 
 #### Manual Verification:
-- [ ] `git -C C:/apps/ps/vom-assistant status --short` shows only ` M .run/AssistantApplication_LOCAL.run.xml`, and it stays unstaged for the whole feature
+- [x] `git -C C:/apps/ps/vom-assistant status --short` shows only ` M .run/AssistantApplication_LOCAL.run.xml`, and it stays unstaged for the whole feature
 
 **Implementation Note**: After completing this phase and all automated verification passes, pause here for manual confirmation from the human that the manual testing was successful before proceeding to the next phase.
 
@@ -315,14 +315,14 @@ Example query: `FROM vn.gofarmstay.model.ActivitySession s WHERE s.tenantId = :t
 ### Success Criteria:
 
 #### Automated Verification:
-- [ ] Compiles and the protostream annotation processor generates the schema: `mvn -q compile` (run in `C:/apps/ps/vom-assistant`)
-- [ ] Adapter tests pass: `mvn test -Dtest=ActivityAdapterTest,ActivitySessionAdapterTest`
-- [ ] Spring context boots with the new caches and schema: `mvn test -Dtest=TelegramBotApplicationTests`
-- [ ] Full suite: `mvn test`, with no failing classes beyond the Phase 0 baseline
+- [x] Compiles and the protostream annotation processor generates the schema: `mvn -q compile` (run in `C:/apps/ps/vom-assistant`)
+- [x] Adapter tests pass: `mvn test -Dtest=ActivityAdapterTest,ActivitySessionAdapterTest`
+- [x] Spring context boots with the new caches and schema: `mvn test -Dtest=TelegramBotApplicationTests`
+- [x] Full suite: `mvn test`, with no failing classes beyond the Phase 0 baseline
 
 #### Manual Verification:
-- [ ] Starting the app locally (IntelliJ `AssistantApplication_LOCAL` run config) logs caches `activities` and `activity-sessions` starting, with no protostream schema errors
-- [ ] Existing caches (invoices, bookings, rate-plans) still load their data
+- [x] Starting the app locally (IntelliJ `AssistantApplication_LOCAL` run config) logs caches `activities` and `activity-sessions` starting, with no protostream schema errors
+- [x] Existing caches (invoices, bookings, rate-plans) still load their data
 
 **Implementation Note**: After completing this phase and all automated verification passes, pause here for manual confirmation from the human that the manual testing was successful before proceeding to the next phase.
 
@@ -403,11 +403,11 @@ Phase 2 also creates the two exceptions: `J/model/ActivityNotFoundException.java
 ### Success Criteria:
 
 #### Automated Verification:
-- [ ] Unit tests pass: `mvn test -Dtest=ActivityPricingEngineTest,ActivitySlotGeneratorTest,ActivitySessionIdsTest`
-- [ ] Full suite: `mvn test`, with no failing classes beyond the Phase 0 baseline
+- [x] Unit tests pass: `mvn test -Dtest=ActivityPricingEngineTest,ActivitySlotGeneratorTest,ActivitySessionIdsTest`
+- [x] Full suite: `mvn test`, with no failing classes beyond the Phase 0 baseline
 
 #### Manual Verification:
-- [ ] A reviewer confirms the tier table in `defaultTiers()` matches the requirements matrix (1-2 0%, 3-5 15%, 6-10 30%, 11+ 40%)
+- [x] A reviewer confirms the tier table in `defaultTiers()` matches the requirements matrix (1-2 0%, 3-5 15%, 6-10 30%, 11+ 40%)
 
 **Implementation Note**: After completing this phase and all automated verification passes, pause here for manual confirmation from the human that the manual testing was successful before proceeding to the next phase.
 

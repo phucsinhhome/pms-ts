@@ -68,3 +68,62 @@ export const previewSlots = (a: Pick<Activity, 'openTime' | 'closeTime' | 'durat
 /** Per-guest price for a tier, matching the server: round(base * (100 - pct) / 100). */
 export const tierUnitPrice = (basePrice: number, discountPct: number) =>
   Math.round((Number(basePrice) || 0) * (100 - (Number(discountPct) || 0)) / 100);
+
+export type ActivityRequestStatus = 'PENDING' | 'APPROVED' | 'REJECTED' | 'CANCELLED';
+
+export type ActivityRequest = {
+  requestId: string;
+  invoiceId?: string;
+  guestName: string;
+  partySize: number;
+  specialRequests?: string;
+  status: ActivityRequestStatus;
+  lockedUnitPrice?: number | null;
+  createdAt: string;
+  createdBy: string;
+};
+
+export type SessionStatus = 'AVAILABLE' | 'PENDING_CONFIRMATION' | 'CONFIRMED' | 'COMPLETED' | 'CANCELLED';
+
+export type ActivitySessionView = {
+  sessionId: string;
+  activityId: string;
+  activityTitle: string;
+  activityType: string;
+  date: string;
+  startTime: string;
+  endTime: string;
+  status: SessionStatus;
+  materialized: boolean;
+  locked: boolean;
+  hostId?: string;
+  maxCapacity: number;
+  headcount: number;
+  approvedHeadcount: number;
+  remaining: number;
+  full: boolean;
+  minGuests: number;
+  currentUnitPrice: number;
+  projectedUnitPrice: number;
+  version: number;
+  requests: ActivityRequest[];
+};
+
+export type SessionAction = 'lock' | 'unlock' | 'confirm' | 'cancel' | 'complete';
+
+const s = (id: string) => `/sessions/${encodeURIComponent(id)}`;
+
+export const listSessions = (fromDate: string, toDate: string, activityId?: string) =>
+  activityApi.get('/sessions', { params: { fromDate, toDate, activityId } });
+
+export const sessionAction = (id: string, action: SessionAction) => activityApi.post(`${s(id)}/${action}`);
+
+export const setSessionCapacity = (id: string, maxCapacity: number) => activityApi.post(`${s(id)}/capacity`, { maxCapacity }, json);
+
+export const assignSessionHost = (id: string, hostId: string) => activityApi.post(`${s(id)}/host`, { hostId }, json);
+
+export const addSessionRequest = (id: string, body: { invoiceId?: string; guestName: string; partySize: number; specialRequests?: string }) =>
+  activityApi.post(`${s(id)}/requests`, body, json);
+
+export const decideRequest = (id: string, requestId: string, decision: 'approve' | 'reject') =>
+  activityApi.post(`${s(id)}/requests/${encodeURIComponent(requestId)}/${decision}`);

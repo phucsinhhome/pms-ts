@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Button, Checkbox, Label, Modal, Select, Spinner, Table, Textarea, TextInput } from "flowbite-react";
-import { HiOutlineExclamationCircle, HiPencil, HiPlus, HiTrash } from "react-icons/hi";
+import { HiCalendar, HiOutlineExclamationCircle, HiPencil, HiPlus, HiTrash } from "react-icons/hi";
+import { useNavigate } from "react-router-dom";
 import { Chat, DEFAULT_PAGE_SIZE } from "../App";
 import { Pagination } from "./ProfitReport";
 import {
@@ -106,6 +107,7 @@ export function ActivityManager(props: ActivityManagerProps) {
   const [editing, setEditing] = useState<Activity>(emptyActivity);
   const [deleting, setDeleting] = useState<Activity | null>(null);
   const staffUsers = useStaffUsers();
+  const navigate = useNavigate();
 
   const canCreate = props.hasAuthority("activity:create");
   const canDelete = props.hasAuthority("activity:delete");
@@ -241,11 +243,16 @@ export function ActivityManager(props: ActivityManagerProps) {
     <div className="p-2 sm:p-4">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 space-y-2 sm:space-y-0">
         <h1 className="text-xl sm:text-2xl font-bold text-green-900">Activity Management</h1>
-        {canCreate && (
-          <Button color="green" onClick={handleAdd} className="w-full sm:w-auto">
-            <HiPlus className="mr-2 h-5 w-5" /> Add Activity
+        <div className="flex w-full sm:w-auto gap-2">
+          <Button color="gray" onClick={() => navigate("/activity/sessions")} className="w-full sm:w-auto">
+            <HiCalendar className="mr-2 h-5 w-5" /> Sessions
           </Button>
-        )}
+          {canCreate && (
+            <Button color="green" onClick={handleAdd} className="w-full sm:w-auto">
+              <HiPlus className="mr-2 h-5 w-5" /> Add Activity
+            </Button>
+          )}
+        </div>
       </div>
 
       <div className="overflow-x-auto overflow-y-auto max-h-[calc(100vh-240px)] shadow-sm sm:rounded-lg border border-gray-100">
@@ -285,6 +292,10 @@ export function ActivityManager(props: ActivityManagerProps) {
                   </Table.Cell>
                   <Table.Cell>
                     <div className="flex justify-center space-x-2">
+                      <Button size="xs" color="gray" title="Sessions"
+                        onClick={() => navigate('/activity/sessions?activityId=' + encodeURIComponent(a.id || ''))}>
+                        <HiCalendar className="h-4 w-4" />
+                      </Button>
                       <Button size="xs" color="gray" onClick={() => handleEdit(a)}><HiPencil className="h-4 w-4" /></Button>
                       {canDelete && (
                         <Button size="xs" color="failure" onClick={() => setDeleting(a)}><HiTrash className="h-4 w-4" /></Button>

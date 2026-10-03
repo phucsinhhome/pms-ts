@@ -956,17 +956,17 @@ export const decideRequest = (id: string, requestId: string, decision: 'approve'
 ### Success Criteria:
 
 #### Automated Verification:
-- [ ] Type check passes: `npx tsc --noEmit -p .`
-- [ ] Production build passes: `npm run build`
+- [x] Type check passes: `npx tsc --noEmit -p .`
+- [x] Production build passes: `npm run build`
 
 #### Manual Verification:
-- [ ] The Sessions screen shows every computed slot for the chosen day; prev/next change day; the activity filter works
-- [ ] Locking an AVAILABLE slot materializes it (status becomes PENDING_CONFIRMATION with a lock icon)
-- [ ] Adding a staff request of `minGuests` people flips the slot to CONFIRMED and updates the prices
-- [ ] Changing capacity below the headcount shows the 409 message and the card refreshes
-- [ ] With two browser tabs, joining the last spot in both: one succeeds and the other shows the 409 alert with refreshed numbers
-- [ ] Host assignment lists staff usernames and saves them. For a user without the `user` authority, it shows a free-text field instead and does **not** redirect to login.
-- [ ] Complete shows `lockedUnitPrice` on approved requests
+- [x] The Sessions screen shows every computed slot for the chosen day; prev/next change day; the activity filter works
+- [x] Locking an AVAILABLE slot materializes it (status becomes PENDING_CONFIRMATION with a lock icon)
+- [x] Adding a staff request of `minGuests` people flips the slot to CONFIRMED and updates the prices
+- [x] Changing capacity below the headcount shows the 409 message and the card refreshes
+- [x] With two browser tabs, joining the last spot in both: one succeeds and the other shows the 409 alert with refreshed numbers
+- [x] Host assignment lists staff usernames and saves them. For a user without the `user` authority, it shows a free-text field instead and does **not** redirect to login.
+- [x] Complete shows `lockedUnitPrice` on approved requests
 
 **Implementation Note**: After completing this phase and all automated verification passes, pause here for manual confirmation from the human that the manual testing was successful before proceeding to the next phase.
 

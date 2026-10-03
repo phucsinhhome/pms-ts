@@ -17,6 +17,7 @@ import { PGroupManager } from "./Components/PGroupManager";
 import { SupplierManager } from "./Components/SupplierManager";
 import { AppConfig, appConfigs } from "./db/configs";
 import { ActivityManager } from "./Components/ActivityManager";
+import { ActivitySessions } from "./Components/ActivitySessions";
 import UserProfile from "./Components/UserProfile";
 import { Welcome } from "./Components/Welcome";
 import { LoadingSpinner } from "./Components/LoadingSpinner";
@@ -654,6 +655,11 @@ export const App = () => {
           chat={getChat()}
           displayName={fullName()}
           authorizedUserId={authorizedUserId}
+          activeMenu={() => setActiveMenu(menus.activity)}
+          handleUnauthorized={() => handleLogin()}
+          hasAuthority={(auth: string) => hasAuthority(auth)}
+        />} />
+        <Route path="activity/sessions" element={<ActivitySessions
           activeMenu={() => setActiveMenu(menus.activity)}
           handleUnauthorized={() => handleLogin()}
           hasAuthority={(auth: string) => hasAuthority(auth)}

@@ -704,15 +704,15 @@ On a multi-node cluster every node runs the sweep. CAS makes that safe: whicheve
 ### Success Criteria:
 
 #### Automated Verification:
-- [ ] Tests pass: `mvn test -Dtest='ActivitySessionServiceImpl*Test,ActivitySessionControllerTest,ActivitySessionSchedulerTest'`
-- [ ] Spring context boots with the new profile, scheduler and `${activity.sessionCron}` placeholder: `mvn test -Dtest=TelegramBotApplicationTests`
-- [ ] Full suite: `mvn test`, with no failing classes beyond the Phase 0 baseline
+- [x] Tests pass: `mvn test -Dtest='ActivitySessionServiceImpl*Test,ActivitySessionControllerTest,ActivitySessionSchedulerTest'`
+- [x] Spring context boots with the new profile, scheduler and `${activity.sessionCron}` placeholder: `mvn test -Dtest=TelegramBotApplicationTests`
+- [x] Full suite: `mvn test`, with no failing classes beyond the Phase 0 baseline
 
 #### Manual Verification:
-- [ ] Locally: `GET /activity/sessions?activityId=…&fromDate=…&toDate=…` lists AVAILABLE slots matching the activity config
-- [ ] `POST …/{sessionId}/requests` on an AVAILABLE slot creates the session; running the list again shows it as materialized
-- [ ] Two parallel `curl` requests for the last spot give exactly one 200 and one 409 with a `message` body
-- [ ] With `ACTIVITY_SESSION_CRON="*/30 * * * * *"`, a CONFIRMED session whose end time has passed becomes COMPLETED within a minute, with `lockedUnitPrice` on its APPROVED requests
+- [x] Locally: `GET /activity/sessions?activityId=…&fromDate=…&toDate=…` lists AVAILABLE slots matching the activity config
+- [x] `POST …/{sessionId}/requests` on an AVAILABLE slot creates the session; running the list again shows it as materialized
+- [x] Two parallel `curl` requests for the last spot give exactly one 200 and one 409 with a `message` body
+- [x] With `ACTIVITY_SESSION_CRON="*/30 * * * * *"`, a CONFIRMED session whose end time has passed becomes COMPLETED within a minute, with `lockedUnitPrice` on its APPROVED requests
 
 **Implementation Note**: After completing this phase and all automated verification passes, pause here for manual confirmation from the human that the manual testing was successful before proceeding to the next phase.
 

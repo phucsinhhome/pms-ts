@@ -784,13 +784,13 @@ Anyone holding the invoice id can act as that guest. This is the same trust mode
 ### Success Criteria:
 
 #### Automated Verification:
-- [ ] Tests pass: `mvn test -Dtest='ActivityGuestResolverTest,ActivityReceptionAPITest,ActivitySessionServiceImplTest'`
-- [ ] Full suite: `mvn test`, with no failing classes beyond the Phase 0 baseline
+- [x] Tests pass: `mvn test -Dtest='ActivityGuestResolverTest,ActivityReceptionAPITest,ActivitySessionServiceImplTest'`
+- [x] Full suite: `mvn test`, with no failing classes beyond the Phase 0 baseline
 
 #### Manual Verification:
-- [ ] Without any token: `GET /assistant/{tenant}/reception/activity/{id}/sessions?resolverId={invoiceId}` returns slots only for the invoice's stay dates
-- [ ] A guest starts a session (POST requests on an AVAILABLE slot), a second invoice joins it, and each sees only their own request
-- [ ] A bogus `resolverId` returns 404 with a `message`
+- [x] Without any token: `GET /assistant/{tenant}/reception/activity/{id}/sessions?resolverId={invoiceId}` returns slots only for the invoice's stay dates
+- [x] A guest starts a session (POST requests on an AVAILABLE slot), a second invoice joins it, and each sees only their own request
+- [x] A bogus `resolverId` returns 404 with a `message`
 
 **Implementation Note**: After completing this phase and all automated verification passes, pause here for manual confirmation from the human that the manual testing was successful before proceeding to the next phase.
 

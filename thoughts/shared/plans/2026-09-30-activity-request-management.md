@@ -496,13 +496,13 @@ The guest paths `/{tenant}/reception/activity/**` match `/*/reception/**`, which
 ### Success Criteria:
 
 #### Automated Verification:
-- [ ] Tests pass: `mvn test -Dtest=ActivityServiceImplTest,ActivityControllerTest,ActivityExceptionHandlerTest`
-- [ ] Full suite: `mvn test`, with no failing classes beyond the Phase 0 baseline
+- [x] Tests pass: `mvn test -Dtest=ActivityServiceImplTest,ActivityControllerTest,ActivityExceptionHandlerTest`
+- [x] Full suite: `mvn test`, with no failing classes beyond the Phase 0 baseline
 
 #### Manual Verification:
-- [ ] Keycloak manual step done (see Migration Notes): resource `activity` with the plain scopes `write`, `create`, `delete`, granted to the staff test user. The profile's `authorities` then include `activity`, `activity:write`, `activity:create` and `activity:delete`.
-- [ ] With a staff token: `PUT /assistant/{tenant}/activity` with no tiers returns the four default tiers; `GET` lists it; `POST /{id}` updates it; `DELETE /{id}` removes it
-- [ ] A user without the `activity:create` scope gets 403 on PUT
+- [x] Keycloak manual step done (see Migration Notes): resource `activity` with the plain scopes `write`, `create`, `delete`, granted to the staff test user. The profile's `authorities` then include `activity`, `activity:write`, `activity:create` and `activity:delete`.
+- [x] With a staff token: `PUT /assistant/{tenant}/activity` with no tiers returns the four default tiers; `GET` lists it; `POST /{id}` updates it; `DELETE /{id}` removes it
+- [x] A user without the `activity:create` scope gets 403 on PUT
 
 **Implementation Note**: After completing this phase and all automated verification passes, pause here for manual confirmation from the human that the manual testing was successful before proceeding to the next phase.
 

@@ -30,3 +30,6 @@ build.log
 
 # Local HTTPS certificate for the dev server (mkcert); contains a private key
 .cert/
+
+# hyprlayer thoughts sync search index (generated)
+/thoughts/searchable/

@@ -877,17 +877,17 @@ export const previewSlots = (a: Pick<Activity, 'openTime' | 'closeTime' | 'durat
 ### Success Criteria:
 
 #### Automated Verification:
-- [ ] Type check passes: `npx tsc --noEmit -p .` (in `C:/apps/ps/pms-ts`)
-- [ ] Production build passes: `npm run build`
-- [ ] No Tour feature code remains: `git grep -nE "TourManager|TourEditor|tourApi|tourRequestApi|db/tour" -- src` returns nothing (exit code 1; scoped to `src` because `.planning/` and `.ua/` still mention Tour)
+- [x] Type check passes: `npx tsc --noEmit -p .` (in `C:/apps/ps/pms-ts`)
+- [x] Production build passes: `npm run build`
+- [x] No Tour feature code remains: `git grep -nE "TourManager|TourEditor|tourApi|tourRequestApi|db/tour" -- src` returns nothing (exit code 1; scoped to `src` because `.planning/` and `.ua/` still mention Tour)
 
 #### Manual Verification:
-- [ ] With the `activity` authority, the **Activity** menu shows and **Tour** is gone
-- [ ] Creating an activity with no tiers saves, and reopening it shows the four default tiers
-- [ ] The slot preview shows 08:00–12:00 and 13:00–17:00 for 08:00–17:00 / 240 / 60
-- [ ] An overlapping tier edit shows the server's 400 message
-- [ ] Delete and Add buttons are hidden without `activity:delete` / `activity:create`
-- [ ] Other menus (Room, Rate Plan, Supplier) are unaffected
+- [x] With the `activity` authority, the **Activity** menu shows and **Tour** is gone
+- [x] Creating an activity with no tiers saves, and reopening it shows the four default tiers
+- [x] The slot preview shows 08:00–12:00 and 13:00–17:00 for 08:00–17:00 / 240 / 60
+- [x] An overlapping tier edit shows the server's 400 message
+- [x] Delete and Add buttons are hidden without `activity:delete` / `activity:create`
+- [x] Other menus (Room, Rate Plan, Supplier) are unaffected
 
 **Implementation Note**: After completing this phase and all automated verification passes, pause here for manual confirmation from the human that the manual testing was successful before proceeding to the next phase.
 

@@ -62,12 +62,6 @@ const reservationExtractApi = createApiInstance(process.env.REACT_APP_RESERVATIO
 // supplierApi
 const supplierApi = createApiInstance(process.env.REACT_APP_SUPPLIER_ENDPOINT);
 
-// tourApi
-const tourApi = createApiInstance(process.env.REACT_APP_TOUR_ENDPOINT);
-
-// tourRequestApi
-const tourRequestApi = createApiInstance(process.env.REACT_APP_TOUR_REQUEST_ENDPOINT);
-
 // configApi
 const configApi = createApiInstance(process.env.REACT_APP_CONFIG_ENDPOINT);
 
@@ -91,6 +85,9 @@ const roomApi = createApiInstance(process.env.REACT_APP_ROOM_ENDPOINT);
 // ratePlan
 const ratePlanApi = createApiInstance(process.env.REACT_APP_RATE_PLAN_ENDPOINT);
 
+// activity
+const activityApi = createApiInstance(process.env.REACT_APP_ACTIVITY_ENDPOINT);
+
 // immigration registration
 const immigrationRegistrationApi = createApiInstance(process.env.REACT_APP_IMMIGRATION_REGISTRATION_ENDPOINT);
 
@@ -107,8 +104,6 @@ export {
     reservationApi,
     reservationExtractApi,
     supplierApi,
-    tourApi,
-    tourRequestApi,
     configApi,
     classificationApi,
     statusApi,
@@ -118,5 +113,6 @@ export {
     psBaseApi,
     roomApi,
     ratePlanApi,
+    activityApi,
     immigrationRegistrationApi
 }

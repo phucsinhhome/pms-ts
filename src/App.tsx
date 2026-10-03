@@ -9,15 +9,14 @@ import { ExpenseManager } from "./Components/ExpenseManager";
 import { ReservationManager } from "./Components/ReservationManager";
 import { Settings } from "./Components/Settings";
 import { IoMdSettings } from "react-icons/io";
-import { FaHome, FaChartLine, FaFileInvoiceDollar, FaMoneyCheckAlt, FaCalendarAlt, FaClipboardList, FaBoxes, FaUserCircle } from "react-icons/fa";
+import { FaHome, FaChartLine, FaFileInvoiceDollar, FaMoneyCheckAlt, FaCalendarAlt, FaClipboardList, FaBoxes, FaUserCircle, FaHiking } from "react-icons/fa";
 import { OrderManager } from "./Components/OrderManager";
 import { OrderEditor } from "./Components/OrderEditor";
 import { Inventory } from "./Components/Inventory";
 import { PGroupManager } from "./Components/PGroupManager";
 import { SupplierManager } from "./Components/SupplierManager";
 import { AppConfig, appConfigs } from "./db/configs";
-import { TourManager } from "./Components/TourManager";
-import { TourEditor } from "./Components/TourEditor";
+import { ActivityManager } from "./Components/ActivityManager";
 import UserProfile from "./Components/UserProfile";
 import { Welcome } from "./Components/Welcome";
 import { LoadingSpinner } from "./Components/LoadingSpinner";
@@ -59,7 +58,7 @@ export const defaultChat: Chat = {
   tenantId: ''
 }
 
-const menuOrder = ['home', 'expense', 'invoice', 'tax', 'tax-policy', 'immigration-registration', 'inventory', 'reservation', 'order', 'profit', 'tour', 'supplier', 'setting', 'room','rate-plan']
+const menuOrder = ['home', 'expense', 'invoice', 'tax', 'tax-policy', 'immigration-registration', 'inventory', 'reservation', 'order', 'profit', 'activity', 'supplier', 'setting', 'room','rate-plan']
 const menus = {
   home: {
     path: 'home',
@@ -121,11 +120,11 @@ const menus = {
     title: 'Profit Report',
     icon: <FaChartLine size={28} />
   },
-  tour: {
-    path: 'tour',
-    displayName: 'Tour',
-    title: 'Tour Management',
-    icon: <FaClipboardList size={28} />
+  activity: {
+    path: 'activity',
+    displayName: 'Activity',
+    title: 'Activity Management',
+    icon: <FaHiking size={28} />
   },
   supplier: {
     path: 'supplier',
@@ -651,19 +650,14 @@ export const App = () => {
         />} />
         <Route path="product-group" element={<PGroupManager activeMenu={() => setActiveMenu(menus.productGroup)} />} />
         <Route path="supplier" element={<SupplierManager chat={getChat()} displayName={fullName()} authorizedUserId={authorizedUserId} activeMenu={() => setActiveMenu(menus.supplier)} />} />
-        <Route path="tour" element={<TourManager
+        <Route path="activity" element={<ActivityManager
           chat={getChat()}
           displayName={fullName()}
           authorizedUserId={authorizedUserId}
-          activeMenu={() => setActiveMenu(menus.tour)}
+          activeMenu={() => setActiveMenu(menus.activity)}
+          handleUnauthorized={() => handleLogin()}
+          hasAuthority={(auth: string) => hasAuthority(auth)}
         />} />
-        <Route path="tour/:tourId"
-          element={<TourEditor
-            chat={getChat()}
-            displayName={fullName()}
-            authorizedUserId={authorizedUserId}
-            activeMenu={() => setActiveMenu(menus.tour)}
-          />} />
         <Route path="setting" element={<Settings
           syncing={syncing}
           changeSyncing={(n: boolean) => setSyncing(n)}
